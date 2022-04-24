@@ -11,7 +11,7 @@
       <Button secondary @click="close">
         Annuleren
       </Button>
-      <Button class="ml-2">
+      <Button class="ml-2" :click="save">
         Dienst aanmaken
       </Button>
     </template>
@@ -31,6 +31,10 @@ export default {
     },
     close () {
       this.$refs.modal.close()
+    },
+    async save () {
+      await this.$api.post('/services', this.service)
+      this.close()
     }
   }
 }

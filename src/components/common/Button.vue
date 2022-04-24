@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none" :class="classes">
+  <button type="button" :disabled="isLoading" class="inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none disabled:opacity-50" :class="classes" @click="onClick">
     <component :is="getIcon(icon)" v-if="icon" class="mr-2 h-4 w-4" aria-hidden="true" />
     <slot />
   </button>
@@ -12,7 +12,15 @@ export default {
   name: 'Button',
   props: {
     icon: String,
-    secondary: Boolean
+    secondary: Boolean,
+
+    /** Like @click event, but auto updates state (based on promise state) */
+    click: Function
+  },
+  data () {
+    return {
+      isLoading: false
+    }
   },
   computed: {
     classes () {
@@ -26,6 +34,17 @@ export default {
   methods: {
     getIcon (icon) {
       return defineAsyncComponent(() => import(`@heroicons/vue/outline/${icon}Icon`))
+    },
+    onClick (e) {
+      if (!this.click) {
+        return this.$emit('click', e)
+      }
+
+      this.isLoading = true
+      this.click(e)
+        .finally(() => {
+          this.isLoading = false
+        })
     }
   }
 }

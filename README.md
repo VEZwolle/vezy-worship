@@ -1,9 +1,15 @@
 # VezyWorship - VEZ Presentation Software
 
 ## Setup for local development
+### Front-end
 ```
-npm install
-npm run serve
+npm run electron:serve
+```
+> Or `npm run serve` if you only want to run the web app.
+
+### Back-end
+```
+npm run firebase:serve
 ```
 
 ## TO DO
