@@ -8,7 +8,7 @@ import './style.css'
 const app = createApp(RouterView)
 
 const pinia = createPinia()
-pinia.use(PiniaSharedState())
+pinia.use(PiniaSharedState({}))
 
 app.use(pinia)
 app.use(router)
