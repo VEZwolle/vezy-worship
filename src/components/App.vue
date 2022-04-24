@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen flex flex-col">
-    <Toolbar class="h-10 border-b" />
+    <Toolbar class="border-b" />
 
     <div class="h-full grid grid-cols-3">
       <Setlist class="border-r" />
