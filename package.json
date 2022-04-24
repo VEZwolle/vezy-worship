@@ -19,6 +19,8 @@
     "@tailwindcss/forms": "^0.5.0",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.1",
+    "floating-vue": "^2.0.0-beta.15",
     "pinia": "^2.0.13",
     "pinia-shared-state": "^0.2.3",
     "vue": "^3.2.13",

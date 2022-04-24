@@ -25,21 +25,16 @@
                         </button>
                       </div>
                     </div>
-                    <div class="mt-1">
+                    <div v-if="$slots.header" class="mt-1">
                       <p class="text-sm text-indigo-300">
                         <slot name="header" />
                       </p>
                     </div>
                   </div>
-                  <div class="flex flex-1 flex-col justify-between">
-                    <div class="divide-y divide-gray-200 px-4 sm:px-6">
-                      <div class="space-y-6 pt-6 pb-5">
-                        <slot />
-                      </div>
-                    </div>
-                  </div>
+
+                  <slot />
                 </div>
-                <div class="flex flex-shrink-0 justify-end px-4 py-4">
+                <div v-if="$slots.footer" class="flex flex-shrink-0 justify-end px-4 py-4">
                   <slot name="footer" />
                 </div>
               </div>

@@ -1,6 +1,6 @@
 <template>
-  <button type="button" :disabled="isLoading" class="inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none disabled:opacity-50" :class="classes" @click="onClick">
-    <component :is="getIcon(icon)" v-if="icon" class="mr-2 h-4 w-4" aria-hidden="true" />
+  <button type="button" :disabled="isLoading" class="h-10 inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none disabled:opacity-50" :class="classes" @click="onClick">
+    <component :is="getIcon(icon)" v-if="icon" class="h-4 w-4" :class="{ 'mr-2': $slots.default }" aria-hidden="true" />
     <slot />
   </button>
 </template>

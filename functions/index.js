@@ -11,9 +11,27 @@ app.use(cors())
 
 app.get('/api/services', async (req, res) => {
   const snapshot = await db.collection('services').get()
-  const services = snapshot.docs.map(doc => doc.data())
+  const services = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }))
 
   res.json(services)
+})
+
+app.get('/api/services/:id', async (req, res) => {
+  const id = req.params.id
+
+  const doc = await db.collection('services').doc(id).get()
+
+  if (!doc.exists) {
+    res.sendStatus(404)
+  }
+
+  res.json({
+    id: doc.id,
+    ...doc.data()
+  })
 })
 
 app.post('/api/services', async (req, res) => {

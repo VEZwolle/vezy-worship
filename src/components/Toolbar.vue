@@ -1,29 +1,34 @@
 <template>
-  <div class="p-3 shadow">
-    <Button icon="FolderOpen">
-      Open dienst
-    </Button>
-    <Button icon="Plus" class="ml-2" @click="openServiceModal">
-      Nieuwe dienst
-    </Button>
+  <div class="p-3 shadow flex items-center">
+    <Button v-tooltip="'Open dienst'" icon="FolderOpen" @click="openSelectServiceModal" />
+    <Button v-tooltip="'Nieuwe dienst maken'" icon="Plus" class="ml-1" @click="openEditServiceModal" />
 
-    <ServiceModal ref="serviceModal" />
+    <h1 v-if="store.service" class="text-lg font-bold capitalize ml-5">
+      {{ $date(store.service.date) }}
+    </h1>
+
+    <SelectServiceModal ref="selectServiceModal" />
+    <EditServiceModal ref="editServiceModal" />
   </div>
 </template>
 
 <script>
+import SelectServiceModal from './service/SelectServiceModal.vue'
+import EditServiceModal from './service/EditServiceModal.vue'
 import useStore from '@/store'
-import ServiceModal from './service/ServiceModal.vue'
 
 export default {
-  components: { ServiceModal },
+  components: { SelectServiceModal, EditServiceModal },
   setup () {
     const store = useStore()
     return { store }
   },
   methods: {
-    openServiceModal () {
-      this.$refs.serviceModal.open()
+    openSelectServiceModal () {
+      this.$refs.selectServiceModal.open()
+    },
+    openEditServiceModal () {
+      this.$refs.editServiceModal.open()
     }
   }
 }

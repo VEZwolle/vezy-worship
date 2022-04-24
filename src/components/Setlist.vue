@@ -1,7 +1,7 @@
 <template>
   <div class="p-3">
     <h1 class="text-blue-500">
-      Setlist
+      {{ store.service }}
     </h1>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="h-screen flex flex-col">
     <Toolbar />
 
-    <div class="h-full grid grid-cols-3">
+    <div v-if="store.service" class="h-full grid grid-cols-3">
       <Setlist class="border-r" />
       <Preview class="border-r" />
       <Live />
