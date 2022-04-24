@@ -1,4 +1,4 @@
-# vezy-worship
+# VezyWorship - VEZ Presentation Software
 
 ## Project setup
 ```
