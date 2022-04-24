@@ -1,6 +1,9 @@
 <template>
-  <div class="p-2">
-    <Button icon="Plus" @click="openServiceModal">
+  <div class="p-3 shadow">
+    <Button icon="FolderOpen">
+      Open dienst
+    </Button>
+    <Button icon="Plus" class="ml-2" @click="openServiceModal">
       Nieuwe dienst
     </Button>
 

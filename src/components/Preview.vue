@@ -1,7 +1,9 @@
 <template>
-  <h1 class="text-blue-500">
-    Preview
-  </h1>
+  <div class="p-3">
+    <h1 class="text-green-500">
+      Preview
+    </h1>
+  </div>
 </template>
 
 <script>
