@@ -17,6 +17,7 @@ export default {
     /** Like @click event, but auto updates state (based on promise state) */
     click: Function
   },
+  emits: ['click'],
   data () {
     return {
       isLoading: false
