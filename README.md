@@ -1,24 +1,35 @@
 # VezyWorship - VEZ Presentation Software
 
-## Project setup
+## Setup for local development
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## TO DO
+### Must haves
+- Dienst aanmaken
+  - Datum
+  - Spreker
+  - Host
+  - Achtergrondafbeelding
+- Setlist aanmaken
+- Lied aanmaken/bewerken
+  - Titel
+  - Tekst
+  - Vertaling
+- Liedtekst projecteren
+- Countdown tonen
+- Lower third aanmaken en tonen
+- Spreker & host lower third knoppen
+- Collecte & nazorg sheet knoppen
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Should haves
+- Bijbel-koppeling om gemakkelijk Bijbelteksten te projecteren
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Could haves
+- Automatisch livestream klaarzetten via Youtube API
+- Koppeling met Musixmatch API om snel liedteksten te vinden
+- Koppeling met DeepL API om snel liedteksten te kunnen vertalen
+
+### Won't haves
