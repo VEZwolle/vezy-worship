@@ -1,0 +1,22 @@
+/* Load Ubuntu font */
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-regular.woff2") format("woff2"),
+    url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-500.woff2") format("woff2"),
+    url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-500.woff") format("woff");
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-700.woff2") format("woff2"),
+    url("./fonts/ubuntu-v19-latin/ubuntu-v19-latin-700.woff") format("woff");
+}
