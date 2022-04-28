@@ -76,8 +76,10 @@ export default {
       this.isSaving = true
 
       this.$api.post('/services', this.service)
-        .then(({ id }) => this.store.loadService(id))
-        .then(() => this.hide())
+        .then(({ id }) => {
+          this.store.loadService(id)
+          this.hide()
+        })
         .finally(() => {
           this.isSaving = false
         })
