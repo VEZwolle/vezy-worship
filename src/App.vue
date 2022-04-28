@@ -1,3 +1,3 @@
 <template>
-  <div>Setlist</div>
+  <router-view />
 </template>

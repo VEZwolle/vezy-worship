@@ -1,34 +1,37 @@
 <template>
-  <div class="p-3 shadow flex items-center">
-    <Button v-tooltip="'Open dienst'" icon="FolderOpen" @click="openSelectServiceModal" />
-    <Button v-tooltip="'Nieuwe dienst maken'" icon="Plus" class="ml-1" @click="openEditServiceModal" />
+  <q-toolbar>
+    <q-btn flat icon="add" label="Nieuw" @click="showEditServiceDialog">
+      <q-tooltip>Nieuwe dienst aanmaken</q-tooltip>
+    </q-btn>
+    <q-btn flat icon="folder_open" label="Open" @click="showSelectServiceDialog">
+      <q-tooltip>Dienst openen</q-tooltip>
+    </q-btn>
+    <q-btn flat icon="save" label="Opslaan" :disable="!store.service">
+      <q-tooltip>Dienst opslaan</q-tooltip>
+    </q-btn>
+  </q-toolbar>
 
-    <h1 v-if="store.service" class="text-lg font-bold capitalize ml-5">
-      {{ $date(store.service.date) }}
-    </h1>
-
-    <SelectServiceModal ref="selectServiceModal" />
-    <EditServiceModal ref="editServiceModal" />
-  </div>
+  <EditServiceDialog ref="editServiceDialog" />
+  <SelectServiceDialog ref="selectServiceDialog" />
 </template>
 
 <script>
-import SelectServiceModal from './service/SelectServiceModal.vue'
-import EditServiceModal from './service/EditServiceModal.vue'
-import useStore from '@/store'
+import useServiceStore from 'stores/service'
+import EditServiceDialog from './service/EditServiceDialog'
+import SelectServiceDialog from './service/SelectServiceDialog'
 
 export default {
-  components: { SelectServiceModal, EditServiceModal },
+  components: { EditServiceDialog, SelectServiceDialog },
   setup () {
-    const store = useStore()
+    const store = useServiceStore()
     return { store }
   },
   methods: {
-    openSelectServiceModal () {
-      this.$refs.selectServiceModal.open()
+    showEditServiceDialog () {
+      this.$refs.editServiceDialog.show()
     },
-    openEditServiceModal () {
-      this.$refs.editServiceModal.open()
+    showSelectServiceDialog () {
+      this.$refs.selectServiceDialog.show()
     }
   }
 }

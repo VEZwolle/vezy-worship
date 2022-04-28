@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import api from './util/api'
+import { api } from 'boot/api'
 
-export default defineStore('main', {
+export default defineStore('service', {
   state: () => ({
     service: null
   }),

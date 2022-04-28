@@ -3,7 +3,7 @@ import nl from 'dayjs/locale/nl'
 
 dayjs.locale(nl)
 
-export default function (value, format) {
+export function date (value, format) {
   const date = dayjs(value)
 
   if (!date.isValid()) return 'n.n.b.'
@@ -13,4 +13,9 @@ export default function (value, format) {
   }
 
   return date.format('dddd D MMMM YYYY')
+}
+
+export default ({ app }) => {
+  // Allows to use this.$date inside Vue components.
+  app.config.globalProperties.$date = date
 }
