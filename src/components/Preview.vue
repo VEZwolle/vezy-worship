@@ -3,6 +3,7 @@
     <q-header>
       <q-toolbar class="bg-grey-3 text-dark">
         <q-toolbar-title class="text-subtitle2">
+          <q-badge rounded color="green" class="q-mr-sm" />
           Preview
           <span v-if="song">- {{ song.title }}</span>
         </q-toolbar-title>

@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar class="bg-grey-3 text-dark">
         <q-toolbar-title class="text-subtitle2">
-          <q-badge rounded color="red" />
+          <q-badge rounded color="red" class="q-mr-sm" />
           Live
           <span v-if="song">- {{ song.title }}</span>
         </q-toolbar-title>
