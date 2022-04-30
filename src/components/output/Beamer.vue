@@ -2,7 +2,7 @@
   <div class="beamer">
     <Transition name="q-transition--fade">
       <div v-if="!store.isClear" class="text">
-        <div v-for="(line, i) in store.selectedSection" :key="i">
+        <div v-for="(line, i) in lines" :key="i">
           {{ line }}
         </div>
       </div>
@@ -17,6 +17,11 @@ export default {
   setup () {
     const store = useServiceStore()
     return { store }
+  },
+  computed: {
+    lines () {
+      return this.store.selectedSection?.flat() || []
+    }
   }
 }
 </script>

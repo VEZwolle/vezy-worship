@@ -22,8 +22,7 @@ export default defineStore('service', {
     },
 
     selectedSection () {
-      const section = this.liveSongSections?.[this.selectedSectionIndex] || []
-      return section.flat()
+      return this.liveSongSections?.[this.selectedSectionIndex] || []
     },
     selectedSlide () {
       return this.selectedSection?.[this.selectedSlideIndex] || []
