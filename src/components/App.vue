@@ -39,5 +39,6 @@ export default {
 <style scoped lang="scss">
 .col {
   border-right: $layout-border;
+  border-width: 3px;
 }
 </style>
