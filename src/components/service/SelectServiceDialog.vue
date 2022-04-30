@@ -11,7 +11,7 @@
       </q-card-section>
 
       <q-card-section v-if="!services" class="text-center">
-        <q-spinner-dots color="primary" :size="50" />
+        <q-spinner-dots color="primary" size="4rem" />
       </q-card-section>
 
       <div v-else>

@@ -42,4 +42,15 @@ app.post('/api/services', async (req, res) => {
   res.json({ id })
 })
 
+app.patch('/api/services/:id', async (req, res) => {
+  const id = req.params.id
+  const data = req.body
+
+  const doc = db.collection('services').doc(id)
+
+  const result = await doc.update(data)
+
+  res.json(result)
+})
+
 exports.api = functions.https.onRequest(app)

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog">
+  <q-dialog ref="dialog" square>
     <q-card>
       <q-card-section class="bg-secondary text-white">
         <div class="text-h6">
@@ -60,7 +60,8 @@ export default {
     return {
       service: {
         date: nextSunday,
-        time: '09:30'
+        time: '09:30',
+        songs: []
       },
       isSaving: false
     }

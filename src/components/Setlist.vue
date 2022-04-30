@@ -1,3 +1,0 @@
-<template>
-  <div>Setlist</div>
-</template>

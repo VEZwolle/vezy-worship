@@ -1,14 +1,8 @@
 <template>
   <q-toolbar>
-    <q-btn flat icon="add" label="Nieuw" @click="showEditServiceDialog">
-      <q-tooltip>Nieuwe dienst aanmaken</q-tooltip>
-    </q-btn>
-    <q-btn flat icon="folder_open" label="Open" @click="showSelectServiceDialog">
-      <q-tooltip>Dienst openen</q-tooltip>
-    </q-btn>
-    <q-btn flat icon="save" label="Opslaan" :disable="!store.service">
-      <q-tooltip>Dienst opslaan</q-tooltip>
-    </q-btn>
+    <q-btn flat icon="add" label="Nieuwe dienst" @click="showEditServiceDialog" />
+    <q-btn flat icon="folder_open" label="Open dienst" @click="showSelectServiceDialog" />
+    <q-btn flat icon="save" label="Dienst opslaan" :disable="!store.service" :loading="isSaving" @click="saveService" />
   </q-toolbar>
 
   <EditServiceDialog ref="editServiceDialog" />
@@ -26,12 +20,26 @@ export default {
     const store = useServiceStore()
     return { store }
   },
+  data () {
+    return {
+      isSaving: false
+    }
+  },
   methods: {
     showEditServiceDialog () {
       this.$refs.editServiceDialog.show()
     },
     showSelectServiceDialog () {
       this.$refs.selectServiceDialog.show()
+    },
+    saveService () {
+      this.isSaving = true
+
+      this.store.saveService()
+        .then(() => this.$q.notify({ position: 'bottom-right', type: 'positive', message: 'De dienst is succesvol opgeslagen' }))
+        .finally(() => {
+          this.isSaving = false
+        })
     }
   }
 }

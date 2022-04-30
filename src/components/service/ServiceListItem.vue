@@ -10,7 +10,7 @@
       <q-item-label class="title">
         {{ $date(service.date) }}
       </q-item-label>
-      <q-item-label caption lines="1">
+      <q-item-label caption :lines="1">
         {{ service.host }}
         <span v-if="service.theme">- “{{ service.theme }}”</span>
       </q-item-label>

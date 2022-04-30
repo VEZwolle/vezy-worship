@@ -3,11 +3,15 @@ import { api } from 'boot/api'
 
 export default defineStore('service', {
   state: () => ({
-    service: null
+    service: null,
+    previewSong: {}
   }),
   actions: {
     async loadService (id) {
       this.service = await api.get(`/services/${id}`)
+    },
+    saveService () {
+      return api.patch(`/services/${this.service.id}`, this.service)
     }
   }
 })
