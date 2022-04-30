@@ -1,5 +1,5 @@
 <template>
-  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex">
+  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex" class="q-py-sm">
     <q-item v-if="section.label" :class="`section-label text-white bg-${section.label.color}`">
       <q-item-section>
         <q-item-label>{{ section.label.value }}</q-item-label>
@@ -56,9 +56,13 @@ export default {
   transition: none;
   user-select: none;
   cursor: default !important;
+  min-height: unset;
+  padding: 0px 13px;
 }
 
 .section-label {
   min-height: unset;
+  padding: 4px 13px;
+  margin-top: -8px;
 }
 </style>
