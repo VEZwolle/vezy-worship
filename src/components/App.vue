@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-header elevated>
+    <q-header>
       <Toolbar />
     </q-header>
 

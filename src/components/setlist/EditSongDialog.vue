@@ -1,24 +1,17 @@
 <template>
   <q-dialog ref="dialog" square>
     <q-card>
-      <q-card-section class="bg-secondary text-white">
-        <div class="text-h6">
-          Lied aanpassen
-        </div>
-      </q-card-section>
+      <q-toolbar class="bg-secondary text-white">
+        <q-toolbar-title>Lied aanpassen</q-toolbar-title>
+        <q-btn v-close-popup flat round dense icon="close" />
+      </q-toolbar>
 
       <q-card-section>
         <q-input v-model="song.title" outlined label="Titel" stack-label :rules="['required']" />
 
         <div class="row">
           <div class="col">
-            <q-input
-              v-model="song.text"
-              outlined
-              label="Tekst"
-              stack-label
-              type="textarea"
-            />
+            <q-input v-model="song.text" outlined label="Tekst" stack-label type="textarea" class="input-songtext" />
           </div>
           <div class="col" />
         </div>
@@ -75,6 +68,11 @@ export default {
 
 <style scoped>
 .q-card {
-  min-width: 80vw;
+  min-width: 60vw;
+  min-height: 80vh;
+}
+
+.input-songtext >>> textarea {
+  height: 60vh;
 }
 </style>

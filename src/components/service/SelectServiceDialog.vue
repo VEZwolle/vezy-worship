@@ -1,14 +1,10 @@
 <template>
   <q-dialog ref="dialog" square>
     <q-card>
-      <q-card-section class="bg-secondary text-white">
-        <div class="text-h6">
-          Open dienst
-        </div>
-        <div class="text-subtitle2">
-          Selecteer hieronder een dienst om te openen.
-        </div>
-      </q-card-section>
+      <q-toolbar class="bg-secondary text-white">
+        <q-toolbar-title>Open dienst</q-toolbar-title>
+        <q-btn v-close-popup flat round dense icon="close" />
+      </q-toolbar>
 
       <q-card-section v-if="!services" class="text-center">
         <q-spinner-dots color="primary" size="4rem" />
@@ -69,3 +65,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.q-card {
+  min-width: 400px;
+}
+</style>

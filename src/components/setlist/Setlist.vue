@@ -1,17 +1,15 @@
 <template>
   <q-card flat square class="full-height">
-    <q-card-section>
-      <div class="text-h6">
-        Setlist {{ $date(store.service.date) }}
-      </div>
-    </q-card-section>
+    <q-toolbar class="bg-grey-3">
+      <q-toolbar-title class="text-subtitle2">
+        Setlist - {{ $date(store.service.date) }}
+      </q-toolbar-title>
 
-    <q-fab color="primary" icon="add" direction="down" class="absolute" style="top: 20px; right: 20px;">
-      <q-fab-action color="secondary" icon="menu_book" external-label label-position="left" label="Bijbeltekst toevoegen" />
-      <q-fab-action color="secondary" icon="description" external-label label-position="left" label="Lied toevoegen" @click="openEditSongDialog" />
-    </q-fab>
-
-    <q-separator />
+      <q-fab color="primary" icon="add" direction="down" class="absolute" style="top: 20px; right: 20px;">
+        <q-fab-action color="secondary" icon="menu_book" external-label label-position="left" label="Bijbeltekst toevoegen" />
+        <q-fab-action color="secondary" icon="description" external-label label-position="left" label="Lied toevoegen" @click="openEditSongDialog" />
+      </q-fab>
+    </q-toolbar>
 
     <q-list>
       <Song

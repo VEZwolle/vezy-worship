@@ -1,14 +1,10 @@
 <template>
   <q-dialog ref="dialog" square>
     <q-card>
-      <q-card-section class="bg-secondary text-white">
-        <div class="text-h6">
-          Nieuwe dienst
-        </div>
-        <div class="text-subtitle2">
-          Vul onderstaande gegevens in om een nieuwe dienst aan te maken.
-        </div>
-      </q-card-section>
+      <q-toolbar class="bg-secondary text-white">
+        <q-toolbar-title>Dienst aanpassen</q-toolbar-title>
+        <q-btn v-close-popup flat round dense icon="close" />
+      </q-toolbar>
 
       <q-card-section>
         <q-input v-model="service.date" label="Datum" stack-label mask="date" :rules="['date']">
@@ -88,3 +84,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.q-card {
+  min-width: 400px;
+}
+</style>

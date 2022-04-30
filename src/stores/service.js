@@ -4,7 +4,7 @@ import { api } from 'boot/api'
 export default defineStore('service', {
   state: () => ({
     service: null,
-    previewSong: {}
+    previewSong: null
   }),
   actions: {
     async loadService (id) {

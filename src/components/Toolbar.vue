@@ -1,5 +1,7 @@
 <template>
   <q-toolbar>
+    <q-icon :name="`img:${icon}`" size="md" />
+
     <q-btn flat icon="add" label="Nieuwe dienst" @click="showEditServiceDialog" />
     <q-btn flat icon="folder_open" label="Open dienst" @click="showSelectServiceDialog" />
     <q-btn flat icon="save" label="Dienst opslaan" :disable="!store.service" :loading="isSaving" @click="saveService" />
@@ -13,12 +15,14 @@
 import useServiceStore from 'stores/service'
 import EditServiceDialog from './service/EditServiceDialog'
 import SelectServiceDialog from './service/SelectServiceDialog'
+import icon from '../assets/icon.svg'
 
 export default {
   components: { EditServiceDialog, SelectServiceDialog },
   setup () {
     const store = useServiceStore()
-    return { store }
+
+    return { store, icon }
   },
   data () {
     return {
