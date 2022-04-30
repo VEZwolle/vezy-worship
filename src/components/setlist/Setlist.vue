@@ -18,7 +18,8 @@
             :nr="i + 1"
             :color="colors[i % 7]"
             :active="store.previewSong?.key === song.key"
-            @click="select(song)"
+            @click="preview(song)"
+            @dblclick="goLive(song)"
             @edit="edit(song)"
             @remove="remove(song)"
           />
@@ -65,8 +66,12 @@ export default {
     }
   },
   methods: {
-    select (song) {
+    preview (song) {
       this.store.previewSong = { ...song }
+    },
+    goLive (song) {
+      this.store.liveSong = { ...song }
+      this.store.selectSlide(0, 0)
     },
     openEditSongDialog () {
       this.$refs.editSongDialog.show()

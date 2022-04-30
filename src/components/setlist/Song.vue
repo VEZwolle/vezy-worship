@@ -1,5 +1,5 @@
 <template>
-  <q-item v-ripple clickable :active="active" active-class="bg-purple-1">
+  <q-item clickable :active="active" active-class="bg-purple-1">
     <q-item-section avatar>
       <q-avatar :color="color" text-color="white">
         {{ nr }}
@@ -39,3 +39,10 @@ export default {
   emits: ['edit', 'remove']
 }
 </script>
+
+<style scoped>
+.q-item {
+  user-select: none;
+  cursor: default !important;
+}
+</style>
