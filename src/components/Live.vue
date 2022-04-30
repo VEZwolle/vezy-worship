@@ -26,14 +26,7 @@
 
     <q-page-container>
       <q-page>
-        <q-list separator>
-          <q-item v-for="hans in [1, 2, 3, 5, 6, 7, 8, 7, 7, 7, 7, 7]" :key="hans" clickable>
-            <q-item-section>
-              Single line item<br>
-              Single line item
-            </q-item-section>
-          </q-item>
-        </q-list>
+        <SongSectionSelect :sections="store.liveSongSections" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -41,8 +34,10 @@
 
 <script>
 import useServiceStore from 'stores/service'
+import SongSectionSelect from './song/SongSectionSelect.vue'
 
 export default {
+  components: { SongSectionSelect },
   setup () {
     const store = useServiceStore()
     return { store }

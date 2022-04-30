@@ -2,7 +2,9 @@
   <q-dialog ref="dialog" square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
-        <q-toolbar-title>Lied aanpassen</q-toolbar-title>
+        <q-toolbar-title>
+          {{ song.key ? 'Lied aanpassen' : 'Nieuw lied' }}
+        </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
 
@@ -48,18 +50,21 @@ export default {
     }
   },
   methods: {
-    show () {
+    show (song) {
       this.$refs.dialog.show()
-      this.song = {
-        title: '',
-        text: ''
+
+      if (song) {
+        this.song = song
       }
     },
     hide () {
       this.$refs.dialog.hide()
     },
-    async save () {
-      this.store.service.songs.push(this.song)
+    save () {
+      if (!this.song.key) {
+        this.store.addSong(this.song)
+      }
+
       this.hide()
     }
   }

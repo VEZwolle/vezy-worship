@@ -5,11 +5,6 @@
         <q-toolbar-title class="text-subtitle2">
           Setlist - {{ $date(store.service.date) }}
         </q-toolbar-title>
-
-        <q-fab color="primary" icon="add" direction="down" class="absolute" style="top: 20px; right: 20px;">
-          <q-fab-action color="secondary" icon="menu_book" external-label label-position="left" label="Bijbeltekst toevoegen" />
-          <q-fab-action color="secondary" icon="description" external-label label-position="left" label="Lied toevoegen" @click="openEditSongDialog" />
-        </q-fab>
       </q-toolbar>
     </q-header>
 
@@ -24,8 +19,28 @@
             :color="colors[i % 7]"
             :active="store.previewSong === song"
             @click="select(song)"
+            @edit="edit(song)"
+            @remove="remove(song)"
           />
         </q-list>
+
+        <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
+          <q-fab-action
+            color="secondary"
+            icon="menu_book"
+            external-label
+            label-position="left"
+            label="Bijbeltekst toevoegen"
+          />
+          <q-fab-action
+            color="secondary"
+            icon="description"
+            external-label
+            label-position="left"
+            label="Lied toevoegen"
+            @click="openEditSongDialog"
+          />
+        </q-fab>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -51,10 +66,16 @@ export default {
   },
   methods: {
     select (song) {
-      this.store.previewSong = song
+      this.store.previewSong = { ...song }
     },
     openEditSongDialog () {
       this.$refs.editSongDialog.show()
+    },
+    edit (song) {
+      this.$refs.editSongDialog.show(song)
+    },
+    remove (song) {
+      this.store.removeSong(song)
     }
   }
 }

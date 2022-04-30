@@ -17,6 +17,8 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.11.1",
+    "lodash": "^4.17.21",
+    "nanoid": "^3.3.3",
     "pinia": "^2.0.11",
     "pinia-shared-state": "^0.2.3",
     "quasar": "^2.6.0",

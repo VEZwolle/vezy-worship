@@ -87,6 +87,6 @@ export default {
 
 <style scoped>
 .q-card {
-  min-width: 400px;
+  min-width: 500px;
 }
 </style>
