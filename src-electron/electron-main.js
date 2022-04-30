@@ -36,7 +36,11 @@ function createWindow (url, display = 0, fullscreen = false) {
   })
 
   window.removeMenu()
-  window.setFullScreen(fullscreen)
+
+  if (fullscreen) {
+    window.setFullScreen(true)
+    window.setAlwaysOnTop(true)
+  }
 
   window.loadURL(process.env.APP_URL + '#' + url)
 
