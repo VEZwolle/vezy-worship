@@ -16,6 +16,10 @@
           <Live />
         </div>
       </q-page>
+
+      <q-page v-else class="flex items-center justify-center text-grey-5">
+        Open linksboven een dienst om verder te gaan.
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
