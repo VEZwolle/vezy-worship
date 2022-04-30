@@ -2,9 +2,34 @@
   <q-toolbar>
     <q-icon :name="`img:${icon}`" size="md" />
 
-    <q-btn flat icon="add" label="Nieuwe dienst" @click="showEditServiceDialog" />
-    <q-btn flat icon="folder_open" label="Open dienst" @click="showSelectServiceDialog" />
-    <q-btn flat icon="save" label="Dienst opslaan" :disable="!store.service" :loading="isSaving" @click="saveService" />
+    <q-btn
+      v-shortkey="['ctrl', 'n']"
+      flat
+      icon="add"
+      label="Nieuwe dienst"
+      @click="showEditServiceDialog"
+      @shortkey="showEditServiceDialog"
+    />
+
+    <q-btn
+      v-shortkey="['ctrl', 'o']"
+      flat
+      icon="folder_open"
+      label="Open dienst"
+      @click="showSelectServiceDialog"
+      @shortkey="showSelectServiceDialog"
+    />
+
+    <q-btn
+      v-shortkey="['ctrl', 's']"
+      flat
+      icon="save"
+      label="Dienst opslaan"
+      :disable="!store.service"
+      :loading="isSaving"
+      @click="saveService"
+      @shortkey="saveService"
+    />
   </q-toolbar>
 
   <EditServiceDialog ref="editServiceDialog" />
