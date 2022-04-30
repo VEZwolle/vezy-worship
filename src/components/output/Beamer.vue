@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     lines () {
-      return this.store.selectedSection?.flat() || []
+      return this.store.selectedSection?.slides.flat() || []
     }
   }
 }

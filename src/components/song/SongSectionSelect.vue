@@ -1,7 +1,13 @@
 <template>
   <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex">
+    <q-item v-if="section.label" :class="`section-label text-white bg-${section.label.color}`">
+      <q-item-section>
+        <q-item-label>{{ section.label.value }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
     <q-item
-      v-for="(slide, slideIndex) in section"
+      v-for="(slide, slideIndex) in section.slides"
       :key="slideIndex"
       clickable
       :active="isSelected(sectionIndex, slideIndex)"
@@ -44,5 +50,9 @@ export default {
 
 .q-item {
   transition: none;
+}
+
+.section-label {
+  min-height: unset;
 }
 </style>

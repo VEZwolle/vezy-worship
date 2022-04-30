@@ -25,7 +25,7 @@ export default defineStore('service', {
       return this.liveSongSections?.[this.selectedSectionIndex] || []
     },
     selectedSlide () {
-      return this.selectedSection?.[this.selectedSlideIndex] || []
+      return this.selectedSection?.slides[this.selectedSlideIndex] || []
     }
   },
   actions: {
@@ -45,6 +45,14 @@ export default defineStore('service', {
   }
 })
 
+const labels = [
+  { key: 'verse', color: 'blue' },
+  { key: 'chorus', color: 'purple' },
+  { key: 'bridge', color: 'green' },
+  { key: 'tag', color: 'deep-purple' },
+  { key: 'end', color: 'red-10' }
+]
+
 function splitSong (text) {
   if (!text) return []
 
@@ -52,7 +60,25 @@ function splitSong (text) {
     .replace(/\r?\n/g, '<br>')
     .split('<br><br>')
     .map((section) => {
+      const result = {
+        label: null,
+        slides: []
+      }
+
       const lines = section.split('<br>')
-      return chunk(lines, 2)
+
+      for (const label of labels) {
+        if (!lines[0]?.toLowerCase().startsWith(label.key)) {
+          continue
+        }
+
+        result.label = { ...label, value: lines[0] }
+        lines.shift()
+        break
+      }
+
+      result.slides = chunk(lines, 2)
+
+      return result
     })
 }
