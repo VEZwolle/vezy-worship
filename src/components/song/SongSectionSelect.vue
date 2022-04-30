@@ -13,6 +13,7 @@
       :active="isSelected(sectionIndex, slideIndex)"
       active-class="bg-blue-1"
       @click="select(sectionIndex, slideIndex)"
+      @dblclick="dblclick(sectionIndex, slideIndex)"
     >
       <q-item-section>
         <div v-for="(line, i) in slide" :key="i">
@@ -30,10 +31,13 @@ export default {
     selectedSectionIndex: Number,
     selectedSlideIndex: Number
   },
-  emits: ['select'],
+  emits: ['select', 'dblclick'],
   methods: {
     select (sectionIndex, slideIndex) {
       this.$emit('select', sectionIndex, slideIndex)
+    },
+    dblclick (sectionIndex, slideIndex) {
+      this.$emit('dblclick', sectionIndex, slideIndex)
     },
     isSelected (sectionIndex, slideIndex) {
       return sectionIndex === this.selectedSectionIndex &&
@@ -50,6 +54,8 @@ export default {
 
 .q-item {
   transition: none;
+  user-select: none;
+  cursor: default !important;
 }
 
 .section-label {

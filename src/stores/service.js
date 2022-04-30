@@ -41,6 +41,22 @@ export default defineStore('service', {
     },
     removeSong (song) {
       this.service.songs = this.service.songs.filter(s => s.key !== song.key)
+    },
+
+    selectSlide (sectionIndex, slideIndex) {
+      this.selectedSectionIndex = sectionIndex
+      this.selectedSlideIndex = slideIndex
+    },
+
+    // Clear
+    clear () {
+      this.isClear = true
+    },
+    unclear () {
+      this.isClear = false
+    },
+    toggleClear () {
+      this.isClear = !this.isClear
     }
   }
 })

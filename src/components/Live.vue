@@ -14,7 +14,7 @@
           left-label
           label="Clear"
           color="red"
-          @shortkey="store.isClear = !store.isClear"
+          @shortkey="store.toggleClear"
         >
           <q-tooltip>
             Vink aan om het scherm leeg te maken<br>(ctrl + c)
@@ -29,7 +29,8 @@
           :sections="store.liveSongSections"
           :selected-section-index="store.selectedSectionIndex"
           :selected-slide-index="store.selectedSlideIndex"
-          @select="select"
+          @select="store.selectSlide"
+          @dblclick="store.unclear"
         />
       </q-page>
     </q-page-container>
@@ -54,12 +55,6 @@ export default {
   computed: {
     song () {
       return this.store.liveSong
-    }
-  },
-  methods: {
-    select (sectionIndex, slideIndex) {
-      this.store.selectedSectionIndex = sectionIndex
-      this.store.selectedSlideIndex = slideIndex
     }
   }
 }

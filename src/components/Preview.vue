@@ -7,7 +7,7 @@
           <span v-if="song">- {{ song.title }}</span>
         </q-toolbar-title>
 
-        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!song" @click="goLive">
+        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!song" @click="goLive(0, 0)">
           <q-tooltip>
             Zet het item in de preview op het scherm
           </q-tooltip>
@@ -17,7 +17,7 @@
 
     <q-page-container>
       <q-page>
-        <SongSectionSelect :sections="store.previewSongSections" />
+        <SongSectionSelect :sections="store.previewSongSections" @dblclick="goLive" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -39,8 +39,9 @@ export default {
     }
   },
   methods: {
-    goLive () {
+    goLive (sectionIndex, slideIndex) {
       this.store.liveSong = this.song
+      this.store.selectSlide(sectionIndex, slideIndex)
     }
   }
 }
