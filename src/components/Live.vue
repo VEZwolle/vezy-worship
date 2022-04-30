@@ -8,19 +8,18 @@
           <span v-if="song">- {{ song.title }}</span>
         </q-toolbar-title>
 
-        <q-toggle
+        <q-checkbox
           v-model="store.isClear"
           v-shortkey="['ctrl', 'c']"
-          checked-icon="check"
-          unchecked-icon="clear"
-          color="positive"
+          left-label
           label="Clear"
+          color="red"
           @shortkey="store.isClear = !store.isClear"
         >
           <q-tooltip>
-            Met clear maak je het scherm leeg<br>(ctrl + c)
+            Vink aan om het scherm leeg te maken<br>(ctrl + c)
           </q-tooltip>
-        </q-toggle>
+        </q-checkbox>
       </q-toolbar>
     </q-header>
 
