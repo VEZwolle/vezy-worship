@@ -11,5 +11,10 @@ export default [
   {
     path: '/output/livestream',
     component: () => import('components/output/Livestream.vue')
+  },
+  {
+    path: '/output/livestream/alpha',
+    component: () => import('components/output/Livestream.vue'),
+    props: () => ({ alpha: true })
   }
 ]

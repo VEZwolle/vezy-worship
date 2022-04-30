@@ -77,7 +77,7 @@ export default {
   min-height: 80vh;
 }
 
-.input-songtext >>> textarea {
+.input-songtext::v-deep(textarea) {
   height: 60vh;
 }
 </style>

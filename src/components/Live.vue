@@ -26,7 +26,11 @@
 
     <q-page-container>
       <q-page>
-        <SongSectionSelect :sections="store.liveSongSections" />
+        <SongSectionSelect
+          :sections="store.liveSongSections"
+          @select-section="selectSection"
+          @select-lines="selectLines"
+        />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -53,8 +57,11 @@ export default {
     }
   },
   methods: {
-    goLive () {
-      this.store.liveSong = this.song
+    selectSection (section) {
+      this.store.selectedSection = section
+    },
+    selectLines (lines) {
+      this.store.selectedLines = lines
     }
   }
 }

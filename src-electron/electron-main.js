@@ -33,6 +33,7 @@ app.whenReady().then(() => {
   createWindow('/')
   createWindow('/output/beamer')
   createWindow('/output/livestream')
+  createWindow('/output/livestream/alpha')
 })
 
 app.on('window-all-closed', () => {

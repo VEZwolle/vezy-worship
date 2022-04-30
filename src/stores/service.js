@@ -8,7 +8,10 @@ export default defineStore('service', {
     service: null,
     previewSong: null,
     liveSong: null,
-    isClear: false
+    isClear: false,
+
+    selectedSection: [],
+    selectedLines: []
   }),
   getters: {
     previewSongSections (state) {
