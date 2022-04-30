@@ -10,6 +10,7 @@
     "build": "quasar build",
     "lint": "eslint --fix --ext .js,.vue ./",
     "electron:serve": "quasar dev -m electron",
+    "electron:build": "quasar build -m electron",
     "firebase:serve": "firebase emulators:start"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "@babel/eslint-parser": "^7.13.14",
     "@quasar/app-webpack": "^3.0.0",
     "electron": "^18.1.0",
+    "electron-packager": "^15.5.1",
     "eslint": "^8.10.0",
     "eslint-config-standard": "^17.0.0-1",
     "eslint-plugin-import": "^2.19.1",
