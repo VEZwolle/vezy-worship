@@ -1,5 +1,5 @@
 <template>
-  <q-item v-ripple class="q-my-sm" clickable :active="active" active-class="bg-purple-1">
+  <q-item v-ripple clickable :active="active" active-class="bg-purple-1">
     <q-item-section avatar>
       <q-avatar :color="color" text-color="white">
         {{ nr }}
