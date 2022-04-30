@@ -53,9 +53,12 @@ export default {
     show (song) {
       this.$refs.dialog.show()
 
-      if (song) {
-        this.song = song
+      const defaults = {
+        title: '',
+        text: ''
       }
+
+      this.song = song || defaults
     },
     hide () {
       this.$refs.dialog.hide()
