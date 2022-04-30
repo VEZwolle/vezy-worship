@@ -57,11 +57,10 @@ export default {
   user-select: none;
   cursor: default !important;
   min-height: unset;
-  padding: 0px 13px;
+  padding: 1px 13px;
 }
 
 .section-label {
-  min-height: unset;
   padding: 4px 13px;
   margin-top: -8px;
 }
