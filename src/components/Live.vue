@@ -27,8 +27,10 @@
       <q-page>
         <SongSectionSelect
           :sections="store.liveSongSections"
+          :selected-section-index="store.selectedSectionIndex"
+          :selected-slide-index="store.selectedSlideIndex"
           @select-section="selectSection"
-          @select-lines="selectLines"
+          @select-slide="selectSlide"
         />
       </q-page>
     </q-page-container>
@@ -56,11 +58,11 @@ export default {
     }
   },
   methods: {
-    selectSection (section) {
-      this.store.selectedSection = section
+    selectSection (i) {
+      this.store.selectSection(i)
     },
-    selectLines (lines) {
-      this.store.selectedLines = lines
+    selectSlide (i) {
+      this.store.selectSlide(i)
     }
   }
 }

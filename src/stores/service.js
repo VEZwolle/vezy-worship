@@ -10,15 +10,23 @@ export default defineStore('service', {
     liveSong: null,
     isClear: true,
 
-    selectedSection: [],
-    selectedLines: []
+    selectedSectionIndex: null,
+    selectedSlideIndex: null
   }),
   getters: {
-    previewSongSections (state) {
-      return splitSong(state.previewSong?.text)
+    previewSongSections () {
+      return splitSong(this.previewSong?.text)
     },
-    liveSongSections (state) {
-      return splitSong(state.liveSong?.text)
+    liveSongSections () {
+      return splitSong(this.liveSong?.text)
+    },
+
+    selectedSection () {
+      const section = this.liveSongSections?.[this.selectedSectionIndex] || []
+      return section.flat()
+    },
+    selectedSlide () {
+      return this.selectedSection?.[this.selectedSlideIndex] || []
     }
   },
   actions: {
@@ -34,6 +42,13 @@ export default defineStore('service', {
     },
     removeSong (song) {
       this.service.songs = this.service.songs.filter(s => s.key !== song.key)
+    },
+
+    selectSection (i) {
+      this.selectedSectionIndex = i
+    },
+    selectSlide (i) {
+      this.selectedSlideIndex = i
     }
   }
 })

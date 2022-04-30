@@ -2,7 +2,7 @@
   <div class="livestream" :class="{ alpha }">
     <Transition name="q-transition--fade">
       <div v-if="!store.isClear" class="text">
-        <div v-for="(line, i) in store.selectedLines" :key="i">
+        <div v-for="(line, i) in store.selectedSlide" :key="i">
           {{ line }}
         </div>
       </div>

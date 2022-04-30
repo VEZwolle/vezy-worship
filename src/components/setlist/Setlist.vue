@@ -17,7 +17,7 @@
             :song="song"
             :nr="i + 1"
             :color="colors[i % 7]"
-            :active="store.previewSong === song"
+            :active="store.previewSong?.key === song.key"
             @click="select(song)"
             @edit="edit(song)"
             @remove="remove(song)"

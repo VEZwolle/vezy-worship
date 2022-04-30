@@ -1,8 +1,15 @@
 <template>
-  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex" @click="selectSection(section)">
-    <q-item v-for="(lines, linesIndex) in section" :key="linesIndex" clickable @click="selectLines(lines)">
+  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex" @click="$emit('selectSection', sectionIndex)">
+    <q-item
+      v-for="(slide, slideIndex) in section"
+      :key="slideIndex"
+      clickable
+      :active="isSelected(sectionIndex, slideIndex)"
+      active-class="bg-blue-1"
+      @click="$emit('selectSlide', slideIndex)"
+    >
       <q-item-section>
-        <div v-for="(line, i) in lines" :key="i">
+        <div v-for="(line, i) in slide" :key="i">
           {{ line }}
         </div>
       </q-item-section>
@@ -13,15 +20,15 @@
 <script>
 export default {
   props: {
-    sections: Array
+    sections: Array,
+    selectedSectionIndex: Number,
+    selectedSlideIndex: Number
   },
-  emits: ['selectSection', 'selectLines'],
+  emits: ['selectSection', 'selectSlide'],
   methods: {
-    selectSection (section) {
-      this.$emit('selectSection', section.flat())
-    },
-    selectLines (lines) {
-      this.$emit('selectLines', lines)
+    isSelected (sectionIndex, slideIndex) {
+      return sectionIndex === this.selectedSectionIndex &&
+        slideIndex === this.selectedSlideIndex
     }
   }
 }
@@ -30,5 +37,9 @@ export default {
 <style scoped lang="scss">
 .q-list {
   border-bottom: $layout-border;
+}
+
+.q-item {
+  transition: none;
 }
 </style>
