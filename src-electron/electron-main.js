@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, nativeTheme, screen } from 'electron'
 import path from 'path'
 import os from 'os'
 
@@ -11,11 +11,22 @@ try {
   }
 } catch (_) { }
 
-function createWindow (url) {
+function createWindow (url, display = 0, fullscreen = false) {
+  const displays = screen.getAllDisplays()
+  const selectedDisplay = displays[display]
+
+  if (!selectedDisplay) {
+    return // Display not found
+  }
+
+  const { x, y } = selectedDisplay.bounds
+
   const window = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
     width: 1000,
     height: 600,
+    x: x + 50,
+    y: y + 50,
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
@@ -25,15 +36,24 @@ function createWindow (url) {
   })
 
   window.removeMenu()
+  window.setFullScreen(fullscreen)
 
   window.loadURL(process.env.APP_URL + '#' + url)
+
+  return window
 }
 
 app.whenReady().then(() => {
-  createWindow('/')
-  createWindow('/output/beamer')
-  createWindow('/output/livestream')
-  createWindow('/output/livestream/alpha')
+  const mainWindow = createWindow('/', 0)
+
+  mainWindow.on('close', () => {
+    app.quit()
+  })
+
+  // Output windows (fullscreen)
+  createWindow('/output/livestream', 1, true)
+  createWindow('/output/livestream/alpha', 2, true)
+  createWindow('/output/beamer', 3, true)
 })
 
 app.on('window-all-closed', () => {

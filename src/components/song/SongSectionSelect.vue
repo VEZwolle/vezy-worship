@@ -1,12 +1,12 @@
 <template>
-  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex" @click="$emit('selectSection', sectionIndex)">
+  <q-list v-for="(section, sectionIndex) in sections" :key="sectionIndex">
     <q-item
       v-for="(slide, slideIndex) in section"
       :key="slideIndex"
       clickable
       :active="isSelected(sectionIndex, slideIndex)"
       active-class="bg-blue-1"
-      @click="$emit('selectSlide', slideIndex)"
+      @click="select(sectionIndex, slideIndex)"
     >
       <q-item-section>
         <div v-for="(line, i) in slide" :key="i">
@@ -24,8 +24,11 @@ export default {
     selectedSectionIndex: Number,
     selectedSlideIndex: Number
   },
-  emits: ['selectSection', 'selectSlide'],
+  emits: ['select'],
   methods: {
+    select (sectionIndex, slideIndex) {
+      this.$emit('select', sectionIndex, slideIndex)
+    },
     isSelected (sectionIndex, slideIndex) {
       return sectionIndex === this.selectedSectionIndex &&
         slideIndex === this.selectedSlideIndex

@@ -29,8 +29,7 @@
           :sections="store.liveSongSections"
           :selected-section-index="store.selectedSectionIndex"
           :selected-slide-index="store.selectedSlideIndex"
-          @select-section="selectSection"
-          @select-slide="selectSlide"
+          @select="select"
         />
       </q-page>
     </q-page-container>
@@ -58,11 +57,9 @@ export default {
     }
   },
   methods: {
-    selectSection (i) {
-      this.store.selectSection(i)
-    },
-    selectSlide (i) {
-      this.store.selectSlide(i)
+    select (sectionIndex, slideIndex) {
+      this.store.selectedSectionIndex = sectionIndex
+      this.store.selectedSlideIndex = slideIndex
     }
   }
 }
