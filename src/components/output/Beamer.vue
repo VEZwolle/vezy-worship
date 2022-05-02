@@ -44,7 +44,7 @@ export default {
   text-align: center;
 
   color: white;
-  font-size: 3.6em;
+  font-size: 3.8em;
   font-weight: bold;
   -webkit-text-stroke: 0.05em black;
   line-height: 1.25em;

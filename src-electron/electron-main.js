@@ -48,15 +48,15 @@ function createWindow (url, display = 0, fullscreen = false) {
 }
 
 app.whenReady().then(() => {
-  const mainWindow = createWindow('/', 0)
+  const mainWindow = createWindow('/', 1)
 
   mainWindow.on('close', () => {
     app.quit()
   })
 
   // Output windows (fullscreen)
-  createWindow('/output/livestream', 1, true)
-  createWindow('/output/livestream/alpha', 2, true)
+  createWindow('/output/livestream', 0, true)
+  createWindow('/output/livestream/alpha', 4, true)
   createWindow('/output/beamer', 3, true)
 })
 
