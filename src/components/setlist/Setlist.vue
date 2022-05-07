@@ -70,7 +70,7 @@ export default {
       this.store.previewSong = { ...song }
     },
     goLive (song) {
-      this.store.liveSong = { ...song }
+      this.store.goLive(song)
       this.store.selectSlide(0, 0)
     },
     openEditSongDialog () {

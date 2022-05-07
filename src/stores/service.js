@@ -43,6 +43,16 @@ export default defineStore('service', {
       this.service.songs = this.service.songs.filter(s => s.key !== song.key)
     },
 
+    goLive (song) {
+      const i = this.service.songs.findIndex(s => s.key === song.key)
+      const nextSong = this.service.songs[i + 1]
+      if (nextSong) {
+        this.previewSong = { ...nextSong }
+      }
+
+      this.liveSong = { ...song }
+    },
+
     selectSlide (sectionIndex, slideIndex) {
       this.selectedSectionIndex = sectionIndex
       this.selectedSlideIndex = slideIndex

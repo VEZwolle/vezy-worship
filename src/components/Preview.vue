@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     goLive (sectionIndex, slideIndex) {
-      this.store.liveSong = this.song
+      this.store.goLive(this.song)
       this.store.selectSlide(sectionIndex, slideIndex)
     }
   }
