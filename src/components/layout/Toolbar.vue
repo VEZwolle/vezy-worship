@@ -42,10 +42,10 @@
 
 <script>
 import useServiceStore from 'stores/service'
-import EditServiceDialog from './service/EditServiceDialog'
-import SelectServiceDialog from './service/SelectServiceDialog'
-import icon from '../assets/icon.svg'
-import PACKAGE from '../../package.json'
+import EditServiceDialog from '../service/EditServiceDialog'
+import SelectServiceDialog from '../service/SelectServiceDialog'
+import icon from 'assets/icon.svg'
+import PACKAGE from '../../../package.json'
 
 export default {
   components: { EditServiceDialog, SelectServiceDialog },

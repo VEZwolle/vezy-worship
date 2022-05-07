@@ -57,7 +57,7 @@ export default {
       service: {
         date: nextSunday,
         time: '09:30',
-        songs: []
+        presentations: []
       },
       isSaving: false
     }

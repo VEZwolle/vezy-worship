@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import Toolbar from './Toolbar.vue'
+import Toolbar from './layout/Toolbar.vue'
 import Setlist from './setlist/Setlist.vue'
-import Preview from './Preview.vue'
-import Live from './Live.vue'
+import Preview from './layout/Preview.vue'
+import Live from './layout/Live.vue'
 import useServiceStore from 'stores/service'
 
 export default {

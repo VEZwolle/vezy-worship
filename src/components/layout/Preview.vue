@@ -5,10 +5,10 @@
         <q-toolbar-title class="text-subtitle2">
           <q-badge rounded color="green" class="q-mr-sm" />
           Preview
-          <span v-if="song">- {{ song.title }}</span>
+          <span v-if="presentation">- {{ presentation.settings.name }}</span>
         </q-toolbar-title>
 
-        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!song" @click="goLive(0, 0)">
+        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!presentation" @click="store.goLive(presentation)">
           <q-tooltip>
             Zet het item in de preview op het scherm
           </q-tooltip>
@@ -18,7 +18,7 @@
 
     <q-page-container>
       <q-page>
-        <SongSectionSelect :sections="store.previewSongSections" @dblclick="goLive" />
+        <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -26,23 +26,22 @@
 
 <script>
 import useServiceStore from 'stores/service'
-import SongSectionSelect from './song/SongSectionSelect.vue'
+import presentationTypes from '../presentation-types'
 
 export default {
-  components: { SongSectionSelect },
   setup () {
     const store = useServiceStore()
     return { store }
   },
   computed: {
-    song () {
-      return this.store.previewSong
-    }
-  },
-  methods: {
-    goLive (sectionIndex, slideIndex) {
-      this.store.goLive(this.song)
-      this.store.selectSlide(sectionIndex, slideIndex)
+    presentation () {
+      return this.store.previewPresentation
+    },
+    presentationType () {
+      return presentationTypes.find(t => t.id === this.presentation?.type)
+    },
+    controlComponent () {
+      return this.presentationType?.components?.control
     }
   }
 }

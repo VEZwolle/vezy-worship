@@ -11,76 +11,55 @@
     <q-page-container>
       <q-page>
         <q-list separator>
-          <Song
-            v-for="(song, i) in store.service.songs"
-            :key="i"
-            :song="song"
-            :nr="i + 1"
-            :color="colors[i % 7]"
-            :active="store.previewSong?.key === song.key"
-            @click="preview(song)"
-            @dblclick="goLive(song)"
-            @edit="edit(song)"
-            @remove="remove(song)"
+          <SetlistItem
+            v-for="presentation in store.service.presentations"
+            :key="presentation.id"
+            :presentation="presentation"
+            :active="store.previewPresentation?.id === presentation.id"
+            @click="store.preview(presentation)"
+            @dblclick="store.goLive(presentation)"
+            @edit="edit(presentation)"
+            @remove="store.removePresentation(presentation)"
           />
         </q-list>
 
         <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
           <q-fab-action
-            color="secondary"
-            icon="menu_book"
+            v-for="presentationType in presentationTypes"
+            :key="presentationType.id"
+            :color="presentationType.color"
+            :icon="presentationType.icon"
             external-label
             label-position="left"
-            label="Bijbeltekst toevoegen"
-          />
-          <q-fab-action
-            color="secondary"
-            icon="description"
-            external-label
-            label-position="left"
-            label="Lied toevoegen"
-            @click="openEditSongDialog"
+            :label="`${presentationType.name} toevoegen`"
+            @click="add(presentationType.id)"
           />
         </q-fab>
       </q-page>
     </q-page-container>
   </q-layout>
 
-  <EditSongDialog ref="editSongDialog" />
+  <PresentationSettingsDialog ref="presentationSettingsDialog" />
 </template>
 
 <script>
 import useServiceStore from 'stores/service'
-import EditSongDialog from './EditSongDialog.vue'
-import Song from './Song.vue'
+import SetlistItem from './SetlistItem.vue'
+import presentationTypes from '../presentation-types'
+import PresentationSettingsDialog from '../presentation/PresentationSettingsDialog.vue'
 
 export default {
-  components: { EditSongDialog, Song },
+  components: { SetlistItem, PresentationSettingsDialog },
   setup () {
     const store = useServiceStore()
-    return { store }
-  },
-  computed: {
-    colors () {
-      return ['primary', 'secondary', 'accent', 'positive', 'negative', 'info', 'warning']
-    }
+    return { store, presentationTypes }
   },
   methods: {
-    preview (song) {
-      this.store.previewSong = { ...song }
+    add (typeId) {
+      this.$refs.presentationSettingsDialog.new(typeId)
     },
-    goLive (song) {
-      this.store.goLive(song)
-      this.store.selectSlide(0, 0)
-    },
-    openEditSongDialog () {
-      this.$refs.editSongDialog.show()
-    },
-    edit (song) {
-      this.$refs.editSongDialog.show(song)
-    },
-    remove (song) {
-      this.store.removeSong(song)
+    edit (presentation) {
+      this.$refs.presentationSettingsDialog.edit(presentation)
     }
   }
 }

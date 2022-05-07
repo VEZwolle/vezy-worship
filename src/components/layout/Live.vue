@@ -5,7 +5,7 @@
         <q-toolbar-title class="text-subtitle2">
           <q-badge rounded color="red" class="q-mr-sm" />
           Live
-          <span v-if="song">- {{ song.title }}</span>
+          <span v-if="presentation">- {{ presentation.settings.name }}</span>
         </q-toolbar-title>
 
         <q-checkbox
@@ -25,13 +25,7 @@
 
     <q-page-container>
       <q-page>
-        <SongSectionSelect
-          :sections="store.liveSongSections"
-          :selected-section-index="store.selectedSectionIndex"
-          :selected-slide-index="store.selectedSlideIndex"
-          @select="store.selectSlide"
-          @dblclick="store.unclear"
-        />
+        <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -39,22 +33,22 @@
 
 <script>
 import useServiceStore from 'stores/service'
-import SongSectionSelect from './song/SongSectionSelect.vue'
+import presentationTypes from '../presentation-types'
 
 export default {
-  components: { SongSectionSelect },
   setup () {
     const store = useServiceStore()
     return { store }
   },
-  data () {
-    return {
-      isClear: false
-    }
-  },
   computed: {
-    song () {
-      return this.store.liveSong
+    presentation () {
+      return this.store.livePresentation
+    },
+    presentationType () {
+      return presentationTypes.find(t => t.id === this.presentation?.type)
+    },
+    controlComponent () {
+      return this.presentationType?.components?.control
     }
   }
 }

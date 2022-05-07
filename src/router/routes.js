@@ -1,20 +1,20 @@
 
+import App from 'components/App.vue'
+import Output from 'components/output/Output.vue'
+
 export default [
   {
     path: '/',
-    component: () => import('components/App.vue')
+    component: App
   },
   {
-    path: '/output/beamer',
-    component: () => import('components/output/Beamer.vue')
+    path: '/output/:id',
+    component: Output,
+    props: route => ({ id: route.params.id })
   },
   {
-    path: '/output/livestream',
-    component: () => import('components/output/Livestream.vue')
-  },
-  {
-    path: '/output/livestream/alpha',
-    component: () => import('components/output/Livestream.vue'),
-    props: () => ({ alpha: true })
+    path: '/output/:id/alpha',
+    component: Output,
+    props: route => ({ id: route.params.id, alpha: true })
   }
 ]
