@@ -20,6 +20,7 @@ npm run firebase:serve
 - Lower third
 - Preset "slides" (spreker, host, nazorg, collecte)
 - Offline modus (dienst als bestand opslaan/openen)
+- Lied-database
 
 ### Should haves
 - Bijbel-koppeling om Bijbelteksten te projecteren
