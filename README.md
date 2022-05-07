@@ -19,6 +19,7 @@ npm run firebase:serve
 - Countdown timer
 - Lower third
 - Preset "slides" (spreker, host, nazorg, collecte)
+- Offline modus (dienst als bestand opslaan/openen)
 
 ### Should haves
 - Bijbel-koppeling om Bijbelteksten te projecteren
