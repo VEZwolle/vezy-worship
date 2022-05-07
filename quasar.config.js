@@ -156,7 +156,7 @@ module.exports = configure(function (ctx) {
       manifest: {
         name: 'VezyWorship',
         short_name: 'VezyWorship',
-        description: 'VEZ Presentation Software',
+        description: 'Presentatiesoftware voor beamer én livestream',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

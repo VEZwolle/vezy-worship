@@ -1,7 +1,7 @@
 {
   "name": "vezy-worship",
   "version": "1.0.0",
-  "description": "VEZ Presentation Software",
+  "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
   "private": true,

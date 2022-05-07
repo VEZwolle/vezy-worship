@@ -1,4 +1,4 @@
-# VezyWorship - VEZ Presentation Software
+# VezyWorship - Presentatiesoftware voor beamer én livestream
 
 ## Lokale ontwikkelomgeving opstarten
 ### Front-end
