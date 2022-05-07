@@ -25,6 +25,7 @@ node_modules
 *.log
 
 # Editor directories and files
+.vscode
 .idea
 *.suo
 *.ntvs*
