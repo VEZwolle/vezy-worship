@@ -1,11 +1,11 @@
 # VezyWorship - VEZ Presentation Software
 
-## Setup for local development
+## Lokale ontwikkelomgeving opstarten
 ### Front-end
 ```
-npm run electron:serve
+npm run serve
 ```
-> Or `npm run serve` if you only want to run the web app.
+> Of `npm run electron:serve` voor de desktop app.
 
 ### Back-end
 ```
@@ -14,28 +14,16 @@ npm run firebase:serve
 
 ## TO DO
 ### Must haves
-- Dienst aanmaken
-  - Datum
-  - Spreker
-  - Host
-  - Achtergrondafbeelding
-- Setlist aanmaken
-- Lied aanmaken/bewerken
-  - Titel
-  - Tekst
-  - Vertaling
-- Liedtekst projecteren
-- Countdown tonen
-- Lower third aanmaken en tonen
-- Spreker & host lower third knoppen
-- Collecte & nazorg sheet knoppen
+- Achtergrondafbeelding instelbaar
+- Lied vertaling opgeven
+- Countdown timer
+- Lower third
+- Preset "slides" (spreker, host, nazorg, collecte)
 
 ### Should haves
-- Bijbel-koppeling om gemakkelijk Bijbelteksten te projecteren
+- Bijbel-koppeling om Bijbelteksten te projecteren
 
 ### Could haves
 - Automatisch livestream klaarzetten via Youtube API
 - Koppeling met Musixmatch API om snel liedteksten te vinden
 - Koppeling met DeepL API om snel liedteksten te kunnen vertalen
-
-### Won't haves
