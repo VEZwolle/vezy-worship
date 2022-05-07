@@ -26,6 +26,7 @@ npm run firebase:serve
 - Bijbel-koppeling om Bijbelteksten te projecteren
 
 ### Could haves
+- Koppeling met Planning Center Online
 - Automatisch livestream klaarzetten via Youtube API
 - Koppeling met Musixmatch API om snel liedteksten te vinden
 - Koppeling met DeepL API om snel liedteksten te kunnen vertalen
