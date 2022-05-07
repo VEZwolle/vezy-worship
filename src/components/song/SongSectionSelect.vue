@@ -11,7 +11,7 @@
       :key="slideIndex"
       clickable
       :active="isSelected(sectionIndex, slideIndex)"
-      active-class="bg-blue-1"
+      active-class="bg-secondary text-white"
       @click="select(sectionIndex, slideIndex)"
       @dblclick="dblclick(sectionIndex, slideIndex)"
     >
