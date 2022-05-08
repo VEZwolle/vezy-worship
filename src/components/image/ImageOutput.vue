@@ -19,6 +19,7 @@ export default {
 
 <style scoped>
 .image {
+  position: absolute;
   width: 100%;
   height: 100%;
   background-size: cover;
