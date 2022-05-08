@@ -6,7 +6,7 @@
       </template>
     </q-file>
 
-    <img v-if="settings.url" :src="settings.url">
+    <img v-if="settings.url" :src="settings.url" class="q-mt-md full-width">
   </div>
 </template>
 
