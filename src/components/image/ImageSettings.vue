@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     update (file) {
-      // TODO: Upload file
+      this.settings.url = URL.createObjectURL(file)
       this.settings.name = file.name
     }
   }

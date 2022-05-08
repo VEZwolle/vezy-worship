@@ -3,7 +3,10 @@
 </template>
 
 <script>
+import BaseOutput from '../output/BaseOutput.vue'
+
 export default {
+  extends: BaseOutput,
   computed: {
     style () {
       return {
