@@ -1,10 +1,7 @@
 <template>
   <q-item clickable :active="active" active-class="bg-purple-1">
     <q-item-section avatar>
-      <q-avatar v-if="presentation.type === 'image'">
-        <img :src="presentation.settings.url" style="width: auto;">
-      </q-avatar>
-      <q-avatar v-else :color="presentationType.color" text-color="white" :icon="presentationType.icon" />
+      <q-avatar :color="presentationType.color" text-color="white" :icon="presentationType.icon" />
     </q-item-section>
 
     <q-item-section>

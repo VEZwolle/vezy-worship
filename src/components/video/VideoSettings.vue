@@ -6,7 +6,9 @@
       </template>
     </q-file>
 
-    <video v-if="settings.url" :src="settings.url" muted class="q-mt-md full-width" />
+    <q-input v-if="settings.url" v-model="settings.name" outlined label="Naam" stack-label :rules="['required']" class="q-mt-sm" />
+
+    <video v-if="settings.url" :src="settings.url" muted class="full-width" />
   </div>
 </template>
 
