@@ -35,6 +35,7 @@
       <q-separator />
 
       <q-card-actions align="right">
+        <q-btn label="Annuleren" @click="hide" />
         <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
       </q-card-actions>
     </q-card>

@@ -21,16 +21,25 @@
       @shortkey="open"
     />
 
-    <q-btn
+    <q-btn-dropdown
       v-shortkey="['ctrl', 's']"
+      split
       flat
       icon="save"
       label="Dienst opslaan"
       :disable="!store.service"
       :loading="isSaving"
-      @click="save"
-      @shortkey="save"
-    />
+      @click="save(false)"
+      @shortkey="save(false)"
+    >
+      <q-list>
+        <q-item v-close-popup clickable @click="save(true)">
+          <q-item-section>
+            <q-item-label>Opslaan als</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
 
     <q-space />
 
@@ -70,10 +79,9 @@ export default {
           this.isLoading = false
         })
     },
-    save () {
+    save (showPicker) {
       this.isSaving = true
-      this.$fs.save()
-        .then(() => this.$q.notify({ type: 'positive', message: 'De dienst is succesvol opgeslagen' }))
+      this.$fs.save(showPicker)
         .finally(() => {
           this.isSaving = false
         })

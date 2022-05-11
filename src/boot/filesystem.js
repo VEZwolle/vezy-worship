@@ -66,7 +66,7 @@ const fs = {
     store.loadService(service)
   },
 
-  async save () {
+  async save (showPicker = false) {
     const store = useServiceStore()
 
     const blobWriter = new zip.BlobWriter('application/zip')
@@ -98,7 +98,7 @@ const fs = {
     const blob = blobWriter.getData()
 
     // Show SaveFilePicker on first save
-    if (!this.fileHandle) {
+    if (showPicker || !this.fileHandle) {
       this.fileHandle = await window.showSaveFilePicker(filePickerOptions)
     }
 
@@ -106,6 +106,8 @@ const fs = {
     const writable = await this.fileHandle.createWritable()
     await writable.write(blob)
     await writable.close()
+
+    Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${this.fileHandle.name}` })
   },
 
   createFileId (file) {

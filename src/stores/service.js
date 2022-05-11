@@ -12,6 +12,8 @@ export default defineStore('service', {
   actions: {
     loadService (data) {
       this.service = { ...data }
+      this.previewPresentation = null
+      this.livePresentation = null
     },
 
     addPresentation (presentation) {
