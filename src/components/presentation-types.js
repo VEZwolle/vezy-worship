@@ -6,7 +6,9 @@ export default [
     color: 'blue',
     settings: {
       name: '',
-      text: ''
+      text: '',
+      useTranslation: false,
+      translation: ''
     },
     description (settings) {
       return settings.text

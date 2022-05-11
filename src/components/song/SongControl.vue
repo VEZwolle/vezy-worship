@@ -44,7 +44,14 @@ export default {
       this.presentation.selectedSlideIndex = 0
     }
 
-    this.presentation.sections = splitSong(this.presentation.settings.text)
+    if (this.presentation.settings.useTranslation) {
+      // Use 1 line per slide
+      this.presentation.sections = splitSong(this.presentation.settings.text, 1)
+      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1)
+    } else {
+      // Use 2 lines per slide
+      this.presentation.sections = splitSong(this.presentation.settings.text, 2)
+    }
   },
   methods: {
     select (sectionIndex, slideIndex) {
@@ -72,7 +79,7 @@ const labels = [
   { key: 'eind', color: 'red-10' }
 ]
 
-function splitSong (text) {
+function splitSong (text, linesPerSlide) {
   if (!text) return []
 
   return text
@@ -96,7 +103,7 @@ function splitSong (text) {
         break
       }
 
-      result.slides = chunk(lines, 2)
+      result.slides = chunk(lines, linesPerSlide)
 
       return result
     })

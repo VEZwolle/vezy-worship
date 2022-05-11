@@ -16,7 +16,6 @@ npm run firebase:serve
 ## TO DO
 ### Must haves
 - Achtergrondafbeelding instelbaar
-- Lied vertaling opgeven
 - Countdown timer
 - Lower third
 - Bijbeltekst

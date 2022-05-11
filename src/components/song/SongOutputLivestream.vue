@@ -3,6 +3,12 @@
     <div v-for="(line, i) in lines" :key="i">
       {{ line }}
     </div>
+
+    <div v-if="settings.useTranslation" class="translation">
+      <div v-for="(line, i) in translatedLines" :key="i">
+        {{ line }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,11 +18,13 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
-    section () {
-      return this.presentation.sections?.[this.presentation.selectedSectionIndex]
-    },
     lines () {
-      return this.section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      return section?.slides?.[this.presentation.selectedSlideIndex] || []
+    },
+    translatedLines () {
+      const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
+      return section?.slides?.[this.presentation.selectedSlideIndex] || []
     }
   }
 }
@@ -38,5 +46,15 @@ export default {
 
 .text.alpha {
   -webkit-text-stroke-color: white;
+}
+
+.translation {
+  margin-top: 0.2rem;
+  font-style: italic;
+  color: #777;
+}
+
+.text.alpha .translation {
+  color: white;
 }
 </style>
