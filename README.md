@@ -11,6 +11,7 @@ npm run serve
 ```
 npm run firebase:serve
 ```
+> De back-end is alleen nodig als je online features wilt gebruiken, zoals Google Translate.
 
 ## TO DO
 ### Must haves
