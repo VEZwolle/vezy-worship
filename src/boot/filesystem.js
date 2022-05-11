@@ -42,12 +42,12 @@ const fs = {
       const settings = presentation.settings
 
       // Skip presentations without files
-      if (!settings.file_id) {
+      if (!settings.fileId) {
         continue
       }
 
       // Find file in zip
-      const file = entries.find(e => e.filename === settings.file_id)
+      const file = entries.find(e => e.filename === settings.fileId)
       if (!file) {
         continue
       }
@@ -56,7 +56,7 @@ const fs = {
       const blob = await file.getData(new zip.BlobWriter())
 
       // Set new file url in `presentation.settings`
-      settings.file_url = URL.createObjectURL(blob)
+      settings.fileUrl = URL.createObjectURL(blob)
     }
 
     await zipReader.close()
@@ -81,17 +81,17 @@ const fs = {
       const settings = presentation.settings
 
       // Skip presentations without files
-      if (!settings.file_id) {
+      if (!settings.fileId) {
         continue
       }
 
-      // Read the file from its `file_url`
-      const reader = new zip.HttpReader(settings.file_url, {
+      // Read the file from its `fileUrl`
+      const reader = new zip.HttpReader(settings.fileUrl, {
         preventHeadRequest: true
       })
 
-      // Add file to zip (by its `file_id`, which includes the file extension)
-      await zipWriter.add(settings.file_id, reader)
+      // Add file to zip (by its `fileId`, which includes the file extension)
+      await zipWriter.add(settings.fileId, reader)
     }
 
     // Add service data to zip

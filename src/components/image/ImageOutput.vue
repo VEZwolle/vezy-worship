@@ -10,7 +10,7 @@ export default {
   computed: {
     style () {
       return {
-        backgroundImage: `url(${this.settings.file_url})`
+        backgroundImage: `url(${this.settings.fileUrl})`
       }
     }
   }

@@ -6,9 +6,9 @@
       </template>
     </q-file>
 
-    <q-input v-if="settings.file_url" v-model="settings.name" outlined label="Naam" stack-label :rules="['required']" class="q-mt-sm" />
+    <q-input v-if="settings.fileUrl" v-model="settings.name" outlined label="Naam" stack-label :rules="['required']" class="q-mt-sm" />
 
-    <img v-if="settings.file_url" :src="settings.file_url" class="full-width">
+    <img v-if="settings.fileUrl" :src="settings.fileUrl" class="full-width">
   </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     update (file) {
-      this.settings.file_id = this.$fs.createFileId(file)
-      this.settings.file_url = URL.createObjectURL(file)
+      this.settings.fileId = this.$fs.createFileId(file)
+      this.settings.fileUrl = URL.createObjectURL(file)
       this.settings.name = file.name
     }
   }

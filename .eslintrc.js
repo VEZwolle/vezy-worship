@@ -33,7 +33,7 @@ module.exports = {
   plugins: [
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-files
     // required to lint *.vue files
-    'vue',
+    'vue'
   ],
 
   globals: {
@@ -73,8 +73,12 @@ module.exports = {
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
-    'vue/max-attributes-per-line': 'off',
     'vue/require-default-prop': 'off',
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+
+    'vue/max-attributes-per-line': ['error', {
+      singleline: 8,
+      multiline: 1
+    }]
   }
 }
