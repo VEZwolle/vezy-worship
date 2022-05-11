@@ -18,12 +18,12 @@ npm run firebase:serve
 - Lied vertaling opgeven
 - Countdown timer
 - Lower third
+- Bijbeltekst
 - Preset "slides" (spreker, host, nazorg, collecte)
-- Offline modus (dienst als bestand opslaan/openen)
 - Lied-database
 
 ### Should haves
-- Bijbel-koppeling om Bijbelteksten te projecteren
+- Bijbel-koppeling om Bijbelteksten gemakkelijk in te laden
 
 ### Could haves
 - Koppeling met Planning Center Online
