@@ -67,10 +67,15 @@ const fs = {
   },
 
   async save (showPicker = false) {
-    const store = useServiceStore()
+    // Show SaveFilePicker on first save
+    if (showPicker || !this.fileHandle) {
+      this.fileHandle = await window.showSaveFilePicker(filePickerOptions)
+    }
 
     const blobWriter = new zip.BlobWriter('application/zip')
     const zipWriter = new zip.ZipWriter(blobWriter)
+
+    const store = useServiceStore()
 
     for (const presentation of store.service.presentations) {
       const settings = presentation.settings
@@ -96,11 +101,6 @@ const fs = {
     await zipWriter.close()
 
     const blob = blobWriter.getData()
-
-    // Show SaveFilePicker on first save
-    if (showPicker || !this.fileHandle) {
-      this.fileHandle = await window.showSaveFilePicker(filePickerOptions)
-    }
 
     // Write zip file to disk
     const writable = await this.fileHandle.createWritable()

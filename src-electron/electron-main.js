@@ -47,6 +47,9 @@ function createWindow (url, display = 0, fullscreen = false) {
   return window
 }
 
+// Needed to use FileSystem API
+app.commandLine.appendSwitch('enable-experimental-web-platform-features')
+
 app.whenReady().then(() => {
   const mainWindow = createWindow('/', 1)
 

@@ -11,7 +11,7 @@ export default defineStore('service', {
   }),
   actions: {
     loadService (data) {
-      this.service = { ...data }
+      this.service = cloneDeep(data)
       this.previewPresentation = null
       this.livePresentation = null
     },
