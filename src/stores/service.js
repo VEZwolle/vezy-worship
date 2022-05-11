@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { api } from 'boot/api'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 
@@ -11,12 +10,10 @@ export default defineStore('service', {
     isClear: true
   }),
   actions: {
-    async loadService (id) {
-      this.service = await api.get(`/services/${id}`)
+    loadService (data) {
+      this.service = { ...data }
     },
-    saveService () {
-      return api.patch(`/services/${this.service.id}`, this.service)
-    },
+
     addPresentation (presentation) {
       presentation.id = nanoid(10)
       this.service.presentations.push(presentation)
@@ -28,7 +25,6 @@ export default defineStore('service', {
     preview (presentation) {
       this.previewPresentation = cloneDeep(presentation)
     },
-
     goLive (presentation) {
       const i = this.service.presentations.findIndex(s => s.id === presentation.id)
       const nextPresentation = this.service.presentations[i + 1]

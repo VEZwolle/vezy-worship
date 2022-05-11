@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="settings.url" class="full-width">
+    <img :src="settings.file_url" class="full-width">
   </div>
 </template>
 

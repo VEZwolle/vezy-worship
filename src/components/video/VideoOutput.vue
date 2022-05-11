@@ -1,5 +1,5 @@
 <template>
-  <video :src="settings.url" class="video" autoplay />
+  <video :src="settings.file_url" class="video" autoplay />
 </template>
 
 <script>

@@ -17,25 +17,12 @@
       }
     ]
   },
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "storage": {
-    "rules": "storage.rules"
-  },
   "emulators": {
     "hosting": {
       "port": 5000
     },
     "functions": {
       "port": 5001
-    },
-    "firestore": {
-      "port": 5002
-    },
-    "storage": {
-      "port": 5003
     },
     "ui": {
       "enabled": true

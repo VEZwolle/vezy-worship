@@ -24,7 +24,8 @@ export default {
   },
   methods: {
     update (file) {
-      this.settings.url = URL.createObjectURL(file)
+      this.settings.file_id = this.$fs.createFileId(file)
+      this.settings.file_url = URL.createObjectURL(file)
       this.settings.name = file.name
     }
   }

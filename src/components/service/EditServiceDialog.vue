@@ -35,7 +35,7 @@
       <q-separator />
 
       <q-card-actions align="right">
-        <q-btn color="secondary" label="Opslaan" icon="save" :loading="isSaving" @click="save" />
+        <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -58,8 +58,7 @@ export default {
         date: nextSunday,
         time: '09:30',
         presentations: []
-      },
-      isSaving: false
+      }
     }
   },
   methods: {
@@ -69,17 +68,9 @@ export default {
     hide () {
       this.$refs.dialog.hide()
     },
-    async save () {
-      this.isSaving = true
-
-      this.$api.post('/services', this.service)
-        .then(({ id }) => {
-          this.store.loadService(id)
-          this.hide()
-        })
-        .finally(() => {
-          this.isSaving = false
-        })
+    save () {
+      this.store.loadService(this.service)
+      this.hide()
     }
   }
 }

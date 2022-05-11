@@ -7,8 +7,8 @@
       flat
       icon="add"
       label="Nieuwe dienst"
-      @click="showEditServiceDialog"
-      @shortkey="showEditServiceDialog"
+      @click="create"
+      @shortkey="create"
     />
 
     <q-btn
@@ -16,8 +16,9 @@
       flat
       icon="folder_open"
       label="Open dienst"
-      @click="showSelectServiceDialog"
-      @shortkey="showSelectServiceDialog"
+      :loading="isLoading"
+      @click="open"
+      @shortkey="open"
     />
 
     <q-btn
@@ -27,8 +28,8 @@
       label="Dienst opslaan"
       :disable="!store.service"
       :loading="isSaving"
-      @click="saveService"
-      @shortkey="saveService"
+      @click="save"
+      @shortkey="save"
     />
 
     <q-space />
@@ -37,18 +38,16 @@
   </q-toolbar>
 
   <EditServiceDialog ref="editServiceDialog" />
-  <SelectServiceDialog ref="selectServiceDialog" />
 </template>
 
 <script>
 import useServiceStore from 'stores/service'
 import EditServiceDialog from '../service/EditServiceDialog'
-import SelectServiceDialog from '../service/SelectServiceDialog'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 
 export default {
-  components: { EditServiceDialog, SelectServiceDialog },
+  components: { EditServiceDialog },
   setup () {
     const store = useServiceStore()
 
@@ -56,21 +55,25 @@ export default {
   },
   data () {
     return {
-      isSaving: false
+      isSaving: false,
+      isLoading: false
     }
   },
   methods: {
-    showEditServiceDialog () {
+    create () {
       this.$refs.editServiceDialog.show()
     },
-    showSelectServiceDialog () {
-      this.$refs.selectServiceDialog.show()
+    open () {
+      this.isLoading = true
+      this.$fs.open()
+        .finally(() => {
+          this.isLoading = false
+        })
     },
-    saveService () {
+    save () {
       this.isSaving = true
-
-      this.store.saveService()
-        .then(() => this.$q.notify({ position: 'bottom-right', type: 'positive', message: 'De dienst is succesvol opgeslagen' }))
+      this.$fs.save()
+        .then(() => this.$q.notify({ type: 'positive', message: 'De dienst is succesvol opgeslagen' }))
         .finally(() => {
           this.isSaving = false
         })

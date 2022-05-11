@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video :src="settings.url" muted class="full-width" />
+    <video :src="settings.file_url" muted class="full-width" />
   </div>
 </template>
 
