@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <video :src="settings.fileUrl" muted class="full-width" />
   </div>
 </template>

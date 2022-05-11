@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-pa-md">
     <img :src="settings.fileUrl" class="full-width">
   </div>
 </template>
