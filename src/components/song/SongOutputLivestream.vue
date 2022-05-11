@@ -13,10 +13,10 @@ export default {
   extends: BaseOutput,
   computed: {
     section () {
-      return this.presentation.sections[this.presentation.selectedSectionIndex]
+      return this.presentation.sections?.[this.presentation.selectedSectionIndex]
     },
     lines () {
-      return this.section?.slides[this.presentation.selectedSlideIndex] || []
+      return this.section?.slides?.[this.presentation.selectedSlideIndex] || []
     }
   }
 }
