@@ -27,4 +27,6 @@ app.post('/api/translate', (req, res) => {
     })
 })
 
-exports.api = functions.https.onRequest(app)
+exports.api = functions
+  .runWith({ secrets: ['DEEPL_API_KEY'] })
+  .https.onRequest(app)
