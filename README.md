@@ -29,7 +29,6 @@ npm run firebase:serve
 
 ## TO DO
 ### Must haves
-- Volgorde setlist aanpassen
 - Achtergrondafbeelding instelbaar
 - Countdown timer
 - Lower third

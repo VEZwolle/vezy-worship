@@ -60,6 +60,10 @@ export default {
     },
     goLive () {
       this.store.goLive(this.presentation)
+
+      if (!this.preview) {
+        this.store.unclear()
+      }
     },
     isSelected (sectionIndex, slideIndex) {
       return sectionIndex === this.presentation.selectedSectionIndex &&

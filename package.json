@@ -26,7 +26,8 @@
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
-    "vue-three-shortkey": "^4.0.0"
+    "vue-three-shortkey": "^4.0.0",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
