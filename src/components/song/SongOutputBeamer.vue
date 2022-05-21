@@ -4,7 +4,7 @@
       {{ line }}
     </div>
 
-    <div v-if="settings.useTranslation" class="translation">
+    <div v-if="settings.translation" class="translation">
       <div v-for="(line, i) in translatedLines" :key="i">
         {{ line }}
       </div>

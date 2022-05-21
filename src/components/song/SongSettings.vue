@@ -10,14 +10,22 @@
       <div class="col">
         <q-input
           v-model="settings.translation"
-          :readonly="!settings.useTranslation"
           outlined
           label="Vertaling"
           stack-label
           type="textarea"
           class="input-songtext"
+          :class="{ 'q-field--readonly': !settings.translation }"
         >
-          <q-toggle v-model="settings.useTranslation" checked-icon="check" label="Gebruik vertaling" class="translation-toggle" />
+          <q-btn
+            v-if="!settings.translation"
+            stack
+            icon="translate"
+            label="Automatisch vertalen"
+            class="translation-button"
+            :loading="isTranslating"
+            @click="translate"
+          />
         </q-input>
       </div>
     </div>
@@ -28,7 +36,25 @@
 import BaseSettings from '../presentation/BaseSettings.vue'
 
 export default {
-  extends: BaseSettings
+  extends: BaseSettings,
+  data () {
+    return {
+      isTranslating: false
+    }
+  },
+  methods: {
+    async translate () {
+      this.isTranslating = true
+
+      this.$api.post('/translate', { text: this.settings.text })
+        .then((result) => {
+          this.settings.translation = result.translation
+        })
+        .finally(() => {
+          this.isTranslating = false
+        })
+    }
+  }
 }
 </script>
 
@@ -41,9 +67,14 @@ export default {
   color: #ccc;
 }
 
-.translation-toggle {
+.translation-button {
   position: absolute;
-  top: 0.3rem;
-  right: 0.2rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.q-field--focused .translation-button {
+  display: none;
 }
 </style>

@@ -7,7 +7,6 @@ export default [
     settings: {
       name: '',
       text: '',
-      useTranslation: false,
       translation: ''
     },
     description (settings) {

@@ -44,7 +44,7 @@ export default {
       this.presentation.selectedSlideIndex = 0
     }
 
-    if (this.presentation.settings.useTranslation) {
+    if (this.presentation.settings.translation) {
       // Use 1 line per slide
       this.presentation.sections = splitSong(this.presentation.settings.text, 1)
       this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1)
@@ -70,6 +70,7 @@ export default {
 
 const labels = [
   { key: 'verse', color: 'blue' },
+  { key: 'vers', color: 'blue' },
   { key: 'couplet', color: 'blue' },
   { key: 'chorus', color: 'purple' },
   { key: 'refrein', color: 'purple' },
