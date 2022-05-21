@@ -11,20 +11,19 @@ const app = express()
 app.use(cors())
 
 // API endpoints
-app.post('/api/translate', (req, res) => {
+app.post('/api/translate', async (req, res) => {
   const data = new URLSearchParams({
     text: req.body.text,
     target_lang: 'NL'
   })
 
-  axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
-    .then((result) => {
-      const translation = result.data.translations[0].text
-      res.json({ translation })
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err })
-    })
+  try {
+    const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+    const translation = result.data.translations[0].text
+    res.json({ translation })
+  } catch {
+    res.status(500).json({ error: 'deepl_error' })
+  }
 })
 
 exports.api = functions
