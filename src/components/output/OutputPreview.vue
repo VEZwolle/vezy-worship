@@ -1,15 +1,24 @@
 <template>
   <div class="output-preview" :style="rootStyle">
     <div class="output-container bg-grey" :style="containerStyle">
-      <slot />
+      <Transition name="q-transition--fade">
+        <slot v-if="!isClear" />
+      </Transition>
     </div>
   </div>
 </template>
 
 <script>
+import useServiceStore from 'stores/service'
+
 export default {
   props: {
-    zoom: { type: Number, default: 1 }
+    zoom: { type: Number, default: 1 },
+    syncClear: Boolean
+  },
+  setup () {
+    const store = useServiceStore()
+    return { store }
   },
   data () {
     return {
@@ -33,6 +42,13 @@ export default {
         transform: `scale(${this.scale})`,
         transformOrigin: 'top left'
       }
+    },
+    isClear () {
+      if (!this.syncClear) {
+        return false
+      }
+
+      return this.store.isClear
     }
   },
   mounted () {

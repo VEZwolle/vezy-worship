@@ -1,10 +1,14 @@
 <template>
   <div class="caption" :class="{ alpha }">
-    <div class="title">
-      {{ title }}
-    </div>
+    <Transition appear name="q-transition--jump-right">
+      <div class="text" v-html="text" />
+    </Transition>
 
-    <div class="text" v-html="text" />
+    <Transition appear name="q-transition--jump-left">
+      <div class="title">
+        {{ title }}
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -20,12 +24,16 @@ export default {
 
 <style scoped lang="scss">
 .caption {
+  position: relative;
+
   .title {
-    transform: translate(2rem, 50%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(2rem, -50%);
     background: $primary;
     color: #fff;
     padding: 0.3rem 5rem 0.3rem 1rem;
-    z-index: 10;
     font-size: 1.3rem;
     width: max-content;
     min-width: 15rem;
