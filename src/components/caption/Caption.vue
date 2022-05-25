@@ -1,10 +1,10 @@
 <template>
   <div class="caption" :class="{ alpha }">
-    <Transition appear name="q-transition--jump-right">
+    <Transition appear name="q-transition--flip-up">
       <div class="text" v-html="text" />
     </Transition>
 
-    <Transition appear name="q-transition--jump-left">
+    <Transition appear name="q-transition--slide-up">
       <div class="title">
         {{ title }}
       </div>
@@ -28,9 +28,8 @@ export default {
 
   .title {
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(2rem, -50%);
+    top: -1.3rem;
+    left: 2rem;
     background: $primary;
     color: #fff;
     padding: 0.3rem 5rem 0.3rem 1rem;
