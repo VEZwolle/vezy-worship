@@ -9,7 +9,7 @@
   - Liederen
   - Bijbelteksten
   - Afbeeldingen en video's
-  - Captions (naambalk, melding, etc.)
+  - Ondertitels (naambalk, melding, etc.)
 - Preset slides (collecte, nazorg, naambalk spreker, etc.)
 - Automatische liedvertaling d.m.v. DeepL
 - Countdown tot begin van de dienst
@@ -31,7 +31,6 @@ npm run firebase:serve
 ### Must haves
 - Achtergrondafbeelding instelbaar
 - Countdown timer
-- Lower third
 - Bijbeltekst
 
 ### Should haves

@@ -56,12 +56,29 @@ export default [
       beamer: require('./video/VideoOutput.vue').default,
       livestream: require('./video/VideoOutput.vue').default
     }
+  },
+  {
+    id: 'caption',
+    name: 'Ondertitel',
+    icon: 'short_text',
+    color: 'orange',
+    settings: {
+      title: 'Titel',
+      text: 'Lorem ipsum...'
+    },
+    description (settings) {
+      return settings.text
+    },
+    components: {
+      settings: require('./caption/CaptionSettings.vue').default,
+      control: require('./caption/CaptionControl.vue').default
+    },
+    outputs: {
+      livestream: require('./caption/CaptionOutput.vue').default
+    }
   }
   // {
   //   id: 'scripture'
-  // },
-  // {
-  //   id: 'caption'
   // },
   // {
   //   id: 'countdown'
