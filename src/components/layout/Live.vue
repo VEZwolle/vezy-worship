@@ -5,7 +5,7 @@
         <q-toolbar-title class="text-subtitle2">
           <q-badge rounded color="red" class="q-mr-sm" />
           Live
-          <span v-if="presentation">- {{ presentation.settings.name }}</span>
+          <span v-if="presentation">- {{ presentation.settings.title }}</span>
         </q-toolbar-title>
 
         <q-checkbox

@@ -6,7 +6,7 @@
 
     <q-item-section>
       <q-item-label class="title">
-        {{ presentation.settings.name }}
+        {{ presentation.settings.title }}
       </q-item-label>
       <q-item-label v-if="description" caption :lines="1">
         {{ description }}

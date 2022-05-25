@@ -5,7 +5,7 @@ export default [
     icon: 'music_note',
     color: 'blue',
     settings: {
-      name: '',
+      title: '',
       text: '',
       translation: ''
     },
@@ -27,7 +27,7 @@ export default [
     icon: 'image',
     color: 'teal',
     settings: {
-      name: '',
+      title: '',
       url: null
     },
     components: {
@@ -45,7 +45,7 @@ export default [
     icon: 'smart_display',
     color: 'red',
     settings: {
-      name: '',
+      title: '',
       url: null
     },
     components: {

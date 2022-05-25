@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-input v-model="settings.name" outlined label="Titel" stack-label :rules="['required']" />
+    <q-input v-model="settings.title" outlined label="Titel" stack-label :rules="['required']" />
 
     <div class="row q-gutter-md">
       <div class="col">
