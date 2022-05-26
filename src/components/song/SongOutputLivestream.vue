@@ -1,15 +1,10 @@
 <template>
-  <div class="text" :class="{ alpha }">
-    <div v-for="(line, i) in lines" :key="i">
-      {{ line }}
-    </div>
-
-    <div v-if="settings.translation" class="translation">
-      <div v-for="(line, i) in translatedLines" :key="i">
-        {{ line }}
-      </div>
-    </div>
-  </div>
+  <svg class="song-output-livestream" :class="{ alpha }">
+    <text y="1.6rem">
+      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4rem">{{ line }}</tspan>
+      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.2rem" class="translation">{{ line }}</tspan>
+    </text>
+  </svg>
 </template>
 
 <script>
@@ -30,31 +25,57 @@ export default {
 }
 </script>
 
-<style scoped>
-.text {
-  position: absolute;
-  bottom: 5%;
+<style scoped lang="scss">
+@function shadow($color, $opacity) {
+  @return drop-shadow(0.3rem 0.3rem 0.3rem rgba($color, $opacity));
+}
+
+.song-output-livestream {
+  position: fixed;
   width: 100%;
-  text-align: center;
+  height: 100%;
+  transform: scaleY(-1); // Flip coordinate system (to align items from bottom)
 
-  color: white;
-  font-size: 3em;
-  font-weight: bold;
-  -webkit-text-stroke: 0.05em black;
-  line-height: 1.1em;
-}
+  text {
+    transform: scaleY(-1); // Re-flip to avoid displaying text upside down
+    transform-origin: center;
+    transform-box: fill-box;
+  }
 
-.text.alpha {
-  -webkit-text-stroke-color: white;
-}
+  tspan {
+    font-size: 3.8rem;
+    letter-spacing: 0.01rem;
 
-.translation {
-  margin-top: 0.2rem;
-  font-style: italic;
-  color: #777;
-}
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 0.5rem;
+    stroke-linejoin: round;
+    paint-order: stroke;
 
-.text.alpha .translation {
-  color: white;
+    text-anchor: middle;
+    dominant-baseline: middle;
+
+    filter: shadow(#000, 0.8);
+  }
+
+  tspan.translation {
+    fill: #bbb;
+    font-style: italic;
+    stroke-width: 0.4rem;
+    font-size: 3rem;
+    filter: shadow(#000, 0.5);
+  }
+
+  &.alpha {
+    tspan {
+      fill: #fff;
+      stroke: #fff;
+      filter: shadow(#fff, 0.8);
+    }
+
+    tspan.translation {
+      filter: shadow(#fff, 0.5);
+    }
+  }
 }
 </style>
