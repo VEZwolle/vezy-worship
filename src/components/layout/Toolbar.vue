@@ -43,6 +43,29 @@
 
     <q-space />
 
+    <div v-if="!$q.platform.is.electron">
+      Open output:
+
+      <q-btn
+        flat
+        label="Beamer"
+        icon="videocam"
+        dense
+        class="q-mr-sm"
+        @click="openOutput('beamer')"
+      />
+
+      <q-btn
+        flat
+        label="Livestream"
+        icon="smart_display"
+        dense
+        @click="openOutput('livestream')"
+      />
+
+      <span class="q-px-md">|</span>
+    </div>
+
     <div>VezyWorship v{{ version }}</div>
   </q-toolbar>
 
@@ -85,6 +108,9 @@ export default {
         .finally(() => {
           this.isSaving = false
         })
+    },
+    openOutput (id) {
+      window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
     }
   }
 }
