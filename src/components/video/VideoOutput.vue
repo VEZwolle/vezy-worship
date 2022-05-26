@@ -1,5 +1,6 @@
 <template>
-  <video :src="settings.fileUrl" class="video" autoplay />
+  <div v-if="alpha" class="alpha" />
+  <video v-else :src="settings.fileUrl" class="video" autoplay />
 </template>
 
 <script>
@@ -11,9 +12,14 @@ export default {
 </script>
 
 <style scoped>
-.video {
+.video,
+.alpha {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.alpha {
+  background: #fff;
 }
 </style>

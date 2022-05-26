@@ -9,6 +9,12 @@ export default {
   extends: BaseOutput,
   computed: {
     style () {
+      if (this.alpha) {
+        return {
+          backgroundColor: '#fff'
+        }
+      }
+
       return {
         backgroundImage: `url(${this.settings.fileUrl})`
       }
