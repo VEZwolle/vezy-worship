@@ -8,13 +8,18 @@ export default [
     component: App
   },
   {
-    path: '/output/:id',
+    path: '/output/beamer',
     component: Output,
-    props: route => ({ id: route.params.id })
+    props: () => ({ id: 'beamer', showBackground: true })
   },
   {
-    path: '/output/:id/alpha',
+    path: '/output/livestream',
     component: Output,
-    props: route => ({ id: route.params.id, alpha: true })
+    props: () => ({ id: 'livestream' })
+  },
+  {
+    path: '/output/livestream/alpha',
+    component: Output,
+    props: () => ({ id: 'livestream', alpha: true })
   }
 ]

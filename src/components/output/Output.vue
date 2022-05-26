@@ -1,5 +1,5 @@
 <template>
-  <div class="output">
+  <div class="output" :style="style">
     <Transition name="q-transition--fade">
       <component :is="outputComponent" v-if="outputComponent && !store.isClear" :key="presentation.id" :alpha="alpha" :presentation="presentation" />
     </Transition>
@@ -13,7 +13,8 @@ import presentationTypes from '../presentation-types'
 export default {
   props: {
     id: String,
-    alpha: Boolean
+    alpha: Boolean,
+    showBackground: Boolean
   },
   setup () {
     const store = useServiceStore()
@@ -28,6 +29,16 @@ export default {
     },
     outputComponent () {
       return this.presentationType?.outputs?.[this.id]
+    },
+    style () {
+      const style = {}
+
+      if (this.showBackground) {
+        const image = require('../../assets/bg.png')
+        style.backgroundImage = `url(${image})`
+      }
+
+      return style
     }
   }
 }
@@ -43,7 +54,7 @@ html {
   width: 100vw;
   height: 100vh;
   cursor: none;
-  background: url('../../assets/bg.png');
+  background-color: #000;
   background-size: cover;
   background-position: center;
 }
