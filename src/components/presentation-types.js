@@ -22,6 +22,26 @@ export default [
     }
   },
   {
+    id: 'caption',
+    name: 'Ondertitel',
+    icon: 'short_text',
+    color: 'primary',
+    settings: {
+      title: 'Titel',
+      text: 'Lorem ipsum...'
+    },
+    description (settings) {
+      return settings.text
+    },
+    components: {
+      settings: require('./caption/CaptionSettings.vue').default,
+      control: require('./caption/CaptionControl.vue').default
+    },
+    outputs: {
+      livestream: require('./caption/CaptionOutput.vue').default
+    }
+  },
+  {
     id: 'image',
     name: 'Afbeelding',
     icon: 'image',
@@ -58,23 +78,22 @@ export default [
     }
   },
   {
-    id: 'caption',
-    name: 'Ondertitel',
-    icon: 'short_text',
+    id: 'countdown',
+    name: 'Countdown',
+    icon: 'alarm',
     color: 'orange',
     settings: {
-      title: 'Titel',
-      text: 'Lorem ipsum...'
+      time: null
     },
     description (settings) {
-      return settings.text
+      return `Aftellen tot ${settings.time}`
     },
     components: {
-      settings: require('./caption/CaptionSettings.vue').default,
-      control: require('./caption/CaptionControl.vue').default
+      settings: require('./countdown/CountdownSettings.vue').default,
+      control: require('./countdown/CountdownControl.vue').default
     },
     outputs: {
-      livestream: require('./caption/CaptionOutput.vue').default
+      livestream: require('./countdown/CountdownOutput.vue').default
     }
   }
   // {

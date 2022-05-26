@@ -1,6 +1,8 @@
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import nl from 'dayjs/locale/nl'
 
+dayjs.extend(customParseFormat)
 dayjs.locale(nl)
 
 export function date (value, format) {

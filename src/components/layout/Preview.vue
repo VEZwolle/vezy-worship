@@ -5,7 +5,7 @@
         <q-toolbar-title class="text-subtitle2">
           <q-badge rounded color="green" class="q-mr-sm" />
           Preview
-          <span v-if="presentation">- {{ presentation.settings.title }}</span>
+          <span v-if="presentation">- {{ presentation.settings.title || presentationType.name }}</span>
         </q-toolbar-title>
 
         <q-btn label="Go live" icon-right="arrow_forward" :disabled="!presentation" @click="store.goLive(presentation)">

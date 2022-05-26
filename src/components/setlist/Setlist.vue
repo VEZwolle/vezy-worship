@@ -55,7 +55,11 @@ export default {
   components: { SetlistItem, PresentationSettingsDialog, Draggable },
   setup () {
     const store = useServiceStore()
-    return { store, presentationTypes }
+
+    return {
+      store,
+      presentationTypes: presentationTypes.reverse()
+    }
   },
   methods: {
     add (typeId) {
