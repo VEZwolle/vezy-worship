@@ -1,44 +1,22 @@
 # VezyWorship - Presentatiesoftware voor beamer én livestream
 
-## Features
-- Afzonderlijke weergave op beamer en livestream, bijvoorbeeld:
-  - Liederen als 2-regel op livestream en 4-regel op beamer
-  - Bijbeltekst als overlay op livestream en volledig scherm op beamer
-  - Naambalk wel weergeven op livestream en niet op beamer
+- Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
 - Verschillende presentatie-types:
   - Liederen
-  - Bijbelteksten
   - Afbeeldingen en video's
   - Ondertitels (naambalk, melding, etc.)
-- Preset slides (collecte, nazorg, naambalk spreker, etc.)
 - Automatische liedvertaling d.m.v. DeepL
 - Countdown tot begin van de dienst
 
-## Lokale ontwikkelomgeving opstarten
-### Front-end
-```
-npm run serve
-```
-> Of `npm run electron:serve` voor de desktop app.
-
-### Back-end
-```
-npm run firebase:serve
-```
-> De back-end is alleen nodig als je online features wilt gebruiken, zoals Google Translate.
-
 ## TO DO
-### Must haves
-- Achtergrondafbeelding instelbaar
-- Countdown timer
-- Bijbeltekst
-
-### Should haves
-- Preset "slides" (spreker, host, nazorg, collecte)
+- Achtergrondafbeelding instelbaar per dienst
+- Bijbeltekst toevoegen
+- Preset slides (collecte, nazorg, naambalk spreker, etc.)
 - Lied-database
 - Bijbel-koppeling om Bijbelteksten gemakkelijk in te laden
-
-### Could haves
 - Koppeling met Planning Center Online
 - Automatisch livestream klaarzetten via Youtube API
 - Koppeling met Musixmatch API om snel liedteksten te vinden
+
+## Licentie
+<a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl"><img alt="Creative Commons-Licentie" style="border-width:0" src="https://licensebuttons.net/l/by-nc/4.0/88x31.png" /></a><br />VezyWorship valt onder een <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl">CC BY-NC 4.0 licentie</a>.
