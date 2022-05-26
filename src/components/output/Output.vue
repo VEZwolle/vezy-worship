@@ -33,13 +33,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+html {
+  font-size: 1vw;
+}
+
 .output {
   position: relative;
   width: 100vw;
   height: 100vh;
-  font-size: 1vw;
   cursor: none;
-  background: #000;
+  background: url('../../assets/bg.png');
+  background-size: cover;
+  background-position: center;
 }
 </style>

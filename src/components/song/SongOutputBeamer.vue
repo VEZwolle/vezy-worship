@@ -1,15 +1,13 @@
 <template>
-  <div class="text">
-    <div v-for="(line, i) in lines" :key="i">
-      {{ line }}
-    </div>
+  <svg class="song-output-beamer">
+    <text>
+      <tspan v-for="(line, i) in lines" :key="i" x="50%" :y="`${(i * 4.4) + 11}rem`">{{ line }}</tspan>
+    </text>
 
-    <div v-if="settings.translation" class="translation">
-      <div v-for="(line, i) in translatedLines" :key="i">
-        {{ line }}
-      </div>
-    </div>
-  </div>
+    <text v-if="settings.translation" class="translation">
+      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" :y="`${(i * 4.1) + 28}rem`">{{ line }}</tspan>
+    </text>
+  </svg>
 </template>
 
 <script>
@@ -30,24 +28,38 @@ export default {
 }
 </script>
 
-<style scoped>
-.text {
-  position: absolute;
-  top: 10%;
-  width: 100%;
-  text-align: center;
-
-  color: white;
-  font-size: 3.8em;
-  font-weight: bold;
-  -webkit-text-stroke: 0.05em black;
-  line-height: 1.25em;
-  letter-spacing: -0.01em;
+<style scoped lang="scss">
+@function shadow($opacity) {
+  @return drop-shadow(0.3rem 0.3rem 0.3rem rgba(0, 0, 0, $opacity));
 }
 
-.translation {
-  margin-top: 2rem;
-  font-style: italic;
-  color: #777;
+.song-output-beamer {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+
+  text {
+    font-size: 3.8rem;
+    letter-spacing: 0.01rem;
+
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 0.5rem;
+    stroke-linejoin: round;
+    paint-order: stroke;
+
+    text-anchor: middle;
+    dominant-baseline: middle;
+
+    filter: shadow(0.8);
+  }
+
+  text.translation {
+    fill: #bbb;
+    font-style: italic;
+    stroke-width: 0.4rem;
+    font-size: 3.4rem;
+    filter: shadow(0.6);
+  }
 }
 </style>

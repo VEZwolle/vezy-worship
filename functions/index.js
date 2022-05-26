@@ -14,7 +14,8 @@ app.use(cors())
 app.post('/api/translate', async (req, res) => {
   const data = new URLSearchParams({
     text: req.body.text,
-    target_lang: 'NL'
+    target_lang: 'NL',
+    formality: 'more'
   })
 
   try {
