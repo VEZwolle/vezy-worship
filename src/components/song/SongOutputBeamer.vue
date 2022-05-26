@@ -1,11 +1,11 @@
 <template>
   <svg class="song-output-beamer">
-    <text>
-      <tspan v-for="(line, i) in lines" :key="i" x="50%" :y="`${(i * 4.4) + 11}rem`">{{ line }}</tspan>
+    <text y="6.6rem">
+      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4rem">{{ line }}</tspan>
     </text>
 
-    <text v-if="settings.translation" class="translation">
-      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" :y="`${(i * 4.1) + 28}rem`">{{ line }}</tspan>
+    <text v-if="settings.translation" y="24rem" class="translation">
+      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.1rem">{{ line }}</tspan>
     </text>
   </svg>
 </template>
