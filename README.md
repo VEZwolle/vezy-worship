@@ -1,10 +1,11 @@
-# VezyWorship - Presentatiesoftware voor beamer én livestream
+# VezyWorship
+📽️ Presentatiesoftware voor beamer én livestream
 
-- Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
 - Verschillende presentatie-types:
   - Liederen
   - Afbeeldingen en video's
   - Ondertitels (naambalk, melding, etc.)
+- Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
 - Automatische liedvertaling d.m.v. DeepL
 - Countdown tot begin van de dienst
 
