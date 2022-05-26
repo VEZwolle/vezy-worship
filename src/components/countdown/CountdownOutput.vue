@@ -1,6 +1,6 @@
 <template>
   <svg v-if="settings.minutes > 0" class="countdown-output" :class="{ alpha }">
-    <text y="2.5rem" x="5rem">{{ remaining }}</text>
+    <text y="2.5vw" x="5vw">{{ remaining }}</text>
   </svg>
 </template>
 
@@ -32,12 +32,12 @@ export default {
     transform-origin: center;
     transform-box: fill-box;
 
-    font-size: 3.4rem;
-    letter-spacing: 0.01rem;
+    font-size: 3.4vw;
+    letter-spacing: 0.01vw;
 
     fill: #fff;
     stroke: #000;
-    stroke-width: 0.5rem;
+    stroke-width: 0.5vw;
     stroke-linejoin: round;
     paint-order: stroke;
 

@@ -1,9 +1,9 @@
 <template>
   <svg class="song-output-beamer">
-    <text y="6.6rem">
-      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4rem">{{ line }}</tspan>
-      <tspan x="50%" dy="4rem">&nbsp;</tspan>
-      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4rem" class="translation">{{ line }}</tspan>
+    <text y="6.6vw">
+      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
+      <tspan x="50%" dy="4vw">&nbsp;</tspan>
+      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
     </text>
   </svg>
 </template>
@@ -28,7 +28,7 @@ export default {
 
 <style scoped lang="scss">
 @function shadow($opacity) {
-  @return drop-shadow(0.3rem 0.3rem 0.3rem rgba(0, 0, 0, $opacity));
+  @return drop-shadow(0.3vw 0.3vw 0.3vw rgba(0, 0, 0, $opacity));
 }
 
 .song-output-beamer {
@@ -37,12 +37,12 @@ export default {
   height: 100%;
 
   tspan {
-    font-size: 3.8rem;
-    letter-spacing: 0.01rem;
+    font-size: 3.8vw;
+    letter-spacing: 0.01vw;
 
     fill: #fff;
     stroke: #000;
-    stroke-width: 0.5rem;
+    stroke-width: 0.5vw;
     stroke-linejoin: round;
     paint-order: stroke;
 
@@ -55,8 +55,8 @@ export default {
   tspan.translation {
     fill: #bbb;
     font-style: italic;
-    stroke-width: 0.4rem;
-    font-size: 3.4rem;
+    stroke-width: 0.4vw;
+    font-size: 3.4vw;
     filter: shadow(0.6);
   }
 }

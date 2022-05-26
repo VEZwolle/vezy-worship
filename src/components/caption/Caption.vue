@@ -28,24 +28,24 @@ export default {
 
   .title {
     position: absolute;
-    top: -1.3rem;
-    left: 2rem;
+    top: -1.3vw;
+    left: 2vw;
     background: $primary;
     color: #fff;
-    padding: 0.3rem 5rem 0.3rem 1rem;
-    font-size: 1.3rem;
+    padding: 0.3vw 5vw 0.3vw 1vw;
+    font-size: 1.3vw;
     width: max-content;
-    min-width: 15rem;
+    min-width: 15vw;
   }
 
   .text {
     background: #fff;
-    padding: 2rem 1.5rem 1.5rem 2rem;
-    font-size: 1.7rem;
+    padding: 2vw 1.5vw 1.5vw 2vw;
+    font-size: 1.7vw;
     width: max-content;
-    min-width: 30rem;
+    min-width: 30vw;
     max-width: 100%;
-    line-height: 2.2rem;
+    line-height: 2.2vw;
   }
 
   &.alpha {
