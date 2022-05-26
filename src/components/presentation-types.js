@@ -98,8 +98,5 @@ export default [
   }
   // {
   //   id: 'scripture'
-  // },
-  // {
-  //   id: 'countdown'
   // }
 ]
