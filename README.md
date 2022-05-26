@@ -1,5 +1,5 @@
 # VezyWorship
-📽️ Presentatiesoftware voor beamer én livestream
+> 📽️ Presentatiesoftware voor beamer én livestream
 
 - Verschillende presentatie-types:
   - Liederen
