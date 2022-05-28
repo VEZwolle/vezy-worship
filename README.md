@@ -1,3 +1,5 @@
+![VezyWorship](/src/assets/banner.png)
+
 # VezyWorship
 > 📽️ Presentatiesoftware voor beamer én livestream
 
