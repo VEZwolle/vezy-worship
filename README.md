@@ -8,13 +8,14 @@
   - Afbeeldingen en video's
   - Ondertitels (naambalk, melding, etc.)
 - Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
-- Dienst thuis voor te bereiden via de web app
-- Automatische liedvertaling d.m.v. DeepL
-- Countdown tot begin van de dienst
+- Dienst thuis voor te bereiden via de web app.
+- Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
+- Countdown tot begin van de dienst.
 
 ## TO DO
 - Achtergrondafbeelding instelbaar per dienst
 - Bijbeltekst toevoegen
+- Output displays instelbaar
 - Preset slides (collecte, nazorg, naambalk spreker, etc.)
 - Lied-database
 - Bijbel-koppeling om Bijbelteksten gemakkelijk in te laden
