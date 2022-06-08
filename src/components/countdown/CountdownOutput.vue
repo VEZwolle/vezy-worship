@@ -1,5 +1,5 @@
 <template>
-  <svg v-if="settings.minutes > 0" class="countdown-output" :class="{ alpha }">
+  <svg v-if="!isFinished" class="countdown-output" :class="{ alpha }">
     <text y="2.5vw" x="5vw">{{ remaining }}</text>
   </svg>
 </template>
@@ -15,6 +15,9 @@ export default {
       const seconds = this.settings.seconds.toString().padStart(2, '0')
 
       return `${minutes}:${seconds}`
+    },
+    isFinished () {
+      return this.settings.minutes < 0
     }
   }
 }
