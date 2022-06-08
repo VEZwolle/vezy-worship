@@ -59,8 +59,8 @@ app.whenReady().then(() => {
 
   // Output windows (fullscreen)
   createWindow('/output/livestream', 0, true)
-  createWindow('/output/livestream/alpha', 4, true)
-  createWindow('/output/beamer', 3, true)
+  createWindow('/output/livestream/alpha', 3, true)
+  createWindow('/output/beamer', 2, true)
 })
 
 app.on('window-all-closed', () => {
