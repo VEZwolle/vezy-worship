@@ -15,3 +15,12 @@
  *     doAThing: () => {}
  *   })
  */
+
+import { contextBridge, ipcRenderer } from 'electron'
+
+// Expose methods defined in electron-main.js
+contextBridge.exposeInMainWorld('electron', {
+  getConfig: (key) => ipcRenderer.invoke('getConfig', key),
+  setConfig: (key, val) => ipcRenderer.invoke('setConfig', key, val),
+  getAllDisplays: () => ipcRenderer.invoke('getAllDisplays')
+})

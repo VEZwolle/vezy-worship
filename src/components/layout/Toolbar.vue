@@ -67,19 +67,30 @@
     </div>
 
     <div>VezyWorship v{{ version }}</div>
+
+    <q-btn
+      v-if="$q.platform.is.electron"
+      flat
+      icon="settings"
+      dense
+      class="q-ml-sm"
+      @click="openSettings"
+    />
   </q-toolbar>
 
   <EditServiceDialog ref="editServiceDialog" />
+  <SettingsDialog ref="settingsDialog" />
 </template>
 
 <script>
 import useServiceStore from 'stores/service'
 import EditServiceDialog from '../service/EditServiceDialog'
+import SettingsDialog from './SettingsDialog'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 
 export default {
-  components: { EditServiceDialog },
+  components: { EditServiceDialog, SettingsDialog },
   setup () {
     const store = useServiceStore()
 
@@ -111,6 +122,9 @@ export default {
     },
     openOutput (id) {
       window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
+    },
+    openSettings () {
+      this.$refs.settingsDialog.show()
     }
   }
 }

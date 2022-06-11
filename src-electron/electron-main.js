@@ -1,4 +1,5 @@
-import { app, BrowserWindow, nativeTheme, screen } from 'electron'
+import { app, BrowserWindow, nativeTheme, screen, ipcMain } from 'electron'
+import Store from 'electron-store'
 import path from 'path'
 import os from 'os'
 
@@ -11,15 +12,52 @@ try {
   }
 } catch (_) { }
 
-function createWindow (url, display = 0, fullscreen = false) {
-  const displays = screen.getAllDisplays()
-  const selectedDisplay = displays[display]
+const config = new Store()
 
-  if (!selectedDisplay) {
+// Expose methods to the renderer thread
+ipcMain.handle('getConfig', (e, key) => {
+  return config.get(key)
+})
+ipcMain.handle('setConfig', (e, key, val) => {
+  config.set(key, val)
+})
+ipcMain.handle('getAllDisplays', () => {
+  return screen.getAllDisplays()
+})
+
+// Needed to use FileSystem API
+app.commandLine.appendSwitch('enable-experimental-web-platform-features')
+
+app.whenReady().then(() => {
+  const primaryDisplay = screen.getPrimaryDisplay()
+
+  const mainWindow = createWindow('/', primaryDisplay)
+
+  mainWindow.on('close', () => {
+    app.quit()
+  })
+
+  // Output windows (fullscreen)
+  const displays = screen.getAllDisplays()
+  const outputDisplays = config.get('displays') || {}
+
+  createWindow('/output/beamer', displays[outputDisplays.beamer], true)
+  createWindow('/output/livestream', displays[outputDisplays.livestream], true)
+  createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], true)
+})
+
+app.on('window-all-closed', () => {
+  if (platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+function createWindow (url, display, fullscreen = false) {
+  if (!display) {
     return // Display not found
   }
 
-  const { x, y } = selectedDisplay.bounds
+  const { x, y } = display.bounds
 
   const window = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
@@ -40,31 +78,10 @@ function createWindow (url, display = 0, fullscreen = false) {
   if (fullscreen) {
     window.setFullScreen(true)
     window.setAlwaysOnTop(true)
+    window.setSkipTaskbar(true)
   }
 
   window.loadURL(process.env.APP_URL + '#' + url)
 
   return window
 }
-
-// Needed to use FileSystem API
-app.commandLine.appendSwitch('enable-experimental-web-platform-features')
-
-app.whenReady().then(() => {
-  const mainWindow = createWindow('/', 1)
-
-  mainWindow.on('close', () => {
-    app.quit()
-  })
-
-  // Output windows (fullscreen)
-  createWindow('/output/livestream', 0, true)
-  createWindow('/output/livestream/alpha', 3, true)
-  createWindow('/output/beamer', 2, true)
-})
-
-app.on('window-all-closed', () => {
-  if (platform !== 'darwin') {
-    app.quit()
-  }
-})

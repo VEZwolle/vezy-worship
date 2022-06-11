@@ -26,6 +26,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'api',
       'filesystem',
+      'electron',
       'date',
       'shortkey',
       'notify'
@@ -110,7 +111,8 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Dialog'
       ]
     },
 
