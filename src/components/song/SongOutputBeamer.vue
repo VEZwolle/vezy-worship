@@ -2,7 +2,7 @@
   <svg class="song-output-beamer">
     <text y="6.6vw">
       <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-      <tspan x="50%" dy="4vw">&nbsp;</tspan>
+      <tspan x="50%" dy="3vw">&nbsp;</tspan>
       <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
     </text>
   </svg>
