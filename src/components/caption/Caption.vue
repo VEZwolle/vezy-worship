@@ -1,14 +1,10 @@
 <template>
   <div class="caption" :class="{ alpha }">
-    <Transition appear name="q-transition--flip-up">
-      <div class="text" v-html="text" />
-    </Transition>
+    <div class="title">
+      {{ title }}
+    </div>
 
-    <Transition appear name="q-transition--slide-up">
-      <div class="title">
-        {{ title }}
-      </div>
-    </Transition>
+    <div class="text" v-html="text" />
   </div>
 </template>
 
