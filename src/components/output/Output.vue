@@ -34,7 +34,7 @@ export default {
       const style = {}
 
       if (this.showBackground) {
-        const image = require('../../assets/bg.png')
+        const image = this.store.service?.backgroundImageUrl || require('../../assets/bg.png')
         style.backgroundImage = `url(${image})`
       }
 

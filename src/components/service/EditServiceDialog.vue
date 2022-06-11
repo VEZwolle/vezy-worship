@@ -7,7 +7,7 @@
       </q-toolbar>
 
       <q-card-section>
-        <q-input v-model="service.date" label="Datum" stack-label mask="date" :rules="['date']">
+        <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
           <template #append>
             <q-icon name="event" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -17,7 +17,7 @@
           </template>
         </q-input>
 
-        <q-input v-model="service.time" label="Starttijd" stack-label hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']">
+        <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
           <template #append>
             <q-icon name="access_time" class="cursor-pointer">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -27,8 +27,16 @@
           </template>
         </q-input>
 
-        <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" stack-label :rules="['required']" />
-        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" stack-label :rules="['required']" />
+        <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
+        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+
+        <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+
+        <img v-if="service.backgroundImageUrl" :src="service.backgroundImageUrl" class="full-width">
       </q-card-section>
 
       <q-separator />
@@ -57,8 +65,11 @@ export default {
       service: {
         date: nextSunday,
         time: '09:30',
-        presentations: []
-      }
+        presentations: [],
+        backgroundImageId: null,
+        backgroundImageUrl: null
+      },
+      backgroundImageFile: null
     }
   },
   methods: {
@@ -67,6 +78,10 @@ export default {
     },
     hide () {
       this.$refs.dialog.hide()
+    },
+    updateBackgroundImage (file) {
+      this.service.backgroundImageId = this.$fs.createFileId(file)
+      this.service.backgroundImageUrl = URL.createObjectURL(file)
     },
     save () {
       this.store.loadService(this.service)

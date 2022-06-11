@@ -1,10 +1,10 @@
 <template>
   <div>
-    <q-input v-model="settings.title" outlined label="Titel" stack-label :rules="['required']" />
+    <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
 
     <div class="row q-gutter-md">
       <div class="col">
-        <q-input v-model="settings.text" outlined label="Tekst" stack-label type="textarea" class="input-songtext" />
+        <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" />
       </div>
 
       <div class="col">
@@ -12,7 +12,6 @@
           v-model="settings.translation"
           outlined
           label="Vertaling"
-          stack-label
           type="textarea"
           class="input-songtext"
           :class="{ 'q-field--readonly': !settings.translation }"

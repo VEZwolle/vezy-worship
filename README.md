@@ -13,7 +13,6 @@
 - Countdown tot begin van de dienst.
 
 ## TO DO
-- Achtergrondafbeelding instelbaar per dienst
 - Bijbeltekst toevoegen
 - Preset slides (collecte, nazorg, naambalk spreker, etc.)
 - Lied-database
