@@ -74,23 +74,23 @@
       icon="settings"
       dense
       class="q-ml-sm"
-      @click="openSettings"
+      @click="openAppSettings"
     />
   </q-toolbar>
 
-  <EditServiceDialog ref="editServiceDialog" />
-  <SettingsDialog ref="settingsDialog" />
+  <ServiceSettingsDialog ref="serviceSettingsDialog" />
+  <AppSettingsDialog ref="appSettingsDialog" />
 </template>
 
 <script>
 import useServiceStore from 'stores/service'
-import EditServiceDialog from '../service/EditServiceDialog'
-import SettingsDialog from './SettingsDialog'
+import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
+import AppSettingsDialog from './AppSettingsDialog'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 
 export default {
-  components: { EditServiceDialog, SettingsDialog },
+  components: { ServiceSettingsDialog, AppSettingsDialog },
   setup () {
     const store = useServiceStore()
 
@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     create () {
-      this.$refs.editServiceDialog.show()
+      this.$refs.serviceSettingsDialog.show()
     },
     open () {
       this.isLoading = true
@@ -123,8 +123,8 @@ export default {
     openOutput (id) {
       window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
     },
-    openSettings () {
-      this.$refs.settingsDialog.show()
+    openAppSettings () {
+      this.$refs.appSettingsDialog.show()
     }
   }
 }

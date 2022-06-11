@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
-        <q-toolbar-title>Nieuwe dienst</q-toolbar-title>
+        <q-toolbar-title>{{ service.id ? 'Dienst bewerken' : 'Nieuwe dienst' }}</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
 
@@ -42,7 +42,6 @@
       <q-separator />
 
       <q-card-actions align="right">
-        <q-btn label="Annuleren" @click="hide" />
         <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
       </q-card-actions>
     </q-card>
@@ -59,21 +58,20 @@ export default {
     return { store }
   },
   data () {
-    const nextSunday = dayjs().day(7).format('YYYY/MM/DD')
-
     return {
-      service: {
-        date: nextSunday,
-        time: '09:30',
-        presentations: [],
-        backgroundImageId: null,
-        backgroundImageUrl: null
-      },
+      service: null,
       backgroundImageFile: null
     }
   },
   methods: {
-    show () {
+    show (service = null) {
+      const defaults = {
+        date: dayjs().day(7).format('YYYY/MM/DD'), // Next sunday
+        time: '09:30'
+      }
+
+      this.service = service || defaults
+
       this.$refs.dialog.show()
     },
     hide () {
@@ -84,7 +82,10 @@ export default {
       this.service.backgroundImageUrl = URL.createObjectURL(file)
     },
     save () {
-      this.store.loadService(this.service)
+      if (!this.service.id) {
+        this.store.createService(this.service)
+      }
+
       this.hide()
     }
   }

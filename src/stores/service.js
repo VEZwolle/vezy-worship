@@ -15,6 +15,51 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
+    createService ({ date, time, host, preacher, backgroundImageId, backgroundImageUrl }) {
+      const service = {
+        id: nanoid(10),
+        date,
+        time,
+        host,
+        preacher,
+        backgroundImageId,
+        backgroundImageUrl,
+        presentations: []
+      }
+
+      // Add default countdown
+      service.presentations.push({
+        id: 'countdown',
+        type: 'countdown',
+        settings: { time }
+      })
+
+      // Add default host caption
+      if (host) {
+        service.presentations.push({
+          id: 'host',
+          type: 'caption',
+          settings: {
+            title: 'Host',
+            text: host
+          }
+        })
+      }
+
+      // Add default preacher caption
+      if (preacher) {
+        service.presentations.push({
+          id: 'preacher',
+          type: 'caption',
+          settings: {
+            title: 'Spreker',
+            text: preacher
+          }
+        })
+      }
+
+      this.loadService(service)
+    },
 
     addPresentation (presentation) {
       presentation.id = nanoid(10)
