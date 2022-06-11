@@ -54,7 +54,7 @@ export default {
     },
     async load () {
       this.availableDisplays = await this.$electron.getAllDisplays()
-      this.displays = await this.$electron.getConfig('displays')
+      this.displays = await this.$electron.getConfig('displays') || {}
     },
     async save () {
       await this.$electron.setConfig('displays', { ...this.displays })
