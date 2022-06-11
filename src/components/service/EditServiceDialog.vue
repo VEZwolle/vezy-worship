@@ -29,7 +29,6 @@
 
         <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" stack-label :rules="['required']" />
         <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" stack-label :rules="['required']" />
-        <q-input v-model="service.theme" label="Thema" stack-label prefix="“" suffix="”" :rules="['required']" />
       </q-card-section>
 
       <q-separator />
