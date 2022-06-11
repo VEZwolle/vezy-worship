@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
-        <q-toolbar-title>Dienst aanpassen</q-toolbar-title>
+        <q-toolbar-title>Nieuwe dienst</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
 
