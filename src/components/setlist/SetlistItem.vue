@@ -13,7 +13,7 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side>
+    <q-item-section side class="setlist-actions">
       <div class="text-grey-8 q-gutter-xs">
         <q-btn class="gt-xs" size="12px" flat dense round icon="edit" @click.stop="$emit('edit')">
           <q-tooltip>{{ presentationType.name }} bewerken</q-tooltip>
@@ -54,5 +54,13 @@ export default {
 .q-item {
   user-select: none;
   cursor: default !important;
+}
+
+.setlist-actions {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.q-item:hover .setlist-actions {
+  opacity: 1;
 }
 </style>
