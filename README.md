@@ -1,6 +1,6 @@
 ![VezyWorship](/src/assets/banner.png)
 
-# VezyWorship
+# ![VezyWorship](/public/icons/favicon-32x32.png) VezyWorship
 > 📽️ Presentatiesoftware voor beamer én livestream
 
 - Verschillende presentatie-types:
