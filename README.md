@@ -1,7 +1,7 @@
 ![VezyWorship](/src/assets/banner.png)
 
 # ![VezyWorship](/public/icons/favicon-32x32.png) VezyWorship
-> 📽️ Presentatiesoftware voor beamer én livestream
+Presentatiesoftware voor beamer én livestream
 
 - Verschillende presentatie-types:
   - Liederen
@@ -11,16 +11,6 @@
 - Dienst thuis voor te bereiden via de web app.
 - Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
 - Countdown tot begin van de dienst.
-
-## TO DO
-- Bijbeltekst toevoegen
-- Preset slides (collecte, nazorg, naambalk spreker, etc.)
-- Lied-database
-- Bijbel-koppeling om Bijbelteksten gemakkelijk in te laden
-- Koppeling met Planning Center Online
-- Automatisch livestream klaarzetten via Youtube API
-- Koppeling met Musixmatch API om snel liedteksten te vinden
-- GitHub action om desktop app automatisch te builden
 
 ## Licentie
 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl"><img alt="Creative Commons-Licentie" style="border-width:0" src="https://licensebuttons.net/l/by-nc/4.0/88x31.png" /></a><br />VezyWorship valt onder een <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl">CC BY-NC 4.0 licentie</a>.
