@@ -8,7 +8,7 @@
           <span v-if="presentation">- {{ presentation.settings.title || presentationType.name }}</span>
         </q-toolbar-title>
 
-        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!presentation" @click="store.goLive(presentation)">
+        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!presentation" @click="$store.goLive(presentation)">
           <q-tooltip>
             Zet het item in de preview op het scherm
           </q-tooltip>
@@ -25,17 +25,12 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import presentationTypes from '../presentation-types'
 
 export default {
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   computed: {
     presentation () {
-      return this.store.previewPresentation
+      return this.$store.previewPresentation
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)

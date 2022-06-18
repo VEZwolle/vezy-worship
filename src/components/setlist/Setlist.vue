@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar class="bg-grey-3 text-dark">
         <q-toolbar-title class="text-subtitle2">
-          Dienst - {{ $date(store.service.date) }}
+          Dienst - {{ $date($store.service.date) }}
 
           <q-btn class="gt-xs text-grey-8" size="12px" flat dense round icon="edit" @click="openServiceSettings">
             <q-tooltip>Dienst bewerken</q-tooltip>
@@ -15,15 +15,15 @@
     <q-page-container>
       <q-page>
         <q-list class="q-pt-sm">
-          <Draggable v-model="store.service.presentations" item-key="id">
+          <Draggable v-model="$store.service.presentations" item-key="id">
             <template #item="{ element: presentation }">
               <SetlistItem
                 :presentation="presentation"
-                :active="store.previewPresentation?.id === presentation.id"
-                @click="store.preview(presentation)"
-                @dblclick="store.goLive(presentation)"
+                :active="$store.previewPresentation?.id === presentation.id"
+                @click="$store.preview(presentation)"
+                @dblclick="$store.goLive(presentation)"
                 @edit="edit(presentation)"
-                @remove="store.removePresentation(presentation)"
+                @remove="$store.removePresentation(presentation)"
               />
             </template>
           </Draggable>
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import SetlistItem from './SetlistItem.vue'
 import presentationTypes from '../presentation-types'
 import PresentationSettingsDialog from '../presentation/PresentationSettingsDialog.vue'
@@ -60,10 +59,7 @@ import Draggable from 'vuedraggable'
 export default {
   components: { SetlistItem, PresentationSettingsDialog, ServiceSettingsDialog, Draggable },
   setup () {
-    const store = useServiceStore()
-
     return {
-      store,
       presentationTypes: presentationTypes.reverse()
     }
   },
@@ -75,7 +71,7 @@ export default {
       this.$refs.presentationSettingsDialog.edit(presentation)
     },
     openServiceSettings () {
-      this.$refs.serviceSettingsDialog.show(this.store.service)
+      this.$refs.serviceSettingsDialog.show(this.$store.service)
     }
   }
 }

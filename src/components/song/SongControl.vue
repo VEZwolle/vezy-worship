@@ -33,15 +33,10 @@
 
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
-import useServiceStore from 'stores/service'
 import chunk from 'lodash/chunk'
 
 export default {
   extends: BaseControl,
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   created () {
     if (!this.presentation.selectedSectionIndex) {
       this.presentation.selectedSectionIndex = 0
@@ -104,10 +99,10 @@ export default {
       }
     },
     goLive () {
-      this.store.goLive(this.presentation)
+      this.$store.goLive(this.presentation)
 
       if (!this.preview) {
-        this.store.unclear()
+        this.$store.unclear()
       }
     },
     isSelected (sectionIndex, slideIndex) {

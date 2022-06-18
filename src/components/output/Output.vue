@@ -1,13 +1,12 @@
 <template>
   <div class="output" :style="style">
     <Transition name="q-transition--fade">
-      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="store.isClear" :alpha="alpha" :presentation="presentation" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import presentationTypes from '../presentation-types'
 
 export default {
@@ -16,13 +15,9 @@ export default {
     alpha: Boolean,
     showBackground: Boolean
   },
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   computed: {
     presentation () {
-      return this.store.livePresentation
+      return this.$store.livePresentation
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
@@ -34,7 +29,7 @@ export default {
       const style = {}
 
       if (this.showBackground) {
-        const image = this.store.service?.backgroundImageUrl || require('../../assets/bg.png')
+        const image = this.$store.service?.backgroundImageUrl || require('../../assets/bg.png')
         style.backgroundImage = `url(${image})`
       }
 

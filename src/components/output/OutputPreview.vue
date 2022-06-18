@@ -9,15 +9,9 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
-
 export default {
   props: {
     zoom: { type: Number, default: 1 }
-  },
-  setup () {
-    const store = useServiceStore()
-    return { store }
   },
   data () {
     return {

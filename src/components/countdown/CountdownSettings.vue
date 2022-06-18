@@ -14,17 +14,12 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
-import useServiceStore from 'stores/service'
 
 export default {
   extends: BaseSettings,
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   created () {
     if (!this.settings.time) {
-      this.settings.time = this.store.service.time
+      this.settings.time = this.$store.service.time
     }
   }
 }

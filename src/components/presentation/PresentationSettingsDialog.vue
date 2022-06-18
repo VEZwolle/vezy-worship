@@ -22,14 +22,9 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import presentationTypes from '../presentation-types'
 
 export default {
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   data () {
     return {
       presentation: null
@@ -66,7 +61,7 @@ export default {
     },
     save () {
       if (!this.presentation.id) {
-        this.store.addPresentation(this.presentation)
+        this.$store.addPresentation(this.presentation)
       }
 
       this.hide()

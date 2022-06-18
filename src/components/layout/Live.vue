@@ -9,12 +9,12 @@
         </q-toolbar-title>
 
         <q-checkbox
-          v-model="store.isClear"
+          v-model="$store.isClear"
           v-shortkey="['ctrl', 'c']"
           left-label
           label="Clear"
           color="red"
-          @shortkey="store.toggleClear"
+          @shortkey="$store.toggleClear"
         >
           <q-tooltip>
             Vink aan om het scherm leeg te maken<br>(ctrl + c)
@@ -32,17 +32,12 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import presentationTypes from '../presentation-types'
 
 export default {
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   computed: {
     presentation () {
-      return this.store.livePresentation
+      return this.$store.livePresentation
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)

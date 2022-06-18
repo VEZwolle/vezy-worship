@@ -58,14 +58,9 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
-import useServiceStore from 'stores/service'
 
 export default {
   extends: BaseSettings,
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   data () {
     return {
       tab: 'text',
@@ -75,7 +70,7 @@ export default {
   },
   computed: {
     backgroundUrl () {
-      return this.settings.fileUrl || this.store.service.backgroundImageUrl
+      return this.settings.fileUrl || this.$store.service.backgroundImageUrl
     }
   },
   methods: {
