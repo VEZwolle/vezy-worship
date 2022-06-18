@@ -1,13 +1,26 @@
 <template>
   <div v-if="!clear && alpha" class="alpha" />
-  <video v-else-if="!clear" :src="settings.fileUrl" class="video" autoplay />
+  <video v-else v-show="!clear" ref="player" :src="settings.fileUrl" class="video" />
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
-  extends: BaseOutput
+  extends: BaseOutput,
+  computed: {
+    player () {
+      return this.$refs.player
+    }
+  },
+  watch: {
+    'settings.play' (val) {
+      val ? this.player.play() : this.player.pause()
+    },
+    'settings.time' (val) {
+      this.player.currentTime = val
+    }
+  }
 }
 </script>
 

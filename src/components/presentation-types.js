@@ -70,7 +70,9 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null
+      fileUrl: null,
+      play: false,
+      time: 0
     },
     components: {
       settings: require('./video/VideoSettings.vue').default,
