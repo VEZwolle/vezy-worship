@@ -79,8 +79,8 @@ export default [
       control: require('./video/VideoControl.vue').default
     },
     outputs: {
-      beamer: require('./video/VideoOutput.vue').default,
-      livestream: require('./video/VideoOutput.vue').default
+      beamer: require('./video/VideoOutputBeamer.vue').default,
+      livestream: require('./video/VideoOutputLivestream.vue').default
     }
   },
   {

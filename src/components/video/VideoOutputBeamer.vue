@@ -1,6 +1,6 @@
 <template>
   <div v-if="!clear && alpha" class="alpha" />
-  <video v-else v-show="!clear" ref="player" :src="settings.fileUrl" class="video" />
+  <video v-else v-show="!clear" ref="player" :muted="muted" :src="settings.fileUrl" class="video" />
 </template>
 
 <script>
@@ -8,6 +8,9 @@ import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
   extends: BaseOutput,
+  props: {
+    muted: Boolean
+  },
   computed: {
     player () {
       return this.$refs.player
