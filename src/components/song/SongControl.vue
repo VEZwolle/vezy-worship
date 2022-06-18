@@ -1,5 +1,11 @@
 <template>
-  <q-list v-for="(section, sectionIndex) in presentation.sections" :key="sectionIndex" class="q-py-sm">
+  <q-list
+    v-for="(section, sectionIndex) in presentation.sections"
+    :key="sectionIndex"
+    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    class="q-py-sm"
+    @shortkey="handleArrow"
+  >
     <q-item v-if="section.label" :class="`section-label text-white bg-${section.label.color}`">
       <q-item-section>
         <q-item-label>{{ section.label.value }}</q-item-label>
@@ -54,9 +60,47 @@ export default {
     }
   },
   methods: {
-    select (sectionIndex, slideIndex) {
-      this.presentation.selectedSectionIndex = sectionIndex
-      this.presentation.selectedSlideIndex = slideIndex
+    select (sectionIndex = null, slideIndex = null) {
+      if (sectionIndex !== null) {
+        this.presentation.selectedSectionIndex = sectionIndex
+      }
+
+      if (slideIndex !== null) {
+        this.presentation.selectedSlideIndex = slideIndex
+      }
+    },
+    jump (change = +1) {
+      const selectedSection = this.presentation.sections[this.presentation.selectedSectionIndex]
+      let newSlideIndex = this.presentation.selectedSlideIndex + change
+
+      if (selectedSection.slides[newSlideIndex]) {
+        // Slide is in current section, so stay on current section
+        return this.select(null, newSlideIndex)
+      }
+
+      const newSectionIndex = this.presentation.selectedSectionIndex + change
+      const section = this.presentation.sections[newSectionIndex]
+
+      if (!section) {
+        return
+      }
+
+      // Select last or first slide of section, based on going up (-1) or down (+1)
+      newSlideIndex = (change === -1)
+        ? section.slides.length - 1 // Going up, select last slide
+        : 0 // Going down, select first slide
+
+      this.select(newSectionIndex, newSlideIndex)
+    },
+    handleArrow (event) {
+      switch (event.srcKey) {
+        case 'up':
+        case 'left':
+          return this.jump(-1)
+        case 'down':
+        case 'right':
+          return this.jump(+1)
+      }
     },
     goLive () {
       this.store.goLive(this.presentation)
