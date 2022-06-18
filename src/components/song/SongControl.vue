@@ -66,8 +66,8 @@ export default {
       this.presentation.selectedSlideIndex = slideIndex
 
       if (scroll) {
-        const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`]?.[0]?.$el
-        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`][0].$el
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     },
     jump (change = +1) {
