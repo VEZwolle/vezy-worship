@@ -1,5 +1,5 @@
 <template>
-  <svg class="song-output-livestream" :class="{ alpha }">
+  <svg v-if="!clear" class="song-output-livestream" :class="{ alpha }">
     <text y="1.6vw">
       <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
       <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.2vw" class="translation">{{ line }}</tspan>

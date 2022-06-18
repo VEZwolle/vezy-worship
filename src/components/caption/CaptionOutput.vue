@@ -1,5 +1,5 @@
 <template>
-  <div class="caption-output">
+  <div v-if="!clear" class="caption-output">
     <Caption :title="settings.title" :text="settings.text" :alpha="alpha" />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <svg v-if="!isFinished" class="countdown-output" :class="{ alpha }">
+  <svg v-if="!clear && !isFinished" class="countdown-output" :class="{ alpha }">
     <text y="2.5vw" x="5vw">{{ remaining }}</text>
   </svg>
 </template>

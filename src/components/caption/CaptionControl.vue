@@ -1,6 +1,6 @@
 <template>
-  <OutputPreview :sync-clear="!preview">
-    <CaptionOutput :presentation="presentation" />
+  <OutputPreview>
+    <CaptionOutput :presentation="presentation" :clear="clear && !preview" />
   </OutputPreview>
 </template>
 

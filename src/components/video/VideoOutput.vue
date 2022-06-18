@@ -1,6 +1,6 @@
 <template>
-  <div v-if="alpha" class="alpha" />
-  <video v-else :src="settings.fileUrl" class="video" autoplay />
+  <div v-if="!clear && alpha" class="alpha" />
+  <video v-else-if="!clear" :src="settings.fileUrl" class="video" autoplay />
 </template>
 
 <script>

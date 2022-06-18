@@ -2,7 +2,8 @@
 export default {
   props: {
     presentation: Object,
-    alpha: Boolean
+    alpha: Boolean,
+    clear: Boolean
   },
   computed: {
     settings () {
