@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted () {
-    if (!this.clear) {
+    if (!this.clear && !this.preview) {
       this.$refs.player.play()
     }
   },
