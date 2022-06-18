@@ -1,7 +1,9 @@
 <template>
   <div class="output-preview" :style="rootStyle">
     <div class="output-container bg-grey" :style="containerStyle">
-      <slot />
+      <Transition name="q-transition--fade">
+        <slot />
+      </Transition>
     </div>
   </div>
 </template>
