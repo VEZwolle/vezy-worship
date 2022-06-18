@@ -70,15 +70,17 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null
+      fileUrl: null,
+      play: false,
+      time: 0
     },
     components: {
       settings: require('./video/VideoSettings.vue').default,
       control: require('./video/VideoControl.vue').default
     },
     outputs: {
-      beamer: require('./video/VideoOutput.vue').default,
-      livestream: require('./video/VideoOutput.vue').default
+      beamer: require('./video/VideoOutputBeamer.vue').default,
+      livestream: require('./video/VideoOutputLivestream.vue').default
     }
   },
   {
