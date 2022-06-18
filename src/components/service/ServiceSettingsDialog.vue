@@ -49,14 +49,9 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import dayjs from 'dayjs'
 
 export default {
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  },
   data () {
     return {
       service: null,
@@ -83,7 +78,7 @@ export default {
     },
     save () {
       if (!this.service.id) {
-        this.store.createService(this.service)
+        this.$store.createService(this.service)
       }
 
       this.hide()

@@ -27,7 +27,7 @@
       flat
       icon="save"
       label="Dienst opslaan"
-      :disable="!store.service"
+      :disable="!$store.service"
       :loading="isSaving"
       @click="save(false)"
       @shortkey="save(false)"
@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import useServiceStore from 'stores/service'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
 import icon from 'assets/icon.svg'
@@ -92,9 +91,7 @@ import PACKAGE from '../../../package.json'
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog },
   setup () {
-    const store = useServiceStore()
-
-    return { store, icon, version: PACKAGE.version }
+    return { icon, version: PACKAGE.version }
   },
   data () {
     return {

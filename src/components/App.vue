@@ -5,7 +5,7 @@
     </q-header>
 
     <q-page-container>
-      <q-page v-if="store.service" class="row">
+      <q-page v-if="$store.service" class="row">
         <div class="col">
           <Setlist />
         </div>
@@ -29,14 +29,9 @@ import Toolbar from './layout/Toolbar.vue'
 import Setlist from './setlist/Setlist.vue'
 import Preview from './layout/Preview.vue'
 import Live from './layout/Live.vue'
-import useServiceStore from 'stores/service'
 
 export default {
-  components: { Toolbar, Setlist, Preview, Live },
-  setup () {
-    const store = useServiceStore()
-    return { store }
-  }
+  components: { Toolbar, Setlist, Preview, Live }
 }
 </script>
 
