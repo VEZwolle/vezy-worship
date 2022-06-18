@@ -15,6 +15,7 @@
     <q-item
       v-for="(slide, slideIndex) in section.slides"
       :key="slideIndex"
+      :ref="`slide_${sectionIndex}_${slideIndex}`"
       clickable
       :active="isSelected(sectionIndex, slideIndex)"
       :active-class="!preview ? 'bg-secondary text-white' : null"
@@ -60,13 +61,13 @@ export default {
     }
   },
   methods: {
-    select (sectionIndex = null, slideIndex = null) {
-      if (sectionIndex !== null) {
-        this.presentation.selectedSectionIndex = sectionIndex
-      }
+    select (sectionIndex, slideIndex, scroll = false) {
+      this.presentation.selectedSectionIndex = sectionIndex
+      this.presentation.selectedSlideIndex = slideIndex
 
-      if (slideIndex !== null) {
-        this.presentation.selectedSlideIndex = slideIndex
+      if (scroll) {
+        const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`]?.[0]?.$el
+        el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     },
     jump (change = +1) {
@@ -74,8 +75,8 @@ export default {
       let newSlideIndex = this.presentation.selectedSlideIndex + change
 
       if (selectedSection.slides[newSlideIndex]) {
-        // Slide is in current section, so stay on current section
-        return this.select(null, newSlideIndex)
+        // Slide is in current section, so stay on `selectedSectionIndex`
+        return this.select(this.presentation.selectedSectionIndex, newSlideIndex, true)
       }
 
       const newSectionIndex = this.presentation.selectedSectionIndex + change
@@ -90,7 +91,7 @@ export default {
         ? section.slides.length - 1 // Going up, select last slide
         : 0 // Going down, select first slide
 
-      this.select(newSectionIndex, newSlideIndex)
+      this.select(newSectionIndex, newSlideIndex, true)
     },
     handleArrow (event) {
       switch (event.srcKey) {
