@@ -1,5 +1,5 @@
 <template>
-  <div class="caption-settings">
+  <q-card-section>
     <label class="label">Titel</label>
     <q-input v-model="settings.title" outlined :rules="['required']" />
 
@@ -10,7 +10,7 @@
     <OutputPreview :zoom="0.8">
       <CaptionOutput :presentation="{ settings }" />
     </OutputPreview>
-  </div>
+  </q-card-section>
 </template>
 
 <script>

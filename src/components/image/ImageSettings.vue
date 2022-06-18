@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-card-section>
     <q-file v-model="file" accept="image/*" label="Selecteer afbeelding" outlined @update:model-value="update">
       <template #prepend>
         <q-icon name="image" />
@@ -9,7 +9,7 @@
     <q-input v-if="settings.fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
 
     <img v-if="settings.fileUrl" :src="settings.fileUrl" class="full-width">
-  </div>
+  </q-card-section>
 </template>
 
 <script>

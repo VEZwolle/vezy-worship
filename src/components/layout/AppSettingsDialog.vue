@@ -20,9 +20,9 @@
         </q-tab-panel>
       </q-tab-panels>
 
-      <q-card-section align="right">
+      <q-card-actions align="right">
         <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
-      </q-card-section>
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
