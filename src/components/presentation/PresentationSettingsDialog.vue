@@ -64,6 +64,7 @@ export default {
         this.$store.addPresentation(this.presentation)
       }
 
+      this.$store.preview(this.presentation)
       this.hide()
     }
   }
