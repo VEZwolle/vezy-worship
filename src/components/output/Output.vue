@@ -1,7 +1,7 @@
 <template>
   <div class="output" :style="style">
     <Transition name="q-transition--fade">
-      <component :is="outputComponent" v-if="outputComponent && !store.isClear" :key="presentation.id" :alpha="alpha" :presentation="presentation" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="store.isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
 </template>

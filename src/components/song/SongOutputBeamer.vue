@@ -1,11 +1,15 @@
 <template>
-  <svg class="song-output-beamer">
-    <text y="6.6vw">
-      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-      <tspan x="50%" dy="3vw">&nbsp;</tspan>
-      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
-    </text>
-  </svg>
+  <div class="song-output-beamer" :style="style">
+    <Transition name="q-transition--fade">
+      <svg v-if="!clear">
+        <text y="6.6vw">
+          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
+          <tspan x="50%" dy="3vw">&nbsp;</tspan>
+          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
+        </text>
+      </svg>
+    </Transition>
+  </div>
 </template>
 
 <script>
@@ -21,6 +25,15 @@ export default {
     translatedLines () {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
+    },
+    style () {
+      const style = {}
+
+      if (this.settings.fileUrl) {
+        style.backgroundImage = `url(${this.settings.fileUrl})`
+      }
+
+      return style
     }
   }
 }
@@ -32,32 +45,39 @@ export default {
 }
 
 .song-output-beamer {
-  position: fixed;
   width: 100%;
   height: 100%;
+  background-size: cover;
+  background-position: center;
 
-  tspan {
-    font-size: 3.8vw;
-    letter-spacing: 0.01vw;
+  svg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
 
-    fill: #fff;
-    stroke: #000;
-    stroke-width: 0.5vw;
-    stroke-linejoin: round;
-    paint-order: stroke;
+    tspan {
+      font-size: 3.8vw;
+      letter-spacing: 0.01vw;
 
-    text-anchor: middle;
-    dominant-baseline: middle;
+      fill: #fff;
+      stroke: #000;
+      stroke-width: 0.5vw;
+      stroke-linejoin: round;
+      paint-order: stroke;
 
-    filter: shadow(0.8);
-  }
+      text-anchor: middle;
+      dominant-baseline: middle;
 
-  tspan.translation {
-    fill: #bbb;
-    font-style: italic;
-    stroke-width: 0.4vw;
-    font-size: 3.4vw;
-    filter: shadow(0.6);
+      filter: shadow(0.8);
+    }
+
+    tspan.translation {
+      fill: #bbb;
+      font-style: italic;
+      stroke-width: 0.4vw;
+      font-size: 3.4vw;
+      filter: shadow(0.6);
+    }
   }
 }
 </style>

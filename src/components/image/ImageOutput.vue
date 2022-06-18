@@ -1,5 +1,5 @@
 <template>
-  <div class="image" :style="style" />
+  <div v-if="!clear" class="image" :style="style" />
 </template>
 
 <script>

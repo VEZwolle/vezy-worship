@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-card-section>
     <q-file v-model="file" accept="video/*" label="Selecteer video" outlined @update:model-value="update">
       <template #prepend>
         <q-icon name="smart_display" />
@@ -9,7 +9,7 @@
     <q-input v-if="settings.fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
 
     <video v-if="settings.fileUrl" :src="settings.fileUrl" muted class="full-width" />
-  </div>
+  </q-card-section>
 </template>
 
 <script>

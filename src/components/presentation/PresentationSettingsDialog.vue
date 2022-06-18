@@ -10,9 +10,7 @@
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
 
-      <q-card-section>
-        <component :is="settingsComponent" v-if="settingsComponent" :presentation="presentation" />
-      </q-card-section>
+      <component :is="settingsComponent" v-if="settingsComponent" :presentation="presentation" />
 
       <q-separator />
 

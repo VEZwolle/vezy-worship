@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-card-section>
     <q-input v-model="settings.time" label="Aftellen tot" outlined mask="time" :rules="['time']">
       <template #append>
         <q-icon name="access_time" class="cursor-pointer">
@@ -9,7 +9,7 @@
         </q-icon>
       </template>
     </q-input>
-  </div>
+  </q-card-section>
 </template>
 
 <script>

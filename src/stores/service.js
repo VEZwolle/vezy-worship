@@ -17,7 +17,7 @@ export default defineStore('service', {
     },
     createService ({ date, time, host, preacher, backgroundImageId, backgroundImageUrl }) {
       const service = {
-        id: nanoid(10),
+        id: nanoid(),
         date,
         time,
         host,
@@ -62,7 +62,7 @@ export default defineStore('service', {
     },
 
     addPresentation (presentation) {
-      presentation.id = nanoid(10)
+      presentation.id = nanoid()
       this.service.presentations.push(presentation)
     },
     removePresentation (presentation) {

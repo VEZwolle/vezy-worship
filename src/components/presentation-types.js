@@ -7,7 +7,9 @@ export default [
     settings: {
       title: '',
       text: '',
-      translation: ''
+      translation: '',
+      fileId: null,
+      fileUrl: null
     },
     description (settings) {
       return settings.text
@@ -48,7 +50,8 @@ export default [
     color: 'teal',
     settings: {
       title: '',
-      url: null
+      fileId: null,
+      fileUrl: null
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
@@ -66,7 +69,8 @@ export default [
     color: 'red',
     settings: {
       title: '',
-      url: null
+      fileId: null,
+      fileUrl: null
     },
     components: {
       settings: require('./video/VideoSettings.vue').default,

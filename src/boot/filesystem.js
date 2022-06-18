@@ -18,7 +18,7 @@ const fs = {
 
   async open () {
     const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
-    this.fileHandle = fileHandle
+    fs.fileHandle = fileHandle
 
     const file = await fileHandle.getFile()
 
@@ -77,8 +77,8 @@ const fs = {
 
   async save (showPicker = false) {
     // Show SaveFilePicker on first save
-    if (showPicker || !this.fileHandle) {
-      this.fileHandle = await window.showSaveFilePicker(filePickerOptions)
+    if (showPicker || !fs.fileHandle) {
+      fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
     }
 
     const blobWriter = new zip.BlobWriter('application/zip')
@@ -121,16 +121,16 @@ const fs = {
     const blob = blobWriter.getData()
 
     // Write zip file to disk
-    const writable = await this.fileHandle.createWritable()
+    const writable = await fs.fileHandle.createWritable()
     await writable.write(blob)
     await writable.close()
 
-    Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${this.fileHandle.name}` })
+    Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
   },
 
   createFileId (file) {
     const ext = file.name.split('.').pop()
-    return `${nanoid(10)}.${ext}`
+    return `${nanoid()}.${ext}`
   }
 }
 
