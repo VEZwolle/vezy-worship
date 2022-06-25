@@ -21,8 +21,8 @@
     "source": "api"
   },
   "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
+    "rules": "api/firestore.rules",
+    "indexes": "api/firestore.indexes.json"
   },
   "emulators": {
     "hosting": {
