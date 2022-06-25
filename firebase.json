@@ -17,6 +17,9 @@
       }
     ]
   },
+  "functions": {
+    "source": "api"
+  },
   "emulators": {
     "hosting": {
       "port": 5000
