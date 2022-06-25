@@ -20,12 +20,19 @@
   "functions": {
     "source": "api"
   },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
   "emulators": {
     "hosting": {
       "port": 5000
     },
     "functions": {
       "port": 5001
+    },
+    "firestore": {
+      "port": 5002
     },
     "ui": {
       "enabled": true
