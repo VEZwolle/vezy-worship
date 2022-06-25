@@ -7,10 +7,32 @@ const axios = require('axios')
 // Initialization
 admin.initializeApp()
 
+const db = admin.firestore()
+
 const app = express()
 app.use(cors())
 
-// API endpoints
+/**
+ * Load bible verse(s) from selected bible.
+ */
+app.get('/api/bible', async (req, res) => {
+  const { bible, book, chapter, from, to } = req.params
+
+  const verses = await db.collection(bible)
+    .where('book', '==', book)
+    .where('chapter', '==', chapter)
+    .where('verse', '>=', from)
+    .where('verse', '<=', to)
+    .get()
+
+  const data = verses.docs.map(doc => doc.data())
+
+  res.json(data)
+})
+
+/**
+ * Translate text into Dutch.
+ */
 app.post('/api/translate', async (req, res) => {
   const data = new URLSearchParams({
     text: req.body.text,
