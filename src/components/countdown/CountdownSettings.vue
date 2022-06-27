@@ -1,6 +1,6 @@
 <template>
   <q-card-section>
-    <q-input v-model="settings.time" label="Aftellen tot" outlined mask="time" :rules="['time']">
+    <q-input v-model="settings.time" label="Aftellen tot (weergave bij tijd in de toekomst op dezelfde dag)" outlined mask="time" :rules="['time']">
       <template #append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
