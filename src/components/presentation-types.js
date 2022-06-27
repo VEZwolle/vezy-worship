@@ -89,10 +89,15 @@ export default [
     icon: 'alarm',
     color: 'orange',
     settings: {
-      time: null
+      time: null,
+      klok: 0
     },
     description (settings) {
-      return `Aftellen tot ${settings.time}`
+      if (settings.klok === 1) {
+        return `Klok tot ${settings.time}`
+      } else {
+        return `Aftellen tot ${settings.time}`
+      }
     },
     components: {
       settings: require('./countdown/CountdownSettings.vue').default,
