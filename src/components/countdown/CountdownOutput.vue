@@ -14,7 +14,9 @@ export default {
       const hours = this.settings.hours.toString()
       const minutes = this.settings.minutes.toString().padStart(2, '0')
       const seconds = this.settings.seconds.toString().padStart(2, '0')
-      if (this.settings.hours > 0) {
+      if (this.settings.klok === 1) {
+        return this.settings.now.format('H:mm:ss')
+      } else if (this.settings.hours > 0) {
         return `${hours}:${minutes}:${seconds}`
       } else {
         return `${minutes}:${seconds}`
