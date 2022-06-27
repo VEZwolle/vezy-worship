@@ -28,7 +28,8 @@ export default {
       const seconds = end.diff(now, 'seconds')
 
       this.settings.seconds = seconds % 60
-      this.settings.minutes = Math.floor(seconds / 60)
+      this.settings.minutes = Math.floor((seconds % 3600) / 60)
+      this.settings.hours = Math.floor(seconds / 3600)
     }
   }
 }
