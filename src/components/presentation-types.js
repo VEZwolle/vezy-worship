@@ -90,10 +90,10 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      klok: 0
+      types: 0
     },
     description (settings) {
-      if (settings.klok === 1) {
+      if (settings.types === 1) {
         return `Klok tot ${settings.time}`
       } else {
         return `Aftellen tot ${settings.time}`
