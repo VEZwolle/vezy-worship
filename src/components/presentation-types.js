@@ -93,11 +93,10 @@ export default [
       type: 0
     },
     description (settings) {
-      if (settings.types === 1) {
+      if (settings.type === 1) {
         return `Klok tot ${settings.time}`
-      } else {
-        return `Aftellen tot ${settings.time}`
       }
+      return `Aftellen tot ${settings.time}`
     },
     components: {
       settings: require('./countdown/CountdownSettings.vue').default,
