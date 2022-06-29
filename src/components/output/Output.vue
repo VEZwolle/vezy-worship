@@ -13,11 +13,16 @@ export default {
   props: {
     id: String,
     alpha: Boolean,
-    showBackground: Boolean
+    showBackground: Boolean,
+    previewPresentation: Boolean
   },
   computed: {
     presentation () {
-      return this.$store.livePresentation
+      if (!this.previewPresentation) {
+        return this.$store.livePresentation
+      } else {
+        return this.$store.previewPresentation
+      }
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)

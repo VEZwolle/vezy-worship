@@ -21,13 +21,19 @@
         <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
       </q-page>
     </q-page-container>
+
+    <q-footer>
+      <OutputBox :preview-presentation="true" :beamer="false" :livestream="false" :alpha="false" />
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
+import OutputBox from '../output/OutputBox.vue'
 
 export default {
+  components: { OutputBox },
   computed: {
     presentation () {
       return this.$store.previewPresentation

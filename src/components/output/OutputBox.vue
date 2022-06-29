@@ -2,7 +2,7 @@
   <div class="output-box">
     <div v-for="view in views" :key="view.id" class="output-box-view">
       <OutputPreview v-if="view.output" :zoom="zoom">
-        <Output :id="view.outputid" :show-background="view.showbackground" :alpha="view.alpha" />
+        <Output :id="view.outputid" :show-background="view.showbackground" :alpha="view.alpha" :preview-presentation="previewPresentation" />
       </OutputPreview>
     </div>
   </div>
@@ -16,7 +16,7 @@
   />
   <q-toolbar class="bg-grey-3 text-dark">
     <q-toolbar-title class="text-subtitle2">
-      Live voorbeeld:
+      Voorbeeld:
       <q-checkbox
         v-for="view in views"
         :key="view.id"
@@ -39,6 +39,12 @@ import OutputPreview from '../output/OutputPreview.vue'
 
 export default {
   components: { OutputPreview, Output },
+  props: {
+    previewPresentation: Boolean,
+    beamer: Boolean,
+    livestream: Boolean,
+    alpha: Boolean
+  },
   data () {
     return {
       maxzoom: 0.6,
@@ -49,7 +55,7 @@ export default {
           outputid: 'beamer',
           showbackground: true,
           alpha: false,
-          output: true
+          output: this.beamer
         },
         {
           id: 1,
@@ -57,7 +63,7 @@ export default {
           outputid: 'livestream',
           showbackground: false,
           alpha: false,
-          output: true
+          output: this.livestream
         },
         {
           id: 2,
@@ -65,7 +71,7 @@ export default {
           outputid: 'livestream',
           showbackground: false,
           alpha: true,
-          output: false
+          output: this.alpha
         }
       ]
     }
