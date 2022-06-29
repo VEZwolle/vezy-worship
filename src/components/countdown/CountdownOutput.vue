@@ -11,13 +11,19 @@ export default {
   extends: BaseOutput,
   computed: {
     remaining () {
+      if (this.settings.type === 1) {
+        return this.settings.now.format('H:mm:ss')
+      }
+      const hours = this.settings.hours.toString()
       const minutes = this.settings.minutes.toString().padStart(2, '0')
       const seconds = this.settings.seconds.toString().padStart(2, '0')
-
+      if (this.settings.hours > 0) {
+        return `${hours}:${minutes}:${seconds}`
+      }
       return `${minutes}:${seconds}`
     },
     isFinished () {
-      return this.settings.minutes < 0
+      return this.settings.hours < 0
     }
   }
 }

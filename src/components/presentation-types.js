@@ -89,9 +89,13 @@ export default [
     icon: 'alarm',
     color: 'orange',
     settings: {
-      time: null
+      time: null,
+      type: 0
     },
     description (settings) {
+      if (settings.type === 1) {
+        return `Klok tot ${settings.time}`
+      }
       return `Aftellen tot ${settings.time}`
     },
     components: {
