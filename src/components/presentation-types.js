@@ -90,7 +90,7 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      types: 0
+      type: 0
     },
     description (settings) {
       if (settings.types === 1) {
