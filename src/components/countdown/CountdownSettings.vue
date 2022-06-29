@@ -1,6 +1,6 @@
 <template>
   <q-card-section>
-    <q-input v-model="settings.time" :label="types[settings.types].definition" outlined mask="time" :rules="['time']">
+    <q-input v-model="settings.time" :label="types[settings.type].definition" outlined mask="time" :rules="['time']">
       <template #append>
         <q-icon name="access_time" class="cursor-pointer">
           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -10,7 +10,7 @@
       </template>
     </q-input>
     <q-option-group
-      v-model="settings.types"
+      v-model="settings.type"
       :options="types"
       color="primary"
       inline
@@ -43,8 +43,8 @@ export default {
     if (!this.settings.time) {
       this.settings.time = this.$store.service.time
     }
-    if (this.settings.types === undefined) {
-      this.settings.types = 0
+    if (this.settings.type === undefined) {
+      this.settings.type = 0
     }
   }
 }

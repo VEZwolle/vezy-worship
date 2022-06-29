@@ -11,7 +11,7 @@ export default {
   extends: BaseOutput,
   computed: {
     remaining () {
-      if (this.settings.types === 1) {
+      if (this.settings.type === 1) {
         return this.settings.now.format('H:mm:ss')
       } else {
         const hours = this.settings.hours.toString()
