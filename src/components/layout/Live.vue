@@ -28,13 +28,19 @@
         <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
       </q-page>
     </q-page-container>
+
+    <q-footer>
+      <OutputBox />
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
+import OutputBox from '../output/OutputBox.vue'
 
 export default {
+  components: { OutputBox },
   computed: {
     presentation () {
       return this.$store.livePresentation
