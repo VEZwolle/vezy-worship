@@ -1,5 +1,5 @@
 <template>
-  <div v-if="countViewsOutput > 0" class="output-box">
+  <div v-if="countViewsOutput > 0" id="output-box" class="output-box bg-grey-3">
     <template v-for="view in views" :key="view.id">
       <template v-if="view.output">
         <div class="output-box-view" :style="rootStyle">
@@ -54,7 +54,7 @@ export default {
   },
   data () {
     return {
-      scale: 0.3, // nog uitzoeken hoe scale van div/template tov breedte kan inlezen
+      scale: 0.3, // nog bekijken hoe dit uit te rekenen is (breedte-kolom/1920)
       maxzoom: 0.5,
       views: [
         {
