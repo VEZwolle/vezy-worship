@@ -1,7 +1,7 @@
 <template>
   <div class="output" :style="style">
     <Transition name="q-transition--fade">
-      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
 </template>
@@ -17,12 +17,17 @@ export default {
     previewPresentation: Boolean
   },
   computed: {
+    isClear () {
+      if (!this.previewPresentation) {
+        return this.$store.isClear
+      }
+      return false
+    },
     presentation () {
       if (!this.previewPresentation) {
         return this.$store.livePresentation
-      } else {
-        return this.$store.previewPresentation
       }
+      return this.$store.previewPresentation
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)

@@ -1,11 +1,18 @@
 <template>
-  <div class="output-box">
-    <div v-for="view in views" :key="view.id" class="output-box-view">
-      <OutputPreview v-if="view.output" :zoom="zoom">
-        <Output :id="view.outputid" :show-background="view.showbackground" :alpha="view.alpha" :preview-presentation="previewPresentation" />
-      </OutputPreview>
-    </div>
+  <div v-if="countViewsOutput > 0" class="output-box">
+    <template v-for="view in views" :key="view.id">
+      <template v-if="view.output">
+        <div class="output-box-view" :style="rootStyle">
+          <div class="output-container" :style="containerStyle">
+            <Transition name="q-transition--fade">
+              <Output :id="view.outputid" :show-background="view.showbackground" :alpha="view.alpha" :preview-presentation="previewPresentation" />
+            </Transition>
+          </div>
+        </div>
+      </template>
+    </template>
   </div>
+  <!--
   <q-slider
     v-if="countViewsOutput > 0"
     v-model="maxzoom"
@@ -14,6 +21,7 @@
     :step="0.1"
     color="red"
   />
+  -->
   <q-toolbar class="bg-grey-3 text-dark">
     <q-toolbar-title class="text-subtitle2">
       Voorbeeld:
@@ -35,10 +43,9 @@
 
 <script>
 import Output from '../output/Output.vue'
-import OutputPreview from '../output/OutputPreview.vue'
 
 export default {
-  components: { OutputPreview, Output },
+  components: { Output },
   props: {
     previewPresentation: Boolean,
     beamer: Boolean,
@@ -47,7 +54,8 @@ export default {
   },
   data () {
     return {
-      maxzoom: 0.6,
+      scale: 0.3, // nog uitzoeken hoe scale van div/template tov breedte kan inlezen
+      maxzoom: 0.5,
       views: [
         {
           id: 0,
@@ -89,8 +97,23 @@ export default {
     zoom () {
       if (this.countViewsOutput > 0) {
         return Math.min(this.maxzoom, 1 / this.countViewsOutput)
-      } else {
-        return this.maxzoom
+      }
+      return this.maxzoom
+    },
+    rootStyle () {
+      const height = (1080 * this.scale) * this.zoom
+      const width = (1920 * this.scale) * this.zoom
+      return {
+        height: `${height}px`,
+        width: `${width}px`
+      }
+    },
+    containerStyle () {
+      return {
+        width: '1920px',
+        height: '1080px',
+        transform: `scale(${this.scale * this.zoom})`,
+        transformOrigin: 'top left'
       }
     }
   }
@@ -99,10 +122,14 @@ export default {
 
 <style scoped>
 .output-box {
-  display: inline;
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  margin: 0px auto 0px auto;
 }
 .output-box-view {
-  display: inline;
+  margin: 5px 5px 5px 5px;
+  pointer-events: none;
 }
 </style>
