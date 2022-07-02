@@ -2,10 +2,10 @@
   <div class="song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
       <svg v-if="!clear">
-        <text y="6.6vw">
-          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-          <tspan x="50%" dy="3vw">&nbsp;</tspan>
-          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
+        <text :y="(6.6 * outputvw) + 'px'">
+          <tspan v-for="(line, i) in lines" :key="i" x="50%" :dy="(4.4 * outputvw) + 'px'">{{ line }}</tspan>
+          <tspan x="50%" :dy="(3 * outputvw) + 'px'">&nbsp;</tspan>
+          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" :dy="(4.4 * outputvw) + 'px'" class="translation">{{ line }}</tspan>
         </text>
       </svg>
     </Transition>
@@ -34,6 +34,27 @@ export default {
       }
 
       return style
+    },
+    cssdropshadow () { // drop-shadow(0.3vw 0.3vw 0.3vw rgba(0, 0, 0, $opacity))
+      return {
+        beamer0_8: 'drop-shadow(' + (0.3 * this.outputvw) + 'px ' + (0.3 * this.outputvw) + 'px ' + (0.3 * this.outputvw) + 'px rgba(0, 0, 0, 0.8))',
+        beamer0_6: 'drop-shadow(' + (0.3 * this.outputvw) + 'px ' + (0.3 * this.outputvw) + 'px ' + (0.3 * this.outputvw) + 'px rgba(0, 0, 0, 0.6))'
+      }
+    },
+    csssongoutputbeamer () {
+      return {
+        svg: {
+          tspan: {
+            fontsize: (3.8 * this.outputvw) + 'px',
+            letterspacing: (0.01 * this.outputvw) + 'px',
+            strokewidth: (0.5 * this.outputvw) + 'px'
+          },
+          tspantranslation: {
+            strokewidth: (0.4 * this.outputvw) + 'px',
+            fontsize: (3.4 * this.outputvw) + 'px'
+          }
+        }
+      }
     }
   }
 }
@@ -56,27 +77,27 @@ export default {
     height: 100%;
 
     tspan {
-      font-size: 3.8vw;
-      letter-spacing: 0.01vw;
+      font-size: v-bind('csssongoutputbeamer.svg.tspan.fontsize');
+      letter-spacing: v-bind('csssongoutputbeamer.svg.tspan.letterspacing');
 
       fill: #fff;
       stroke: #000;
-      stroke-width: 0.5vw;
+      stroke-width: v-bind('csssongoutputbeamer.svg.tspan.strokewidth');
       stroke-linejoin: round;
       paint-order: stroke;
 
       text-anchor: middle;
       dominant-baseline: middle;
 
-      filter: shadow(0.8);
+      filter: v-bind('cssdropshadow.beamer0_8');
     }
 
     tspan.translation {
       fill: #bbb;
       font-style: italic;
-      stroke-width: 0.4vw;
-      font-size: 3.4vw;
-      filter: shadow(0.6);
+      stroke-width: v-bind('csssongoutputbeamer.svg.tspantranslation.strokewidth');
+      font-size: v-bind('csssongoutputbeamer.svg.tspantranslation.fontsize');
+      filter: v-bind('cssdropshadow.beamer0_6');
     }
   }
 }
