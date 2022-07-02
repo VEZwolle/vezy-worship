@@ -6,11 +6,11 @@ export default {
     clear: Boolean,
     outputvw: {
       type: Number,
-      default: 1
+      default: 19.2
     },
     outputvh: {
       type: Number,
-      default: 1
+      default: 10.8
     }
   },
   computed: {

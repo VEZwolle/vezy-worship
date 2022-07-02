@@ -16,7 +16,7 @@ export default {
     alpha: Boolean,
     outputvw: {
       type: Number,
-      default: 1
+      default: 19.2
     }
   },
   computed: {
