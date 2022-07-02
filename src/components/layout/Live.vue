@@ -30,17 +30,17 @@
     </q-page-container>
 
     <q-footer>
-      <OutputBox :beamer="false" :livestream="true" :alpha="false" />
+      <OutputBoxes :beamer="false" :livestream="true" :alpha="false" />
     </q-footer>
   </q-layout>
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
-import OutputBox from '../output/OutputBox.vue'
+import OutputBoxes from '../output/OutputBoxes.vue'
 
 export default {
-  components: { OutputBox },
+  components: { OutputBoxes },
   computed: {
     presentation () {
       return this.$store.livePresentation

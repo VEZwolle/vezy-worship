@@ -1,6 +1,6 @@
 <template>
   <div v-if="!clear" class="caption-output">
-    <Caption :title="settings.title" :text="settings.text" :alpha="alpha" />
+    <Caption :title="settings.title" :text="settings.text" :alpha="alpha" :outputvw="outputvw" />
   </div>
 </template>
 
@@ -10,7 +10,12 @@ import Caption from './Caption.vue'
 
 export default {
   components: { Caption },
-  extends: BaseOutput
+  extends: BaseOutput,
+  computed: {
+    csscaptionoutputpadding () {
+      return (6 * this.outputvw) + 'px'
+    }
+  }
 }
 </script>
 
@@ -20,6 +25,6 @@ export default {
   left: 0;
   bottom: 0;
   width: 100%;
-  padding: 6vw;
+  padding: v-bind('csscaptionoutputpadding');
 }
 </style>

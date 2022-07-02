@@ -23,17 +23,17 @@
     </q-page-container>
 
     <q-footer>
-      <OutputBox :preview-presentation="true" :beamer="false" :livestream="false" :alpha="false" />
+      <OutputBoxes :preview-presentation="true" :beamer="false" :livestream="false" :alpha="false" />
     </q-footer>
   </q-layout>
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
-import OutputBox from '../output/OutputBox.vue'
+import OutputBoxes from '../output/OutputBoxes.vue'
 
 export default {
-  components: { OutputBox },
+  components: { OutputBoxes },
   computed: {
     presentation () {
       return this.$store.previewPresentation

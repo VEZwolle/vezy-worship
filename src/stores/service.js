@@ -7,7 +7,17 @@ export default defineStore('service', {
     service: null,
     previewPresentation: null,
     livePresentation: null,
-    isClear: true
+    isClear: true,
+    output: { // nog nazien of dit een handige plaats is, uitwerken dat gegevens vanuit scherm er in komen of een default waarde via web-app
+      Beamer: {
+        vw: 19.20 / 2,
+        vh: 10.80
+      },
+      Livestream: {
+        vw: 19.20,
+        vh: 10.80
+      }
+    }
   }),
   actions: {
     loadService (data) {

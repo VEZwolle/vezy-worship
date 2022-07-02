@@ -1,135 +1,105 @@
 <template>
-  <div v-if="countViewsOutput > 0" id="output-box" class="output-box bg-grey-3">
-    <template v-for="view in views" :key="view.id">
-      <template v-if="view.output">
-        <div class="output-box-view" :style="rootStyle">
-          <div class="output-container" :style="containerStyle">
-            <Transition name="q-transition--fade">
-              <Output :id="view.outputid" :show-background="view.showbackground" :alpha="view.alpha" :preview-presentation="previewPresentation" />
-            </Transition>
-          </div>
-        </div>
-      </template>
-    </template>
+  <div class="output-box-view" :style="rootStyle">
+    <div class="output-container" :style="containerStyle">
+      <div class="output-box" :style="style">
+        <Transition name="q-transition--fade">
+          <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" :outputvw="outputv.w" :outputvh="outputv.h" />
+        </Transition>
+      </div>
+    </div>
   </div>
-  <!--
-  <q-slider
-    v-if="countViewsOutput > 0"
-    v-model="maxzoom"
-    :min="0"
-    :max="1"
-    :step="0.1"
-    color="red"
-  />
-  -->
-  <q-toolbar class="bg-grey-3 text-dark">
-    <q-toolbar-title class="text-subtitle2">
-      Voorbeeld:
-      <q-checkbox
-        v-for="view in views"
-        :key="view.id"
-        v-model="view.output"
-        right-label
-        :label="view.name"
-        color="red"
-      >
-        <q-tooltip>
-          Vink aan om miniatuur weergave van de {{ view.name }} te zien.
-        </q-tooltip>
-      </q-checkbox>
-    </q-toolbar-title>
-  </q-toolbar>
 </template>
 
 <script>
-import Output from '../output/Output.vue'
+import presentationTypes from '../presentation-types'
 
 export default {
-  components: { Output },
   props: {
+    outputid: String,
+    showBackground: Boolean,
+    alpha: Boolean,
     previewPresentation: Boolean,
-    beamer: Boolean,
-    livestream: Boolean,
-    alpha: Boolean
-  },
-  data () {
-    return {
-      scale: 0.3, // nog bekijken hoe dit uit te rekenen is (breedte-kolom/1920)
-      maxzoom: 0.5,
-      views: [
-        {
-          id: 0,
-          name: 'Beamer',
-          outputid: 'beamer',
-          showbackground: true,
-          alpha: false,
-          output: this.beamer
-        },
-        {
-          id: 1,
-          name: 'Livestream',
-          outputid: 'livestream',
-          showbackground: false,
-          alpha: false,
-          output: this.livestream
-        },
-        {
-          id: 2,
-          name: 'Alpha',
-          outputid: 'livestream',
-          showbackground: false,
-          alpha: true,
-          output: this.alpha
-        }
-      ]
-    }
+    boxwidth: { type: Number, Default: 0 }
   },
   computed: {
-    countViewsOutput () {
-      let count = 0
-      for (const view in this.views) {
-        if (this.views[view].output) {
-          count++
+    outputv () {
+      if (this.outputid === 'beamer') {
+        return {
+          w: this.$store.output.Beamer.vw,
+          h: this.$store.output.Beamer.vh
         }
       }
-      return count
-    },
-    zoom () {
-      if (this.countViewsOutput > 0) {
-        return Math.min(this.maxzoom, 1 / this.countViewsOutput)
+      return {
+        w: this.$store.output.Livestream.vw,
+        h: this.$store.output.Livestream.vh
       }
-      return this.maxzoom
     },
     rootStyle () {
-      const height = (1080 * this.scale) * this.zoom
-      const width = (1920 * this.scale) * this.zoom
+      const width = this.boxwidth
+      const height = this.outputv.h / this.outputv.w * width
       return {
-        height: `${height}px`,
-        width: `${width}px`
+        width: `${width}px`,
+        height: `${height}px`
       }
     },
     containerStyle () {
       return {
-        width: '1920px',
-        height: '1080px',
-        transform: `scale(${this.scale * this.zoom})`,
+        width: (100 * this.outputv.w) + 'px',
+        height: (100 * this.outputv.h) + 'px',
+        transform: `scale(${this.boxwidth / (100 * this.outputv.w)})`,
         transformOrigin: 'top left'
       }
+    },
+    cssoutput () {
+      return {
+        w: (100 * this.outputv.w) + 'px',
+        h: (100 * this.outputv.h) + 'px'
+      }
+    },
+    isClear () {
+      if (!this.previewPresentation) {
+        return this.$store.isClear
+      }
+      return false
+    },
+    presentation () {
+      if (!this.previewPresentation) {
+        return this.$store.livePresentation
+      }
+      return this.$store.previewPresentation
+    },
+    presentationType () {
+      return presentationTypes.find(t => t.id === this.presentation?.type)
+    },
+    outputComponent () {
+      return this.presentationType?.outputs?.[this.outputid]
+    },
+    style () {
+      const style = {}
+
+      if (this.showBackground) {
+        const image = this.$store.service?.backgroundImageUrl || require('../../assets/bg.png')
+        style.backgroundImage = `url(${image})`
+      }
+
+      return style
     }
   }
 }
 </script>
 
 <style scoped>
-.output-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin: 0px auto 0px auto;
-}
 .output-box-view {
   margin: 5px 5px 5px 5px;
   pointer-events: none;
+}
+.output-box {
+  position: relative;
+  width: v-bind('cssoutput.w');
+  height: v-bind('cssoutput.h');
+  cursor: none;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
 }
 </style>

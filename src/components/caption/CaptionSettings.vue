@@ -8,7 +8,7 @@
 
     <label class="label">Preview</label>
     <OutputPreview :zoom="0.8">
-      <CaptionOutput :presentation="{ settings }" />
+      <CaptionOutput :presentation="{ settings }" :outputvw="$store.output.Livestream.vw" />
     </OutputPreview>
   </q-card-section>
 </template>

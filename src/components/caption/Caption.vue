@@ -13,7 +13,30 @@ export default {
   props: {
     title: String,
     text: String,
-    alpha: Boolean
+    alpha: Boolean,
+    outputvw: {
+      type: Number,
+      default: 1
+    }
+  },
+  computed: {
+    csscaption () {
+      return {
+        title: {
+          top: (-1.3 * this.outputvw) + 'px',
+          left: (2 * this.outputvw) + 'px',
+          padding: (0.3 * this.outputvw) + 'px ' + (5 * this.outputvw) + 'px ' + (0.3 * this.outputvw) + 'px ' + (1 * this.outputvw) + 'px',
+          fontsize: (1.3 * this.outputvw) + 'px',
+          minwidth: (15 * this.outputvw) + 'px'
+        },
+        text: {
+          padding: (2 * this.outputvw) + 'px ' + (1.5 * this.outputvw) + 'px ' + (1.5 * this.outputvw) + 'px ' + (2 * this.outputvw) + 'px',
+          fontsize: (1.7 * this.outputvw) + 'px',
+          minwidth: (30 * this.outputvw) + 'px',
+          lineheight: (2.2 * this.outputvw) + 'px'
+        }
+      }
+    }
   }
 }
 </script>
@@ -24,24 +47,24 @@ export default {
 
   .title {
     position: absolute;
-    top: -1.3vw;
-    left: 2vw;
+    top: v-bind('csscaption.title.top');
+    left: v-bind('csscaption.title.left');
     background: $primary;
     color: #fff;
-    padding: 0.3vw 5vw 0.3vw 1vw;
-    font-size: 1.3vw;
+    padding: v-bind('csscaption.title.padding');
+    font-size: v-bind('csscaption.title.fontsize');
     width: max-content;
-    min-width: 15vw;
+    min-width: v-bind('csscaption.title.minwidth');
   }
 
   .text {
     background: #fff;
-    padding: 2vw 1.5vw 1.5vw 2vw;
-    font-size: 1.7vw;
+    padding: v-bind('csscaption.text.padding');
+    font-size: v-bind('csscaption.text.fontsize');
     width: max-content;
-    min-width: 30vw;
+    min-width: v-bind('csscaption.text.minwidth');
     max-width: 100%;
-    line-height: 2.2vw;
+    line-height: v-bind('csscaption.text.lineheight');
   }
 
   &.alpha {

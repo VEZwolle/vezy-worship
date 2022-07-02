@@ -1,6 +1,6 @@
 <template>
   <OutputPreview>
-    <CaptionOutput :presentation="presentation" :clear="clear && !preview" />
+    <CaptionOutput :presentation="presentation" :clear="clear && !preview" :outputvw="$store.output.Livestream.vw" />
   </OutputPreview>
 </template>
 
