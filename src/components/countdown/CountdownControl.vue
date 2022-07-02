@@ -1,6 +1,6 @@
 <template>
   <OutputPreview>
-    <CountdownOutput :presentation="presentation" :clear="clear && !preview" />
+    <CountdownOutput :presentation="presentation" :clear="clear && !preview" :outputvw="$store.output.Livestream.vw" />
   </OutputPreview>
 </template>
 

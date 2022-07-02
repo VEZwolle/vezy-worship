@@ -1,6 +1,6 @@
 <template>
   <svg v-if="!clear && !isFinished" class="countdown-output" :class="{ alpha }">
-    <text y="2.5vw" x="5vw">{{ remaining }}</text>
+    <text :y="(2.5 * outputvw) + 'px'" :x="(5 * outputvw) + 'px'">{{ remaining }}</text>
   </svg>
 </template>
 
@@ -24,6 +24,15 @@ export default {
     },
     isFinished () {
       return this.settings.hours < 0
+    },
+    csscountdownoutput () {
+      return {
+        text: {
+          fontsize: (3.4 * this.outputvw) + 'px',
+          letterspacing: (0.01 * this.outputvw) + 'px',
+          strokewidth: (0.5 * this.outputvw) + 'px'
+        }
+      }
     }
   }
 }
@@ -41,12 +50,12 @@ export default {
     transform-origin: center;
     transform-box: fill-box;
 
-    font-size: 3.4vw;
-    letter-spacing: 0.01vw;
+    font-size: v-bind('csscountdownoutput.text.fontsize');
+    letter-spacing: v-bind('csscountdownoutput.text.letterspacing');
 
     fill: #fff;
     stroke: #000;
-    stroke-width: 0.5vw;
+    stroke-width: v-bind('csscountdownoutput.text.strokewidth');
     stroke-linejoin: round;
     paint-order: stroke;
 
