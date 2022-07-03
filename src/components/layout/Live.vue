@@ -25,7 +25,7 @@
 
     <q-page-container>
       <q-page>
-        <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
+        <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
       </q-page>
     </q-page-container>
 
