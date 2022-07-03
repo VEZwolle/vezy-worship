@@ -92,6 +92,7 @@ export default {
 .output-box-view {
   margin: 5px 5px 5px 5px;
   pointer-events: none;
+  color: #000;
 }
 .output-box {
   position: relative;
