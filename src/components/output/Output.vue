@@ -4,12 +4,15 @@
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
+  <messageOutput message="test message test message" />
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
+import messageOutput from '../message/messageOutput'
 
 export default {
+  components: { messageOutput },
   props: {
     id: String,
     alpha: Boolean,
