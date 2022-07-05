@@ -42,6 +42,8 @@
     </q-btn-dropdown>
 
     <q-space />
+    <message-control />
+    <q-space />
 
     <div v-if="!$q.platform.is.electron">
       Open output:
@@ -87,9 +89,10 @@ import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
+import messageControl from '../message/messageControl'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog },
+  components: { ServiceSettingsDialog, AppSettingsDialog, messageControl },
   setup () {
     return { icon, version: PACKAGE.version }
   },

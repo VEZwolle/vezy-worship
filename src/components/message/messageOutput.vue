@@ -1,22 +1,16 @@
 <template>
   <Transition :duration="{ enter: 5500, leave: 5500 }" name="message">
-    <div v-if="show" class="messagebox">
+    <div v-if="message.length > 1" class="messagebox">
       <div class="messagetext" v-html="message" />
     </div>
   </Transition>
-  <button class="testbutton" @click="show = !show">
-    Toggle
-  </button>
 </template>
 
 <script>
 export default {
-  props: {
-    message: String
-  },
-  data () {
-    return {
-      show: false
+  computed: {
+    message () {
+      return this.$store.messageShow
     }
   }
 }
@@ -43,13 +37,6 @@ export default {
   width: 100%;
   max-width: 100%;
   line-height: 2.2vw;
-}
-
-.testbutton {
-  position: absolute;
-  top: 30%;
-  left: 15%;
-  width: 70%;
 }
 
 /* https://vuejs.org/guide/built-ins/transition.html#css-based-transitions */

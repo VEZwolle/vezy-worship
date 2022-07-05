@@ -4,7 +4,7 @@
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
-  <messageOutput message="test message test message" />
+  <messageOutput />
 </template>
 
 <script>
