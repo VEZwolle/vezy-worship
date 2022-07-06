@@ -2,9 +2,11 @@
   <div class="row">
     <q-input
       v-model="messagetext"
+      placeholder="Mededeling"
+      :dense="true"
+      :hide-bottom-space="true"
       filled
-      placeholder="Mededeling text"
-      :dense="dense"
+      maxlength="60"
       class="messageinput"
     />
     <q-btn-dropdown
@@ -33,12 +35,19 @@ export default {
       messagetext: '',
       buttontext: '',
       time: 0,
-      buttondefault: 'Weergeven',
+      buttondefault: '➤',
       timedefault: 15,
       messageList: [
-        'bericht 0',
-        'bericht 1',
-        'bericht 2'
+        'gevraagd: extra BHV (melden bij kosters)',
+        'Spoed:  verplaatsen ivm nooduitgang hulpdiensten!',
+        'gevraagd: 2 tieners voor de Baby\'s',
+        'gevraagd: 2 tieners voor de Lopers',
+        'gevraagd: 2 tieners voor de Springers',
+        'gevraagd: 2 tieners voor de Schaapjes',
+        'gevraagd: 2 tieners voor de Gele groep',
+        'gevraagd: 2 tieners voor de Groene groep',
+        'gevraagd: 2 tieners voor de Paarse groep',
+        'gevraagd: 2 tieners voor de Oranje groep'
       ]
     }
   },
@@ -53,16 +62,19 @@ export default {
     showMessage () {
       if (this.buttontext === this.buttondefault && this.messagetext.length > 1) {
         this.$store.messageShow = this.messagetext
-        this.messagetext = ''
         this.ticker = setInterval(this.tick, 1000)
         this.tick()
+        if (this.messageList.includes(this.messagetext) === false) {
+          this.messageList.push(this.messagetext)
+        }
+        this.messagetext = ''
       } else if (this.buttontext !== this.buttondefault) {
         this.hideMessage()
       }
     },
     tick () {
       if (this.time > 0) {
-        this.buttontext = 'Stop ( ' + this.time + ' sec)'
+        this.buttontext = this.time // 'Stop ( ' + this.time + ' sec)'
         this.time--
       } else {
         this.hideMessage()
@@ -80,9 +92,6 @@ export default {
 
 <style scoped>
 .messageinput {
-  background-color: #fff;
-  color: #000;
   width: 20vw;
-  height: 2vw;
 }
 </style>

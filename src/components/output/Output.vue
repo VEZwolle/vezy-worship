@@ -4,7 +4,7 @@
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
-  <messageOutput />
+  <messageOutput v-if="id == 'beamer'" />
 </template>
 
 <script>
