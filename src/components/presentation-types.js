@@ -51,7 +51,9 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null
+      fileUrl: null,
+      fileLivestreamId: null,
+      fileLivestreamUrl: null
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
@@ -59,7 +61,7 @@ export default [
     },
     outputs: {
       beamer: require('./image/ImageOutput.vue').default,
-      livestream: require('./image/ImageOutput.vue').default
+      livestream: require('./image/ImageOutputLivestream.vue').default
     }
   },
   {
