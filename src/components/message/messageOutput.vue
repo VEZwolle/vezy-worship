@@ -18,7 +18,7 @@ export default {
 
 <style scoped lang="scss">
 .messagebox, .messagetext {
-  position: fixed;
+  position: absolute;
   top: 0px;
   left: 0px;
   padding: 3vw;
