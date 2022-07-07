@@ -26,6 +26,7 @@
           :label-value="'Zoom: ' + settings.beamer.zoom + '%'"
           label-always
           color="purple"
+          @update:model-value="updateEqual"
         />
         <q-slider
           v-if="!beamerDefault"
@@ -36,6 +37,7 @@
           :label-value="'Draai: ' + settings.beamer.rotate + '%'"
           label-always
           color="purple"
+          @update:model-value="updateEqual"
         />
         <div class="row">
           <q-slider
@@ -48,12 +50,9 @@
             :label-value="'Midden op: ' + settings.beamer.y + '%'"
             label-always
             color="purple"
+            @update:model-value="updateEqual"
           />
-          <div :style="styleOutputRoot">
-            <div class="Output" :style="styleOutput">
-              <img :src="settings.beamer.fileUrl" class="positionabsolute" :style="styleImgBeamer">
-            </div>
-          </div>
+          <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" />
         </div>
         <q-slider
           v-if="!beamerDefault"
@@ -64,6 +63,7 @@
           :label-value="'Midden op: ' + settings.beamer.x + '%'"
           label-always
           color="purple"
+          @update:model-value="updateEqual"
         />
       </div>
       <div v-if="settings.livestream.fileUrl && !equalFile" class="width50">
@@ -100,11 +100,7 @@
             label-always
             color="purple"
           />
-          <div :style="styleOutputRoot">
-            <div class="Output" :style="styleOutput">
-              <img :src="settings.livestream.fileUrl" class="positionabsolute" :style="styleImgLivestream">
-            </div>
-          </div>
+          <ImagePreview :id="'livestream'" :scale="scale" :presentation="presentation" />
         </div>
         <q-slider
           v-if="!livestreamDefault"
@@ -123,8 +119,10 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
+import ImagePreview from './ImagePreview.vue'
 
 export default {
+  components: { ImagePreview },
   extends: BaseSettings,
   data () {
     return {
@@ -137,42 +135,15 @@ export default {
       scale: 0
     }
   },
-  computed: {
-    styleOutputRoot () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
-      return {
-        width: 1920 * this.scale + 'px',
-        height: 1080 * this.scale + 'px',
-        overflow: 'hidden'
-      }
-    },
-    styleOutput () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
-      return {
-        width: '1920px',
-        height: '1080px',
-        transform: `scale(${this.scale})`,
-        transformOrigin: 'top left'
-      }
-    },
-    styleImgBeamer () {
-      return {
-        width: this.settings.beamer.zoom + '%',
-        left: this.settings.beamer.x - this.settings.beamer.zoom / 2 + '%',
-        top: this.settings.beamer.y - this.settings.beamer.zoom / 2 + '%',
-        transform: 'rotate(' + this.settings.beamer.rotate + 'deg)'
-      }
-    },
-    styleImgLivestream () {
-      return {
-        width: this.settings.livestream.zoom + '%',
-        left: this.settings.livestream.x - this.settings.livestream.zoom / 2 + '%',
-        top: this.settings.livestream.y - this.settings.livestream.zoom / 2 + '%',
-        transform: 'rotate(' + this.settings.livestream.rotate + 'deg)'
-      }
-    }
-  },
   created () {
-    if (this.settings.beamer.fileId !== this.settings.livestream.fileId) {
+    if (this.settings.beamer.fileId !== this.settings.livestream.fileId || this.settings.beamer.zoom !== this.settings.livestream.zoom || this.settings.beamer.x !== this.settings.livestream.x || this.settings.beamer.y !== this.settings.livestream.y || this.settings.beamer.rotate !== this.settings.livestream.rotate) {
       this.equalFile = false
+    }
+    if (this.settings.beamer.zoom !== 100 || this.settings.beamer.x !== 50 || this.settings.beamer.y !== 50 || this.settings.beamer.rotate !== 0) {
+      this.beamerDefault = false
+    }
+    if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 50 || this.settings.livestream.y !== 50 || this.settings.livestream.rotate !== 0) {
+      this.livestreamDefault = false
     }
   },
   mounted () { // toekomst nog aanpassen aan output formaten
@@ -202,6 +173,11 @@ export default {
         this.labelFile = 'Selecteer afbeelding'
       } else {
         this.labelFile = 'Selecteer afbeelding Beamer'
+        if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 50 || this.settings.livestream.y !== 50 || this.settings.livestream.rotate !== 0) {
+          this.livestreamDefault = false
+        } else {
+          this.livestreamDefault = true
+        }
       }
     },
     updateBeamerDefault () {
@@ -228,13 +204,6 @@ export default {
 .width50 {
   position: relative;
   width: 50%;
-}
-.Output {
-  position: relative;
-  background-color: grey;
-}
-.positionabsolute {
-  position: absolute;
 }
 
 </style>

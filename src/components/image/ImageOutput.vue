@@ -1,24 +1,26 @@
 <template>
-  <div v-if="!clear" class="image" :style="style" />
+  <div v-if="!clear" class="image">
+    <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" />
+  </div>
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
+import ImagePreview from './ImagePreview.vue'
 
 export default {
+  components: { ImagePreview },
   extends: BaseOutput,
-  computed: {
-    style () {
-      if (this.alpha) {
-        return {
-          backgroundColor: '#fff'
-        }
-      }
-
-      return {
-        backgroundImage: `url(${this.settings.beamer.fileUrl})`
-      }
+  data () {
+    return {
+      scale: 0
     }
+  },
+  mounted () { // toekomst nog aanpassen aan output formaten
+    this.scale = (this.$el.offsetWidth) / 1920
+  },
+  updated () { // toekomst nog aanpassen aan output formaten
+    this.scale = (this.$el.offsetWidth) / 1920
   }
 }
 </script>
@@ -29,5 +31,6 @@ export default {
   width: 100%;
   height: 100%;
   background-size: cover;
+  overflow: hidden;
 }
 </style>
