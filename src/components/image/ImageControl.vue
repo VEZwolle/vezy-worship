@@ -2,11 +2,11 @@
   <div class="q-pa-md row">
     <div class="width50">
       Beamer<br>
-      <img :src="settings.fileUrl" class="full-width">
+      <img :src="settings.beamer.fileUrl" class="full-width">
     </div>
     <div class="width50">
       Livestream<br>
-      <img :src="settings.fileLivestreamUrl" class="full-width">
+      <img :src="settings.livestream.fileUrl" class="full-width">
     </div>
   </div>
 </template>

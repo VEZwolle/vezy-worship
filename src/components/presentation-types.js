@@ -50,10 +50,22 @@ export default [
     color: 'teal',
     settings: {
       title: '',
-      fileId: null,
-      fileUrl: null,
-      fileLivestreamId: null,
-      fileLivestreamUrl: null
+      beamer: {
+        fileId: null,
+        fileUrl: null,
+        zoom: 100,
+        y: 50,
+        x: 50,
+        rotate: 0
+      },
+      livestream: {
+        fileId: null,
+        fileUrl: null,
+        zoom: 100,
+        y: 50,
+        x: 50,
+        rotate: 0
+      }
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,

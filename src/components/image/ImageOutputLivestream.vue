@@ -16,7 +16,7 @@ export default {
       }
 
       return {
-        backgroundImage: `url(${this.settings.fileLivestreamUrl})`
+        backgroundImage: `url(${this.settings.livestream.fileUrl})`
       }
     }
   }

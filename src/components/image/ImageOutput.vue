@@ -16,7 +16,7 @@ export default {
       }
 
       return {
-        backgroundImage: `url(${this.settings.fileUrl})`
+        backgroundImage: `url(${this.settings.beamer.fileUrl})`
       }
     }
   }
