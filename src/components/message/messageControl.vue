@@ -1,31 +1,35 @@
 <template>
-  <div class="row">
-    <q-input
-      v-model="messagetext"
-      placeholder="Mededeling"
-      :dense="true"
-      :hide-bottom-space="true"
-      filled
-      maxlength="60"
-      class="messageinput"
-    />
-    <q-btn-dropdown
-      split
-      flat
-      :label="buttontext"
-      @click="showMessage"
-    >
-      <q-list>
-        <q-item v-for="(message, index) in messageList" :key="index" v-close-popup clickable @click="messageFromList(index)">
-          <q-item-section>
-            <q-item-label>
-              {{ message }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-btn-dropdown>
-  </div>
+  <q-select
+    v-model="messagetext"
+    :options="messageList"
+    dense
+    options-dense
+    standout="bg-primary"
+    hide-selected
+    hide-dropdown-icon
+    use-input
+    fill-input
+    :input-debounce="0"
+    placeholder="Mededeling"
+    class="messageinput"
+    @filter="updateMessage"
+  >
+    <template #append>
+      <q-btn
+        color="white"
+        flat
+        dense
+        round
+        :label="buttontext"
+        :disabled="!messagetext"
+        @click.stop="showMessage"
+      >
+        <q-tooltip v-if="$store.messageShow">
+          Klik om mededeling te verbergen
+        </q-tooltip>
+      </q-btn>
+    </template>
+  </q-select>
 </template>
 
 <script>
@@ -38,16 +42,16 @@ export default {
       buttondefault: '➤',
       timedefault: 15,
       messageList: [
-        'gevraagd: extra BHV (melden bij kosters)',
-        'Spoed:  verplaatsen ivm nooduitgang hulpdiensten!',
-        'gevraagd: 2 tieners voor de Baby\'s',
-        'gevraagd: 2 tieners voor de Lopers',
-        'gevraagd: 2 tieners voor de Springers',
-        'gevraagd: 2 tieners voor de Schaapjes',
-        'gevraagd: 2 tieners voor de Gele groep',
-        'gevraagd: 2 tieners voor de Groene groep',
-        'gevraagd: 2 tieners voor de Paarse groep',
-        'gevraagd: 2 tieners voor de Oranje groep'
+        'Gevraagd: extra BHV (melden bij kosters)',
+        'Spoed: verplaatsen i.v.m. nooduitgang hulpdiensten!',
+        'Gevraagd: 2 tieners voor de Baby\'s',
+        'Gevraagd: 2 tieners voor de Lopers',
+        'Gevraagd: 2 tieners voor de Springers',
+        'Gevraagd: 2 tieners voor de Schaapjes',
+        'Gevraagd: 2 tieners voor de Gele groep',
+        'Gevraagd: 2 tieners voor de Groene groep',
+        'Gevraagd: 2 tieners voor de Paarse groep',
+        'Gevraagd: 2 tieners voor de Oranje groep'
       ]
     }
   },
@@ -58,6 +62,15 @@ export default {
   methods: {
     messageFromList (id) {
       this.messagetext = this.messageList[id]
+    },
+    updateMessage (text, update) {
+      update(() => {
+        if (!text) {
+          return
+        }
+
+        this.messagetext = text
+      })
     },
     showMessage () {
       if (this.buttontext === this.buttondefault && this.messagetext.length > 1) {
@@ -90,8 +103,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 .messageinput {
-  width: 20vw;
+  width: 25vw;
+
+  input {
+    color: #fff;
+  }
 }
 </style>
