@@ -6,7 +6,15 @@
     class="q-py-sm"
     @shortkey="handleArrow"
   >
-    <q-item v-if="section.label" :class="`section-label text-white bg-${section.label.color}`">
+    <q-item
+      v-if="section.label"
+      clickable
+      :class="`section-label text-white bg-${section.label.color}`"
+      :active="isSelectedLabel(sectionIndex)"
+      active-class="text-bold"
+      @click="select(sectionIndex, 0)"
+      @dblclick="goLive"
+    >
       <q-item-section>
         <q-item-label>{{ section.label.value }}</q-item-label>
       </q-item-section>
@@ -108,6 +116,23 @@ export default {
     isSelected (sectionIndex, slideIndex) {
       return sectionIndex === this.presentation.selectedSectionIndex &&
         slideIndex === this.presentation.selectedSlideIndex
+    },
+    isSelectedLabel (sectionIndex) {
+      const selectedIndex = this.presentation.selectedSectionIndex
+
+      if (selectedIndex === sectionIndex) {
+        return true
+      }
+
+      const nextLabelIndex = this.presentation.sections
+        .findIndex((s, i) => i > sectionIndex && s.label !== null)
+
+      if (nextLabelIndex === -1) { // No next labeled section found
+        return selectedIndex >= sectionIndex
+      }
+
+      return selectedIndex >= sectionIndex &&
+        selectedIndex < nextLabelIndex
     }
   }
 }
