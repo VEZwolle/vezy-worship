@@ -53,17 +53,21 @@ export default [
       beamer: {
         fileId: null,
         fileUrl: null,
+        width: 0,
+        height: 0,
         zoom: 100,
-        y: 50,
-        x: 50,
+        y: 0,
+        x: 0,
         rotate: 0
       },
       livestream: {
         fileId: null,
         fileUrl: null,
+        width: 0,
+        height: 0,
         zoom: 100,
-        y: 50,
-        x: 50,
+        y: 0,
+        x: 0,
         rotate: 0
       }
     },
