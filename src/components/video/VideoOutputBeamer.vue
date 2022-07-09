@@ -1,6 +1,6 @@
 <template>
   <div v-if="!clear && alpha" class="alpha" />
-  <video v-else v-show="!clear" ref="player" :muted="muted" :src="settings.fileUrl" class="video" />
+  <video v-else v-show="!clear" ref="player" :muted="muted" :src="fileUrl" class="video" />
 </template>
 
 <script>
@@ -12,6 +12,11 @@ export default {
     muted: Boolean
   },
   computed: {
+    computed: {
+      fileUrl () {
+        return this.$store.media[this.settings.fileId]
+      }
+    },
     player () {
       return this.$refs.player
     }

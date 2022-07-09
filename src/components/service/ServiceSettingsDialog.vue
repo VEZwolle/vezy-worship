@@ -36,7 +36,7 @@
           </template>
         </q-file>
 
-        <img v-if="service.backgroundImageUrl" :src="service.backgroundImageUrl" class="full-width">
+        <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
       </q-card-section>
 
       <q-separator />
@@ -58,6 +58,11 @@ export default {
       backgroundImageFile: null
     }
   },
+  computed: {
+    backgroundImageUrl () {
+      return this.$store.media[this.service.backgroundImageId]
+    }
+  },
   methods: {
     show (service = null) {
       const defaults = {
@@ -73,8 +78,7 @@ export default {
       this.$refs.dialog.hide()
     },
     updateBackgroundImage (file) {
-      this.service.backgroundImageId = this.$fs.createFileId(file)
-      this.service.backgroundImageUrl = URL.createObjectURL(file)
+      this.service.backgroundImageId = this.$store.addMedia(file, this.service.backgroundImageId)
     },
     save () {
       if (!this.service.id) {

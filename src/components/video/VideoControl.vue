@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <video
       ref="player"
-      :src="settings.fileUrl"
+      :src="fileUrl"
       controls
       muted
       class="full-width"
@@ -22,6 +22,11 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
+  computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.fileId]
+    }
+  },
   watch: {
     clear (val) {
       if (this.preview) {

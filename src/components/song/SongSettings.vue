@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     backgroundUrl () {
-      return this.settings.fileUrl || this.$store.service.backgroundImageUrl
+      return this.$store.media[this.settings.fileId || this.$store.service.backgroundImageId]
     }
   },
   methods: {
@@ -87,12 +87,11 @@ export default {
       }
     },
     updateBackground (file) {
-      this.settings.fileId = this.$fs.createFileId(file)
-      this.settings.fileUrl = URL.createObjectURL(file)
+      this.settings.fileId = this.$store.addMedia(file, this.settings.fileId)
     },
     resetBackground () {
+      this.$store.removeMedia(this.settings.fileId)
       this.settings.fileId = null
-      this.settings.fileUrl = null
       this.background = null
     }
   }

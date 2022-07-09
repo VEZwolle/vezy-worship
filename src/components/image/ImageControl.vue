@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <img :src="settings.fileUrl" class="full-width">
+    <img :src="fileUrl" class="full-width">
   </div>
 </template>
 
@@ -8,6 +8,11 @@
 import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
-  extends: BaseControl
+  extends: BaseControl,
+  computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.fileId]
+    }
+  }
 }
 </script>

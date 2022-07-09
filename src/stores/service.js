@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 export default defineStore('service', {
   state: () => ({
     service: null,
+    media: {},
     previewPresentation: null,
     livePresentation: null,
     isClear: true
@@ -91,6 +92,21 @@ export default defineStore('service', {
     },
     toggleClear () {
       this.isClear = !this.isClear
+    },
+
+    // Media
+    addMedia (file, id = null) {
+      if (!id) {
+        const ext = file.name.split('.').pop()
+        id = `${nanoid()}.${ext}`
+      }
+
+      this.media[id] = URL.createObjectURL(file)
+
+      return id
+    },
+    removeMedia (id) {
+      delete this.media[id]
     }
   }
 })
