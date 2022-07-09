@@ -8,6 +8,9 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.fileLivestreamId]
+    },
     style () {
       if (this.alpha) {
         return {
@@ -16,7 +19,7 @@ export default {
       }
 
       return {
-        backgroundImage: `url(${this.settings.fileLivestreamUrl})`
+        backgroundImage: `url(${this.fileUrl})`
       }
     }
   }
