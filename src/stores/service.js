@@ -95,7 +95,7 @@ export default defineStore('service', {
     },
 
     // Media
-    upload (file) {
+    addMedia (file) {
       const ext = file.name.split('.').pop()
       const id = `${nanoid()}.${ext}`
 
