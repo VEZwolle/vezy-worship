@@ -78,7 +78,7 @@ export default {
       this.$refs.dialog.hide()
     },
     updateBackgroundImage (file) {
-      this.service.backgroundImageId = this.$store.addMedia(file, this.service.backgroundImageId)
+      this.service.backgroundImageId = this.$store.addMedia(file)
     },
     save () {
       if (!this.service.id) {

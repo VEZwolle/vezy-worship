@@ -95,18 +95,13 @@ export default defineStore('service', {
     },
 
     // Media
-    addMedia (file, id = null) {
-      if (!id) {
-        const ext = file.name.split('.').pop()
-        id = `${nanoid()}.${ext}`
-      }
+    upload (file) {
+      const ext = file.name.split('.').pop()
+      const id = `${nanoid()}.${ext}`
 
       this.media[id] = URL.createObjectURL(file)
 
       return id
-    },
-    removeMedia (id) {
-      delete this.media[id]
     }
   }
 })

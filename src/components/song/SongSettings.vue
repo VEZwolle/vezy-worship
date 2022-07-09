@@ -87,10 +87,9 @@ export default {
       }
     },
     updateBackground (file) {
-      this.settings.fileId = this.$store.addMedia(file, this.settings.fileId)
+      this.settings.fileId = this.$store.addMedia(file)
     },
     resetBackground () {
-      this.$store.removeMedia(this.settings.fileId)
       this.settings.fileId = null
       this.background = null
     }

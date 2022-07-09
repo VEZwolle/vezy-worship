@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     update (file) {
-      this.settings.fileId = this.$store.addMedia(file, this.settings.fileId)
+      this.settings.fileId = this.$store.addMedia(file)
       this.settings.title = file.name
     }
   }

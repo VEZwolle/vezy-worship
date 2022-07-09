@@ -65,19 +65,24 @@ const fs = {
 
     const store = useServiceStore()
 
-    for (const [id, url] of Object.entries(store.media)) {
+    // Add service data to zip
+    const service = JSON.stringify(store.service)
+    await zipWriter.add('service.json', new zip.TextReader(service))
+
+    // Add media files to zip
+    for (const [fileId, fileUrl] of Object.entries(store.media)) {
+      if (!service.includes(fileId)) {
+        continue // File isn't used anymore, so don't save it
+      }
+
       // Read the file from its url
-      const reader = new zip.HttpReader(url, {
+      const reader = new zip.HttpReader(fileUrl, {
         preventHeadRequest: true
       })
 
       // Add file to zip (by its id, which includes the file extension)
-      await zipWriter.add(id, reader)
+      await zipWriter.add(fileId, reader)
     }
-
-    // Add service data to zip
-    const service = JSON.stringify(store.service)
-    await zipWriter.add('service.json', new zip.TextReader(service))
 
     await zipWriter.close()
 
