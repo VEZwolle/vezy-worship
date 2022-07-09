@@ -5,7 +5,7 @@ export default {
   extends: ImageOutputBeamer,
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileLivestreamId]
+      return this.$store.media[this.settings.fileLivestreamId || this.settings.fileId]
     }
   }
 }
