@@ -49,15 +49,16 @@ export default [
     color: 'teal',
     settings: {
       title: '',
-      fileId: null
+      fileId: null,
+      fileLivestreamId: null
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
       control: require('./image/ImageControl.vue').default
     },
     outputs: {
-      beamer: require('./image/ImageOutput.vue').default,
-      livestream: require('./image/ImageOutput.vue').default
+      beamer: require('./image/ImageOutputBeamer.vue').default,
+      livestream: require('./image/ImageOutputLivestream.vue').default
     }
   },
   {
