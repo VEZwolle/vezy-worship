@@ -1,11 +1,11 @@
 <template>
-  <div class="q-pa-md row">
-    <div class="width50">
-      Beamer<br>
+  <div class="q-pa-md row q-gutter-md">
+    <div class="col">
+      Beamer:<br>
       <img :src="fileUrl" class="full-width">
     </div>
-    <div class="width50">
-      Livestream<br>
+    <div class="col">
+      Livestream:<br>
       <img :src="fileLivestreamUrl" class="full-width">
     </div>
   </div>
@@ -21,14 +21,8 @@ export default {
       return this.$store.media[this.settings.fileId]
     },
     fileLivestreamUrl () {
-      return this.$store.media[this.settings.fileLivestreamId]
+      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
     }
   }
 }
 </script>
-
-<style scope>
-.width50 {
-  width: 50%;
-}
-</style>
