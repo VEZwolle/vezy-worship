@@ -22,10 +22,12 @@ export default {
   },
   methods: {
     tick () {
-      this.settings.now = dayjs()
-      const end = dayjs(this.settings.time, 'HH:mm')
+      const now = dayjs()
 
-      const seconds = end.diff(this.settings.now, 'seconds')
+      this.settings.now = now.format('H:mm:ss')
+
+      const end = dayjs(this.settings.time, 'HH:mm')
+      const seconds = end.diff(now, 'seconds')
 
       this.settings.seconds = seconds % 60
       this.settings.minutes = Math.floor((seconds % 3600) / 60)

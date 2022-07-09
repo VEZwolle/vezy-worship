@@ -8,8 +8,7 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null,
-      fileUrl: null
+      fileId: null
     },
     description (settings) {
       return settings.text
@@ -51,9 +50,7 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null,
-      fileLivestreamId: null,
-      fileLivestreamUrl: null
+      fileLivestreamId: null
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
@@ -72,7 +69,6 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null,
       play: false,
       time: 0
     },

@@ -39,5 +39,9 @@ export default {
 .col {
   border-right: $layout-border;
   border-width: 3px;
+
+  &:last-child {
+    border-right: none;
+  }
 }
 </style>

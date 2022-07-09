@@ -1,7 +1,6 @@
 import * as zip from '@zip.js/zip.js'
 import useServiceStore from 'stores/service'
 import { Notify } from 'quasar'
-import { nanoid } from 'nanoid'
 
 const filePickerOptions = {
   types: [{
@@ -26,19 +25,6 @@ const fs = {
     const zipReader = new zip.ZipReader(new zip.BlobReader(file))
     const entries = await zipReader.getEntries()
 
-    const loadFile = async (fileId) => {
-      // Find file in zip
-      const file = entries.find(e => e.filename === fileId)
-      if (!file) {
-        return null
-      }
-
-      // Read file as blob
-      const blob = await file.getData(new zip.BlobWriter())
-
-      return URL.createObjectURL(blob)
-    }
-
     // Load service data from `service.json`
     let service = entries.find(e => e.filename === 'service.json')
     if (!service) {
@@ -50,29 +36,21 @@ const fs = {
     service = await service.getData(new zip.TextWriter())
     service = JSON.parse(service)
 
-    // Loop over presentations and download associated files from zip
-    for (const presentation of service.presentations) {
-      const settings = presentation.settings
+    const store = useServiceStore()
 
-      // Skip presentations without files
-      if (!settings.fileId) {
-        continue
-      }
+    // Load media into store
+    const mediaEntries = entries.filter(e => e.filename !== 'service.json')
 
-      // Set new file url in `presentation.settings`
-      settings.fileUrl = await loadFile(settings.fileId)
+    for (const file of mediaEntries) {
+      const blob = await file.getData(new zip.BlobWriter())
+
+      store.media[file.filename] = URL.createObjectURL(blob)
     }
-
-    // Load service background image
-    if (service.backgroundImageId) {
-      service.backgroundImageUrl = await loadFile(service.backgroundImageId)
-    }
-
-    await zipReader.close()
 
     // Add loaded service to store
-    const store = useServiceStore()
     store.loadService(service)
+
+    await zipReader.close()
   },
 
   async save (showPicker = false) {
@@ -84,53 +62,41 @@ const fs = {
     const blobWriter = new zip.BlobWriter('application/zip')
     const zipWriter = new zip.ZipWriter(blobWriter)
 
-    const addFile = async (id, url) => {
-      // Read the file from its url
-      const reader = new zip.HttpReader(url, {
-        preventHeadRequest: true
-      })
-
-      // Add file to zip (by its id, which includes the file extension)
-      await zipWriter.add(id, reader)
-    }
-
     const store = useServiceStore()
-
-    for (const presentation of store.service.presentations) {
-      const settings = presentation.settings
-
-      // Skip presentations without files
-      if (!settings.fileId) {
-        continue
-      }
-
-      await addFile(settings.fileId, settings.fileUrl)
-    }
-
-    // Add service background image
-    if (store.service.backgroundImageId) {
-      await addFile(store.service.backgroundImageId, store.service.backgroundImageUrl)
-    }
 
     // Add service data to zip
     const service = JSON.stringify(store.service)
     await zipWriter.add('service.json', new zip.TextReader(service))
+
+    // Add media files to zip
+    for (const [fileId, fileUrl] of Object.entries(store.media)) {
+      if (!service.includes(fileId)) {
+        continue // File isn't used anymore, so don't save it
+      }
+
+      // Read the file from its url
+      const reader = new zip.HttpReader(fileUrl, {
+        preventHeadRequest: true
+      })
+
+      // Add file to zip (by its id, which includes the file extension)
+      await zipWriter.add(fileId, reader)
+    }
 
     await zipWriter.close()
 
     const blob = blobWriter.getData()
 
     // Write zip file to disk
-    const writable = await fs.fileHandle.createWritable()
-    await writable.write(blob)
-    await writable.close()
+    try {
+      const writable = await fs.fileHandle.createWritable()
+      await writable.write(blob)
+      await writable.close()
 
-    Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
-  },
-
-  createFileId (file) {
-    const ext = file.name.split('.').pop()
-    return `${nanoid()}.${ext}`
+      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+    } catch {
+      Notify.create({ type: 'negative', message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+    }
   }
 }
 
