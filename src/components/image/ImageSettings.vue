@@ -9,7 +9,7 @@
 
     <div class="row q-gutter-md">
       <div class="col">
-        <q-file v-model="file" accept="image/*" :label="equalFile ? 'Beamer & livestream' : 'Beamer'" outlined @update:model-value="update">
+        <q-file v-model="file" accept="image/*" :label="equalFile ? 'Beamer & livestream' : 'Beamer'" outlined @update:model-value="updateFile">
           <template #prepend>
             <q-icon name="image" />
           </template>
@@ -19,7 +19,7 @@
       </div>
 
       <div class="col" :class="{ disabled: equalFile }">
-        <q-file v-model="fileLivestream" :readonly="equalFile" accept="image/*" label="Livestream" outlined @update:model-value="updateLivestream">
+        <q-file v-model="fileLivestream" :readonly="equalFile" accept="image/*" label="Livestream" outlined @update:model-value="updateFileLivestream">
           <template #prepend>
             <q-icon name="image" />
           </template>
@@ -52,25 +52,21 @@ export default {
     }
   },
   created () {
-    if (this.settings.fileLivestreamId && this.settings.fileLivestreamId !== this.settings.fileId) {
+    if (this.settings.fileLivestreamId) {
       this.equalFile = false
     }
   },
   methods: {
-    update (file) {
+    updateFile (file) {
       this.settings.fileId = this.$store.addMedia(file)
       this.settings.title = file.name
-
-      if (this.equalFile) {
-        this.settings.fileLivestreamId = this.settings.fileId
-      }
     },
-    updateLivestream (fileLivestream) {
+    updateFileLivestream (fileLivestream) {
       this.settings.fileLivestreamId = this.$store.addMedia(fileLivestream)
     },
     toggleEqual () {
-      if (this.equalFile) {
-        this.settings.fileLivestreamId = this.settings.fileId
+      if (!this.equalFile) {
+        this.settings.fileLivestreamId = null
       }
     }
   }
