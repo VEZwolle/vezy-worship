@@ -8,7 +8,17 @@
 
     <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
 
-    <video v-if="fileUrl" :src="fileUrl" muted class="full-width" />
+    <video
+      v-if="fileUrl"
+      :src="fileUrl"
+      controls
+      muted
+      playsinline
+      disablePictureInPicture
+      controlsList="nodownload noremoteplayback noplaybackrate"
+      x-webkit-airplay="deny"
+      class="full-width"
+    />
   </q-card-section>
 </template>
 
