@@ -26,10 +26,8 @@ export default {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
     },
-    computed: {
-      backgroundImageUrl () {
-        return this.$store.media[this.settings.fileId]
-      }
+    backgroundImageUrl () {
+      return this.$store.media[this.settings.fileId]
     },
     style () {
       const style = {}
