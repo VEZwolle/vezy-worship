@@ -1,22 +1,32 @@
 <template>
   <q-card-section>
     <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
-    <div class="row">
-      <q-file v-model="file" accept="image/*" :label="labelFile" outlined class="width50" @update:model-value="update">
-        <template #prepend>
-          <q-icon name="image" />
-        </template>
-      </q-file>
-      <q-file v-if="!equalFile" v-model="fileLivestream" accept="image/*" label="Selecteer afbeelding Livestream" outlined class="width50" @update:model-value="updateLivestream">
-        <template #prepend>
-          <q-icon name="image" />
-        </template>
-      </q-file>
+
+    <div class="inputs-header">
+      Selecteer afbeelding(en):
+      <q-toggle v-model="equalFile" label="Zelfde bestand op beamer & livestream" @update:model-value="toggleEqual" />
     </div>
-    <q-toggle v-model="equalFile" label="Zelfde bestand voor Beamer & Livestream" @update:model-value="updateEqual" />
-    <div class="row">
-      <img v-if="fileUrl" :src="fileUrl" class="width50">
-      <img v-if="fileLivestreamUrl && !equalFile" :src="fileLivestreamUrl" class="width50">
+
+    <div class="row q-gutter-md">
+      <div class="col">
+        <q-file v-model="file" accept="image/*" :label="equalFile ? 'Beamer & livestream' : 'Beamer'" outlined @update:model-value="update">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+
+        <img v-if="fileUrl" :src="fileUrl" class="full-width">
+      </div>
+
+      <div class="col" :class="{ disabled: equalFile }">
+        <q-file v-model="fileLivestream" :readonly="equalFile" accept="image/*" label="Livestream" outlined @update:model-value="updateLivestream">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+
+        <img v-if="fileLivestreamUrl" :src="fileLivestreamUrl" class="full-width">
+      </div>
     </div>
   </q-card-section>
 </template>
@@ -30,8 +40,7 @@ export default {
     return {
       file: null,
       fileLivestream: null,
-      equalFile: true,
-      labelFile: 'Selecteer afbeelding'
+      equalFile: true
     }
   },
   computed: {
@@ -43,7 +52,7 @@ export default {
     }
   },
   created () {
-    if (this.settings.fileLivestreamId !== this.settings.fileId) {
+    if (this.settings.fileLivestreamId && this.settings.fileLivestreamId !== this.settings.fileId) {
       this.equalFile = false
     }
   },
@@ -51,6 +60,7 @@ export default {
     update (file) {
       this.settings.fileId = this.$store.addMedia(file)
       this.settings.title = file.name
+
       if (this.equalFile) {
         this.settings.fileLivestreamId = this.settings.fileId
       }
@@ -58,20 +68,19 @@ export default {
     updateLivestream (fileLivestream) {
       this.settings.fileLivestreamId = this.$store.addMedia(fileLivestream)
     },
-    updateEqual () {
+    toggleEqual () {
       if (this.equalFile) {
         this.settings.fileLivestreamId = this.settings.fileId
-        this.labelFile = 'Selecteer afbeelding'
-      } else {
-        this.labelFile = 'Selecteer afbeelding Beamer'
       }
     }
   }
 }
 </script>
 
-<style scope>
-.width50 {
-  width: 50%;
+<style scoped>
+.inputs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
