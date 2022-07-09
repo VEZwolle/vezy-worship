@@ -129,6 +129,7 @@ const labels = [
   { key: 'ending', color: 'red-10' },
   { key: 'end', color: 'red-10' },
   { key: 'eind', color: 'red-10' },
+  { key: 'outro', color: 'red-10' },
   { key: 'slide', color: 'blue' },
   { key: 'vamp', color: 'blue' },
   { key: 'other', color: 'blue' },
