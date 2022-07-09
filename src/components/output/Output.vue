@@ -25,11 +25,14 @@ export default {
     outputComponent () {
       return this.presentationType?.outputs?.[this.id]
     },
+    backgroundImageUrl () {
+      return this.$store.media[this.$store.service?.backgroundImageId]
+    },
     style () {
       const style = {}
 
       if (this.showBackground) {
-        const image = this.$store.service?.backgroundImageUrl || require('../../assets/bg.png')
+        const image = this.backgroundImageUrl || require('../../assets/bg.png')
         style.backgroundImage = `url(${image})`
       }
 
