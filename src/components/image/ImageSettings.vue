@@ -64,9 +64,10 @@ export default {
     updateFileLivestream (fileLivestream) {
       this.settings.fileLivestreamId = this.$store.addMedia(fileLivestream)
     },
-    toggleEqual () {
-      if (!this.equalFile) {
+    toggleEqual (equal) {
+      if (equal) {
         this.settings.fileLivestreamId = null
+        this.fileLivestream = null
       }
     }
   }
