@@ -10,8 +10,8 @@
       v-if="section.label"
       clickable
       :class="`section-label text-white bg-${section.label.color}`"
-      :active="isSelectedlabel(sectionIndex)"
-      active-class="text-black"
+      :active="isSelectedLabel(sectionIndex)"
+      active-class="text-bold"
       @click="select(sectionIndex, 0)"
       @dblclick="goLive"
     >
@@ -117,8 +117,22 @@ export default {
       return sectionIndex === this.presentation.selectedSectionIndex &&
         slideIndex === this.presentation.selectedSlideIndex
     },
-    isSelectedlabel (sectionIndex) {
-      return sectionIndex === this.presentation.selectedSectionIndex
+    isSelectedLabel (sectionIndex) {
+      const selectedIndex = this.presentation.selectedSectionIndex
+
+      if (selectedIndex === sectionIndex) {
+        return true
+      }
+
+      const nextLabelIndex = this.presentation.sections
+        .findIndex((s, i) => i > sectionIndex && s.label !== null)
+
+      if (nextLabelIndex === -1) { // No next labeled section found
+        return selectedIndex >= sectionIndex
+      }
+
+      return selectedIndex >= sectionIndex &&
+        selectedIndex < nextLabelIndex
     }
   }
 }
