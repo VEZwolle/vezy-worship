@@ -16,7 +16,7 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    createService ({ date, time, host, preacher, backgroundImageId, backgroundImageUrl }) {
+    createService ({ date, time, host, preacher, backgroundImageId }) {
       const service = {
         id: nanoid(),
         date,
@@ -24,7 +24,6 @@ export default defineStore('service', {
         host,
         preacher,
         backgroundImageId,
-        backgroundImageUrl,
         presentations: []
       }
 
