@@ -12,10 +12,8 @@ export default {
     muted: Boolean
   },
   computed: {
-    computed: {
-      fileUrl () {
-        return this.$store.media[this.settings.fileId]
-      }
+    fileUrl () {
+      return this.$store.media[this.settings.fileId]
     },
     player () {
       return this.$refs.player

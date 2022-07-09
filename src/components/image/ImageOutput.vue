@@ -8,10 +8,8 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
-    computed: {
-      fileUrl () {
-        return this.$store.media[this.settings.fileId]
-      }
+    fileUrl () {
+      return this.$store.media[this.settings.fileId]
     },
     style () {
       if (this.alpha) {
