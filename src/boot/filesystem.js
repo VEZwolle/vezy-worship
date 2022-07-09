@@ -88,11 +88,15 @@ const fs = {
     const blob = blobWriter.getData()
 
     // Write zip file to disk
-    const writable = await fs.fileHandle.createWritable()
-    await writable.write(blob)
-    await writable.close()
+    try {
+      const writable = await fs.fileHandle.createWritable()
+      await writable.write(blob)
+      await writable.close()
 
-    Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+    } catch {
+      Notify.create({ type: 'negative', message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+    }
   }
 }
 
