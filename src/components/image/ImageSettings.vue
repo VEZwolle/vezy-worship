@@ -15,7 +15,7 @@
           </template>
         </q-file>
 
-        <img v-if="fileUrl" :src="fileUrl" class="full-width">
+        <img v-if="fileUrl" :src="fileUrl" class="q-mt-sm full-width">
       </div>
 
       <div class="col" :class="{ disabled: equalFile }">
@@ -25,7 +25,7 @@
           </template>
         </q-file>
 
-        <img v-if="fileLivestreamUrl" :src="fileLivestreamUrl" class="full-width">
+        <img v-if="fileLivestreamUrl" :src="fileLivestreamUrl" class="q-mt-sm full-width">
       </div>
     </div>
   </q-card-section>
