@@ -43,9 +43,8 @@ const fs = {
 
     for (const file of mediaEntries) {
       const blob = await file.getData(new zip.BlobWriter())
-      const fileUrl = URL.createObjectURL(blob)
 
-      store.media[file.filename] = fileUrl
+      store.media[file.filename] = URL.createObjectURL(blob)
     }
 
     // Add loaded service to store
