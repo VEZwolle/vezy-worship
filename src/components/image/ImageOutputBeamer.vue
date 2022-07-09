@@ -12,12 +12,6 @@ export default {
       return this.$store.media[this.settings.fileId]
     },
     style () {
-      if (this.alpha) {
-        return {
-          backgroundColor: '#fff'
-        }
-      }
-
       return {
         backgroundImage: `url(${this.fileUrl})`
       }

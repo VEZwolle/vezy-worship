@@ -48,7 +48,7 @@ export default {
       return this.$store.media[this.settings.fileId]
     },
     fileLivestreamUrl () {
-      return this.$store.media[this.settings.fileLivestreamId]
+      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
     }
   },
   created () {
