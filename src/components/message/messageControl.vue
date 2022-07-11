@@ -1,6 +1,6 @@
 <template>
   <q-select
-    v-model="messagetext"
+    v-model="messageText"
     :options="messageList"
     dense
     options-dense
@@ -11,7 +11,7 @@
     fill-input
     :input-debounce="0"
     placeholder="Mededeling"
-    class="messageinput"
+    class="message-input"
     @filter="updateMessage"
   >
     <template #append>
@@ -20,11 +20,11 @@
         flat
         dense
         round
-        :label="buttontext"
-        :disabled="!messagetext"
-        @click.stop="showMessage"
+        :label="buttonText"
+        :disabled="!messageText && buttonText === buttonDefault"
+        @click.stop="toggleMessage"
       >
-        <q-tooltip v-if="$store.messageShow">
+        <q-tooltip v-if="$store.message">
           Klik om mededeling te verbergen
         </q-tooltip>
       </q-btn>
@@ -36,11 +36,10 @@
 export default {
   data () {
     return {
-      messagetext: '',
-      buttontext: '',
+      messageText: '',
       time: 0,
-      buttondefault: '➤',
-      timedefault: 15,
+      buttonDefault: '➤',
+      timeDefault: 15,
       messageList: [
         'Gevraagd: extra BHV (melden bij kosters)',
         'Spoed: verplaatsen i.v.m. nooduitgang hulpdiensten!',
@@ -55,39 +54,38 @@ export default {
       ]
     }
   },
+  computed: {
+    buttonText () {
+      return this.$store.message ? this.time : this.buttonDefault
+    }
+  },
   created () {
-    this.buttontext = this.buttondefault
-    this.time = this.timedefault
+    this.time = this.timeDefault
   },
   methods: {
-    messageFromList (id) {
-      this.messagetext = this.messageList[id]
-    },
     updateMessage (text, update) {
       update(() => {
         if (!text) {
           return
         }
-
-        this.messagetext = text
+        this.messageText = text
       })
     },
-    showMessage () {
-      if (this.buttontext === this.buttondefault && this.messagetext.length > 1) {
-        this.$store.messageShow = this.messagetext
+    toggleMessage () {
+      if (this.buttonText === this.buttonDefault && this.messageText.length > 1) {
+        this.$store.message = this.messageText
         this.ticker = setInterval(this.tick, 1000)
         this.tick()
-        if (this.messageList.includes(this.messagetext) === false) {
-          this.messageList.push(this.messagetext)
+        if (!this.messageList.includes(this.messageText)) {
+          this.messageList.push(this.messageText)
         }
-        this.messagetext = ''
-      } else if (this.buttontext !== this.buttondefault) {
+        this.messageText = ''
+      } else if (this.buttonText !== this.buttonDefault) {
         this.hideMessage()
       }
     },
     tick () {
       if (this.time > 0) {
-        this.buttontext = this.time // 'Stop ( ' + this.time + ' sec)'
         this.time--
       } else {
         this.hideMessage()
@@ -95,16 +93,15 @@ export default {
     },
     hideMessage () {
       clearInterval(this.ticker)
-      this.$store.messageShow = ''
-      this.time = this.timedefault
-      this.buttontext = this.buttondefault
+      this.$store.message = ''
+      this.time = this.timeDefault
     }
   }
 }
 </script>
 
 <style lang="scss">
-.messageinput {
+.message-input {
   width: 25vw;
 
   input {

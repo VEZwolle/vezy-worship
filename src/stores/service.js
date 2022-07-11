@@ -8,7 +8,7 @@ export default defineStore('service', {
     previewPresentation: null,
     livePresentation: null,
     isClear: true,
-    messageShow: ''
+    message: ''
   }),
   actions: {
     loadService (data) {

@@ -1,7 +1,7 @@
 <template>
   <Transition :duration="{ enter: 5500, leave: 5500 }" name="message">
-    <div v-if="message.length > 1" class="messagebox">
-      <div class="messagetext" v-html="message" />
+    <div v-if="message.length > 1" class="message-box">
+      <div class="message-text" v-html="message" />
     </div>
   </Transition>
 </template>
@@ -10,14 +10,14 @@
 export default {
   computed: {
     message () {
-      return this.$store.messageShow
+      return this.$store.message
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.messagebox, .messagetext {
+.message-box, .message-text {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -26,10 +26,10 @@ export default {
   height: 5vw;
   background: $primary;
 }
-.messagebox {
+.message-box {
   overflow: hidden;
 }
-.messagetext {
+.message-text {
   margin: auto;
   padding: 1.5vw;
   text-align: center;
@@ -53,7 +53,7 @@ export default {
     enter totaal: 5500
     leave totaal: 5500
 */
-/* transition messagebox */
+/* transition message-box */
 .message-enter-active, .message-leave-active {
   transition: all 1.5s ease-in-out;
 }
@@ -68,21 +68,21 @@ export default {
   opacity: 0;
 }
 
-/* transition messagetext */
-.message-enter-active .messagetext,
-.message-leave-active .messagetext {
+/* transition message-text */
+.message-enter-active .message-text,
+.message-leave-active .message-text {
   transition: all 3.5s ease-in-out;
 }
 /* delay enter of message element */
-.message-enter-active .messagetext {
+.message-enter-active .message-text {
   transition-delay: 0.5s;
 }
 
-.message-enter-from .messagetext {
+.message-enter-from .message-text {
   transform: translateX(200%);
   /* opacity: 0.001; */
 }
-.message-leave-to .messagetext {
+.message-leave-to .message-text {
   transform: translateX(-100%);
   /* opacity: 0.001; */
 }
