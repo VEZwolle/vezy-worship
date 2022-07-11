@@ -72,6 +72,10 @@ export default {
       })
     },
     toggleMessage () {
+      if (this.buttonText !== this.buttonDefault) {
+        this.hideMessage()
+        return
+      }
       if (this.buttonText === this.buttonDefault && this.messageText.length > 1) {
         this.$store.message = this.messageText
         this.ticker = setInterval(this.tick, 1000)
@@ -80,8 +84,6 @@ export default {
           this.messageList.push(this.messageText)
         }
         this.messageText = ''
-      } else if (this.buttonText !== this.buttonDefault) {
-        this.hideMessage()
       }
     },
     tick () {
