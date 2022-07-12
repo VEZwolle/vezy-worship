@@ -71,9 +71,13 @@ export default defineStore('service', {
     },
 
     preview (presentation) {
+      if (!presentation) return
+
       this.previewPresentation = cloneDeep(presentation)
     },
     goLive (presentation) {
+      if (!presentation) return
+
       const i = this.service.presentations.findIndex(s => s.id === presentation.id)
       const nextPresentation = this.service.presentations[i + 1]
       if (nextPresentation) {
