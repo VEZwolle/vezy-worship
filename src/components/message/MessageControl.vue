@@ -21,7 +21,7 @@
         dense
         round
         :label="buttonText"
-        :disabled="!messageText && buttonText === buttonDefault"
+        :disabled="!messageText && !isMessageActive"
         @click.stop="toggleMessage"
       >
         <q-tooltip v-if="$store.message">
@@ -38,7 +38,6 @@ export default {
     return {
       messageText: '',
       time: 0,
-      buttonDefault: '➤',
       timeDefault: 15,
       messageList: [
         'Gevraagd: extra BHV (melden bij kosters)',
@@ -55,8 +54,11 @@ export default {
     }
   },
   computed: {
+    isMessageActive () {
+      return this.$store.message !== ''
+    },
     buttonText () {
-      return this.$store.message ? this.time : this.buttonDefault
+      return this.isMessageActive ? this.time : '➤'
     }
   },
   created () {
@@ -72,19 +74,21 @@ export default {
       })
     },
     toggleMessage () {
-      if (this.buttonText !== this.buttonDefault) {
+      if (this.isMessageActive) {
         this.hideMessage()
         return
       }
-      if (this.buttonText === this.buttonDefault && this.messageText.length > 1) {
-        this.$store.message = this.messageText
-        this.ticker = setInterval(this.tick, 1000)
-        this.tick()
-        if (!this.messageList.includes(this.messageText)) {
-          this.messageList.push(this.messageText)
-        }
-        this.messageText = ''
+
+      this.$store.message = this.messageText
+
+      this.ticker = setInterval(this.tick, 1000)
+      this.tick()
+
+      if (!this.messageList.includes(this.messageText)) {
+        this.messageList.push(this.messageText)
       }
+
+      this.messageText = ''
     },
     tick () {
       if (this.time > 0) {
