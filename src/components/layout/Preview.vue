@@ -28,13 +28,19 @@
         <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
       </q-page>
     </q-page-container>
+
+    <q-footer>
+      <OutputBoxes preview-presentation :beamer="false" :livestream="true" :alpha="false" />
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
 import presentationTypes from '../presentation-types'
+import OutputBoxes from '../output/OutputBoxes'
 
 export default {
+  components: { OutputBoxes },
   computed: {
     presentation () {
       return this.$store.previewPresentation

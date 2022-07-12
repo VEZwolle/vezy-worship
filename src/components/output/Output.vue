@@ -1,7 +1,7 @@
 <template>
   <div class="output" :style="style">
     <Transition name="q-transition--fade">
-      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="$store.isClear" :alpha="alpha" :presentation="presentation" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
   <MessageOutput v-if="id === 'beamer'" />
@@ -16,11 +16,14 @@ export default {
   props: {
     id: String,
     alpha: Boolean,
-    showBackground: Boolean
+    showBackground: Boolean,
+    preview: Boolean
   },
   computed: {
     presentation () {
-      return this.$store.livePresentation
+      return this.preview
+        ? this.$store.previewPresentation
+        : this.$store.livePresentation
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
@@ -30,6 +33,11 @@ export default {
     },
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]
+    },
+    isClear () {
+      return this.preview
+        ? false
+        : this.$store.isClear
     },
     style () {
       const style = {}

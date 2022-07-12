@@ -8,18 +8,13 @@ export default [
     component: App
   },
   {
-    path: '/output/beamer',
+    path: '/output/:id',
     component: Output,
-    props: () => ({ id: 'beamer', showBackground: true })
-  },
-  {
-    path: '/output/livestream',
-    component: Output,
-    props: () => ({ id: 'livestream' })
-  },
-  {
-    path: '/output/livestream/alpha',
-    component: Output,
-    props: () => ({ id: 'livestream', alpha: true })
+    props: ({ params, query }) => ({
+      id: params.id,
+      showBackground: query.showBackground !== undefined,
+      alpha: query.alpha !== undefined,
+      preview: query.preview !== undefined
+    })
   }
 ]

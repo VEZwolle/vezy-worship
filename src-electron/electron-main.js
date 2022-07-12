@@ -41,9 +41,9 @@ app.whenReady().then(() => {
   const displays = screen.getAllDisplays()
   const outputDisplays = config.get('displays') || {}
 
-  createWindow('/output/beamer', displays[outputDisplays.beamer], true)
+  createWindow('/output/beamer?showBackground', displays[outputDisplays.beamer], true)
   createWindow('/output/livestream', displays[outputDisplays.livestream], true)
-  createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], true)
+  createWindow('/output/livestream?alpha', displays[outputDisplays.livestreamAlpha], true)
 })
 
 app.on('window-all-closed', () => {

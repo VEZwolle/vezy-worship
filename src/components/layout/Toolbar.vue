@@ -54,7 +54,7 @@
         icon="videocam"
         dense
         class="q-mr-sm"
-        @click="openOutput('beamer')"
+        @click="openOutput('beamer?showBackground')"
       />
 
       <q-btn
