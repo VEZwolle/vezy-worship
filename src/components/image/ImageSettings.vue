@@ -1,21 +1,28 @@
 <template>
   <q-card-section>
     <q-input v-if="settings.beamer.fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
-    <q-toggle v-if="settings.beamer.fileUrl" v-model="equalFile" label="Zelfde bestand & positie voor Beamer & Livestream" @update:model-value="updateEqual" />
-    <div class="row">
-      <q-file v-model="file" accept="image/*" :label="labelFile" outlined class="width50" @update:model-value="update">
-        <template #prepend>
-          <q-icon name="image" />
-        </template>
-      </q-file>
-      <q-file v-if="!equalFile" v-model="fileLivestream" accept="image/*" label="Selecteer afbeelding Livestream" outlined class="width50" @update:model-value="updateLivestream">
-        <template #prepend>
-          <q-icon name="image" />
-        </template>
-      </q-file>
+    <div class="inputs-header">
+      Selecteer afbeelding(en):
+      <q-toggle v-if="settings.beamer.fileUrl" v-model="equalFile" label="Zelfde bestand & positie voor Beamer & Livestream" @update:model-value="updateEqual" />
+    </div>
+    <div class="row q-gutter-md">
+      <div class="col">
+        <q-file v-model="file" accept="image/*" :label="labelFile" outlined class="col" @update:model-value="update">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+      </div>
+      <div class="col" :class="{ disabled: equalFile }">
+        <q-file v-model="fileLivestream" accept="image/*" label="Selecteer afbeelding Livestream" outlined class="col" @update:model-value="updateLivestream">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+      </div>
     </div>
     <div v-if="settings.beamer.fileUrl" class="row">
-      <div class="width50">
+      <div class="col">
         <q-toggle v-model="beamerDefault" label="Volledige breedte gebruiken" @update:model-value="updateBeamerDefault" />
         <q-slider
           v-if="!beamerDefault"
@@ -69,7 +76,7 @@
           {{ settings.beamer.width }} x {{ settings.beamer.height }}
         </div>
       </div>
-      <div v-if="settings.livestream.fileUrl && !equalFile" class="width50">
+      <div v-if="settings.livestream.fileUrl && !equalFile" class="col">
         <q-toggle v-model="livestreamDefault" label="Volledig breedte gebruiken" @update:model-value="updateLivestreamDefault" />
         <q-slider
           v-if="!livestreamDefault"
@@ -140,6 +147,14 @@ export default {
       labelFile: 'Selecteer afbeelding',
       scale: 0,
       imageLoaded: false
+    }
+  },
+  computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.beamer.fileId]
+    },
+    fileLivestreamUrl () {
+      return this.$store.media[this.settings.livestream.fileId] || this.fileUrl
     }
   },
   created () {
@@ -228,6 +243,19 @@ export default {
         this.settings.livestream.y = 0
         this.settings.livestream.rotate = 0
       }
+    },
+    updateFile (file) {
+      this.settings.beamer.fileId = this.$store.addMedia(file)
+      this.settings.title = file.name
+    },
+    updateFileLivestream (fileLivestream) {
+      this.settings.livestream.fileId = this.$store.addMedia(fileLivestream)
+    },
+    toggleEqual (equal) {
+      if (equal) {
+        this.settings.livestream.fileId = null
+        this.fileLivestream = null
+      }
     }
   }
 }
@@ -238,5 +266,9 @@ export default {
   position: relative;
   width: 50%;
 }
-
+.inputs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 </style>

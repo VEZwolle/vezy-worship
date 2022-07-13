@@ -8,8 +8,7 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null,
-      fileUrl: null
+      fileId: null
     },
     description (settings) {
       return settings.text
@@ -76,7 +75,7 @@ export default [
       control: require('./image/ImageControl.vue').default
     },
     outputs: {
-      beamer: require('./image/ImageOutput.vue').default,
+      beamer: require('./image/ImageOutputBeamer.vue').default,
       livestream: require('./image/ImageOutputLivestream.vue').default
     }
   },
@@ -88,7 +87,6 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null,
       play: false,
       time: 0
     },

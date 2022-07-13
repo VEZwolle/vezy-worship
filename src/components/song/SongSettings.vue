@@ -50,7 +50,7 @@
           </template>
         </q-file>
 
-        <img :src="backgroundUrl" class="full-width">
+        <img :src="backgroundUrl" class="q-mt-sm full-width">
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     backgroundUrl () {
-      return this.settings.fileUrl || this.$store.service.backgroundImageUrl
+      return this.$store.media[this.settings.fileId || this.$store.service.backgroundImageId]
     }
   },
   methods: {
@@ -87,12 +87,10 @@ export default {
       }
     },
     updateBackground (file) {
-      this.settings.fileId = this.$fs.createFileId(file)
-      this.settings.fileUrl = URL.createObjectURL(file)
+      this.settings.fileId = this.$store.addMedia(file)
     },
     resetBackground () {
       this.settings.fileId = null
-      this.settings.fileUrl = null
       this.background = null
     }
   }

@@ -1,10 +1,10 @@
 <template>
-  <div class="q-pa-md row">
-    <div class="width50">
+  <div class="q-pa-md row q-gutter-md">
+    <div class="col">
       Beamer<br>
       <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" />
     </div>
-    <div class="width50">
+    <div class="col">
       Livestream<br>
       <ImagePreview :id="'livestream'" :scale="scale" :presentation="presentation" />
     </div>
@@ -23,14 +23,16 @@ export default {
       scale: 0
     }
   },
+  computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.beamer.fileId]
+    },
+    fileLivestreamUrl () {
+      return this.$store.media[this.settings.livestream.fileId] || this.fileUrl
+    }
+  },
   mounted () { // toekomst nog aanpassen aan output formaten
     this.scale = ((this.$el.offsetWidth * 0.5) - 40) / 1920
   }
 }
 </script>
-
-<style scope>
-.width50 {
-  width: 50%;
-}
-</style>
