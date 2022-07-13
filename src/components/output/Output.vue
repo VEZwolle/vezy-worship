@@ -4,7 +4,8 @@
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" />
     </Transition>
   </div>
-  <MessageOutput v-if="id === 'beamer'" />
+
+  <MessageOutput v-if="showMessages" />
 </template>
 
 <script>
@@ -15,9 +16,10 @@ export default {
   components: { MessageOutput },
   props: {
     id: String,
+    preview: Boolean,
     alpha: Boolean,
     showBackground: Boolean,
-    preview: Boolean
+    showMessages: Boolean
   },
   computed: {
     presentation () {

@@ -6,9 +6,10 @@
           <OutputPreview
             :id="view.id"
             :component="Output"
-            :preview="previewPresentation"
+            :preview="preview"
             :alpha="view.alpha"
             :show-background="view.showBackground"
+            :show-messages="view.showMessages"
           />
         </Transition>
       </template>
@@ -40,7 +41,7 @@ import OutputPreview from './OutputPreview.vue'
 export default {
   components: { OutputPreview },
   props: {
-    previewPresentation: Boolean,
+    preview: Boolean,
     beamer: Boolean,
     livestream: Boolean,
     alpha: Boolean
@@ -54,22 +55,25 @@ export default {
         {
           id: 'beamer',
           name: 'Beamer',
-          showBackground: true,
           alpha: false,
+          showBackground: true,
+          showMessages: true,
           isActive: this.beamer
         },
         {
           id: 'livestream',
           name: 'Livestream',
-          showBackground: false,
           alpha: false,
+          showBackground: false,
+          showMessages: false,
           isActive: this.livestream
         },
         {
           id: 'livestream',
           name: 'Alpha channel',
-          showBackground: false,
           alpha: true,
+          showBackground: false,
+          showMessages: false,
           isActive: this.alpha
         }
       ]
