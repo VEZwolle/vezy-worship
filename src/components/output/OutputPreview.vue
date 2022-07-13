@@ -35,6 +35,7 @@ export default {
 .output-preview {
   background: #000;
   width: 100%;
+  pointer-events: none;
 }
 
 iframe {

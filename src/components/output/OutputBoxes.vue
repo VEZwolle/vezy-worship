@@ -1,22 +1,28 @@
 <template>
-  <div>
-    <div v-if="countViewsOutput > 0" class="output-boxes bg-grey-3">
+  <div class="bg-grey-3">
+    <div v-if="activeViews.length" class="output-boxes">
       <template v-for="view in views" :key="view.id">
-        <Transition v-if="view.output" name="q-transition--fade">
-          <OutputPreview :id="view.outputid" :component="Output" :preview="previewPresentation" :alpha="view.alpha" :show-background="view.showbackground" />
+        <Transition v-if="view.isActive" name="q-transition--fade">
+          <OutputPreview
+            :id="view.id"
+            :component="Output"
+            :preview="previewPresentation"
+            :alpha="view.alpha"
+            :show-background="view.showBackground"
+          />
         </Transition>
       </template>
     </div>
-    <q-toolbar class="bg-grey-3 text-dark">
+
+    <q-toolbar class="text-dark">
       <q-toolbar-title class="text-subtitle2">
         Voorbeeld:
         <q-checkbox
           v-for="view in views"
           :key="view.id"
-          v-model="view.output"
+          v-model="view.isActive"
           right-label
           :label="view.name"
-          color="red"
         >
           <q-tooltip>
             Vink aan om miniatuur weergave van de {{ view.name }} te zien.
@@ -46,41 +52,32 @@ export default {
     return {
       views: [
         {
-          id: 0,
+          id: 'beamer',
           name: 'Beamer',
-          outputid: 'beamer',
-          showbackground: true,
+          showBackground: true,
           alpha: false,
-          output: this.beamer
+          isActive: this.beamer
         },
         {
-          id: 1,
+          id: 'livestream',
           name: 'Livestream',
-          outputid: 'livestream',
-          showbackground: false,
+          showBackground: false,
           alpha: false,
-          output: this.livestream
+          isActive: this.livestream
         },
         {
-          id: 2,
-          name: 'Alpha',
-          outputid: 'livestream',
-          showbackground: false,
+          id: 'livestream',
+          name: 'Alpha channel',
+          showBackground: false,
           alpha: true,
-          output: this.alpha
+          isActive: this.alpha
         }
       ]
     }
   },
   computed: {
-    countViewsOutput () {
-      let count = 0
-      for (const view in this.views) {
-        if (this.views[view].output) {
-          count++
-        }
-      }
-      return count
+    activeViews () {
+      return this.views.filter(v => v.isActive)
     }
   }
 }
@@ -92,7 +89,6 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 0px auto 0px auto;
   padding: 5px;
   padding-bottom: 0;
 }
