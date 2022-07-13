@@ -3,7 +3,7 @@
     <div v-if="countViewsOutput > 0" class="output-boxes bg-grey-3">
       <template v-for="view in views" :key="view.id">
         <Transition v-if="view.output" name="q-transition--fade">
-          <OutputBox :output-id="view.outputid" :preview="previewPresentation" :alpha="view.alpha" :show-background="view.showbackground" />
+          <OutputPreview :id="view.outputid" :component="Output" :preview="previewPresentation" :alpha="view.alpha" :show-background="view.showbackground" />
         </Transition>
       </template>
     </div>
@@ -28,15 +28,19 @@
 </template>
 
 <script>
-import OutputBox from './OutputBox.vue'
+import Output from './Output.vue'
+import OutputPreview from './OutputPreview.vue'
 
 export default {
-  components: { OutputBox },
+  components: { OutputPreview },
   props: {
     previewPresentation: Boolean,
     beamer: Boolean,
     livestream: Boolean,
     alpha: Boolean
+  },
+  setup () {
+    return { Output }
   },
   data () {
     return {

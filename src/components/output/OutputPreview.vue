@@ -15,13 +15,18 @@ export default {
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
 
+    // Sync styles
     const styles = document.querySelectorAll('link,style')
     for (const style of styles) {
       iframe.head.append(style.cloneNode(true))
     }
 
-    createApp(this.component, this.$attrs)
-      .mount(iframe.body)
+    const app = createApp(this.component, this.$attrs)
+
+    // Sync store
+    app.config.globalProperties.$store = this.$store
+
+    app.mount(iframe.body)
   }
 }
 </script>
@@ -29,6 +34,7 @@ export default {
 <style scoped>
 .output-preview {
   background: #000;
+  width: 100%;
 }
 
 iframe {
