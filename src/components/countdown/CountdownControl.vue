@@ -22,7 +22,12 @@ export default {
   extends: BaseControl,
   computed: {
     description () {
-      return this.settings.type === 1 ? 'Klok' : 'Aftellen'
+      const types = {
+        0: 'Aftellen',
+        1: 'Klok'
+      }
+
+      return types[this.settings.type]
     }
   },
   created () {
