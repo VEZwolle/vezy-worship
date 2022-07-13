@@ -1,7 +1,5 @@
 <template>
-  <OutputPreview>
-    <CaptionOutput :presentation="presentation" :clear="clear && !preview" />
-  </OutputPreview>
+  <OutputPreview :component="CaptionOutput" :presentation="presentation" :clear="clear && !preview" />
 </template>
 
 <script>
@@ -10,7 +8,10 @@ import CaptionOutput from './CaptionOutput.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 
 export default {
-  components: { CaptionOutput, OutputPreview },
-  extends: BaseControl
+  components: { OutputPreview },
+  extends: BaseControl,
+  setup () {
+    return { CaptionOutput }
+  }
 }
 </script>

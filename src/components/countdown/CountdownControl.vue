@@ -1,7 +1,5 @@
 <template>
-  <OutputPreview>
-    <CountdownOutput :presentation="presentation" :clear="clear && !preview" />
-  </OutputPreview>
+  <OutputPreview :component="CountdownOutput" :presentation="presentation" :clear="clear && !preview" />
 </template>
 
 <script>
@@ -11,8 +9,11 @@ import OutputPreview from '../output/OutputPreview.vue'
 import CountdownOutput from './CountdownOutput.vue'
 
 export default {
-  components: { OutputPreview, CountdownOutput },
+  components: { OutputPreview },
   extends: BaseControl,
+  setup () {
+    return { CountdownOutput }
+  },
   created () {
     this.ticker = setInterval(this.tick, 1000)
     this.tick()
