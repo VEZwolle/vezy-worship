@@ -1,4 +1,5 @@
 <template>
+  <!-- <div v-if="!clear" class="image" :style="style" /> -->
   <div v-if="!clear" class="image">
     <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" />
   </div>
@@ -16,16 +17,16 @@ export default {
       scale: 0
     }
   },
-  computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.beamer.fileId]
-    },
-    style () {
-      return {
-        backgroundImage: `url(${this.fileUrl})`
-      }
-    }
-  },
+  //  computed: {
+  //    fileUrl () {
+  //      return this.$store.media[this.settings.beamer.fileId]
+  //    },
+  //    style () {
+  //      return {
+  //        backgroundImage: `url(${this.fileUrl})`
+  //      }
+  //    }
+  //  },
   mounted () { // toekomst nog aanpassen aan output formaten
     this.scale = (this.$el.offsetWidth) / 1920
   },

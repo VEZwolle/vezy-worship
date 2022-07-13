@@ -1,11 +1,13 @@
 <template>
   <div class="q-pa-md row q-gutter-md">
     <div class="col">
-      Beamer<br>
+      Beamer:<br>
+      <!-- <img :src="fileUrl" class="full-width"> -->
       <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" />
     </div>
     <div class="col">
-      Livestream<br>
+      Livestream:<br>
+      <!-- <img :src="fileLivestreamUrl" class="full-width"> -->
       <ImagePreview :id="'livestream'" :scale="scale" :presentation="presentation" />
     </div>
   </div>

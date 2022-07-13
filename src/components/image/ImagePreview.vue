@@ -1,8 +1,8 @@
 <template>
   <div class="image" :style="styleOutputRoot">
     <div class="Output" :style="styleOutput">
-      <img v-if="id !== 'livestream'" :src="settings.beamer.fileUrl" class="positionabsolute" :style="styleImgBeamer">
-      <img v-else :src="settings.livestream.fileUrl" class="positionabsolute" :style="styleImgLivestream">
+      <img v-if="id !== 'livestream'" :src="fileUrl" class="positionabsolute" :style="styleImgBeamer">
+      <img v-else :src="fileLivestreamUrl" class="positionabsolute" :style="styleImgLivestream">
     </div>
   </div>
 </template>
@@ -24,6 +24,15 @@ export default {
     bgcolor: { type: String, default: 'gray' }
   },
   computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.beamer.fileId]
+    },
+    fileLivestreamUrl () {
+      return this.$store.media[this.settings.livestream.fileId] || this.fileUrl
+    },
+    backgroundImageUrl () {
+      return this.$store.media[this.$store.service?.backgroundImageId]
+    },
     factorBeamer () {
       if (this.settings.beamer.width !== 0 && this.settings.beamer.height !== 0) {
         return (1920 / 1080) / (this.settings.beamer.width / this.settings.beamer.height)
@@ -45,7 +54,7 @@ export default {
     styleOutput () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
       const style = {}
       if (this.id === 'beamer') {
-        const image = this.$store.service?.backgroundImageUrl || require('../../assets/bg.png')
+        const image = this.backgroundImageUrl || require('../../assets/bg.png')
         style.backgroundImage = `url(${image})`
       } else {
         style.backgroundColor = this.bgcolor

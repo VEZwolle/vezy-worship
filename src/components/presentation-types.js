@@ -51,7 +51,7 @@ export default [
       title: '',
       beamer: {
         fileId: null,
-        fileUrl: null,
+        default: true,
         width: 0,
         height: 0,
         zoom: 100,
@@ -61,7 +61,7 @@ export default [
       },
       livestream: {
         fileId: null,
-        fileUrl: null,
+        default: true,
         width: 0,
         height: 0,
         zoom: 100,

@@ -1,31 +1,22 @@
 <template>
   <q-card-section>
-    <q-input v-if="settings.beamer.fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+    <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
     <div class="inputs-header">
       Selecteer afbeelding(en):
-      <q-toggle v-if="settings.beamer.fileUrl" v-model="equalFile" label="Zelfde bestand & positie voor Beamer & Livestream" @update:model-value="updateEqual" />
+      <q-toggle v-if="fileUrl" v-model="equalFile" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
+
     <div class="row q-gutter-md">
       <div class="col">
-        <q-file v-model="file" accept="image/*" :label="labelFile" outlined class="col" @update:model-value="update">
+        <q-file v-model="file" accept="image/*" :label="equalFile ? 'Beamer & livestream' : 'Beamer'" outlined @update:model-value="updateFile">
           <template #prepend>
             <q-icon name="image" />
           </template>
         </q-file>
-      </div>
-      <div class="col" :class="{ disabled: equalFile }">
-        <q-file v-model="fileLivestream" accept="image/*" label="Selecteer afbeelding Livestream" outlined class="col" @update:model-value="updateLivestream">
-          <template #prepend>
-            <q-icon name="image" />
-          </template>
-        </q-file>
-      </div>
-    </div>
-    <div v-if="settings.beamer.fileUrl" class="row">
-      <div class="col">
-        <q-toggle v-model="beamerDefault" label="Volledige breedte gebruiken" @update:model-value="updateBeamerDefault" />
+        <!-- <img v-if="fileUrl" :src="fileUrl" class="q-mt-sm full-width"> -->
+        <q-toggle v-model="settings.beamer.default" label="Volledige breedte gebruiken" @update:model-value="updateBeamerDefault" />
         <q-slider
-          v-if="!beamerDefault"
+          v-if="!settings.beamer.default"
           v-model="settings.beamer.zoom"
           :min="0"
           :max="100"
@@ -33,10 +24,10 @@
           :label-value="'Zoom: ' + settings.beamer.zoom + '%'"
           label-always
           color="purple"
-          @update:model-value="updateEqual"
+          @update:model-value="toggleEqual"
         />
         <q-slider
-          v-if="!beamerDefault"
+          v-if="!settings.beamer.default"
           v-model="settings.beamer.rotate"
           :min="-180"
           :max="180"
@@ -44,11 +35,11 @@
           :label-value="'Draai: ' + settings.beamer.rotate + '%'"
           label-always
           color="purple"
-          @update:model-value="updateEqual"
+          @update:model-value="toggleEqual"
         />
         <div class="row">
           <q-slider
-            v-if="!beamerDefault"
+            v-if="!settings.beamer.default"
             v-model="settings.beamer.y"
             vertical
             :min="-100"
@@ -57,12 +48,12 @@
             :label-value="'Midden op: ' + settings.beamer.y + '%'"
             label-always
             color="purple"
-            @update:model-value="updateEqual"
+            @update:model-value="toggleEqual"
           />
           <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" />
         </div>
         <q-slider
-          v-if="!beamerDefault"
+          v-if="!settings.beamer.default"
           v-model="settings.beamer.x"
           :min="-100"
           :max="100"
@@ -70,16 +61,23 @@
           :label-value="'Midden op: ' + settings.beamer.x + '%'"
           label-always
           color="purple"
-          @update:model-value="updateEqual"
+          @update:model-value="toggleEqual"
         />
         <div v-if="imageLoaded">
           {{ settings.beamer.width }} x {{ settings.beamer.height }}
         </div>
       </div>
-      <div v-if="settings.livestream.fileUrl && !equalFile" class="col">
-        <q-toggle v-model="livestreamDefault" label="Volledig breedte gebruiken" @update:model-value="updateLivestreamDefault" />
+
+      <div class="col" :class="{ disabled: equalFile }">
+        <q-file v-model="fileLivestream" :readonly="equalFile" accept="image/*" label="Livestream" outlined @update:model-value="updateFileLivestream">
+          <template #prepend>
+            <q-icon name="image" />
+          </template>
+        </q-file>
+        <!-- <img v-if="fileLivestreamUrl" :src="fileLivestreamUrl" class="q-mt-sm full-width"> -->
+        <q-toggle v-model="settings.livestream.default" label="Volledig breedte gebruiken" @update:model-value="updateLivestreamDefault" />
         <q-slider
-          v-if="!livestreamDefault"
+          v-if="!settings.livestream.default"
           v-model="settings.livestream.zoom"
           :min="0"
           :max="100"
@@ -89,7 +87,7 @@
           color="purple"
         />
         <q-slider
-          v-if="!livestreamDefault"
+          v-if="!settings.livestream.default"
           v-model="settings.livestream.rotate"
           :min="-180"
           :max="180"
@@ -100,7 +98,7 @@
         />
         <div class="row">
           <q-slider
-            v-if="!livestreamDefault"
+            v-if="!settings.livestream.default"
             v-model="settings.livestream.y"
             vertical
             :min="-100"
@@ -113,7 +111,7 @@
           <ImagePreview :id="'livestream'" :scale="scale" :presentation="presentation" />
         </div>
         <q-slider
-          v-if="!livestreamDefault"
+          v-if="!settings.livestream.default"
           v-model="settings.livestream.x"
           :min="-100"
           :max="100"
@@ -142,11 +140,8 @@ export default {
       file: null,
       fileLivestream: null,
       equalFile: true,
-      beamerDefault: true,
-      livestreamDefault: true,
-      labelFile: 'Selecteer afbeelding',
       scale: 0,
-      imageLoaded: false
+      imageLoaded: false // tijdelijke var voor inlezen maat image
     }
   },
   computed: {
@@ -158,25 +153,18 @@ export default {
     }
   },
   created () {
-    if (this.settings.beamer.fileId !== this.settings.livestream.fileId || this.settings.beamer.zoom !== this.settings.livestream.zoom || this.settings.beamer.x !== this.settings.livestream.x || this.settings.beamer.y !== this.settings.livestream.y || this.settings.beamer.rotate !== this.settings.livestream.rotate) {
+    if (this.settings.livestream.fileId || this.settings.beamer.zoom !== this.settings.livestream.zoom || this.settings.beamer.x !== this.settings.livestream.x || this.settings.beamer.y !== this.settings.livestream.y || this.settings.beamer.rotate !== this.settings.livestream.rotate) {
       this.equalFile = false
-    }
-    if (this.settings.beamer.zoom !== 100 || this.settings.beamer.x !== 0 || this.settings.beamer.y !== 0 || this.settings.beamer.rotate !== 0) {
-      this.beamerDefault = false
-    }
-    if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 0 || this.settings.livestream.y !== 0 || this.settings.livestream.rotate !== 0) {
-      this.livestreamDefault = false
     }
   },
   mounted () { // toekomst nog aanpassen aan output formaten
     this.scale = ((this.$el.offsetWidth * 0.5) - 80) / 1920
   },
   methods: {
-    update (file) {
-      this.settings.beamer.fileId = this.$fs.createFileId(file)
-      this.settings.beamer.fileUrl = URL.createObjectURL(file)
+    updateFile (file) {
+      this.settings.beamer.fileId = this.$store.addMedia(file)
       this.settings.title = file.name
-      this.updateEqual()
+      this.toggleEqual()
       // read witdh / height
       this.imageLoaded = false
       const reader = new FileReader()
@@ -191,9 +179,8 @@ export default {
         img.src = evt.target.result
       }
     },
-    updateLivestream (fileLivestream) {
-      this.settings.livestream.fileId = this.$fs.createFileId(fileLivestream)
-      this.settings.livestream.fileUrl = URL.createObjectURL(fileLivestream)
+    updateFileLivestream (fileLivestream) {
+      this.settings.livestream.fileId = this.$store.addMedia(fileLivestream)
       // read witdh / height
       this.imageLoaded = false
       const reader = new FileReader()
@@ -208,28 +195,26 @@ export default {
         img.src = evt.target.result
       }
     },
-    updateEqual () {
+    toggleEqual () {
       if (this.equalFile) {
-        this.settings.livestream.fileId = this.settings.beamer.fileId
-        this.settings.livestream.fileUrl = this.settings.beamer.fileUrl
+        this.settings.livestream.fileId = null
+        this.fileLivestream = null
         this.settings.livestream.width = this.settings.beamer.width
         this.settings.livestream.height = this.settings.beamer.height
         this.settings.livestream.zoom = this.settings.beamer.zoom
         this.settings.livestream.x = this.settings.beamer.x
         this.settings.livestream.y = this.settings.beamer.y
         this.settings.livestream.rotate = this.settings.beamer.rotate
-        this.labelFile = 'Selecteer afbeelding'
       } else {
-        this.labelFile = 'Selecteer afbeelding Beamer'
         if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 0 || this.settings.livestream.y !== 0 || this.settings.livestream.rotate !== 0) {
-          this.livestreamDefault = false
+          this.settings.livestream.default = false
         } else {
-          this.livestreamDefault = true
+          this.settings.livestream.default = true
         }
       }
     },
     updateBeamerDefault () {
-      if (this.beamerDefault) {
+      if (this.settings.beamer.default) {
         this.settings.beamer.zoom = 100
         this.settings.beamer.x = 0
         this.settings.beamer.y = 0
@@ -237,31 +222,18 @@ export default {
       }
     },
     updateLivestreamDefault () {
-      if (this.livestreamDefault) {
+      if (this.settings.livestream.default) {
         this.settings.livestream.zoom = 100
         this.settings.livestream.x = 0
         this.settings.livestream.y = 0
         this.settings.livestream.rotate = 0
-      }
-    },
-    updateFile (file) {
-      this.settings.beamer.fileId = this.$store.addMedia(file)
-      this.settings.title = file.name
-    },
-    updateFileLivestream (fileLivestream) {
-      this.settings.livestream.fileId = this.$store.addMedia(fileLivestream)
-    },
-    toggleEqual (equal) {
-      if (equal) {
-        this.settings.livestream.fileId = null
-        this.fileLivestream = null
       }
     }
   }
 }
 </script>
 
-<style scope>
+<style scoped>
 .width50 {
   position: relative;
   width: 50%;
