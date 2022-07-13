@@ -6,6 +6,7 @@
           <OutputPreview
             :id="view.id"
             :component="Output"
+            muted
             :preview="preview"
             :alpha="view.alpha"
             :show-background="view.showBackground"

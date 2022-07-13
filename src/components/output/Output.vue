@@ -1,7 +1,7 @@
 <template>
   <div class="output" :style="style">
     <Transition name="q-transition--fade">
-      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
     </Transition>
   </div>
 
@@ -19,7 +19,8 @@ export default {
     preview: Boolean,
     alpha: Boolean,
     showBackground: Boolean,
-    showMessages: Boolean
+    showMessages: Boolean,
+    muted: Boolean
   },
   computed: {
     presentation () {

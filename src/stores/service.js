@@ -80,7 +80,7 @@ export default defineStore('service', {
 
       const i = this.service.presentations.findIndex(s => s.id === presentation.id)
       const nextPresentation = this.service.presentations[i + 1]
-      if (nextPresentation) {
+      if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
         this.previewPresentation = cloneDeep(nextPresentation)
       }
 
