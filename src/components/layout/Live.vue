@@ -30,7 +30,7 @@
     </q-page-container>
 
     <q-footer>
-      <OutputBoxes :beamer="false" :livestream="true" :alpha="false" />
+      <OutputBoxes :beamer="true" :livestream="true" :alpha="false" />
     </q-footer>
   </q-layout>
 </template>
