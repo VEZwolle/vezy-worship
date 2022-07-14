@@ -1,7 +1,9 @@
 <template>
-  <!-- <div v-if="!clear" class="image" :style="style" /> -->
-  <div v-if="!clear" class="image">
-    <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" />
+  <div>
+    <!-- <div v-if="!clear" class="image" :style="style" /> -->
+    <div v-if="!clear" class="image">
+      <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" />
+    </div>
   </div>
 </template>
 
