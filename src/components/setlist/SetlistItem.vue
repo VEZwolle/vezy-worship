@@ -5,12 +5,8 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title">
-        {{ title }}
-      </q-item-label>
-      <q-item-label v-if="description" caption :lines="1">
-        {{ description }}
-      </q-item-label>
+      <q-item-label class="title" v-html="title" />
+      <q-item-label v-if="description" caption :lines="1" v-html="description" />
     </q-item-section>
 
     <q-item-section side class="setlist-actions">

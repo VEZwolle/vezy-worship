@@ -15,19 +15,20 @@ app.use(cors())
 /**
  * Load bible verse(s) from selected bible.
  */
-app.get('/api/bible', async (req, res) => {
-  const { bible, book, chapter, verseFrom, verseTo } = req.params
+app.post('/api/bible', async (req, res) => {
+  const { bible, book, chapter, verseFrom, verseTo } = req.body
 
-  const verses = await db.collection(bible)
+  const query = db.collection(bible)
     .where('book', '==', book)
     .where('chapter', '==', chapter)
     .where('verse', '>=', verseFrom)
-    .where('verse', '<=', verseTo)
-    .get()
+    .where('verse', '<=', verseTo || verseFrom)
 
-  const data = verses.docs.map(doc => doc.data())
+  const result = await query.get()
 
-  res.json(data)
+  const verses = result.docs.map(doc => doc.data())
+
+  res.json({ verses })
 })
 
 /**

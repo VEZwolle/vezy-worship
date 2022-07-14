@@ -62,17 +62,33 @@
               type="number"
               outlined
               stack-label
-              label="Vers tot"
+              label="Vers t/m"
               :rules="['required']"
             />
           </div>
 
           <div class="col-2 q-pl-sm">
-            <q-btn stack label="Tekst inladen" icon="download" class="full-width" />
+            <q-btn
+              stack
+              outline
+              color="primary"
+              label="Tekst inladen"
+              icon="download"
+              class="full-width"
+              :disabled="!settings.chapter || !settings.verseFrom"
+              :loading="isLoadingBibleText"
+              @click="loadBibleText"
+            />
           </div>
         </div>
 
-        <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-bibletext" />
+        <q-editor
+          ref="editor"
+          v-model="settings.text"
+          min-height="60vh"
+          :toolbar="[['bold', 'italic', 'underline', 'superscript']]"
+          @paste.prevent.stop="pastePlainText"
+        />
       </q-tab-panel>
 
       <q-tab-panel name="background">
@@ -102,7 +118,8 @@ export default {
   data () {
     return {
       tab: 'text',
-      background: null
+      background: null,
+      isLoadingBibleText: false
     }
   },
   computed: {
@@ -123,6 +140,33 @@ export default {
     }
   },
   methods: {
+    async loadBibleText () {
+      this.isLoadingBibleText = true
+
+      try {
+        const { bible, book, chapter, verseFrom, verseTo } = this.settings
+
+        const result = await this.$api.post('/bible', {
+          bible,
+          book,
+          chapter,
+          verseFrom,
+          verseTo
+        })
+
+        this.settings.text = result.verses
+          .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
+          .trim()
+      } catch {
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
+      } finally {
+        this.isLoadingBibleText = false
+      }
+    },
+    pastePlainText (e) {
+      const text = e.clipboardData.getData('text/plain')
+      this.$refs.editor.runCmd('insertText', text)
+    },
     updateBackground (file) {
       this.settings.backgroundImageId = this.$store.addMedia(file)
     },
@@ -133,9 +177,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.input-bibletext::v-deep(textarea) {
-  height: 60vh;
-}
-</style>
