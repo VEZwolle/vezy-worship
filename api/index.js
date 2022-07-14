@@ -16,13 +16,13 @@ app.use(cors())
  * Load bible verse(s) from selected bible.
  */
 app.get('/api/bible', async (req, res) => {
-  const { bible, book, chapter, from, to } = req.params
+  const { bible, book, chapter, verseFrom, verseTo } = req.params
 
   const verses = await db.collection(bible)
     .where('book', '==', book)
     .where('chapter', '==', chapter)
-    .where('verse', '>=', from)
-    .where('verse', '<=', to)
+    .where('verse', '>=', verseFrom)
+    .where('verse', '<=', verseTo)
     .get()
 
   const data = verses.docs.map(doc => doc.data())
