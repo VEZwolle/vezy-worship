@@ -8,7 +8,14 @@
           <span v-if="presentation">- {{ presentation.settings.title || presentationType.name }}</span>
         </q-toolbar-title>
 
-        <q-btn label="Go live" icon-right="arrow_forward" :disabled="!presentation" @click="$store.goLive(presentation)">
+        <q-btn
+          v-shortkey="['ctrl', 'arrowright']"
+          label="Go live"
+          icon-right="arrow_forward"
+          :disabled="!presentation"
+          @click="$store.goLive(presentation)"
+          @shortkey="$store.goLive(presentation)"
+        >
           <q-tooltip>
             Zet het item in de preview op het scherm
           </q-tooltip>

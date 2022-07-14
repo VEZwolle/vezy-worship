@@ -8,8 +8,7 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null,
-      fileUrl: null
+      fileId: null
     },
     description (settings) {
       return settings.text
@@ -51,15 +50,15 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null
+      fileLivestreamId: null
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
       control: require('./image/ImageControl.vue').default
     },
     outputs: {
-      beamer: require('./image/ImageOutput.vue').default,
-      livestream: require('./image/ImageOutput.vue').default
+      beamer: require('./image/ImageOutputBeamer.vue').default,
+      livestream: require('./image/ImageOutputLivestream.vue').default
     }
   },
   {
@@ -70,7 +69,6 @@ export default [
     settings: {
       title: '',
       fileId: null,
-      fileUrl: null,
       play: false,
       time: 0
     },
@@ -89,9 +87,13 @@ export default [
     icon: 'alarm',
     color: 'orange',
     settings: {
-      time: null
+      time: null,
+      type: 0
     },
     description (settings) {
+      if (settings.type === 1) {
+        return `Klok tot ${settings.time}`
+      }
       return `Aftellen tot ${settings.time}`
     },
     components: {

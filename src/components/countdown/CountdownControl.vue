@@ -23,12 +23,15 @@ export default {
   methods: {
     tick () {
       const now = dayjs()
-      const end = dayjs(this.settings.time, 'HH:mm')
 
+      this.settings.now = now.format('H:mm:ss')
+
+      const end = dayjs(this.settings.time, 'HH:mm')
       const seconds = end.diff(now, 'seconds')
 
       this.settings.seconds = seconds % 60
-      this.settings.minutes = Math.floor(seconds / 60)
+      this.settings.minutes = Math.floor((seconds % 3600) / 60)
+      this.settings.hours = Math.floor(seconds / 3600)
     }
   }
 }

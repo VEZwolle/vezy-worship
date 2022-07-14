@@ -26,11 +26,14 @@ export default {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
     },
+    backgroundImageUrl () {
+      return this.$store.media[this.settings.fileId]
+    },
     style () {
       const style = {}
 
-      if (this.settings.fileUrl) {
-        style.backgroundImage = `url(${this.settings.fileUrl})`
+      if (this.backgroundImageUrl) {
+        style.backgroundImage = `url(${this.backgroundImageUrl})`
       }
 
       return style

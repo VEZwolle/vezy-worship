@@ -8,15 +8,12 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
+    fileUrl () {
+      return this.$store.media[this.settings.fileId]
+    },
     style () {
-      if (this.alpha) {
-        return {
-          backgroundColor: '#fff'
-        }
-      }
-
       return {
-        backgroundImage: `url(${this.settings.fileUrl})`
+        backgroundImage: `url(${this.fileUrl})`
       }
     }
   }
