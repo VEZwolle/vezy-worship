@@ -13,9 +13,9 @@ const app = express()
 app.use(cors())
 
 /**
- * Load bible verse(s) from selected bible.
+ * Load verse(s) from selected Bible.
  */
-app.post('/api/bible', async (req, res) => {
+app.post('/api/scripture', async (req, res) => {
   const { bible, book, chapter, verseFrom, verseTo } = req.body
 
   const query = db.collection(bible)

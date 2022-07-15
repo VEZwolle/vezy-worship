@@ -5,7 +5,7 @@
         <q-toolbar-title class="text-subtitle2">
           <q-badge rounded color="green" class="q-mr-sm" />
           Preview
-          <span v-if="presentation">- {{ presentation.settings.title || presentationType.name }}</span>
+          <span v-if="presentation" v-html="`- ${title}`" />
         </q-toolbar-title>
 
         <q-btn
@@ -44,6 +44,17 @@ export default {
     },
     controlComponent () {
       return this.presentationType?.components?.control
+    },
+    title () {
+      if (this.presentation.settings.title) {
+        return this.presentation.settings.title
+      }
+
+      if (this.presentationType.title) {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
+      return this.presentationType.name
     }
   }
 }

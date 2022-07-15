@@ -76,8 +76,8 @@
               icon="download"
               class="full-width"
               :disabled="!settings.chapter || !settings.verseFrom"
-              :loading="isLoadingBibleText"
-              @click="loadBibleText"
+              :loading="isLoadingScripture"
+              @click="loadScripture"
             />
           </div>
         </div>
@@ -119,7 +119,7 @@ export default {
     return {
       tab: 'text',
       background: null,
-      isLoadingBibleText: false
+      isLoadingScripture: false
     }
   },
   computed: {
@@ -140,13 +140,13 @@ export default {
     }
   },
   methods: {
-    async loadBibleText () {
-      this.isLoadingBibleText = true
+    async loadScripture () {
+      this.isLoadingScripture = true
 
       try {
         const { bible, book, chapter, verseFrom, verseTo } = this.settings
 
-        const result = await this.$api.post('/bible', {
+        const result = await this.$api.post('/scripture', {
           bible,
           book,
           chapter,
@@ -160,7 +160,7 @@ export default {
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
       } finally {
-        this.isLoadingBibleText = false
+        this.isLoadingScripture = false
       }
     },
     pastePlainText (e) {

@@ -119,7 +119,7 @@ export default [
       verseTo: null,
       text: ''
     },
-    title ({ book, chapter, verseFrom, verseTo }) {
+    title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
 
       let title = `${bookDefinition.name} ${chapter}:${verseFrom}`
@@ -128,7 +128,7 @@ export default [
         title += `-${verseTo}`
       }
 
-      return title
+      return `${title} <small>(${bible})</small>`
     },
     description (settings) {
       return settings.text
