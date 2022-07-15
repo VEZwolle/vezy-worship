@@ -1,4 +1,6 @@
 <script>
+import presentationTypes from '../presentation-types'
+
 export default {
   props: {
     presentation: Object,
@@ -8,6 +10,9 @@ export default {
   computed: {
     settings () {
       return this.presentation.settings
+    },
+    presentationType () {
+      return presentationTypes.find(t => t.id === this.presentation?.type)
     }
   }
 }

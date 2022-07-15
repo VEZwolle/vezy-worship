@@ -1,9 +1,6 @@
 <template>
   <div class="caption" :class="{ alpha }">
-    <div class="title">
-      {{ title }}
-    </div>
-
+    <div class="title" v-html="title" />
     <div class="text" v-html="text" />
   </div>
 </template>
