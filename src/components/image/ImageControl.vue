@@ -3,22 +3,22 @@
     <div class="col">
       Beamer:<br>
       <!-- <img :src="fileUrl" class="full-width"> -->
-      <ImagePreview :id="'beamer'" :scale="scale" :presentation="presentation" />
+      <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" />
     </div>
     <div class="col">
       Livestream:<br>
       <!-- <img :src="fileLivestreamUrl" class="full-width"> -->
-      <ImagePreview :id="'livestream'" :scale="scale" :presentation="presentation" />
+      <ImageOutput :id="'livestream'" :scale="scale" :presentation="presentation" />
     </div>
   </div>
 </template>
 
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
-import ImagePreview from './ImagePreview.vue'
+import ImageOutput from './ImageOutput.vue'
 
 export default {
-  components: { ImagePreview },
+  components: { ImageOutput },
   extends: BaseControl,
   data () {
     return {
