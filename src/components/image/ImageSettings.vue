@@ -159,60 +159,33 @@ export default {
     this.scale = ((this.$el.offsetWidth * 0.5) - 80) / 1920
   },
   methods: {
-    getImageRatio (file) {
-      this.imageLoaded = false
-      const image = new Image()
-      const url = window.URL || window.webkitURL
-      const objectUrl = url.createObjectURL(file)
-      let ratio = 16 / 9
-      image.onload = () => {
-        url.revokeObjectURL(objectUrl)
-        this.settings.beamer.width = image.width
-        this.settings.beamer.height = image.height
-        if (image.height > 0) {
-          ratio = image.width / image.height
-        }
-        this.imageLoaded = true
-      }
-      image.src = objectUrl
-      return ratio
-    },
     updateFile (file) {
       this.settings.beamer.fileId = this.$store.addMedia(file)
+      const fileUrl = URL.createObjectURL(file)
       this.settings.title = file.name
       // read witdh / height
       this.imageLoaded = false
-      const image = new Image()
-      // const url = window.URL || window.webkitURL
-      const objectUrl = this.fileUrl()
-      // let ratio = 16 / 9
-      image.onload = () => {
-        // url.revokeObjectURL(objectUrl)
-        this.settings.beamer.width = image.width
-        this.settings.beamer.height = image.height
-        // if (image.height > 0) {
-        //  ratio = image.width / image.height
-        // }
+      const img = new Image()
+      img.onload = () => {
+        this.settings.beamer.width = img.width
+        this.settings.beamer.height = img.height
         this.imageLoaded = true
       }
-      image.src = objectUrl
+      img.src = fileUrl
       this.toggleEqual()
     },
     updateFileLivestream (fileLivestream) {
       this.settings.livestream.fileId = this.$store.addMedia(fileLivestream)
+      const fileUrl = URL.createObjectURL(fileLivestream)
       // read witdh / height
       this.imageLoaded = false
-      const reader = new FileReader()
-      reader.readAsDataURL(fileLivestream)
-      reader.onload = evt => {
-        const img = new Image()
-        img.onload = () => {
-          this.settings.livestream.width = img.width
-          this.settings.livestream.height = img.height
-          this.imageLoaded = true
-        }
-        img.src = evt.target.result
+      const img = new Image()
+      img.onload = () => {
+        this.settings.livestream.width = img.width
+        this.settings.livestream.height = img.height
+        this.imageLoaded = true
       }
+      img.src = fileUrl
     },
     toggleEqual () {
       if (this.equal) {

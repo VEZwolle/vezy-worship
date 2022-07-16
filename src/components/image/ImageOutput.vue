@@ -1,6 +1,6 @@
 <template>
   <div class="image" :style="styleOutputRoot">
-    {{ factor }} : {{ settings.beamer.width }} x {{ settings.beamer.height }}
+    <!-- {{ factor }} : {{ settings.beamer.width }} x {{ settings.beamer.height }} -->
     <div class="Output" :style="styleOutput">
       <img :src="fileUrl" class="positionabsolute" :style="styleImg">
     </div>
