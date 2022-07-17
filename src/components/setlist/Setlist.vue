@@ -28,21 +28,23 @@
             </template>
           </Draggable>
         </q-list>
-
-        <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
-          <q-fab-action
-            v-for="presentationType in presentationTypes"
-            :key="presentationType.id"
-            :color="presentationType.color"
-            :icon="presentationType.icon"
-            external-label
-            label-position="left"
-            :label="`${presentationType.name} toevoegen`"
-            @click="add(presentationType.id)"
-          />
-        </q-fab>
       </q-page>
     </q-page-container>
+
+    <q-footer>
+      <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
+        <q-fab-action
+          v-for="presentationType in presentationTypes"
+          :key="presentationType.id"
+          :color="presentationType.color"
+          :icon="presentationType.icon"
+          external-label
+          label-position="left"
+          :label="`${presentationType.name} toevoegen`"
+          @click="add(presentationType.id)"
+        />
+      </q-fab>
+    </q-footer>
   </q-layout>
 
   <PresentationSettingsDialog ref="presentationSettingsDialog" />
