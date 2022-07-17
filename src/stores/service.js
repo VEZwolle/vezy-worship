@@ -32,7 +32,10 @@ export default defineStore('service', {
       service.presentations.push({
         id: 'countdown',
         type: 'countdown',
-        settings: { time }
+        settings: {
+          time,
+          type: 0
+        }
       })
 
       // Add default host caption
