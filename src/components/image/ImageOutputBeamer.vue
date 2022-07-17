@@ -1,6 +1,5 @@
 <template>
   <div v-if="!clear" class="image">
-    <!-- <div v-if="!clear" class="image" :style="style" /> -->
     <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" :alpha="alpha" />
   </div>
 </template>

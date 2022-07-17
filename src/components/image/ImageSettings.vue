@@ -271,6 +271,35 @@ export default {
       }
       img.src = imageUrl
     },
+    toggleEqual () {
+      if (this.equal) {
+        this.settings.fileLivestreamId = null
+        this.fileLivestream = null
+        this.settings.livestream.default = this.settings.beamer.default
+        this.settings.livestream.width = this.settings.beamer.width
+        this.settings.livestream.height = this.settings.beamer.height
+        this.settings.livestream.zoom = this.settings.beamer.zoom
+        this.settings.livestream.x = this.settings.beamer.x
+        this.settings.livestream.y = this.settings.beamer.y
+        this.settings.livestream.rotate = this.settings.beamer.rotate
+        this.btnLabelZoomToggleLivestream = this.btnLabelZoomToggleBeamer
+      } else {
+        if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 0 || this.settings.livestream.y !== 0 || this.settings.livestream.rotate !== 0) {
+          this.settings.livestream.default = false
+        } else {
+          this.settings.livestream.default = true
+        }
+      }
+    },
+    updateBeamerDefault () {
+      if (this.settings.beamer.default) {
+        this.settings.beamer.zoom = 100
+        this.settings.beamer.x = 0
+        this.settings.beamer.y = 0
+        this.settings.beamer.rotate = 0
+      }
+      this.toggleEqual()
+    },
     toggleBeamerZoom () {
       if (this.btnLabelZoomToggleBeamer === '↕') {
         this.settings.beamer.zoom = 100 / this.factorBeamer
@@ -330,6 +359,14 @@ export default {
       this.settings.beamer.y = 0
       this.toggleEqual()
     },
+    updateLivestreamDefault () {
+      if (this.settings.livestream.default) {
+        this.settings.livestream.zoom = 100
+        this.settings.livestream.x = 0
+        this.settings.livestream.y = 0
+        this.settings.livestream.rotate = 0
+      }
+    },
     toggleLivestreamZoom () {
       if (this.btnLabelZoomToggleLivestream === '↕') {
         this.settings.livestream.zoom = 100 / this.factorLivestream
@@ -377,43 +414,6 @@ export default {
     alignCenterLivestream () {
       this.settings.livestream.x = 0
       this.settings.livestream.y = 0
-    },
-    toggleEqual () {
-      if (this.equal) {
-        this.settings.fileLivestreamId = null
-        this.fileLivestream = null
-        this.settings.livestream.default = this.settings.beamer.default
-        this.settings.livestream.width = this.settings.beamer.width
-        this.settings.livestream.height = this.settings.beamer.height
-        this.settings.livestream.zoom = this.settings.beamer.zoom
-        this.settings.livestream.x = this.settings.beamer.x
-        this.settings.livestream.y = this.settings.beamer.y
-        this.settings.livestream.rotate = this.settings.beamer.rotate
-        this.btnLabelZoomToggleLivestream = this.btnLabelZoomToggleBeamer
-      } else {
-        if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 0 || this.settings.livestream.y !== 0 || this.settings.livestream.rotate !== 0) {
-          this.settings.livestream.default = false
-        } else {
-          this.settings.livestream.default = true
-        }
-      }
-    },
-    updateBeamerDefault () {
-      if (this.settings.beamer.default) {
-        this.settings.beamer.zoom = 100
-        this.settings.beamer.x = 0
-        this.settings.beamer.y = 0
-        this.settings.beamer.rotate = 0
-      }
-      this.toggleEqual()
-    },
-    updateLivestreamDefault () {
-      if (this.settings.livestream.default) {
-        this.settings.livestream.zoom = 100
-        this.settings.livestream.x = 0
-        this.settings.livestream.y = 0
-        this.settings.livestream.rotate = 0
-      }
     }
   }
 }

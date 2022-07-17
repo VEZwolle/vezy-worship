@@ -2,12 +2,10 @@
   <div class="q-pa-md row q-gutter-md">
     <div class="col">
       Beamer:<br>
-      <!-- <img :src="fileUrl" class="full-width"> -->
       <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" />
     </div>
     <div class="col">
       Livestream:<br>
-      <!-- <img :src="fileLivestreamUrl" class="full-width"> -->
       <ImageOutput :id="'livestream'" :scale="scale" :presentation="presentation" />
     </div>
   </div>
