@@ -49,8 +49,9 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      fileId: null,
+      fileLivestreamId: null,
       beamer: {
-        fileId: null,
         default: true,
         width: 0,
         height: 0,
@@ -60,7 +61,6 @@ export default [
         rotate: 0
       },
       livestream: {
-        fileId: null,
         default: true,
         width: 0,
         height: 0,

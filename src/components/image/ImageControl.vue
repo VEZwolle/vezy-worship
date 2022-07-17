@@ -27,10 +27,10 @@ export default {
   },
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.beamer.fileId]
+      return this.$store.media[this.settings.fileId]
     },
     fileLivestreamUrl () {
-      return this.$store.media[this.settings.livestream.fileId] || this.fileUrl
+      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
     }
   },
   mounted () { // toekomst nog aanpassen aan output formaten

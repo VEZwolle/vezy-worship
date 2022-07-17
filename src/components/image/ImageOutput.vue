@@ -27,9 +27,9 @@ export default {
   computed: {
     fileUrl () {
       if (this.id !== 'livestream') {
-        return this.$store.media[this.settings.beamer.fileId]
+        return this.$store.media[this.settings.fileId]
       }
-      return this.$store.media[this.settings.livestream.fileId] || this.$store.media[this.settings.beamer.fileId]
+      return this.$store.media[this.settings.fileLivestreamId] || this.$store.media[this.settings.fileId]
     },
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]
