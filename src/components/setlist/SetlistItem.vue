@@ -27,15 +27,29 @@
       <q-list dense style="min-width: 100px">
         <q-item v-close-popup clickable @click.stop="$emit('click')">
           <q-item-section>Preview</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round>
+              🖵
+            </q-avatar>
+          </q-item-section>
         </q-item>
         <q-item v-close-popup clickable @click.stop="$emit('dblclick')">
           <q-item-section>Go Live</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="arrow_forward" />
+          </q-item-section>
         </q-item>
         <q-item v-close-popup clickable @click.stop="$emit('edit')">
           <q-item-section>Bewerken</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="edit" />
+          </q-item-section>
         </q-item>
         <q-item v-close-popup clickable @click.stop="$emit('remove')">
           <q-item-section>Verwijderen</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+          </q-item-section>
         </q-item>
       </q-list>
     </q-menu>
