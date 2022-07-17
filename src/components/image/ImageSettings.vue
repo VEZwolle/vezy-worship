@@ -42,7 +42,7 @@
                 :min="-180"
                 :max="180"
                 label
-                :label-value="'Draai: ' + settings.beamer.rotate + '%'"
+                :label-value="'Draai: ' + settings.beamer.rotate + '°'"
                 label-always
                 class="slider-h"
                 @update:model-value="toggleEqual"
@@ -136,7 +136,7 @@
                 :min="-180"
                 :max="180"
                 label
-                :label-value="'Draai: ' + settings.livestream.rotate + '%'"
+                :label-value="'Draai: ' + settings.livestream.rotate + '°'"
                 label-always
                 class="slider-h"
               />
