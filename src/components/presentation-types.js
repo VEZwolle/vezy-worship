@@ -51,24 +51,20 @@ export default [
       title: '',
       fileId: null,
       fileLivestreamId: null,
-      beamer: {
-        default: true,
-        width: 0,
-        height: 0,
-        zoom: 100,
-        y: 0,
-        x: 0,
-        rotate: 0
-      },
-      livestream: {
-        default: true,
-        width: 0,
-        height: 0,
-        zoom: 100,
-        y: 0,
-        x: 0,
-        rotate: 0
-      }
+      beamerDefault: true,
+      beamerWidth: 0,
+      beamerHeight: 0,
+      beamerZoom: 100,
+      beamerY: 0,
+      beamerX: 0,
+      beamerRotate: 0,
+      livestreamDefault: true,
+      livestreamWidth: 0,
+      livestreamHeight: 0,
+      livestreamZoom: 100,
+      livestreamY: 0,
+      livestreamX: 0,
+      livestreamRotate: 0
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,

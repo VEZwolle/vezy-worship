@@ -14,35 +14,35 @@
           </template>
         </q-file>
         <template v-if="fileUrl">
-          <q-toggle v-model="settings.beamer.default" :label="settings.beamer.default ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateBeamerDefault" />
-          <div v-if="!settings.beamer.default" class="row">
+          <q-toggle v-model="settings.beamerDefault" :label="settings.beamerDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateBeamerDefault" />
+          <div v-if="!settings.beamerDefault" class="row">
             <div class="w-col1">
               <q-btn flat round dense :label="btnLabelZoomToggleBeamer" @click="toggleBeamerZoom" />
             </div>
             <div class="col">
               <q-slider
-                v-model="settings.beamer.zoom"
+                v-model="settings.beamerZoom"
                 :min="0"
                 :max="100"
                 label
-                :label-value="'Zoom: ' + settings.beamer.zoom + '%'"
+                :label-value="'Zoom: ' + settings.beamerZoom + '%'"
                 label-always
                 class="slider-h"
                 @update:model-value="toggleEqual"
               />
             </div>
           </div>
-          <div v-if="!settings.beamer.default" class="row">
+          <div v-if="!settings.beamerDefault" class="row">
             <div class="w-col1">
               <q-btn flat round dense label="🗘" @click="resetBeamerAngle" />
             </div>
             <div class="col">
               <q-slider
-                v-model="settings.beamer.rotate"
+                v-model="settings.beamerRotate"
                 :min="-180"
                 :max="180"
                 label
-                :label-value="'Draai: ' + settings.beamer.rotate + '°'"
+                :label-value="'Draai: ' + settings.beamerRotate + '°'"
                 label-always
                 class="slider-h"
                 @update:model-value="toggleEqual"
@@ -52,20 +52,20 @@
           <div class="row position-relative">
             <div class="w-col1">
               <q-slider
-                v-if="!settings.beamer.default"
-                v-model="settings.beamer.y"
+                v-if="!settings.beamerDefault"
+                v-model="settings.beamerY"
                 vertical
                 :min="-110"
                 :max="110"
                 label
-                :label-value="'Midden op: ' + settings.beamer.y + '%'"
+                :label-value="'Midden op: ' + settings.beamerY + '%'"
                 class="slider-v"
                 @update:model-value="toggleEqual"
               />
             </div>
             <div class="col preview">
               <OutputPreview :id="'beamer'" :component="ImageOutput" :presentation="{ settings }" />
-              <div v-if="!settings.beamer.default" class="btn-position">
+              <div v-if="!settings.beamerDefault" class="btn-position">
                 <div>
                   <q-btn flat round dense label="⭶" @click="alignTopLeftBeamer" />
                   <q-btn flat round dense label="⭱" @click="alignTopBeamer" />
@@ -84,22 +84,22 @@
               </div>
             </div>
           </div>
-          <div v-if="!settings.beamer.default" class="row">
+          <div v-if="!settings.beamerDefault" class="row">
             <div class="w-col1" />
             <div class="col">
               <q-slider
-                v-model="settings.beamer.x"
+                v-model="settings.beamerX"
                 :min="-110"
                 :max="110"
                 label
-                :label-value="'Midden op: ' + settings.beamer.x + '%'"
+                :label-value="'Midden op: ' + settings.beamerX + '%'"
                 class="slider-h"
                 @update:model-value="toggleEqual"
               />
             </div>
           </div>
           <div v-if="imageLoaded" class="image-dim">
-            {{ settings.beamer.width }} x {{ settings.beamer.height }}
+            {{ settings.beamerWidth }} x {{ settings.beamerHeight }}
           </div>
         </template>
       </div>
@@ -111,36 +111,36 @@
           </template>
         </q-file>
         <template v-if="fileUrl">
-          <q-toggle v-model="settings.livestream.default" :disable="equal" :label="settings.livestream.default ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateLivestreamDefault" />
-          <div v-if="!settings.livestream.default" class="row">
+          <q-toggle v-model="settings.livestreamDefault" :disable="equal" :label="settings.livestreamDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateLivestreamDefault" />
+          <div v-if="!settings.livestreamDefault" class="row">
             <div class="w-col1">
               <q-btn flat round dense :label="btnLabelZoomToggleLivestream" @click="toggleLivestreamZoom" />
             </div>
             <div class="col">
               <q-slider
-                v-model="settings.livestream.zoom"
+                v-model="settings.livestreamZoom"
                 :disable="equal"
                 :min="0"
                 :max="100"
                 label
-                :label-value="'Zoom: ' + settings.livestream.zoom + '%'"
+                :label-value="'Zoom: ' + settings.livestreamZoom + '%'"
                 label-always
                 class="slider-h"
               />
             </div>
           </div>
-          <div v-if="!settings.livestream.default" class="row">
+          <div v-if="!settings.livestreamDefault" class="row">
             <div class="w-col1">
               <q-btn flat round dense label="🗘" @click="resetLivestreamAngle" />
             </div>
             <div class="col">
               <q-slider
-                v-model="settings.livestream.rotate"
+                v-model="settings.livestreamRotate"
                 :disable="equal"
                 :min="-180"
                 :max="180"
                 label
-                :label-value="'Draai: ' + settings.livestream.rotate + '°'"
+                :label-value="'Draai: ' + settings.livestreamRotate + '°'"
                 label-always
                 class="slider-h"
               />
@@ -149,20 +149,20 @@
           <div class="row position-relative">
             <div class="w-col1">
               <q-slider
-                v-if="!settings.livestream.default"
-                v-model="settings.livestream.y"
+                v-if="!settings.livestreamDefault"
+                v-model="settings.livestreamY"
                 :disable="equal"
                 vertical
                 :min="-110"
                 :max="110"
                 label
-                :label-value="'Midden op: ' + settings.livestream.y + '%'"
+                :label-value="'Midden op: ' + settings.livestreamY + '%'"
                 class="slider-v"
               />
             </div>
             <div class="col preview">
               <OutputPreview :id="'livestream'" :component="ImageOutput" :presentation="{ settings }" />
-              <div v-if="!settings.livestream.default" class="btn-position">
+              <div v-if="!settings.livestreamDefault" class="btn-position">
                 <div>
                   <q-btn flat round dense label="⭶" @click="alignTopLeftLivestream" />
                   <q-btn flat round dense label="⭱" @click="alignTopLivestream" />
@@ -181,22 +181,22 @@
               </div>
             </div>
           </div>
-          <div v-if="!settings.livestream.default" class="row">
+          <div v-if="!settings.livestreamDefault" class="row">
             <div class="w-col1" />
             <div class="col">
               <q-slider
-                v-model="settings.livestream.x"
+                v-model="settings.livestreamX"
                 :disable="equal"
                 :min="-110"
                 :max="110"
                 label
-                :label-value="'Midden op: ' + settings.livestream.x + '%'"
+                :label-value="'Midden op: ' + settings.livestreamX + '%'"
                 class="slider-h"
               />
             </div>
           </div>
           <div v-if="imageLoaded" class="image-dim">
-            {{ settings.livestream.width }} x {{ settings.livestream.height }}
+            {{ settings.livestreamWidth }} x {{ settings.livestreamHeight }}
           </div>
         </template>
       </div>
@@ -232,21 +232,21 @@ export default {
     fileLivestreamUrl () {
       return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
     },
-    factorBeamer () {
-      if (this.settings.beamer.width !== 0 && this.settings.beamer.height !== 0) {
-        return (16 / 9) / (this.settings.beamer.width / this.settings.beamer.height)
+    factorBeamer () { // toekomst naar ratio output variabele
+      if (this.settings.beamerWidth !== 0 && this.settings.beamerHeight !== 0) {
+        return (16 / 9) / (this.settings.beamerWidth / this.settings.beamerHeight)
       }
       return 1
     },
-    factorLivestream () {
-      if (this.settings.livestream.width !== 0 && this.settings.livestream.height !== 0) {
-        return (16 / 9) / (this.settings.livestream.width / this.settings.livestream.height)
+    factorLivestream () { // toekomst naar ratio output variabele
+      if (this.settings.livestreamWidth !== 0 && this.settings.livestreamHeight !== 0) {
+        return (16 / 9) / (this.settings.livestreamWidth / this.settings.livestreamHeight)
       }
       return 1
     }
   },
   created () {
-    if (this.settings.fileLivestreamId || this.settings.beamer.zoom !== this.settings.livestream.zoom || this.settings.beamer.x !== this.settings.livestream.x || this.settings.beamer.y !== this.settings.livestream.y || this.settings.beamer.rotate !== this.settings.livestream.rotate) {
+    if (this.settings.fileLivestreamId || this.settings.beamerZoom !== this.settings.livestreamZoom || this.settings.beamerX !== this.settings.livestreamX || this.settings.beamerY !== this.settings.livestreamY || this.settings.beamerRotate !== this.settings.livestreamRotate) {
       this.equal = false
     }
   },
@@ -259,8 +259,8 @@ export default {
       this.imageLoaded = false
       const img = new Image()
       img.onload = () => {
-        this.settings.beamer.width = img.width
-        this.settings.beamer.height = img.height
+        this.settings.beamerWidth = img.width
+        this.settings.beamerHeight = img.height
         this.imageLoaded = true
         this.toggleEqual()
       }
@@ -273,8 +273,8 @@ export default {
       this.imageLoaded = false
       const img = new Image()
       img.onload = () => {
-        this.settings.livestream.width = img.width
-        this.settings.livestream.height = img.height
+        this.settings.livestreamWidth = img.width
+        this.settings.livestreamHeight = img.height
         this.imageLoaded = true
       }
       img.src = imageUrl
@@ -283,145 +283,145 @@ export default {
       if (this.equal) {
         this.settings.fileLivestreamId = null
         this.fileLivestream = null
-        this.settings.livestream.default = this.settings.beamer.default
-        this.settings.livestream.width = this.settings.beamer.width
-        this.settings.livestream.height = this.settings.beamer.height
-        this.settings.livestream.zoom = this.settings.beamer.zoom
-        this.settings.livestream.x = this.settings.beamer.x
-        this.settings.livestream.y = this.settings.beamer.y
-        this.settings.livestream.rotate = this.settings.beamer.rotate
+        this.settings.livestreamDefault = this.settings.beamerDefault
+        this.settings.livestreamWidth = this.settings.beamerWidth
+        this.settings.livestreamHeight = this.settings.beamerHeight
+        this.settings.livestreamZoom = this.settings.beamerZoom
+        this.settings.livestreamX = this.settings.beamerX
+        this.settings.livestreamY = this.settings.beamerY
+        this.settings.livestreamRotate = this.settings.beamerRotate
         this.btnLabelZoomToggleLivestream = this.btnLabelZoomToggleBeamer
       } else {
-        if (this.settings.livestream.zoom !== 100 || this.settings.livestream.x !== 0 || this.settings.livestream.y !== 0 || this.settings.livestream.rotate !== 0) {
-          this.settings.livestream.default = false
+        if (this.settings.livestreamZoom !== 100 || this.settings.livestreamX !== 0 || this.settings.livestreamY !== 0 || this.settings.livestreamRotate !== 0) {
+          this.settings.livestreamDefault = false
         } else {
-          this.settings.livestream.default = true
+          this.settings.livestreamDefault = true
         }
       }
     },
     updateBeamerDefault () {
-      if (this.settings.beamer.default) {
-        this.settings.beamer.zoom = 100
-        this.settings.beamer.x = 0
-        this.settings.beamer.y = 0
-        this.settings.beamer.rotate = 0
+      if (this.settings.beamerDefault) {
+        this.settings.beamerZoom = 100
+        this.settings.beamerX = 0
+        this.settings.beamerY = 0
+        this.settings.beamerRotate = 0
       }
       this.toggleEqual()
     },
     toggleBeamerZoom () {
       if (this.btnLabelZoomToggleBeamer === '↕') {
-        this.settings.beamer.zoom = 100 / this.factorBeamer
+        this.settings.beamerZoom = 100 / this.factorBeamer
         this.btnLabelZoomToggleBeamer = '↔'
       } else {
-        this.settings.beamer.zoom = 100
+        this.settings.beamerZoom = 100
         this.btnLabelZoomToggleBeamer = '↕'
       }
       this.toggleEqual()
     },
     resetBeamerAngle () {
-      this.settings.beamer.rotate = 0
+      this.settings.beamerRotate = 0
       this.toggleEqual()
     },
     alignLeftBeamer () {
-      this.settings.beamer.x = -50 + this.settings.beamer.zoom / 2
-      this.settings.beamer.y = 0
+      this.settings.beamerX = -50 + this.settings.beamerZoom / 2
+      this.settings.beamerY = 0
       this.toggleEqual()
     },
     alignRightBeamer () {
-      this.settings.beamer.x = 50 - this.settings.beamer.zoom / 2
-      this.settings.beamer.y = 0
+      this.settings.beamerX = 50 - this.settings.beamerZoom / 2
+      this.settings.beamerY = 0
       this.toggleEqual()
     },
     alignTopBeamer () {
-      this.settings.beamer.x = 0
-      this.settings.beamer.y = (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = 0
+      this.settings.beamerY = (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignBottomBeamer () {
-      this.settings.beamer.x = 0
-      this.settings.beamer.y = -1 * (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = 0
+      this.settings.beamerY = -1 * (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignTopLeftBeamer () {
-      this.settings.beamer.x = -50 + this.settings.beamer.zoom / 2
-      this.settings.beamer.y = (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = -50 + this.settings.beamerZoom / 2
+      this.settings.beamerY = (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignBottomLeftBeamer () {
-      this.settings.beamer.x = -50 + this.settings.beamer.zoom / 2
-      this.settings.beamer.y = -1 * (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = -50 + this.settings.beamerZoom / 2
+      this.settings.beamerY = -1 * (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignBottomRightBeamer () {
-      this.settings.beamer.x = 50 - this.settings.beamer.zoom / 2
-      this.settings.beamer.y = -1 * (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = 50 - this.settings.beamerZoom / 2
+      this.settings.beamerY = -1 * (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignTopRightBeamer () {
-      this.settings.beamer.x = 50 - this.settings.beamer.zoom / 2
-      this.settings.beamer.y = (this.factorBeamer * this.settings.beamer.zoom - 100) / (this.factorBeamer + 1)
+      this.settings.beamerX = 50 - this.settings.beamerZoom / 2
+      this.settings.beamerY = (this.factorBeamer * this.settings.beamerZoom - 100) / (this.factorBeamer + 1)
       this.toggleEqual()
     },
     alignCenterBeamer () {
-      this.settings.beamer.x = 0
-      this.settings.beamer.y = 0
+      this.settings.beamerX = 0
+      this.settings.beamerY = 0
       this.toggleEqual()
     },
     updateLivestreamDefault () {
-      if (this.settings.livestream.default) {
-        this.settings.livestream.zoom = 100
-        this.settings.livestream.x = 0
-        this.settings.livestream.y = 0
-        this.settings.livestream.rotate = 0
+      if (this.settings.livestreamDefault) {
+        this.settings.livestreamZoom = 100
+        this.settings.livestreamX = 0
+        this.settings.livestreamY = 0
+        this.settings.livestreamRotate = 0
       }
     },
     toggleLivestreamZoom () {
       if (this.btnLabelZoomToggleLivestream === '↕') {
-        this.settings.livestream.zoom = 100 / this.factorLivestream
+        this.settings.livestreamZoom = 100 / this.factorLivestream
         this.btnLabelZoomToggleLivestream = '↔'
       } else {
-        this.settings.livestream.zoom = 100
+        this.settings.livestreamZoom = 100
         this.btnLabelZoomToggleLivestream = '↕'
       }
     },
     resetLivestreamAngle () {
-      this.settings.livestream.rotate = 0
+      this.settings.livestreamRotate = 0
     },
     alignLeftLivestream () {
-      this.settings.livestream.x = -50 + this.settings.livestream.zoom / 2
-      this.settings.livestream.y = 0
+      this.settings.livestreamX = -50 + this.settings.livestreamZoom / 2
+      this.settings.livestreamY = 0
     },
     alignRightLivestream () {
-      this.settings.livestream.x = 50 - this.settings.livestream.zoom / 2
-      this.settings.livestream.y = 0
+      this.settings.livestreamX = 50 - this.settings.livestreamZoom / 2
+      this.settings.livestreamY = 0
     },
     alignTopLivestream () {
-      this.settings.livestream.x = 0
-      this.settings.livestream.y = (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = 0
+      this.settings.livestreamY = (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignBottomLivestream () {
-      this.settings.livestream.x = 0
-      this.settings.livestream.y = -1 * (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = 0
+      this.settings.livestreamY = -1 * (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignTopLeftLivestream () {
-      this.settings.livestream.x = -50 + this.settings.livestream.zoom / 2
-      this.settings.livestream.y = (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = -50 + this.settings.livestreamZoom / 2
+      this.settings.livestreamY = (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignBottomLeftLivestream () {
-      this.settings.livestream.x = -50 + this.settings.livestream.zoom / 2
-      this.settings.livestream.y = -1 * (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = -50 + this.settings.livestreamZoom / 2
+      this.settings.livestreamY = -1 * (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignBottomRightLivestream () {
-      this.settings.livestream.x = 50 - this.settings.livestream.zoom / 2
-      this.settings.livestream.y = -1 * (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = 50 - this.settings.livestreamZoom / 2
+      this.settings.livestreamY = -1 * (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignTopRightLivestream () {
-      this.settings.livestream.x = 50 - this.settings.livestream.zoom / 2
-      this.settings.livestream.y = (this.factorLivestream * this.settings.livestream.zoom - 100) / (this.factorLivestream + 1)
+      this.settings.livestreamX = 50 - this.settings.livestreamZoom / 2
+      this.settings.livestreamY = (this.factorLivestream * this.settings.livestreamZoom - 100) / (this.factorLivestream + 1)
     },
     alignCenterLivestream () {
-      this.settings.livestream.x = 0
-      this.settings.livestream.y = 0
+      this.settings.livestreamX = 0
+      this.settings.livestreamY = 0
     }
   }
 }
@@ -445,6 +445,7 @@ export default {
 }
 .image-dim {
   color: grey;
+  padding: 0px 0px 0px 28px;
 }
 .w-col1 {
   width: 28px;

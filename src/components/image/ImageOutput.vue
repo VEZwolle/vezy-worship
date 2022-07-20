@@ -29,19 +29,19 @@ export default {
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]
     },
-    factor () {
+    factor () { // toekomst ratio output uit variabele halen
       if (this.id !== 'livestream') {
-        if (this.settings.beamer.width !== 0 && this.settings.beamer.height !== 0) {
-          return (16 / 9) / (this.settings.beamer.width / this.settings.beamer.height)
+        if (this.settings.beamerWidth !== 0 && this.settings.beamerHeight !== 0) {
+          return (16 / 9) / (this.settings.beamerWidth / this.settings.beamerHeight)
         }
         return 1
       }
-      if (this.settings.livestream.width !== 0 && this.settings.livestream.height !== 0) {
-        return (16 / 9) / (this.settings.livestream.width / this.settings.livestream.height)
+      if (this.settings.livestreamWidth !== 0 && this.settings.livestreamHeight !== 0) {
+        return (16 / 9) / (this.settings.livestreamWidth / this.settings.livestreamHeight)
       }
       return 1
     },
-    styleOutput () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
+    styleOutput () {
       const style = {}
       if (this.alpha) {
         style.backgroundColor = '#000'
@@ -61,16 +61,16 @@ export default {
         style.filter = 'brightness(0) invert(1)'
       }
       if (this.id !== 'livestream') {
-        style.width = this.settings.beamer.zoom + '%'
-        style.left = this.settings.beamer.x + 50 - this.settings.beamer.zoom / 2 + '%'
-        style.top = ((this.settings.beamer.y - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - this.settings.beamer.zoom)) / 2) + '%'
-        style.transform = 'rotate(' + this.settings.beamer.rotate + 'deg)'
+        style.width = this.settings.beamerZoom + '%'
+        style.left = this.settings.beamerX + 50 - this.settings.beamerZoom / 2 + '%'
+        style.top = ((this.settings.beamerY - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - this.settings.beamerZoom)) / 2) + '%'
+        style.transform = 'rotate(' + this.settings.beamerRotate + 'deg)'
         return style
       }
-      style.width = this.settings.livestream.zoom + '%'
-      style.left = this.settings.livestream.x + 50 - this.settings.livestream.zoom / 2 + '%'
-      style.top = ((this.settings.livestream.y - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - this.settings.livestream.zoom)) / 2) + '%'
-      style.transform = 'rotate(' + this.settings.livestream.rotate + 'deg)'
+      style.width = this.settings.livestreamZoom + '%'
+      style.left = this.settings.livestreamX + 50 - this.settings.livestreamZoom / 2 + '%'
+      style.top = ((this.settings.livestreamY - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - this.settings.livestreamZoom)) / 2) + '%'
+      style.transform = 'rotate(' + this.settings.livestreamRotate + 'deg)'
       return style
     }
   }
