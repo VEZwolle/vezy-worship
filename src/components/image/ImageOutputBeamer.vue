@@ -1,6 +1,6 @@
 <template>
   <div v-if="!clear" class="image">
-    <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" :bgcolor="'#000'" :alpha="alpha" />
+    <ImageOutput :id="'beamer'" :presentation="presentation" :bgcolor="'#000'" :alpha="alpha" />
   </div>
 </template>
 
@@ -10,18 +10,7 @@ import ImageOutput from './ImageOutput.vue'
 
 export default {
   components: { ImageOutput },
-  extends: BaseOutput,
-  data () {
-    return {
-      scale: 0
-    }
-  },
-  mounted () { // toekomst nog aanpassen aan output formaten
-    this.scale = (this.$el.offsetWidth) / 1920
-  },
-  updated () { // toekomst nog aanpassen aan output formaten
-    this.scale = (this.$el.offsetWidth) / 1920
-  }
+  extends: BaseOutput
 }
 </script>
 
