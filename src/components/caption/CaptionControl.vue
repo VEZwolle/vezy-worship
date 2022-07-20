@@ -1,12 +1,23 @@
 <template>
   <q-list>
-    <q-item clickable class="bg-primary text-white" @dblclick="goLive">
+    <q-item
+      clickable
+      class="bg-primary text-white"
+      :active="true"
+      active-class="text-bold"
+      @dblclick="goLive"
+    >
       <q-item-section>
         <q-item-label>{{ settings.title }}</q-item-label>
       </q-item-section>
     </q-item>
 
-    <q-item clickable @dblclick="goLive">
+    <q-item
+      clickable
+      :active="true"
+      :active-class="!preview ? 'bg-secondary text-white' : null"
+      @dblclick="goLive"
+    >
       <q-item-section v-html="settings.text" />
     </q-item>
   </q-list>
