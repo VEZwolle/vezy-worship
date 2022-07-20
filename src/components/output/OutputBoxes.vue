@@ -2,17 +2,19 @@
   <div class="bg-grey-3">
     <div v-if="activeViews.length" class="output-boxes">
       <template v-for="view in views" :key="view.id">
-        <Transition v-if="view.isActive" name="q-transition--fade">
-          <OutputPreview
-            :id="view.id"
-            :component="Output"
-            muted
-            :preview="preview"
-            :alpha="view.alpha"
-            :show-background="view.showBackground"
-            :show-messages="view.showMessages"
-          />
-        </Transition>
+        <div v-if="view.isActive" class="col output-box">
+          <Transition name="q-transition--fade">
+            <OutputPreview
+              :id="view.id"
+              :component="Output"
+              muted
+              :preview="preview"
+              :alpha="view.alpha"
+              :show-background="view.showBackground"
+              :show-messages="view.showMessages"
+            />
+          </Transition>
+        </div>
       </template>
     </div>
 
@@ -94,7 +96,12 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 5px;
+  padding: 3px;
   padding-bottom: 0;
+}
+.output-box {
+  padding: 2px;
+  padding-bottom: 0;
+  max-width: 60%;
 }
 </style>
