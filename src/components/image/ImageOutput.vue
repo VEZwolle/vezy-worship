@@ -1,5 +1,5 @@
 <template>
-  <div class="image" :style="styleOutputRoot">
+  <div class="image">
     <div class="Output" :style="styleOutput">
       <img :src="fileUrl" class="positionabsolute" :style="styleImg">
     </div>
@@ -15,10 +15,6 @@ export default {
     id: {
       type: String,
       default: 'beamer'
-    },
-    scale: {
-      type: Number,
-      default: 0
     },
     bgcolor: { type: String, default: 'gray' },
     alpha: Boolean
@@ -45,18 +41,8 @@ export default {
       }
       return 1
     },
-    styleOutputRoot () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
-      return {
-        width: 1920 * this.scale + 'px',
-        height: 1080 * this.scale + 'px'
-      }
-    },
     styleOutput () { // toekomst nog aanpassen aan output formaten, nu uitgegaan van zelfde maat
       const style = {}
-      style.width = '1920px'
-      style.height = '1080px'
-      style.transform = `scale(${this.scale})`
-      style.transformOrigin = 'top left'
       if (this.alpha) {
         style.backgroundColor = '#000'
         return style
@@ -94,11 +80,17 @@ export default {
 <style scoped>
 .Output {
   position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
 }
 .positionabsolute {
   position: absolute;
 }
 .image {
+  width: 100vw;
+  height: 100vh;
   background-size: cover;
   overflow: hidden;
 }

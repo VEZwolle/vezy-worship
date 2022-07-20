@@ -2,26 +2,25 @@
   <div class="q-pa-md row q-gutter-md">
     <div class="col">
       Beamer:<br>
-      <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" />
+      <OutputPreview :id="'beamer'" :component="ImageOutput" :presentation="{ settings }" />
     </div>
     <div class="col">
       Livestream:<br>
-      <ImageOutput :id="'livestream'" :scale="scale" :presentation="presentation" />
+      <OutputPreview :id="'livestream'" :component="ImageOutput" :presentation="{ settings }" />
     </div>
   </div>
 </template>
 
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
+import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutput from './ImageOutput.vue'
 
 export default {
-  components: { ImageOutput },
+  components: { OutputPreview },
   extends: BaseControl,
-  data () {
-    return {
-      scale: 0
-    }
+  setup () {
+    return { ImageOutput }
   },
   computed: {
     fileUrl () {
@@ -30,9 +29,6 @@ export default {
     fileLivestreamUrl () {
       return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
     }
-  },
-  mounted () { // toekomst nog aanpassen aan output formaten
-    this.scale = ((this.$el.offsetWidth * 0.5) - 40) / 1920
   }
 }
 </script>

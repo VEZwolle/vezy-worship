@@ -16,7 +16,7 @@
         <template v-if="fileUrl">
           <q-toggle v-model="settings.beamer.default" :label="settings.beamer.default ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateBeamerDefault" />
           <div v-if="!settings.beamer.default" class="row">
-            <div class="col10">
+            <div class="w-col1">
               <q-btn flat round dense :label="btnLabelZoomToggleBeamer" @click="toggleBeamerZoom" />
             </div>
             <div class="col">
@@ -33,7 +33,7 @@
             </div>
           </div>
           <div v-if="!settings.beamer.default" class="row">
-            <div class="col10">
+            <div class="w-col1">
               <q-btn flat round dense label="🗘" @click="resetBeamerAngle" />
             </div>
             <div class="col">
@@ -50,33 +50,37 @@
             </div>
           </div>
           <div class="row position-relative">
-            <q-slider
-              v-if="!settings.beamer.default"
-              v-model="settings.beamer.y"
-              vertical
-              :min="-110"
-              :max="110"
-              label
-              :label-value="'Midden op: ' + settings.beamer.y + '%'"
-              class="slider-v"
-              @update:model-value="toggleEqual"
-            />
-            <ImageOutput :id="'beamer'" :scale="scale" :presentation="presentation" />
-            <div v-if="!settings.beamer.default" class="btn-position">
-              <div>
-                <q-btn flat round dense label="⭶" @click="alignTopLeftBeamer" />
-                <q-btn flat round dense label="⭱" @click="alignTopBeamer" />
-                <q-btn flat round dense label="⭷" @click="alignTopRightBeamer" />
-              </div>
-              <div>
-                <q-btn flat round dense label="⭰" @click="alignLeftBeamer" />
-                <q-btn flat round dense label="⊙" @click="alignCenterBeamer" />
-                <q-btn flat round dense label="⭲" @click="alignRightBeamer" />
-              </div>
-              <div>
-                <q-btn flat round dense label="⭹" @click="alignBottomLeftBeamer" />
-                <q-btn flat round dense label="⭳" @click="alignBottomBeamer" />
-                <q-btn flat round dense label="⭸" @click="alignBottomRightBeamer" />
+            <div class="w-col1">
+              <q-slider
+                v-if="!settings.beamer.default"
+                v-model="settings.beamer.y"
+                vertical
+                :min="-110"
+                :max="110"
+                label
+                :label-value="'Midden op: ' + settings.beamer.y + '%'"
+                class="slider-v"
+                @update:model-value="toggleEqual"
+              />
+            </div>
+            <div class="col preview">
+              <OutputPreview :id="'beamer'" :component="ImageOutput" :presentation="{ settings }" />
+              <div v-if="!settings.beamer.default" class="btn-position">
+                <div>
+                  <q-btn flat round dense label="⭶" @click="alignTopLeftBeamer" />
+                  <q-btn flat round dense label="⭱" @click="alignTopBeamer" />
+                  <q-btn flat round dense label="⭷" @click="alignTopRightBeamer" />
+                </div>
+                <div>
+                  <q-btn flat round dense label="⭰" @click="alignLeftBeamer" />
+                  <q-btn flat round dense label="⊙" @click="alignCenterBeamer" />
+                  <q-btn flat round dense label="⭲" @click="alignRightBeamer" />
+                </div>
+                <div>
+                  <q-btn flat round dense label="⭹" @click="alignBottomLeftBeamer" />
+                  <q-btn flat round dense label="⭳" @click="alignBottomBeamer" />
+                  <q-btn flat round dense label="⭸" @click="alignBottomRightBeamer" />
+                </div>
               </div>
             </div>
           </div>
@@ -109,7 +113,7 @@
         <template v-if="fileUrl">
           <q-toggle v-model="settings.livestream.default" :disable="equal" :label="settings.livestream.default ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateLivestreamDefault" />
           <div v-if="!settings.livestream.default" class="row">
-            <div class="col10">
+            <div class="w-col1">
               <q-btn flat round dense :label="btnLabelZoomToggleLivestream" @click="toggleLivestreamZoom" />
             </div>
             <div class="col">
@@ -126,7 +130,7 @@
             </div>
           </div>
           <div v-if="!settings.livestream.default" class="row">
-            <div class="col10">
+            <div class="w-col1">
               <q-btn flat round dense label="🗘" @click="resetLivestreamAngle" />
             </div>
             <div class="col">
@@ -143,33 +147,37 @@
             </div>
           </div>
           <div class="row position-relative">
-            <q-slider
-              v-if="!settings.livestream.default"
-              v-model="settings.livestream.y"
-              :disable="equal"
-              vertical
-              :min="-110"
-              :max="110"
-              label
-              :label-value="'Midden op: ' + settings.livestream.y + '%'"
-              class="slider-v"
-            />
-            <ImageOutput :id="'livestream'" :scale="scale" :presentation="presentation" />
-            <div v-if="!settings.livestream.default" class="btn-position">
-              <div>
-                <q-btn flat round dense label="⭶" @click="alignTopLeftLivestream" />
-                <q-btn flat round dense label="⭱" @click="alignTopLivestream" />
-                <q-btn flat round dense label="⭷" @click="alignTopRightLivestream" />
-              </div>
-              <div>
-                <q-btn flat round dense label="⭰" @click="alignLeftLivestream" />
-                <q-btn flat round dense label="⊙" @click="alignCenterLivestream" />
-                <q-btn flat round dense label="⭲" @click="alignRightLivestream" />
-              </div>
-              <div>
-                <q-btn flat round dense label="⭹" @click="alignBottomLeftLivestream" />
-                <q-btn flat round dense label="⭳" @click="alignBottomLivestream" />
-                <q-btn flat round dense label="⭸" @click="alignBottomRightLivestream" />
+            <div class="w-col1">
+              <q-slider
+                v-if="!settings.livestream.default"
+                v-model="settings.livestream.y"
+                :disable="equal"
+                vertical
+                :min="-110"
+                :max="110"
+                label
+                :label-value="'Midden op: ' + settings.livestream.y + '%'"
+                class="slider-v"
+              />
+            </div>
+            <div class="col preview">
+              <OutputPreview :id="'livestream'" :component="ImageOutput" :presentation="{ settings }" />
+              <div v-if="!settings.livestream.default" class="btn-position">
+                <div>
+                  <q-btn flat round dense label="⭶" @click="alignTopLeftLivestream" />
+                  <q-btn flat round dense label="⭱" @click="alignTopLivestream" />
+                  <q-btn flat round dense label="⭷" @click="alignTopRightLivestream" />
+                </div>
+                <div>
+                  <q-btn flat round dense label="⭰" @click="alignLeftLivestream" />
+                  <q-btn flat round dense label="⊙" @click="alignCenterLivestream" />
+                  <q-btn flat round dense label="⭲" @click="alignRightLivestream" />
+                </div>
+                <div>
+                  <q-btn flat round dense label="⭹" @click="alignBottomLeftLivestream" />
+                  <q-btn flat round dense label="⭳" @click="alignBottomLivestream" />
+                  <q-btn flat round dense label="⭸" @click="alignBottomRightLivestream" />
+                </div>
               </div>
             </div>
           </div>
@@ -198,17 +206,20 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
+import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutput from './ImageOutput.vue'
 
 export default {
-  components: { ImageOutput },
+  components: { OutputPreview },
   extends: BaseSettings,
+  setup () {
+    return { ImageOutput }
+  },
   data () {
     return {
       file: null,
       fileLivestream: null,
       equal: true,
-      scale: 0,
       btnLabelZoomToggleBeamer: '↕',
       btnLabelZoomToggleLivestream: '↕',
       imageLoaded: false // variabele voor inlezen maat image
@@ -238,9 +249,6 @@ export default {
     if (this.settings.fileLivestreamId || this.settings.beamer.zoom !== this.settings.livestream.zoom || this.settings.beamer.x !== this.settings.livestream.x || this.settings.beamer.y !== this.settings.livestream.y || this.settings.beamer.rotate !== this.settings.livestream.rotate) {
       this.equal = false
     }
-  },
-  mounted () { // toekomst nog aanpassen aan output formaten
-    this.scale = ((this.$el.offsetWidth * 0.5) - 80) / 1920
   },
   methods: {
     updateFile (file) {
@@ -425,11 +433,15 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
+.preview {
+  margin-right: 40px;
+}
 .slider-h {
-  padding: 0px 35px 0px 0px;
+  padding: 0px 40px 0px 0px;
 }
 .slider-v {
-  height: auto;
+  padding: 0px 0px 0px 0px;
+  height: 100%;
 }
 .image-dim {
   color: grey;
