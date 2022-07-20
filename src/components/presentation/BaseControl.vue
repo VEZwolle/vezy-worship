@@ -11,6 +11,15 @@ export default {
     clear () {
       return this.$store.isClear
     }
+  },
+  methods: {
+    goLive () {
+      this.$store.goLive(this.presentation)
+
+      if (!this.preview) {
+        this.$store.unclear()
+      }
+    }
   }
 }
 </script>

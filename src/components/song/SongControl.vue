@@ -106,13 +106,6 @@ export default {
           return this.jump(+1)
       }
     },
-    goLive () {
-      this.$store.goLive(this.presentation)
-
-      if (!this.preview) {
-        this.$store.unclear()
-      }
-    },
     isSelected (sectionIndex, slideIndex) {
       return sectionIndex === this.presentation.selectedSectionIndex &&
         slideIndex === this.presentation.selectedSlideIndex
