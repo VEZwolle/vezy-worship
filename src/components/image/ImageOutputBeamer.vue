@@ -1,22 +1,16 @@
 <template>
-  <div v-if="!clear" class="image" :style="style" />
+  <div v-if="!clear" class="image">
+    <ImageOutput :id="'beamer'" :presentation="presentation" :bgcolor="'#000'" :alpha="alpha" />
+  </div>
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
+import ImageOutput from './ImageOutput.vue'
 
 export default {
-  extends: BaseOutput,
-  computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.fileId]
-    },
-    style () {
-      return {
-        backgroundImage: `url(${this.fileUrl})`
-      }
-    }
-  }
+  components: { ImageOutput },
+  extends: BaseOutput
 }
 </script>
 
@@ -26,5 +20,6 @@ export default {
   width: 100%;
   height: 100%;
   background-size: cover;
+  overflow: hidden;
 }
 </style>
