@@ -27,7 +27,7 @@ export default {
       if (this.settings.fileLivestreamId === null) {
         return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
       }
-      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileId + 'livestream.png')
+      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileLivestreamId + 'livestream.png')
     },
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]

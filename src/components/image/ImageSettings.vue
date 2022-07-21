@@ -227,10 +227,13 @@ export default {
   },
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
     },
     fileLivestreamUrl () {
-      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
+      if (this.settings.fileLivestreamId === null) {
+        return this.fileUrl
+      }
+      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileLivestreamId + 'livestream.png')
     },
     factorBeamer () { // toekomst naar ratio output variabele
       if (this.settings.beamerWidth !== 0 && this.settings.beamerHeight !== 0) {
