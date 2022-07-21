@@ -22,9 +22,12 @@ export default {
   computed: {
     fileUrl () {
       if (this.id !== 'livestream') {
-        return this.$store.media[this.settings.fileId]
+        return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
       }
-      return this.$store.media[this.settings.fileLivestreamId] || this.$store.media[this.settings.fileId]
+      if (this.settings.fileLivestreamId === null) {
+        return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
+      }
+      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileId + 'livestream.png')
     },
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]
