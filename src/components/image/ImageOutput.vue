@@ -1,16 +1,16 @@
 <template>
   <div class="image">
     <div class="Output" :style="styleOutput">
-      <img :src="fileUrl" class="positionabsolute" :style="styleImg">
+      <img v-if="fileUrl" :src="fileUrl" class="positionabsolute" :style="styleImg">
     </div>
   </div>
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import ImageDefault from './ImageDefault.vue'
 
 export default {
-  extends: BaseSettings,
+  extends: ImageDefault,
   props: {
     id: {
       type: String,
@@ -22,12 +22,9 @@ export default {
   computed: {
     fileUrl () {
       if (this.id !== 'livestream') {
-        return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
+        return this.fileBeamerUrl
       }
-      if (this.settings.fileLivestreamId === null) {
-        return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
-      }
-      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileLivestreamId + 'livestream.png')
+      return this.fileLivestreamUrl
     },
     backgroundImageUrl () {
       return this.$store.media[this.$store.service?.backgroundImageId]

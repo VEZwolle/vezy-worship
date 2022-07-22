@@ -1,9 +1,9 @@
 <template>
   <q-card-section>
-    <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+    <q-input v-if="fileBeamerUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
     <div class="inputs-header">
       Selecteer afbeelding(en):
-      <q-toggle v-if="fileUrl" v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
+      <q-toggle v-if="fileBeamerUrl" v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
 
     <div class="row q-gutter-md">
@@ -13,7 +13,7 @@
             <q-icon name="image" />
           </template>
         </q-file>
-        <template v-if="fileUrl">
+        <template v-if="fileBeamerUrl">
           <q-toggle v-model="settings.beamerDefault" :label="settings.beamerDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateBeamerDefault" />
           <div v-if="!settings.beamerDefault" class="row">
             <div class="w-col1">
@@ -110,7 +110,7 @@
             <q-icon name="image" />
           </template>
         </q-file>
-        <template v-if="fileUrl">
+        <template v-if="fileBeamerUrl">
           <q-toggle v-model="settings.livestreamDefault" :disable="equal" :label="settings.livestreamDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateLivestreamDefault" />
           <div v-if="!settings.livestreamDefault" class="row">
             <div class="w-col1">
@@ -205,13 +205,13 @@
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import ImageDefault from './ImageDefault.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutput from './ImageOutput.vue'
 
 export default {
   components: { OutputPreview },
-  extends: BaseSettings,
+  extends: ImageDefault,
   setup () {
     return { ImageOutput }
   },
@@ -226,15 +226,6 @@ export default {
     }
   },
   computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.fileId] || require('../../assets/' + this.settings.fileId + 'beamer.png')
-    },
-    fileLivestreamUrl () {
-      if (this.settings.fileLivestreamId === null) {
-        return this.fileUrl
-      }
-      return this.$store.media[this.settings.fileLivestreamId] || require('../../assets/' + this.settings.fileLivestreamId + 'livestream.png')
-    },
     factorBeamer () { // toekomst naar ratio output variabele
       if (this.settings.beamerWidth !== 0 && this.settings.beamerHeight !== 0) {
         return (16 / 9) / (this.settings.beamerWidth / this.settings.beamerHeight)
