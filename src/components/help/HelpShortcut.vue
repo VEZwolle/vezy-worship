@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      Snelkoppelingen VezyWorship
+      <img src="../../../public/icons/favicon-32x32.png">
+      VezyWorship: Snelkoppelingen
     </div>
     <div class="q-pa-md">
       <q-table
@@ -10,6 +11,7 @@
         :columns="columns"
         :rows-per-page-options="[0]"
         row-key="name"
+        dense
       />
     </div>
   </div>
@@ -30,13 +32,13 @@ const columns = [
 ]
 
 const rows = [
-  { shortkey: 'ctrl + c', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
-  { shortkey: '→  of  ↓', function: 'Ga naar volgende regel/onderdeel in live' },
-  { shortkey: '←  of  ↑', function: 'Ga naar vorige regel/onderdeel in live' },
-  { shortkey: 'ctrl + →', function: 'Preview naar live verplaatsen (Go Live)' },
-  { shortkey: 'ctrl + n', function: 'Nieuwe dienst aanmaken' },
-  { shortkey: 'ctrl + o', function: 'Opgeslagen dienst openen' },
-  { shortkey: 'ctrl + s', function: 'Huidige dienst opslaan' }
+  { shortkey: 'ctrl + C', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
+  { shortkey: '➡  of  ⬇', function: 'Ga naar volgende regel/onderdeel in live' },
+  { shortkey: '⬅  of  ⬆', function: 'Ga naar vorige regel/onderdeel in live' },
+  { shortkey: 'ctrl + ➡', function: 'Preview naar live verplaatsen (Go Live)' },
+  { shortkey: 'ctrl + N', function: 'Nieuwe dienst aanmaken' },
+  { shortkey: 'ctrl + O', function: 'Opgeslagen dienst openen' },
+  { shortkey: 'ctrl + S', function: 'Huidige dienst opslaan' }
 ]
 
 export default {
