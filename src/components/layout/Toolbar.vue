@@ -78,21 +78,30 @@
       class="q-ml-sm"
       @click="openAppSettings"
     />
+    <q-btn
+      flat
+      icon="help"
+      dense
+      class="q-ml-sm"
+      @click="openHelp"
+    />
   </q-toolbar>
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
+  <HelpDialog ref="helpDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
+import HelpDialog from '../help/HelpDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
+  components: { ServiceSettingsDialog, AppSettingsDialog, HelpDialog, MessageControl },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -125,6 +134,9 @@ export default {
     },
     openAppSettings () {
       this.$refs.appSettingsDialog.show()
+    },
+    openHelp () {
+      this.$refs.helpDialog.show()
     }
   }
 }
