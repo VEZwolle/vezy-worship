@@ -2,7 +2,23 @@
   <q-card-section>
     <q-input v-if="fileBeamerUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
     <div class="inputs-header">
-      Selecteer afbeelding(en):
+      Selecteer afbeelding(en)
+      <q-btn-dropdown
+        split
+        flat
+        no-caps
+        dense
+        label="Of kies een standaard"
+        @click="updateFileDefault(imageDefaults[0].idName)"
+      >
+        <q-list>
+          <q-item v-for="(imgDefault, index) in imageDefaults" :key="index" v-close-popup dense clickable @click="updateFileDefault(imgDefault.idName)">
+            <q-item-section>
+              <q-item-label>{{ imgDefault.title }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
       <q-toggle v-if="fileBeamerUrl" v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
 
@@ -245,6 +261,20 @@ export default {
     }
   },
   methods: {
+    updateFileDefault (idName) {
+      const imageDefault = this.imageDefaults.find(t => t.idName === idName)
+      this.settings.fileId = idName
+      this.settings.fileLivestreamId = idName
+      this.settings.title = imageDefault.title
+      this.settings.beamerWidth = imageDefault.width
+      this.settings.beamerHeight = imageDefault.height
+      this.settings.livestreamWidth = imageDefault.width
+      this.settings.livestreamHeight = imageDefault.height
+      this.settings.livestreamDefault = true
+      this.settings.beamerDefault = true
+      this.updateLivestreamDefault()
+      this.updateBeamerDefault()
+    },
     updateFile (file) {
       this.settings.fileId = this.$store.addMedia(file)
       const imageUrl = URL.createObjectURL(file)
