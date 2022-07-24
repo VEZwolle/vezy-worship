@@ -1,0 +1,156 @@
+<template>
+  <q-btn-dropdown
+    v-shortkey="['ctrl', 'r']"
+    flat
+    dense
+    no-caps
+    :label="labelBack"
+    @click="returnLiveOuptut()"
+    @shortkey="returnLiveOuptut()"
+  >
+    <q-tooltip>
+      Kies een sheet uit de lijst die direct getoond moet worden.<br>
+      Daarna kan u terug naar waar u gebleven bent in de setlist. (ctrl + r)<br>
+    </q-tooltip>
+    <q-list>
+      <q-item
+        v-for="defaultItem in defaultItems"
+        :key="defaultItem.id"
+        v-close-popup
+        dense
+        clickable
+        @click="output(defaultItem.id)"
+      >
+        <q-item-section>
+          <q-item-label>{{ defaultItem.settings.title }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </q-btn-dropdown>
+</template>
+
+<script>
+import cloneDeep from 'lodash/cloneDeep'
+
+export default {
+  components: { },
+  data () {
+    return {
+      defaultItems: [
+        {
+          id: 'nazorg',
+          type: 'image',
+          settings: {
+            title: 'Nazorg',
+            fileId: 'nazorg',
+            fileLivestreamId: 'nazorg',
+            beamerDefault: true,
+            beamerWidth: 1920,
+            beamerHeight: 1080,
+            beamerZoom: 100,
+            beamerY: 0,
+            beamerX: 0,
+            beamerRotate: 0,
+            livestreamDefault: true,
+            livestreamWidth: 1920,
+            livestreamHeight: 1080,
+            livestreamZoom: 100,
+            livestreamY: 0,
+            livestreamX: 0,
+            livestreamRotate: 0
+          }
+        },
+        {
+          id: 'collecte',
+          type: 'image',
+          settings: {
+            title: 'Collecte',
+            fileId: 'collecte',
+            fileLivestreamId: 'collecte',
+            beamerDefault: true,
+            beamerWidth: 1920,
+            beamerHeight: 1080,
+            beamerZoom: 100,
+            beamerY: 0,
+            beamerX: 0,
+            beamerRotate: 0,
+            livestreamDefault: true,
+            livestreamWidth: 1920,
+            livestreamHeight: 1080,
+            livestreamZoom: 100,
+            livestreamY: 0,
+            livestreamX: 0,
+            livestreamRotate: 0
+          }
+        },
+        {
+          id: 'end',
+          type: 'image',
+          settings: {
+            title: 'Einde dienst',
+            fileId: 'end',
+            fileLivestreamId: 'end',
+            beamerDefault: true,
+            beamerWidth: 1920,
+            beamerHeight: 1080,
+            beamerZoom: 100,
+            beamerY: 0,
+            beamerX: 0,
+            beamerRotate: 0,
+            livestreamDefault: true,
+            livestreamWidth: 1920,
+            livestreamHeight: 1080,
+            livestreamZoom: 100,
+            livestreamY: 0,
+            livestreamX: 0,
+            livestreamRotate: 0
+          }
+        },
+        {
+          id: 'host',
+          type: 'caption',
+          settings: {
+            title: 'Host',
+            text: 'host'
+          }
+        },
+        {
+          id: 'preacher',
+          type: 'caption',
+          settings: {
+            title: 'Spreker',
+            text: 'preacher'
+          }
+        }
+      ]
+    }
+  },
+  computed: {
+    labelBack () {
+      if (this.$store.livePresentationToRestore !== null) {
+        if (this.$store.livePresentationToRestore.settings.title !== undefined) {
+          return 'verder met: ' + this.$store.livePresentationToRestore.settings.title
+        }
+        return 'verder met: live'
+      }
+      return 'Toon direct...'
+    }
+  },
+  methods: {
+    output (idName) {
+      if (this.$store.livePresentationToRestore === null) {
+        this.$store.livePresentationToRestore = cloneDeep(this.$store.livePresentation)
+      }
+      this.$store.livePresentation = cloneDeep(this.defaultItems.find(t => t.id === idName))
+      this.$store.isClear = false
+    },
+    returnLiveOuptut () {
+      if (this.$store.livePresentationToRestore !== null) {
+        this.$store.isClear = true
+        this.$store.livePresentation = cloneDeep(this.$store.livePresentationToRestore)
+        this.$store.livePresentationToRestore = null
+      }
+    }
+  }
+}
+</script>

@@ -1,9 +1,25 @@
 <template>
   <q-card-section>
-    <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+    <q-input v-if="fileBeamerUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
     <div class="inputs-header">
-      Selecteer afbeelding(en):
-      <q-toggle v-if="fileUrl" v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
+      Selecteer afbeelding(en)
+      <q-btn-dropdown
+        split
+        flat
+        no-caps
+        dense
+        label="Of kies een standaard"
+        @click="updateFileDefault(imageDefaults[0].idName)"
+      >
+        <q-list>
+          <q-item v-for="(imgDefault, index) in imageDefaults" :key="index" v-close-popup dense clickable @click="updateFileDefault(imgDefault.idName)">
+            <q-item-section>
+              <q-item-label>{{ imgDefault.title }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+      <q-toggle v-if="fileBeamerUrl" v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
 
     <div class="row q-gutter-md">
@@ -13,7 +29,7 @@
             <q-icon name="image" />
           </template>
         </q-file>
-        <template v-if="fileUrl">
+        <template v-if="fileBeamerUrl">
           <q-toggle v-model="settings.beamerDefault" :label="settings.beamerDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateBeamerDefault" />
           <div v-if="!settings.beamerDefault" class="row">
             <div class="w-col1">
@@ -110,7 +126,7 @@
             <q-icon name="image" />
           </template>
         </q-file>
-        <template v-if="fileUrl">
+        <template v-if="fileBeamerUrl">
           <q-toggle v-model="settings.livestreamDefault" :disable="equal" :label="settings.livestreamDefault ? 'Standaard (volledig breedte gebruiken)' : 'reset'" @update:model-value="updateLivestreamDefault" />
           <div v-if="!settings.livestreamDefault" class="row">
             <div class="w-col1">
@@ -205,13 +221,13 @@
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import ImageDefault from './ImageDefault.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutput from './ImageOutput.vue'
 
 export default {
   components: { OutputPreview },
-  extends: BaseSettings,
+  extends: ImageDefault,
   setup () {
     return { ImageOutput }
   },
@@ -226,12 +242,6 @@ export default {
     }
   },
   computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.fileId]
-    },
-    fileLivestreamUrl () {
-      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
-    },
     factorBeamer () { // toekomst naar ratio output variabele
       if (this.settings.beamerWidth !== 0 && this.settings.beamerHeight !== 0) {
         return (16 / 9) / (this.settings.beamerWidth / this.settings.beamerHeight)
@@ -251,6 +261,20 @@ export default {
     }
   },
   methods: {
+    updateFileDefault (idName) {
+      const imageDefault = this.imageDefaults.find(t => t.idName === idName)
+      this.settings.fileId = idName
+      this.settings.fileLivestreamId = idName
+      this.settings.title = imageDefault.title
+      this.settings.beamerWidth = imageDefault.width
+      this.settings.beamerHeight = imageDefault.height
+      this.settings.livestreamWidth = imageDefault.width
+      this.settings.livestreamHeight = imageDefault.height
+      this.settings.livestreamDefault = true
+      this.settings.beamerDefault = true
+      this.updateLivestreamDefault()
+      this.updateBeamerDefault()
+    },
     updateFile (file) {
       this.settings.fileId = this.$store.addMedia(file)
       const imageUrl = URL.createObjectURL(file)
