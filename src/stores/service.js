@@ -61,6 +61,51 @@ export default defineStore('service', {
 
       this.loadService(service)
     },
+    updateService ({ date, time, host, preacher, backgroundImageId }) {
+      // Add/update default countdown
+      let itemId = this.service.presentations.findIndex(t => t.id === 'countdown')
+      if (itemId !== -1) {
+        this.service.presentations[itemId].settings.time = time
+      } else {
+        this.service.presentations.push({
+          id: 'countdown',
+          type: 'countdown',
+          settings: { time }
+        })
+      }
+      // Add/update default host caption
+      if (host) {
+        itemId = this.service.presentations.findIndex(t => t.id === 'host')
+        if (itemId !== -1) {
+          this.service.presentations[itemId].settings.text = host
+        } else {
+          this.service.presentations.push({
+            id: 'host',
+            type: 'caption',
+            settings: {
+              title: 'Host',
+              text: host
+            }
+          })
+        }
+      }
+      // Add/update default preacher caption
+      if (preacher) {
+        itemId = this.service.presentations.findIndex(t => t.id === 'preacher')
+        if (itemId !== -1) {
+          this.service.presentations[itemId].settings.text = preacher
+        } else {
+          this.service.presentations.push({
+            id: 'preacher',
+            type: 'caption',
+            settings: {
+              title: 'Spreker',
+              text: preacher
+            }
+          })
+        }
+      }
+    },
 
     addPresentation (presentation) {
       presentation.id = nanoid()
