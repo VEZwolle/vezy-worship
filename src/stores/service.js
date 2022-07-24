@@ -8,6 +8,7 @@ export default defineStore('service', {
     media: {},
     previewPresentation: null,
     livePresentation: null,
+    livePresentationToRestore: null,
     isClear: true,
     message: ''
   }),
@@ -163,6 +164,7 @@ export default defineStore('service', {
       }
 
       this.livePresentation = cloneDeep(presentation)
+      this.livePresentationToRestore = null
     },
 
     // Clear
