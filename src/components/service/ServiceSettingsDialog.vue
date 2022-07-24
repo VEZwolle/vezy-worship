@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog" square>
+  <q-dialog ref="dialog" persistent square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>{{ service.id ? 'Dienst bewerken' : 'Nieuwe dienst' }}</q-toolbar-title>
@@ -71,6 +71,20 @@ export default {
       }
 
       this.service = service || defaults
+      if (this.service.id) { // check for changes in setlist
+        let item = this.service.presentations.find(t => t.id === 'countdown')
+        if (item !== undefined) {
+          this.service.time = item.settings.time
+        }
+        item = this.service.presentations.find(t => t.id === 'host')
+        if (item !== undefined) {
+          this.service.host = item.settings.text
+        }
+        item = this.service.presentations.find(t => t.id === 'preacher')
+        if (item !== undefined) {
+          this.service.preacher = item.settings.text
+        }
+      }
 
       this.$refs.dialog.show()
     },
@@ -83,6 +97,8 @@ export default {
     save () {
       if (!this.service.id) {
         this.$store.createService(this.service)
+      } else {
+        this.$store.updateService(this.service)
       }
 
       this.hide()
