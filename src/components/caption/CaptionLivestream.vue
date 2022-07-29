@@ -31,21 +31,23 @@ export default {
     background: $primary;
     color: #fff;
     padding: 0.3vw 5vw 0.3vw 1vw;
-    font-size: 1.3vw;
     width: max-content;
     min-width: 15vw;
   }
   .title-default {
     top: -1.3vw;
     left: 2vw;
+    font-size: 1.3vw;
   }
   .title-big-bottom {
-    top: -1.3vw;
+    top: -2.4vw;
     left: 4vw;
+    font-size: 2.4vw;
   }
   .title-big-right {
     top: 4vw;
     left: 1vw;
+    font-size: 2.4vw;
   }
 
   .text {
@@ -62,15 +64,15 @@ export default {
   .text-big-bottom {
     padding: 2vw 4vw 4vw 4vw;
     width: 100vw;
-    font-size: 2.55vw;
-    line-height: 3.3vw;
+    font-size: 3.1vw;
+    line-height: 3.5vw;
   }
   .text-big-right {
-    padding: 7.3vw 4vw 4vw 2vw;
+    padding: 8.4vw 4vw 4vw 2vw;
     width: 45vw;
     height: 100vh;
-    font-size: 2.55vw;
-    line-height: 3.3vw;
+    font-size: 3.1vw;
+    line-height: 3.5vw;
   }
 
   &.alpha {
