@@ -29,7 +29,9 @@ export default [
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...'
+      text: 'Lorem ipsum...',
+      formatBeamer: 'Geen',
+      formatLivestream: 'Standaard'
     },
     description (settings) {
       return settings.text
@@ -39,7 +41,8 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      livestream: require('./caption/CaptionOutput.vue').default
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   },
   {
