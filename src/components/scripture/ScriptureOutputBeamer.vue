@@ -1,12 +1,10 @@
 <template>
   <div v-if="!clear" class="scripture-output">
-    <div>
-      <div>
-        <span v-for="(line, i) in lines" :key="i" v-html="line" />
-      </div>
-
-      <div v-html="title" />
+    <div class="scripture-text">
+      <span v-for="(line, i) in lines" :key="i" v-html="line" />
     </div>
+
+    <div class="scripture-title" v-html="title" />
   </div>
 </template>
 
@@ -34,16 +32,24 @@ export default {
 <style scoped>
 .scripture-output {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
   height: 100%;
+  padding: 10vh;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.scripture-output>div {
-  width: 90vw;
-  padding: 9vh;
-  font-size: 2vw;
+.scripture-text {
+  text-align: justify;
+  font-size: 2.6vw;
+  line-height: 4vw;
   color: #fff;
-  background: rgba(0, 0, 0, 0.4);
+}
+
+.scripture-title {
+  text-align: right;
+  font-size: 2.4vw;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6)
 }
 </style>
