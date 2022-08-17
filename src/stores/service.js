@@ -35,9 +35,7 @@ export default defineStore('service', {
       this.upsertPresentation({
         id: 'countdown',
         type: 'countdown',
-        settings: {
-          time
-        }
+        settings: { time }
       })
 
       // Default host caption
