@@ -79,9 +79,9 @@ export default {
       if (!this.isNew) {
         const find = (id) => this.service.presentations.find(t => t.id === id)?.settings || {}
 
-        this.service.time = find('countdown').time
-        this.service.host = find('host').text
-        this.service.preacher = find('preacher').text
+        this.service.time = find('countdown').time || this.service.time
+        this.service.host = find('host').text || this.service.host
+        this.service.preacher = find('preacher').text || this.service.preacher
       }
 
       this.$refs.dialog.show()
