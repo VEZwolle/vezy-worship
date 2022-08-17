@@ -3,7 +3,7 @@
     <q-item
       clickable
       class="bg-primary text-white"
-      :active="true"
+      active
       active-class="text-bold"
       @dblclick="goLive"
     >
@@ -14,7 +14,7 @@
 
     <q-item
       clickable
-      :active="true"
+      active
       :active-class="!preview ? 'bg-secondary text-white' : null"
       @dblclick="goLive"
     >
