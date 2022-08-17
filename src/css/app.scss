@@ -61,3 +61,10 @@
   src: local(""), url("../assets/fonts/ubuntu/ubuntu-v20-latin-700italic.woff2") format("woff2"),
     url("../assets/fonts/ubuntu/ubuntu-v20-latin-700italic.woff") format("woff");
 }
+
+// Global styles
+sup {
+  vertical-align: top;
+  font-size: 0.8em;
+  opacity: 0.6;
+}
