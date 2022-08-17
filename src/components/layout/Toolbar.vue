@@ -77,7 +77,9 @@
       dense
       class="q-ml-sm"
       @click="openAppSettings"
-    />
+    >
+      <q-tooltip>Instellingen</q-tooltip>
+    </q-btn>
 
     <q-btn
       flat
@@ -85,7 +87,9 @@
       dense
       class="q-ml-sm"
       @click="openHelp"
-    />
+    >
+      <q-tooltip>Helpinformatie</q-tooltip>
+    </q-btn>
   </q-toolbar>
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
