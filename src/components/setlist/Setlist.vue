@@ -21,7 +21,9 @@
                 :presentation="presentation"
                 :active="$store.previewPresentation?.id === presentation.id"
                 @click="$store.preview(presentation)"
+                @preview="$store.preview(presentation)"
                 @dblclick="$store.goLive(presentation)"
+                @go-live="$store.goLive(presentation)"
                 @edit="edit(presentation)"
                 @remove="$store.removePresentation(presentation)"
               />
