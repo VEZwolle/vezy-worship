@@ -8,6 +8,7 @@
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
+
       <q-card-section>
         <div>
           <q-splitter
@@ -26,6 +27,7 @@
                 <q-tab name="about" icon="build" label="Over" />
               </q-tabs>
             </template>
+
             <template #after>
               <q-tab-panels
                 v-model="tab"
@@ -49,7 +51,9 @@
           </q-splitter>
         </div>
       </q-card-section>
+
       <q-separator />
+
       <q-card-actions align="right">
         <q-btn color="secondary" label="Sluiten" icon="close" @click="hide" />
       </q-card-actions>
