@@ -18,7 +18,7 @@ export default defineStore('service', {
       this.livePresentation = null
     },
     createService ({ id, date, time, host, preacher, backgroundImageId }) {
-      // Create if presentation is new (so has no id)
+      // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
           id: nanoid(),
@@ -73,7 +73,7 @@ export default defineStore('service', {
       Object.assign(presentation.settings, settings)
     },
     upsertPresentation (presentation) {
-      const existing = this.service.find(p => p.id === presentation.id)
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
 
       existing
         ? this.updatePresentation(existing, presentation.settings)
