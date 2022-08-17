@@ -41,14 +41,14 @@ export default {
 
 .scripture-text {
   text-align: justify;
-  font-size: 2.6vw;
-  line-height: 4vw;
+  font-size: 2.4vw;
+  line-height: 3.6vw;
   color: #fff;
 }
 
 .scripture-title {
   text-align: right;
-  font-size: 2.4vw;
+  font-size: 2.2vw;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.6)
 }
