@@ -26,13 +26,13 @@
 
     <q-menu context-menu no-focus>
       <q-list dense style="min-width: 100px">
-        <q-item v-close-popup clickable @click.stop="$emit('click')">
+        <q-item v-close-popup clickable @click.stop="$emit('preview')">
           <q-item-section>Preview</q-item-section>
           <q-item-section avatar>
             <q-avatar color="primary" text-color="white" size="28px" flat round icon="search" />
           </q-item-section>
         </q-item>
-        <q-item v-close-popup clickable @click.stop="$emit('dblclick')">
+        <q-item v-close-popup clickable @click.stop="$emit('goLive')">
           <q-item-section>Go Live</q-item-section>
           <q-item-section avatar>
             <q-avatar color="primary" text-color="white" size="28px" flat round icon="arrow_forward" />
@@ -63,7 +63,7 @@ export default {
     presentation: Object,
     active: Boolean
   },
-  emits: ['edit', 'remove', 'click', 'dblclick'],
+  emits: ['edit', 'remove', 'preview', 'goLive'],
   computed: {
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation.type)
