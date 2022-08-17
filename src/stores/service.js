@@ -17,7 +17,7 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    createService ({ id, date, time, host, preacher, backgroundImageId }) {
+    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({

@@ -93,7 +93,7 @@ export default {
       this.service.backgroundImageId = this.$store.addMedia(file)
     },
     save () {
-      this.$store.createService(this.service)
+      this.$store.fillService(this.service)
 
       this.hide()
     }
