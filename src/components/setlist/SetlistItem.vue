@@ -23,14 +23,13 @@
         </q-btn>
       </div>
     </q-item-section>
+
     <q-menu context-menu no-focus>
       <q-list dense style="min-width: 100px">
         <q-item v-close-popup clickable @click.stop="$emit('click')">
           <q-item-section>Preview</q-item-section>
           <q-item-section avatar>
-            <q-avatar color="primary" text-color="white" size="28px" flat round>
-              🖵
-            </q-avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="search" />
           </q-item-section>
         </q-item>
         <q-item v-close-popup clickable @click.stop="$emit('dblclick')">
