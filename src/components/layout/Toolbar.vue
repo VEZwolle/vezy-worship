@@ -64,13 +64,7 @@
         dense
         @click="openOutput('livestream')"
       />
-      <q-btn
-        flat
-        icon="help"
-        dense
-        class="q-ml-sm"
-        @click="openHelp"
-      />
+
       <span class="q-px-md">|</span>
     </div>
 
@@ -83,6 +77,14 @@
       dense
       class="q-ml-sm"
       @click="openAppSettings"
+    />
+
+    <q-btn
+      flat
+      icon="help"
+      dense
+      class="q-ml-sm"
+      @click="openHelp"
     />
   </q-toolbar>
 
