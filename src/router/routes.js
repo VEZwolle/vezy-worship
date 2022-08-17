@@ -10,7 +10,7 @@ export default [
   {
     path: '/output/beamer',
     component: Output,
-    props: () => ({ id: 'beamer', showBackground: true })
+    props: () => ({ id: 'beamer', showBackground: true, showMessages: true })
   },
   {
     path: '/output/livestream',

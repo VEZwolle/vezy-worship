@@ -7,9 +7,9 @@
     <q-editor ref="editor" v-model="settings.text" min-height="80px" :toolbar="[['bold', 'italic', 'underline']]" class="q-mb-md" @paste.prevent.stop="pastePlainText" />
 
     <label class="label">Preview</label>
-    <OutputPreview :zoom="0.8">
-      <CaptionOutput :presentation="{ settings }" />
-    </OutputPreview>
+    <div class="preview">
+      <OutputPreview :component="CaptionOutput" :presentation="{ settings }" />
+    </div>
   </q-card-section>
 </template>
 
@@ -19,8 +19,11 @@ import OutputPreview from '../output/OutputPreview.vue'
 import CaptionOutput from './CaptionOutput.vue'
 
 export default {
-  components: { OutputPreview, CaptionOutput },
+  components: { OutputPreview },
   extends: BaseSettings,
+  setup () {
+    return { CaptionOutput }
+  },
   methods: {
     pastePlainText (e) {
       const text = e.clipboardData.getData('text/plain')
@@ -37,7 +40,7 @@ export default {
   line-height: 22px;
 }
 
-.caption {
-  zoom: 0.7;
+.preview {
+  max-width: 800px;
 }
 </style>

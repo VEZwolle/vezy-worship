@@ -1,50 +1,44 @@
 <template>
-  <div class="output-preview" :style="rootStyle">
-    <div class="output-container bg-grey" :style="containerStyle">
-      <Transition name="q-transition--fade">
-        <slot />
-      </Transition>
-    </div>
-  </div>
+  <q-responsive :ratio="ratio" class="output-preview">
+    <iframe ref="iframe" />
+  </q-responsive>
 </template>
 
 <script>
+import { createApp } from 'vue'
+
 export default {
   props: {
-    zoom: { type: Number, default: 1 }
-  },
-  data () {
-    return {
-      scale: 0
-    }
-  },
-  computed: {
-    rootStyle () {
-      const height = (1080 * this.scale) * this.zoom
-
-      return {
-        height: `${height}px`,
-        transform: `scale(${this.zoom})`,
-        transformOrigin: 'top left'
-      }
-    },
-    containerStyle () {
-      return {
-        width: '1920px',
-        height: '1080px',
-        transform: `scale(${this.scale})`,
-        transformOrigin: 'top left'
-      }
-    }
+    component: Object,
+    ratio: { type: Number, default: 16 / 9 }
   },
   mounted () {
-    this.scale = this.$el.offsetWidth / 1920
+    const iframe = this.$refs.iframe.contentDocument
+
+    // Sync styles
+    const styles = document.querySelectorAll('link,style')
+    for (const style of styles) {
+      iframe.head.append(style.cloneNode(true))
+    }
+
+    const app = createApp(this.component, this.$attrs)
+
+    // Sync store
+    app.config.globalProperties.$store = this.$store
+
+    app.mount(iframe.body)
   }
 }
 </script>
 
 <style scoped>
 .output-preview {
+  background: #000;
+  width: 100%;
   pointer-events: none;
+}
+
+iframe {
+  border: none;
 }
 </style>

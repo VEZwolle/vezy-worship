@@ -21,9 +21,13 @@ export default {
   },
   watch: {
     'settings.play' (val) {
+      if (!this.player) return
+
       val ? this.player.play() : this.player.pause()
     },
     'settings.time' (val) {
+      if (!this.player) return
+
       this.player.currentTime = val
     }
   }
