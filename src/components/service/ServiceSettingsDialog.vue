@@ -1,8 +1,8 @@
 <template>
-  <q-dialog ref="dialog" square>
+  <q-dialog ref="dialog" persistent square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
-        <q-toolbar-title>{{ service.id ? 'Dienst bewerken' : 'Nieuwe dienst' }}</q-toolbar-title>
+        <q-toolbar-title>{{ isNew ? 'Nieuwe dienst' : 'Dienst bewerken' }}</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
 
@@ -61,6 +61,9 @@ export default {
   computed: {
     backgroundImageUrl () {
       return this.$store.media[this.service.backgroundImageId]
+    },
+    isNew () {
+      return !this.service.id
     }
   },
   methods: {
@@ -72,6 +75,15 @@ export default {
 
       this.service = service || defaults
 
+      // Check for changes from setlist
+      if (!this.isNew) {
+        const find = (id) => this.service.presentations.find(t => t.id === id)?.settings || {}
+
+        this.service.time = find('countdown').time || this.service.time
+        this.service.host = find('host').text || this.service.host
+        this.service.preacher = find('preacher').text || this.service.preacher
+      }
+
       this.$refs.dialog.show()
     },
     hide () {
@@ -81,9 +93,7 @@ export default {
       this.service.backgroundImageId = this.$store.addMedia(file)
     },
     save () {
-      if (!this.service.id) {
-        this.$store.createService(this.service)
-      }
+      this.$store.fillService(this.service)
 
       this.hide()
     }
