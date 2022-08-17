@@ -17,8 +17,13 @@ export default {
 function splitScripture (text, maxCharsPerSlide = 350) {
   if (!text) return []
 
+  const lineBreaks = [
+    '<div><br></div>',
+    '<div><sup><br></sup></div>'
+  ]
+
   return text
-    .split('<div><br></div>')
+    .split(new RegExp(lineBreaks.join('|')))
     .map((section) => {
       const sentenceEndChars = '.,;?!'
       const regex = new RegExp(`.{1,${maxCharsPerSlide}}[${sentenceEndChars}]`, 'g')
