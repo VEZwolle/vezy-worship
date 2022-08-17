@@ -17,27 +17,32 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    createService ({ date, time, host, preacher, backgroundImageId }) {
-      const service = {
-        id: nanoid(),
-        date,
-        time,
-        host,
-        preacher,
-        backgroundImageId,
-        presentations: []
+    createService ({ id, date, time, host, preacher, backgroundImageId }) {
+      // Create if presentation is new (so has no id)
+      if (!id) {
+        this.loadService({
+          id: nanoid(),
+          date,
+          time,
+          host,
+          preacher,
+          backgroundImageId,
+          presentations: []
+        })
       }
 
-      // Add default countdown
-      service.presentations.push({
+      // Default countdown
+      this.upsertPresentation({
         id: 'countdown',
         type: 'countdown',
-        settings: { time }
+        settings: {
+          time
+        }
       })
 
-      // Add default host caption
+      // Default host caption
       if (host) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'host',
           type: 'caption',
           settings: {
@@ -47,9 +52,9 @@ export default defineStore('service', {
         })
       }
 
-      // Add default preacher caption
+      // Default preacher caption
       if (preacher) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'preacher',
           type: 'caption',
           settings: {
@@ -58,58 +63,21 @@ export default defineStore('service', {
           }
         })
       }
-
-      this.loadService(service)
-    },
-    updateService ({ date, time, host, preacher, backgroundImageId }) {
-      // Add/update default countdown
-      let itemId = this.service.presentations.findIndex(t => t.id === 'countdown')
-      if (itemId !== -1) {
-        this.service.presentations[itemId].settings.time = time
-      } else {
-        this.service.presentations.push({
-          id: 'countdown',
-          type: 'countdown',
-          settings: { time }
-        })
-      }
-      // Add/update default host caption
-      if (host) {
-        itemId = this.service.presentations.findIndex(t => t.id === 'host')
-        if (itemId !== -1) {
-          this.service.presentations[itemId].settings.text = host
-        } else {
-          this.service.presentations.push({
-            id: 'host',
-            type: 'caption',
-            settings: {
-              title: 'Host',
-              text: host
-            }
-          })
-        }
-      }
-      // Add/update default preacher caption
-      if (preacher) {
-        itemId = this.service.presentations.findIndex(t => t.id === 'preacher')
-        if (itemId !== -1) {
-          this.service.presentations[itemId].settings.text = preacher
-        } else {
-          this.service.presentations.push({
-            id: 'preacher',
-            type: 'caption',
-            settings: {
-              title: 'Spreker',
-              text: preacher
-            }
-          })
-        }
-      }
     },
 
     addPresentation (presentation) {
-      presentation.id = nanoid()
+      presentation.id = presentation.id || nanoid()
       this.service.presentations.push(presentation)
+    },
+    updatePresentation (presentation, settings) {
+      Object.assign(presentation.settings, settings)
+    },
+    upsertPresentation (presentation) {
+      const existing = this.service.find(p => p.id === presentation.id)
+
+      existing
+        ? this.updatePresentation(existing, presentation.settings)
+        : this.addPresentation(presentation)
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)
