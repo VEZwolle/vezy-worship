@@ -5,11 +5,9 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title">
-        {{ presentation.settings.title || presentationType.name }}
-      </q-item-label>
+      <q-item-label class="title" v-html="title" />
       <q-item-label v-if="description" caption :lines="1">
-        {{ description }}
+        {{ $strip(description) }}
       </q-item-label>
     </q-item-section>
 
@@ -67,6 +65,17 @@ export default {
   computed: {
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation.type)
+    },
+    title () {
+      if (this.presentation.settings.title) {
+        return this.presentation.settings.title
+      }
+
+      if (this.presentationType.title) {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
+      return this.presentationType.name
     },
     description () {
       if (!this.presentationType.description) {

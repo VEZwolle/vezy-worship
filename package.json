@@ -11,7 +11,7 @@
     "lint": "eslint --fix --ext .js,.vue ./",
     "electron:serve": "quasar dev -m electron",
     "electron:build": "quasar build -m electron",
-    "firebase:serve": "firebase emulators:start"
+    "api:serve": "firebase emulators:start"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
