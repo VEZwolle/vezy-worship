@@ -1,5 +1,7 @@
 <template>
-  <video-output-beamer muted v-bind="$attrs" />
+  <div>
+    <video-output-beamer v-bind="$attrs" muted />
+  </div>
 </template>
 
 <script>

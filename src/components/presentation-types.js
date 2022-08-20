@@ -1,3 +1,5 @@
+import books from './scripture/books'
+
 export default [
   {
     id: 'song',
@@ -117,8 +119,41 @@ export default [
     outputs: {
       livestream: require('./countdown/CountdownOutput.vue').default
     }
+  },
+  {
+    id: 'scripture',
+    name: 'Bijbeltekst',
+    icon: 'menu_book',
+    color: 'brown',
+    settings: {
+      bible: 'nbv21',
+      book: 'GEN',
+      chapter: null,
+      verseFrom: null,
+      verseTo: null,
+      text: ''
+    },
+    title ({ bible, book, chapter, verseFrom, verseTo }) {
+      const bookDefinition = books.find(b => b.id === book)
+
+      let title = `${bookDefinition.name} ${chapter}:${verseFrom}`
+
+      if (verseTo) {
+        title += `-${verseTo}`
+      }
+
+      return `${title} <small>(${bible})</small>`
+    },
+    description (settings) {
+      return settings.text
+    },
+    components: {
+      settings: require('./scripture/ScriptureSettings.vue').default,
+      control: require('./scripture/ScriptureControl.vue').default
+    },
+    outputs: {
+      beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
+      livestream: require('./scripture/ScriptureOutputLivestream.vue').default
+    }
   }
-  // {
-  //   id: 'scripture'
-  // }
 ]

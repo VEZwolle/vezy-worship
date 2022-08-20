@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "1.2.0",
+  "version": "1.3.0-beta",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
@@ -11,7 +11,7 @@
     "lint": "eslint --fix --ext .js,.vue ./",
     "electron:serve": "quasar dev -m electron",
     "electron:build": "quasar build -m electron",
-    "firebase:serve": "firebase emulators:start"
+    "api:serve": "firebase emulators:start"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
