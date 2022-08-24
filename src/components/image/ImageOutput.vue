@@ -27,8 +27,9 @@ export default {
       return {
         position: 'absolute',
         width: `${zoom}vw`,
-        left: `${x + 50 - zoom / 2}vw`,
-        top: `${((y - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - zoom)) / 2)}vh`
+        left: `${x - zoom / 2}vw`,
+        top: `${(y * (this.factor + 1) / 2 - (this.factor * zoom) / 2)}vh`,
+        transform: `translate(${50}vw, ${50}vh)`
       }
     },
     imageStyle () {
