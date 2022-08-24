@@ -15,15 +15,20 @@ export default {
     fileUrl () {
       return this.$store.media[this.settings.fileId]
     },
+    factor () { // toekomst ratio output uit variabele halen
+      const { ratio } = this.settings
+      if (ratio !== null && ratio !== 0) {
+        return (16 / 9) / ratio
+      }
+      return 1
+    },
     containerStyle () {
       const { zoom, x, y } = this.settings
-
       return {
         position: 'absolute',
         width: `${zoom}vw`,
-        left: `${x}vw`,
-        top: `${y}vh`,
-        transform: `translate(-${x}%, -${y}%)`
+        left: `${x + 50 - zoom / 2}vw`,
+        top: `${((y - 100) * (this.factor + 1) / 2 + 100 + (this.factor * (100 - zoom)) / 2)}vh`
       }
     },
     imageStyle () {

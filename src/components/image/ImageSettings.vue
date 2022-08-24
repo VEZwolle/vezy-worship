@@ -35,10 +35,22 @@ export default {
       if (equal) {
         this.settings.livestream = {
           fileId: null,
+          ratio: null,
+          advanced: false,
           zoom: 100,
-          x: 50,
-          y: 50,
+          x: 0,
+          y: 0,
           rotate: 0
+        }
+      } else {
+        this.settings.livestream = {
+          fileId: this.settings.beamer.fileId,
+          ratio: this.settings.beamer.ratio,
+          advanced: this.settings.beamer.advanced,
+          zoom: this.settings.beamer.zoom,
+          x: this.settings.beamer.x,
+          y: this.settings.beamer.y,
+          rotate: this.settings.beamer.rotate
         }
       }
     }
