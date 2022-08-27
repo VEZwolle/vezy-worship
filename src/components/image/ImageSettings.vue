@@ -8,7 +8,7 @@
 
     <div class="row q-gutter-md">
       <div class="col">
-        <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" />
+        <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
       </div>
 
       <div class="col" :class="{ disabled: equal }">
@@ -43,16 +43,11 @@ export default {
           rotate: 0
         }
       } else {
-        this.settings.livestream = {
-          fileId: this.settings.beamer.fileId,
-          ratio: this.settings.beamer.ratio,
-          advanced: this.settings.beamer.advanced,
-          zoom: this.settings.beamer.zoom,
-          x: this.settings.beamer.x,
-          y: this.settings.beamer.y,
-          rotate: this.settings.beamer.rotate
-        }
+        this.settings.livestream = { ...this.settings.beamer }
       }
+    },
+    updateTitle (file) {
+      this.settings.title = file.name
     }
   }
 }

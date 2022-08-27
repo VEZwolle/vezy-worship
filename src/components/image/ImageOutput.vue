@@ -15,21 +15,18 @@ export default {
     fileUrl () {
       return this.$store.media[this.settings.fileId]
     },
-    factor () { // toekomst ratio output uit variabele halen
-      const { ratio } = this.settings
-      if (ratio !== null && ratio !== 0) {
-        return (16 / 9) / ratio
-      }
-      return 1
+    factor () {
+      return this.$store.outputRatio / this.settings.ratio
     },
     containerStyle () {
       const { zoom, x, y } = this.settings
+
       return {
         position: 'absolute',
         width: `${zoom}vw`,
-        left: `${x - zoom / 2}vw`,
-        top: `${(y * (this.factor + 1) / 2 - (this.factor * zoom) / 2)}vh`,
-        transform: `translate(${50}vw, ${50}vh)`
+        left: `${x}vw`,
+        top: `${y * ((this.factor + 1) / 2)}vh`,
+        transform: 'translate(calc(50vw - 50%), calc(50vh - 50%))' // Base position calculations from the center
       }
     },
     imageStyle () {

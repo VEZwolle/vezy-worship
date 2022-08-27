@@ -1,5 +1,5 @@
 <template>
-  <q-file v-model="file" accept="image/*" :label="label" outlined @update:model-value="updateFile">
+  <q-file v-model="file" accept="image/*" :label="label" :loading="isLoading" outlined @update:model-value="updateFile">
     <template #prepend>
       <q-icon name="image" />
     </template>
@@ -9,8 +9,8 @@
     <!-- Zoom -->
     <div v-if="settings.advanced" class="row">
       <div class="col-narrow">
-        <q-btn flat round dense :label="fitType" size="sm" @click="resetToggleZoom">
-          <q-tooltip>Reset zoom naar volledige breedte of hoogte</q-tooltip>
+        <q-btn flat round dense :label="fitType" class="reset-button" @click="fit">
+          <q-tooltip>Reset zoom naar volledige {{ fitType === '↕' ? 'hoogte' : 'breedte' }}</q-tooltip>
         </q-btn>
       </div>
 
@@ -29,7 +29,7 @@
     <!-- Rotate -->
     <div v-if="settings.advanced" class="row">
       <div class="col-narrow">
-        <q-btn flat round dense icon="autorenew" size="sm" @click="resetRotate">
+        <q-btn flat round dense label="🗘" class="reset-button" @click="resetRotate">
           <q-tooltip>Reset rotatie naar 0°</q-tooltip>
         </q-btn>
       </div>
@@ -54,7 +54,7 @@
           :min="-110"
           :max="110"
           label
-          :label-value="`Vanaf midden: ${settings.y}%`"
+          :label-value="`Vanaf midden: ${settings.y > 0 ? '+' : ''}${settings.y}%`"
           class="full-height"
         />
       </div>
@@ -64,19 +64,19 @@
 
         <div v-if="settings.advanced" class="position-buttons">
           <div>
-            <q-btn flat round dense label="⭦" @click="alignTopLeft" />
-            <q-btn flat round dense label="⭡" @click="alignTop" />
-            <q-btn flat round dense label="⭧" @click="alignTopRight" />
+            <q-btn flat round dense label="⭦" @click="align('top', 'left')" />
+            <q-btn flat round dense label="⭡" @click="align('top', 'center')" />
+            <q-btn flat round dense label="⭧" @click="align('top', 'right')" />
           </div>
           <div>
-            <q-btn flat round dense label="⭠" @click="alignLeft" />
-            <q-btn flat round dense label="⊙" @click="alignCenter" />
-            <q-btn flat round dense label="⭢" @click="alignRight" />
+            <q-btn flat round dense label="⭠" @click="align('center', 'left')" />
+            <q-btn flat round dense label="⊙" @click="align('center', 'center')" />
+            <q-btn flat round dense label="⭢" @click="align('center', 'right')" />
           </div>
           <div>
-            <q-btn flat round dense label="⭩" @click="alignBottomLeft" />
-            <q-btn flat round dense label="⭣" @click="alignBottom" />
-            <q-btn flat round dense label="⭨" @click="alignBottomRight" />
+            <q-btn flat round dense label="⭩" @click="align('bottom', 'left')" />
+            <q-btn flat round dense label="⭣" @click="align('bottom', 'center')" />
+            <q-btn flat round dense label="⭨" @click="align('bottom', 'right')" />
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
           :min="-110"
           :max="110"
           label
-          :label-value="`Vanaf midden: ${settings.x}%`"
+          :label-value="`Vanaf midden: ${settings.x > 0 ? '+' : ''}${settings.x}%`"
           class="q-pt-xs"
         />
       </div>
@@ -101,9 +101,6 @@
       <q-toggle v-model="settings.advanced" size="xs" label="Geavanceerde instellingen" @click="toggleAdvanced">
         <q-tooltip>Toon instellingen als zoom, positie, etc.</q-tooltip>
       </q-toggle>
-      <div v-if="imageLoaded" style="height: 0; overflow: hidden;">
-        {{ settings.ratio }}
-      </div>
     </div>
   </div>
 </template>
@@ -118,6 +115,7 @@ export default {
     label: String,
     settings: Object
   },
+  emits: ['updateFile'],
   setup () {
     return { ImageOutput }
   },
@@ -125,37 +123,41 @@ export default {
     return {
       file: null,
       fitType: '↕',
-      imageLoaded: false // variabele voor inlezen maat image
+      isLoading: false
     }
   },
   computed: {
     fileUrl () {
       return this.$store.media[this.settings.fileId]
     },
-    factor () { // toekomst ratio output uit variabele halen
-      if (this.settings.ratio !== null && this.settings.ratio !== 0) {
-        return (16 / 9) / this.settings.ratio
-      }
-      return 1
+    factor () {
+      return this.$store.outputRatio / this.settings.ratio
     }
   },
   methods: {
-    updateFile (file) {
+    async updateFile (file) {
+      this.isLoading = true
+
+      this.settings.ratio = await this.getImageRatio(file)
       this.settings.fileId = this.$store.addMedia(file)
-      if (!this.settings.title) { // dit gaat niet terug naar de titel --> zit nu onder sub van beamer of livestream
-        this.settings.title = file.name
-      }
-      // read ratio (witdh / height)
-      const imageUrl = URL.createObjectURL(file)
-      this.imageLoaded = false
-      const img = new Image()
-      img.onload = () => {
-        this.settings.ratio = (img.width / img.height)
-        this.imageLoaded = true
-      }
-      img.src = imageUrl
+
+      this.$emit('updateFile', file)
+
+      this.isLoading = false
     },
-    resetToggleZoom () {
+    getImageRatio (file) {
+      return new Promise((resolve) => {
+        const img = new Image()
+
+        img.onload = () => {
+          const ratio = img.width / img.height
+          resolve(ratio)
+        }
+
+        img.src = URL.createObjectURL(file)
+      })
+    },
+    fit () {
       if (this.fitType === '↕') {
         this.settings.zoom = 100 / this.factor
         this.fitType = '↔'
@@ -164,54 +166,39 @@ export default {
         this.fitType = '↕'
       }
     },
+    reset () {
+      this.resetZoom()
+      this.resetRotate()
+      this.resetPosition()
+    },
+    resetZoom () {
+      this.settings.zoom = 100
+    },
     resetRotate () {
       this.settings.rotate = 0
     },
+    resetPosition () {
+      this.settings.x = 0
+      this.settings.y = 0
+    },
     toggleAdvanced () {
       if (!this.settings.advanced) {
-        this.settings.zoom = 100
-        this.settings.rotate = 0
-        this.settings.x = 0
-        this.settings.y = 0
+        this.reset()
       }
     },
+    align (y, x) {
+      const { zoom } = this.settings
 
-    // Alignment
-    alignTopLeft () {
-      this.settings.x = -50 + this.settings.zoom / 2
-      this.settings.y = (this.factor * this.settings.zoom - 100) / (this.factor + 1)
-    },
-    alignTop () {
-      this.settings.x = 0
-      this.settings.y = (this.factor * this.settings.zoom - 100) / (this.factor + 1)
-    },
-    alignTopRight () {
-      this.settings.x = 50 - this.settings.zoom / 2
-      this.settings.y = (this.factor * this.settings.zoom - 100) / (this.factor + 1)
-    },
-    alignLeft () {
-      this.settings.x = -50 + this.settings.zoom / 2
-      this.settings.y = 0
-    },
-    alignCenter () {
-      this.settings.x = 0
-      this.settings.y = 0
-    },
-    alignRight () {
-      this.settings.x = 50 - this.settings.zoom / 2
-      this.settings.y = 0
-    },
-    alignBottomLeft () {
-      this.settings.x = -50 + this.settings.zoom / 2
-      this.settings.y = -1 * (this.factor * this.settings.zoom - 100) / (this.factor + 1)
-    },
-    alignBottom () {
-      this.settings.x = 0
-      this.settings.y = -1 * (this.factor * this.settings.zoom - 100) / (this.factor + 1)
-    },
-    alignBottomRight () {
-      this.settings.x = 50 - this.settings.zoom / 2
-      this.settings.y = -1 * (this.factor * this.settings.zoom - 100) / (this.factor + 1)
+      const top = ((this.factor * zoom) - 100) / (this.factor + 1)
+      const bottom = -1 * top
+      const left = -50 + (zoom / 2)
+      const right = 50 - (zoom / 2)
+      const center = 0
+
+      const bounds = { top, bottom, left, right, center }
+
+      this.settings.y = bounds[y]
+      this.settings.x = bounds[x]
     }
   }
 }
@@ -220,6 +207,10 @@ export default {
 <style scoped lang="scss">
 .col-narrow {
   width: 30px;
+}
+
+.reset-button {
+  transform: translate(-3px, -4px);
 }
 
 .position-buttons {

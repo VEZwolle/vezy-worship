@@ -6,6 +6,7 @@ export default defineStore('service', {
   state: () => ({
     service: null,
     media: {},
+    outputRatio: 16 / 9,
     previewPresentation: null,
     livePresentation: null,
     isClear: true,

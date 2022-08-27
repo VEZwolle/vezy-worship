@@ -10,7 +10,7 @@
 
     <q-tab-panels v-model="tab">
       <q-tab-panel name="both">
-        <div class="q-pa-md row q-gutter-md">
+        <div class="row q-gutter-md">
           <div class="col">
             Beamer:<br>
             <OutputPreview :component="ImageOutputBeamer" :presentation="presentation" />

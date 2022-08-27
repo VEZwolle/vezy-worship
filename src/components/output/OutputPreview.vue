@@ -1,5 +1,5 @@
 <template>
-  <q-responsive :ratio="ratio" class="output-preview">
+  <q-responsive :ratio="$store.outputRatio" class="output-preview">
     <iframe ref="iframe" />
   </q-responsive>
 </template>
@@ -9,8 +9,7 @@ import { createApp } from 'vue'
 
 export default {
   props: {
-    component: Object,
-    ratio: { type: Number, default: 16 / 9 }
+    component: Object
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument

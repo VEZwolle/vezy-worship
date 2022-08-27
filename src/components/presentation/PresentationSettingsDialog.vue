@@ -23,6 +23,7 @@
 
 <script>
 import presentationTypes from '../presentation-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   data () {
@@ -62,7 +63,7 @@ export default {
 
       this.presentation = {
         type: typeId,
-        settings: { ...type.settings }
+        settings: cloneDeep(type.settings)
       }
 
       this.show()
