@@ -1,5 +1,5 @@
 <template>
-  <q-toolbar>
+  <q-toolbar class="app-toolbar">
     <q-icon :name="`img:${icon}`" size="md" />
 
     <q-btn
@@ -146,3 +146,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.app-toolbar {
+  @media (max-width: 1550px) {
+    .q-btn .q-btn__content {
+      :nth-child(1) {
+        margin-right: 0;
+      }
+
+      :nth-child(2) {
+        display: none !important;
+      }
+    }
+  }
+}
+</style>
