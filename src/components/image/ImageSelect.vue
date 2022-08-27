@@ -154,6 +154,10 @@ export default {
           resolve(ratio)
         }
 
+        img.onerror = () => {
+          resolve(1) // Default to 1:1 ratio if something goes wrong
+        }
+
         img.src = URL.createObjectURL(file)
       })
     },
