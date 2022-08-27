@@ -117,7 +117,7 @@ export default {
           type: 'caption',
           settings: {
             title: 'Host',
-            text: 'host'
+            text: ''
           }
         },
         {
@@ -125,7 +125,7 @@ export default {
           type: 'caption',
           settings: {
             title: 'Spreker',
-            text: 'preacher'
+            text: ''
           }
         }
       ]
@@ -147,7 +147,8 @@ export default {
       if (this.$store.livePresentationToRestore === null) {
         this.$store.livePresentationToRestore = cloneDeep(this.$store.livePresentation)
       }
-      this.$store.livePresentation = cloneDeep(this.defaultItems.find(t => t.id === idName))
+      // controleer of in setlist staat
+      this.$store.livePresentation = cloneDeep(this.$store.service.presentations.find(t => t.id === idName)) || cloneDeep(this.defaultItems.find(t => t.id === idName))
       this.$store.isClear = false
     },
     returnLiveOuptut () {
