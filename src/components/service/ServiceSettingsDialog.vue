@@ -39,6 +39,13 @@
         <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
       </q-card-section>
 
+      <div class="image-default">
+        Toevoegen{{ !isNew ? ' of herstellen' : '' }} standaard sheets:<br>
+        <q-checkbox key="nazorg" v-model="service.nazorg" right-label dense label="Nazorg " />
+        <q-checkbox key="collecte" v-model="service.collecte" right-label dense label="Collecte " />
+        <q-checkbox key="end" v-model="service.end" right-label dense label="Einde dienst / Gezegende Zondag" />
+      </div>
+
       <q-separator />
 
       <q-card-actions align="right">
@@ -70,7 +77,10 @@ export default {
     show (service = null) {
       const defaults = {
         date: dayjs().day(7).format('YYYY/MM/DD'), // Next sunday
-        time: '09:30'
+        time: '09:30',
+        nazorg: false,
+        collecte: false,
+        end: false
       }
 
       this.service = service || defaults
@@ -82,6 +92,9 @@ export default {
         this.service.time = find('countdown').time || this.service.time
         this.service.host = find('host').text || this.service.host
         this.service.preacher = find('preacher').text || this.service.preacher
+        this.service.nazorg = false
+        this.service.collecte = false
+        this.service.end = false
       }
 
       this.$refs.dialog.show()
@@ -104,5 +117,8 @@ export default {
 <style scoped>
 .q-card {
   min-width: 500px;
+}
+.image-default {
+  padding: 5px 20px 5px 20px;
 }
 </style>

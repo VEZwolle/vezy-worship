@@ -19,7 +19,7 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
+    fillService ({ id, date, time, host, preacher, backgroundImageId, nazorg, collecte, end }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
@@ -67,86 +67,92 @@ export default defineStore('service', {
         })
       }
 
-      // Add collecte
-      this.upsertPresentation({
-        id: 'collecte',
-        type: 'image',
-        settings: {
-          title: 'Collecte',
-          beamer: {
-            fileId: 'collectebeamer.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
-          },
-          livestream: {
-            fileId: 'collectelivestream.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
+      if (collecte) {
+        // Add collecte
+        this.upsertPresentation({
+          id: 'collecte',
+          type: 'image',
+          settings: {
+            title: 'Collecte',
+            beamer: {
+              fileId: 'collectebeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'collectelivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
-        }
-      })
+        })
+      }
 
-      // Add nazorg
-      this.upsertPresentation({
-        id: 'nazorg',
-        type: 'image',
-        settings: {
-          title: 'Nazorg',
-          beamer: {
-            fileId: 'nazorgbeamer.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
-          },
-          livestream: {
-            fileId: 'nazorglivestream.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
+      if (nazorg) {
+        // Add nazorg
+        this.upsertPresentation({
+          id: 'nazorg',
+          type: 'image',
+          settings: {
+            title: 'Nazorg',
+            beamer: {
+              fileId: 'nazorgbeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'nazorglivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
-        }
-      })
+        })
+      }
 
-      // Add gezegendezondag
-      this.upsertPresentation({
-        id: 'end',
-        type: 'image',
-        settings: {
-          title: 'Einde dienst / Gezegende Zondag',
-          beamer: {
-            fileId: 'endbeamer.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
-          },
-          livestream: {
-            fileId: 'endlivestream.png',
-            ratio: 16 / 9,
-            advanced: false,
-            zoom: 100,
-            x: 0,
-            y: 0,
-            rotate: 0
+      if (end) {
+        // Add gezegendezondag
+        this.upsertPresentation({
+          id: 'end',
+          type: 'image',
+          settings: {
+            title: 'Einde dienst / Gezegende Zondag',
+            beamer: {
+              fileId: 'endbeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'endlivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
-        }
-      })
+        })
+      }
     },
 
     addPresentation (presentation) {
