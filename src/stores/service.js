@@ -6,6 +6,7 @@ export default defineStore('service', {
   state: () => ({
     service: null,
     media: {},
+    outputRatio: 16 / 9,
     previewPresentation: null,
     livePresentation: null,
     isClear: true,
@@ -17,19 +18,22 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    createService ({ date, time, host, preacher, backgroundImageId }) {
-      const service = {
-        id: nanoid(),
-        date,
-        time,
-        host,
-        preacher,
-        backgroundImageId,
-        presentations: []
+    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
+      // Create if is a new service (so has no id yet)
+      if (!id) {
+        this.loadService({
+          id: nanoid(),
+          date,
+          time,
+          host,
+          preacher,
+          backgroundImageId,
+          presentations: []
+        })
       }
 
-      // Add default countdown
-      service.presentations.push({
+      // Default countdown
+      this.upsertPresentation({
         id: 'countdown',
         type: 'countdown',
         settings: {
@@ -38,9 +42,9 @@ export default defineStore('service', {
         }
       })
 
-      // Add default host caption
+      // Default host caption
       if (host) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'host',
           type: 'caption',
           settings: {
@@ -52,9 +56,9 @@ export default defineStore('service', {
         })
       }
 
-      // Add default preacher caption
+      // Default preacher caption
       if (preacher) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'preacher',
           type: 'caption',
           settings: {
@@ -65,13 +69,21 @@ export default defineStore('service', {
           }
         })
       }
-
-      this.loadService(service)
     },
 
     addPresentation (presentation) {
-      presentation.id = nanoid()
+      presentation.id = presentation.id || nanoid()
       this.service.presentations.push(presentation)
+    },
+    updatePresentation (presentation, settings) {
+      Object.assign(presentation.settings, settings)
+    },
+    upsertPresentation (presentation) {
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
+
+      existing
+        ? this.updatePresentation(existing, presentation.settings)
+        : this.addPresentation(presentation)
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)

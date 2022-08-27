@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-3">
+  <div class="bg-grey-3 output-boxes-container">
     <div v-if="activeViews.length" class="output-boxes">
       <template v-for="view in views" :key="view.id">
         <div v-if="view.isActive" class="col output-box">
@@ -18,22 +18,18 @@
       </template>
     </div>
 
-    <q-toolbar class="text-dark">
-      <q-toolbar-title class="text-subtitle2">
-        Voorbeeld:
-        <q-checkbox
-          v-for="view in views"
-          :key="view.id"
-          v-model="view.isActive"
-          right-label
-          :label="view.name"
-        >
-          <q-tooltip>
-            Vink aan om miniatuur weergave van de {{ view.name }} te zien.
-          </q-tooltip>
-        </q-checkbox>
-      </q-toolbar-title>
-    </q-toolbar>
+    <div class="output-boxes-selection text-caption text-dark">
+      <q-checkbox
+        v-for="view in views"
+        :key="view.id"
+        v-model="view.isActive"
+        right-label
+        size="xs"
+        :label="view.name"
+      >
+        <q-tooltip>Toon miniatuurweergave van {{ view.name }}</q-tooltip>
+      </q-checkbox>
+    </div>
   </div>
 </template>
 
@@ -90,18 +86,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.output-boxes-container {
+  padding: 5px 3px;
+  border-top: $layout-border;
+}
+
 .output-boxes {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 3px;
-  padding-bottom: 0;
 }
+
 .output-box {
-  padding: 2px;
+  padding: 0 2px;
   padding-bottom: 0;
   max-width: 60%;
+}
+
+.output-boxes-selection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

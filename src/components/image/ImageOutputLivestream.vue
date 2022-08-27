@@ -1,36 +1,16 @@
-<template>
-  <div v-if="!clear" class="image" :style="style" />
-</template>
-
 <script>
-import BaseOutput from '../output/BaseOutput.vue'
+import ImageOutput from './ImageOutput.vue'
 
 export default {
-  extends: BaseOutput,
+  extends: ImageOutput,
   computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.fileLivestreamId || this.settings.fileId]
-    },
-    style () {
-      if (this.alpha) {
-        return {
-          backgroundColor: '#fff'
-        }
+    settings () {
+      if (!this.presentation.settings.livestream.fileId) {
+        return this.presentation.settings.beamer
       }
 
-      return {
-        backgroundImage: `url(${this.fileUrl})`
-      }
+      return this.presentation.settings.livestream
     }
   }
 }
 </script>
-
-<style scoped>
-.image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-}
-</style>

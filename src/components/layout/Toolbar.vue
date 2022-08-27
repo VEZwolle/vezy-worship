@@ -1,5 +1,5 @@
 <template>
-  <q-toolbar>
+  <q-toolbar class="app-toolbar">
     <q-icon :name="`img:${icon}`" size="md" />
 
     <q-btn
@@ -77,22 +77,36 @@
       dense
       class="q-ml-sm"
       @click="openAppSettings"
-    />
+    >
+      <q-tooltip>Instellingen</q-tooltip>
+    </q-btn>
+
+    <q-btn
+      flat
+      icon="help"
+      dense
+      class="q-ml-sm"
+      @click="openHelp"
+    >
+      <q-tooltip>Helpinformatie</q-tooltip>
+    </q-btn>
   </q-toolbar>
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
+  <HelpDialog ref="helpDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
+import HelpDialog from '../help/HelpDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
+  components: { ServiceSettingsDialog, AppSettingsDialog, HelpDialog, MessageControl },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -125,7 +139,26 @@ export default {
     },
     openAppSettings () {
       this.$refs.appSettingsDialog.show()
+    },
+    openHelp () {
+      this.$refs.helpDialog.show()
     }
   }
 }
 </script>
+
+<style lang="scss">
+.app-toolbar {
+  @media (max-width: 1550px) {
+    .q-btn .q-btn__content {
+      :nth-child(1) {
+        margin-right: 0;
+      }
+
+      :nth-child(2) {
+        display: none !important;
+      }
+    }
+  }
+}
+</style>

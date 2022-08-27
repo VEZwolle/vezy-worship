@@ -76,7 +76,7 @@ module.exports = {
     'vue/require-default-prop': 'off',
     'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off',
-    'vue/one-component-per-file': 'off',
+    'vue/no-mutating-props': 'off',
 
     'vue/max-attributes-per-line': ['error', {
       singleline: 8,

@@ -29,6 +29,7 @@ module.exports = configure(function (ctx) {
       'filesystem',
       'electron',
       'date',
+      'strip',
       'shortkey',
       'notify'
     ],
