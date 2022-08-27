@@ -24,7 +24,7 @@ import ImageSelect from './ImageSelect.vue'
 
 export default {
   components: { ImageSelect },
-  extends: ImageDefault,
+  extends: BaseSettings,
   data () {
     return {
       equal: !this.presentation.settings.livestream.fileId

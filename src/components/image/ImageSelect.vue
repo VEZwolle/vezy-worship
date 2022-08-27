@@ -128,6 +128,10 @@ export default {
   },
   computed: {
     fileUrl () {
+      if (this.settings.fileId.substring(this.settings.fileId.length - 10) === 'beamer.png' ||
+          this.settings.fileId.substring(this.settings.fileId.length - 14) === 'livestream.png') {
+        return require('../../assets/' + this.settings.fileId) // ...beamer.png ...livestream.png
+      }
       return this.$store.media[this.settings.fileId]
     },
     factor () {

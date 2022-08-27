@@ -7,14 +7,15 @@
 </template>
 
 <script>
-import ImageDefault from './ImageDefault.vue'
+import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
-  extends: ImageDefault,
+  extends: BaseOutput,
   computed: {
-    fileUrl () { // nazien
-      if (this.imageDefaults.find(t => t.idName === this.settings.fileId) !== undefined) {
-        return require('../../assets/' + this.settings.fileId + 'beamer.png') // + 'livestream.png')
+    fileUrl () {
+      if (this.settings.fileId.substring(this.settings.fileId.length - 10) === 'beamer.png' ||
+          this.settings.fileId.substring(this.settings.fileId.length - 14) === 'livestream.png') {
+        return require('../../assets/' + this.settings.fileId) // ...beamer.png ...livestream.png
       }
       return this.$store.media[this.settings.fileId]
     },

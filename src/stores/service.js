@@ -68,13 +68,13 @@ export default defineStore('service', {
       }
 
       // Add collecte
-      service.presentations.push({
+      this.upsertPresentation({
         id: 'collecte',
         type: 'image',
         settings: {
           title: 'Collecte',
           beamer: {
-            fileId: 'Collectebeamer.png',
+            fileId: 'collectebeamer.png',
             ratio: 16 / 9,
             advanced: false,
             zoom: 100,
@@ -95,7 +95,7 @@ export default defineStore('service', {
       })
 
       // Add nazorg
-      service.presentations.push({
+      this.upsertPresentation({
         id: 'nazorg',
         type: 'image',
         settings: {
@@ -122,7 +122,7 @@ export default defineStore('service', {
       })
 
       // Add gezegendezondag
-      service.presentations.push({
+      this.upsertPresentation({
         id: 'end',
         type: 'image',
         settings: {
@@ -147,7 +147,6 @@ export default defineStore('service', {
           }
         }
       })
-
     },
 
     addPresentation (presentation) {

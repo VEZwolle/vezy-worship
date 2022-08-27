@@ -42,22 +42,24 @@ export default {
           type: 'image',
           settings: {
             title: 'Nazorg',
-            fileId: 'nazorg',
-            fileLivestreamId: 'nazorg',
-            beamerDefault: true,
-            beamerWidth: 1920,
-            beamerHeight: 1080,
-            beamerZoom: 100,
-            beamerY: 0,
-            beamerX: 0,
-            beamerRotate: 0,
-            livestreamDefault: true,
-            livestreamWidth: 1920,
-            livestreamHeight: 1080,
-            livestreamZoom: 100,
-            livestreamY: 0,
-            livestreamX: 0,
-            livestreamRotate: 0
+            beamer: {
+              fileId: 'nazorgbeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'nazorglivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
         },
         {
@@ -65,45 +67,49 @@ export default {
           type: 'image',
           settings: {
             title: 'Collecte',
-            fileId: 'collecte',
-            fileLivestreamId: 'collecte',
-            beamerDefault: true,
-            beamerWidth: 1920,
-            beamerHeight: 1080,
-            beamerZoom: 100,
-            beamerY: 0,
-            beamerX: 0,
-            beamerRotate: 0,
-            livestreamDefault: true,
-            livestreamWidth: 1920,
-            livestreamHeight: 1080,
-            livestreamZoom: 100,
-            livestreamY: 0,
-            livestreamX: 0,
-            livestreamRotate: 0
+            beamer: {
+              fileId: 'collectebeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'collectelivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
         },
         {
           id: 'end',
           type: 'image',
           settings: {
-            title: 'Einde dienst',
-            fileId: 'end',
-            fileLivestreamId: 'end',
-            beamerDefault: true,
-            beamerWidth: 1920,
-            beamerHeight: 1080,
-            beamerZoom: 100,
-            beamerY: 0,
-            beamerX: 0,
-            beamerRotate: 0,
-            livestreamDefault: true,
-            livestreamWidth: 1920,
-            livestreamHeight: 1080,
-            livestreamZoom: 100,
-            livestreamY: 0,
-            livestreamX: 0,
-            livestreamRotate: 0
+            title: 'Einde dienst / Gezegende Zondag',
+            beamer: {
+              fileId: 'endbeamer.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            },
+            livestream: {
+              fileId: 'endlivestream.png',
+              ratio: 16 / 9,
+              advanced: false,
+              zoom: 100,
+              x: 0,
+              y: 0,
+              rotate: 0
+            }
           }
         },
         {
