@@ -1,19 +1,33 @@
 <template>
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+      <q-tab name="both" label="Beamer & Livestream" />
       <q-tab name="beamer" label="Beamer" />
       <q-tab name="livestream" label="Livestream" />
     </q-tabs>
 
     <q-separator />
 
-    <q-tab-panels v-model="tab" animated>
+    <q-tab-panels v-model="tab">
+      <q-tab-panel name="both">
+        <div class="row q-gutter-md">
+          <div class="col">
+            Beamer:<br>
+            <OutputPreview :component="ImageOutputBeamer" :presentation="presentation" />
+          </div>
+          <div class="col">
+            Livestream:<br>
+            <OutputPreview :component="ImageOutputLivestream" :presentation="presentation" />
+          </div>
+        </div>
+      </q-tab-panel>
+
       <q-tab-panel name="beamer">
-        <img :src="fileUrl" class="full-width">
+        <OutputPreview :component="ImageOutputBeamer" :presentation="presentation" />
       </q-tab-panel>
 
       <q-tab-panel name="livestream">
-        <img :src="fileLivestreamUrl" class="full-width">
+        <OutputPreview :component="ImageOutputLivestream" :presentation="presentation" />
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -21,20 +35,19 @@
 
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
+import OutputPreview from '../output/OutputPreview.vue'
+import ImageOutputBeamer from './ImageOutputBeamer.vue'
+import ImageOutputLivestream from './ImageOutputLivestream.vue'
 
 export default {
+  components: { OutputPreview },
   extends: BaseControl,
+  setup () {
+    return { ImageOutputBeamer, ImageOutputLivestream }
+  },
   data () {
     return {
-      tab: 'beamer'
-    }
-  },
-  computed: {
-    fileUrl () {
-      return this.$store.media[this.settings.fileId]
-    },
-    fileLivestreamUrl () {
-      return this.$store.media[this.settings.fileLivestreamId] || this.fileUrl
+      tab: 'both'
     }
   }
 }
