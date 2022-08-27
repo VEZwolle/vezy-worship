@@ -117,7 +117,7 @@ export default {
           type: 'caption',
           settings: {
             title: 'Host',
-            text: ''
+            text: 'Host'
           }
         },
         {
@@ -125,7 +125,7 @@ export default {
           type: 'caption',
           settings: {
             title: 'Spreker',
-            text: ''
+            text: 'Spreker'
           }
         }
       ]
