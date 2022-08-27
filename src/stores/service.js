@@ -6,6 +6,7 @@ export default defineStore('service', {
   state: () => ({
     service: null,
     media: {},
+    outputRatio: 16 / 9,
     previewPresentation: null,
     livePresentation: null,
     livePresentationToRestore: null,
@@ -18,19 +19,22 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    createService ({ date, time, host, preacher, backgroundImageId }) {
-      const service = {
-        id: nanoid(),
-        date,
-        time,
-        host,
-        preacher,
-        backgroundImageId,
-        presentations: []
+    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
+      // Create if is a new service (so has no id yet)
+      if (!id) {
+        this.loadService({
+          id: nanoid(),
+          date,
+          time,
+          host,
+          preacher,
+          backgroundImageId,
+          presentations: []
+        })
       }
 
-      // Add default countdown
-      service.presentations.push({
+      // Default countdown
+      this.upsertPresentation({
         id: 'countdown',
         type: 'countdown',
         settings: {
@@ -39,9 +43,9 @@ export default defineStore('service', {
         }
       })
 
-      // Add default host caption
+      // Default host caption
       if (host) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'host',
           type: 'caption',
           settings: {
@@ -51,9 +55,9 @@ export default defineStore('service', {
         })
       }
 
-      // Add default preacher caption
+      // Default preacher caption
       if (preacher) {
-        service.presentations.push({
+        this.upsertPresentation({
           id: 'preacher',
           type: 'caption',
           settings: {
@@ -69,22 +73,24 @@ export default defineStore('service', {
         type: 'image',
         settings: {
           title: 'Collecte',
-          fileId: 'collecte',
-          fileLivestreamId: 'collecte',
-          beamerDefault: true,
-          beamerWidth: 1920,
-          beamerHeight: 1080,
-          beamerZoom: 100,
-          beamerY: 0,
-          beamerX: 0,
-          beamerRotate: 0,
-          livestreamDefault: true,
-          livestreamWidth: 1920,
-          livestreamHeight: 1080,
-          livestreamZoom: 100,
-          livestreamY: 0,
-          livestreamX: 0,
-          livestreamRotate: 0
+          beamer: {
+            fileId: 'Collectebeamer.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          },
+          livestream: {
+            fileId: 'collectelivestream.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          }
         }
       })
 
@@ -94,22 +100,24 @@ export default defineStore('service', {
         type: 'image',
         settings: {
           title: 'Nazorg',
-          fileId: 'nazorg',
-          fileLivestreamId: 'nazorg',
-          beamerDefault: true,
-          beamerWidth: 1920,
-          beamerHeight: 1080,
-          beamerZoom: 100,
-          beamerY: 0,
-          beamerX: 0,
-          beamerRotate: 0,
-          livestreamDefault: true,
-          livestreamWidth: 1920,
-          livestreamHeight: 1080,
-          livestreamZoom: 100,
-          livestreamY: 0,
-          livestreamX: 0,
-          livestreamRotate: 0
+          beamer: {
+            fileId: 'nazorgbeamer.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          },
+          livestream: {
+            fileId: 'nazorglivestream.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          }
         }
       })
 
@@ -119,31 +127,42 @@ export default defineStore('service', {
         type: 'image',
         settings: {
           title: 'Einde dienst / Gezegende Zondag',
-          fileId: 'end',
-          fileLivestreamId: 'end',
-          beamerDefault: true,
-          beamerWidth: 1920,
-          beamerHeight: 1080,
-          beamerZoom: 100,
-          beamerY: 0,
-          beamerX: 0,
-          beamerRotate: 0,
-          livestreamDefault: true,
-          livestreamWidth: 1920,
-          livestreamHeight: 1080,
-          livestreamZoom: 100,
-          livestreamY: 0,
-          livestreamX: 0,
-          livestreamRotate: 0
+          beamer: {
+            fileId: 'endbeamer.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          },
+          livestream: {
+            fileId: 'endlivestream.png',
+            ratio: 16 / 9,
+            advanced: false,
+            zoom: 100,
+            x: 0,
+            y: 0,
+            rotate: 0
+          }
         }
       })
 
-      this.loadService(service)
     },
 
     addPresentation (presentation) {
-      presentation.id = nanoid()
+      presentation.id = presentation.id || nanoid()
       this.service.presentations.push(presentation)
+    },
+    updatePresentation (presentation, settings) {
+      Object.assign(presentation.settings, settings)
+    },
+    upsertPresentation (presentation) {
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
+
+      existing
+        ? this.updatePresentation(existing, presentation.settings)
+        : this.addPresentation(presentation)
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)

@@ -1,3 +1,5 @@
+import books from './scripture/books'
+
 export default [
   {
     id: 'song',
@@ -49,22 +51,24 @@ export default [
     color: 'teal',
     settings: {
       title: '',
-      fileId: null,
-      fileLivestreamId: null,
-      beamerDefault: true,
-      beamerWidth: 0,
-      beamerHeight: 0,
-      beamerZoom: 100,
-      beamerY: 0,
-      beamerX: 0,
-      beamerRotate: 0,
-      livestreamDefault: true,
-      livestreamWidth: 0,
-      livestreamHeight: 0,
-      livestreamZoom: 100,
-      livestreamY: 0,
-      livestreamX: 0,
-      livestreamRotate: 0
+      beamer: {
+        fileId: null,
+        ratio: null,
+        advanced: false,
+        zoom: 100,
+        x: 0,
+        y: 0,
+        rotate: 0
+      },
+      livestream: {
+        fileId: null,
+        ratio: null,
+        advanced: false,
+        zoom: 100,
+        x: 0,
+        y: 0,
+        rotate: 0
+      }
     },
     components: {
       settings: require('./image/ImageSettings.vue').default,
@@ -117,8 +121,41 @@ export default [
     outputs: {
       livestream: require('./countdown/CountdownOutput.vue').default
     }
+  },
+  {
+    id: 'scripture',
+    name: 'Bijbeltekst',
+    icon: 'menu_book',
+    color: 'brown',
+    settings: {
+      bible: 'nbv21',
+      book: 'GEN',
+      chapter: null,
+      verseFrom: null,
+      verseTo: null,
+      text: ''
+    },
+    title ({ bible, book, chapter, verseFrom, verseTo }) {
+      const bookDefinition = books.find(b => b.id === book)
+
+      let title = `${bookDefinition.name} ${chapter}:${verseFrom}`
+
+      if (verseTo) {
+        title += `-${verseTo}`
+      }
+
+      return `${title} <small>(${bible})</small>`
+    },
+    description (settings) {
+      return settings.text
+    },
+    components: {
+      settings: require('./scripture/ScriptureSettings.vue').default,
+      control: require('./scripture/ScriptureControl.vue').default
+    },
+    outputs: {
+      beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
+      livestream: require('./scripture/ScriptureOutputLivestream.vue').default
+    }
   }
-  // {
-  //   id: 'scripture'
-  // }
 ]

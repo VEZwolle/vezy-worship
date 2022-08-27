@@ -5,11 +5,13 @@ Presentatiesoftware voor beamer én livestream
 
 - Verschillende presentatie-types:
   - Liederen
+  - Bijbelteksten
   - Afbeeldingen en video's
   - Ondertitels (naambalk, melding, etc.)
 - Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
 - Dienst thuis voor te bereiden via de web app.
 - Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
+- Bijbelteksten inladen vanuit meerdere Bijbelvertalingen.
 - Countdown tot begin van de dienst.
 
 ## Licentie

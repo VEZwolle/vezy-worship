@@ -5,11 +5,9 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title">
-        {{ presentation.settings.title || presentationType.name }}
-      </q-item-label>
+      <q-item-label class="title" v-html="title" />
       <q-item-label v-if="description" caption :lines="1">
-        {{ description }}
+        {{ $strip(description) }}
       </q-item-label>
     </q-item-section>
 
@@ -23,6 +21,35 @@
         </q-btn>
       </div>
     </q-item-section>
+
+    <q-menu context-menu no-focus>
+      <q-list dense style="min-width: 100px">
+        <q-item v-close-popup clickable @click.stop="$emit('preview')">
+          <q-item-section>Preview</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="search" />
+          </q-item-section>
+        </q-item>
+        <q-item v-close-popup clickable @click.stop="$emit('goLive')">
+          <q-item-section>Go Live</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="arrow_forward" />
+          </q-item-section>
+        </q-item>
+        <q-item v-close-popup clickable @click.stop="$emit('edit')">
+          <q-item-section>Bewerken</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="edit" />
+          </q-item-section>
+        </q-item>
+        <q-item v-close-popup clickable @click.stop="$emit('remove')">
+          <q-item-section>Verwijderen</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-menu>
   </q-item>
 </template>
 
@@ -34,10 +61,21 @@ export default {
     presentation: Object,
     active: Boolean
   },
-  emits: ['edit', 'remove'],
+  emits: ['edit', 'remove', 'preview', 'goLive'],
   computed: {
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation.type)
+    },
+    title () {
+      if (this.presentation.settings.title) {
+        return this.presentation.settings.title
+      }
+
+      if (this.presentationType.title) {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
+      return this.presentationType.name
     },
     description () {
       if (!this.presentationType.description) {

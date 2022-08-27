@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog" square>
+  <q-dialog ref="dialog" persistent square>
     <q-card v-if="presentation">
       <q-toolbar class="bg-secondary text-white">
         <q-btn flat round dense :icon="presentationType.icon" />
@@ -15,7 +15,7 @@
       <q-separator />
 
       <q-card-actions align="right">
-        <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
+        <q-btn color="secondary" :label="btnLabel" :icon="btnIcon" @click="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -23,6 +23,7 @@
 
 <script>
 import presentationTypes from '../presentation-types'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   data () {
@@ -36,6 +37,18 @@ export default {
     },
     settingsComponent () {
       return this.presentationType?.components?.settings
+    },
+    btnLabel () {
+      if (!this.presentation.id) {
+        return 'Opslaan'
+      }
+      return 'Sluiten'
+    },
+    btnIcon () {
+      if (!this.presentation.id) {
+        return 'save'
+      }
+      return 'done'
     }
   },
   methods: {
@@ -50,7 +63,7 @@ export default {
 
       this.presentation = {
         type: typeId,
-        settings: { ...type.settings }
+        settings: cloneDeep(type.settings)
       }
 
       this.show()
