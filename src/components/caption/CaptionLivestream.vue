@@ -39,12 +39,12 @@ export default {
   .title-big-bottom {
     top: -2.4vw;
     left: 4vw;
-    font-size: 2.4vw;
+    font-size: 2.2vw;
   }
   .title-big-right {
     top: 4vw;
     left: 1vw;
-    font-size: 2.4vw;
+    font-size: 2.2vw;
   }
 
   .text {
@@ -59,17 +59,20 @@ export default {
     line-height: 2.2vw;
   }
   .text-big-bottom {
+    text-align: justify;
     padding: 2vw 4vw 4vw 4vw;
     width: 100vw;
-    font-size: 3.1vw;
-    line-height: 3.5vw;
+    font-size: 3.0vw;
+    line-height: 3.4vw;
   }
   .text-big-right {
+    text-align: left;
     padding: 8.4vw 4vw 4vw 2vw;
     width: 45vw;
     height: 100vh;
-    font-size: 3.1vw;
-    line-height: 3.5vw;
+    overflow: hidden;
+    font-size: 3.0vw;
+    line-height: 3.4vw;
   }
 
   &.alpha {

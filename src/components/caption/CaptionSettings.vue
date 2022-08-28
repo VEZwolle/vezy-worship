@@ -2,14 +2,12 @@
   <q-card-section>
     <label class="label">Titel</label>
     <q-input v-model="settings.title" outlined :rules="['required']" />
-
     <label class="label">Tekst</label>
     <q-editor ref="editor" v-model="settings.text" min-height="80px" :toolbar="[['bold', 'italic', 'underline']]" class="q-mb-md" @paste.prevent.stop="pastePlainText" />
 
     <div class="q-pa-md row q-gutter-md">
       <div class="col">
         <q-select v-model="settings.formatBeamer" :options="formatBeamer" fill-input outlined label="Opmaak type" />
-
         <label class="label">Voorbeeld Beamer</label>
         <div>
           <OutputPreview :component="CaptionOutputBeamer" :presentation="{ settings }" />
@@ -17,7 +15,6 @@
       </div>
       <div class="col">
         <q-select v-model="settings.formatLivestream" :options="formatLivestream" fill-input outlined label="Opmaak type" />
-
         <label class="label">Voorbeeld Livestream</label>
         <div>
           <OutputPreview :component="CaptionOutputLivestream" :presentation="{ settings }" />

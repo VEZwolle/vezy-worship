@@ -30,26 +30,28 @@ export default {
   height: 100%;
 
   .title {
-    padding: 0;
+    padding: 0.5vw 0 0.5vw 0;
     width: 100%;
 
     text-align: left;
     line-height: 4.4vw;
-    font-size: 3.8vw;
+    font-size: 3.0vw;
     letter-spacing: 0.01vw;
     color: $primary;
+    // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    filter: shadow(0.8);
   }
 
   .text {
     padding: 0vw;
     width: 100%;
 
-    text-align: left;
-    line-height: 4.4vw;
-    font-size: 3.8vw;
+    text-align: justify;
+    line-height: 4.0vw;
+    font-size: 3.4vw;
     letter-spacing: 0.01vw;
     color: #fff;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     filter: shadow(0.8);
   }
 }
