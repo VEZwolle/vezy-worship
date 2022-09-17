@@ -8,7 +8,6 @@
           <span v-if="presentation" v-html="`- ${title}`" />
         </q-toolbar-title>
 
-        <ShortButtons />
         <q-checkbox
           v-model="$store.isClear"
           v-shortkey="['ctrl', 'c']"
@@ -38,11 +37,10 @@
 
 <script>
 import presentationTypes from '../presentation-types'
-import ShortButtons from '../service/ShortButtons.vue'
 import OutputBoxes from '../output/OutputBoxes'
 
 export default {
-  components: { OutputBoxes, ShortButtons },
+  components: { OutputBoxes },
   computed: {
     presentation () {
       return this.$store.livePresentation

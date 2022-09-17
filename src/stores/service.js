@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
+import presentationPresets from '../components/presentation-presets'
 
 export default defineStore('service', {
   state: () => ({
@@ -9,7 +10,6 @@ export default defineStore('service', {
     outputRatio: 16 / 9,
     previewPresentation: null,
     livePresentation: null,
-    livePresentationToRestore: null,
     isClear: true,
     message: ''
   }),
@@ -19,7 +19,7 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    fillService ({ id, date, time, host, preacher, backgroundImageId, nazorg, collecte, end }) {
+    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
@@ -67,92 +67,7 @@ export default defineStore('service', {
         })
       }
 
-      if (collecte) {
-        // Add collecte
-        this.upsertPresentation({
-          id: 'collecte',
-          type: 'image',
-          settings: {
-            title: 'Collecte',
-            beamer: {
-              fileId: 'collectebeamer.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            },
-            livestream: {
-              fileId: 'collectelivestream.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            }
-          }
-        })
-      }
-
-      if (nazorg) {
-        // Add nazorg
-        this.upsertPresentation({
-          id: 'nazorg',
-          type: 'image',
-          settings: {
-            title: 'Nazorg',
-            beamer: {
-              fileId: 'nazorgbeamer.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            },
-            livestream: {
-              fileId: 'nazorglivestream.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            }
-          }
-        })
-      }
-
-      if (end) {
-        // Add gezegendezondag
-        this.upsertPresentation({
-          id: 'end',
-          type: 'image',
-          settings: {
-            title: 'Einde dienst / Gezegende Zondag',
-            beamer: {
-              fileId: 'endbeamer.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            },
-            livestream: {
-              fileId: 'endlivestream.png',
-              ratio: 16 / 9,
-              advanced: false,
-              zoom: 100,
-              x: 0,
-              y: 0,
-              rotate: 0
-            }
-          }
-        })
-      }
+      presentationPresets.forEach(this.upsertPresentation)
     },
 
     addPresentation (presentation) {
@@ -178,17 +93,18 @@ export default defineStore('service', {
 
       this.previewPresentation = cloneDeep(presentation)
     },
-    goLive (presentation) {
+    goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
-      const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-      const nextPresentation = this.service.presentations[i + 1]
-      if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
-        this.previewPresentation = cloneDeep(nextPresentation)
+      if (previewNextPresentation) {
+        const i = this.service.presentations.findIndex(s => s.id === presentation.id)
+        const nextPresentation = this.service.presentations[i + 1]
+        if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
+          this.previewPresentation = cloneDeep(nextPresentation)
+        }
       }
 
       this.livePresentation = cloneDeep(presentation)
-      this.livePresentationToRestore = null
     },
 
     // Clear
@@ -210,6 +126,17 @@ export default defineStore('service', {
       this.media[id] = URL.createObjectURL(file)
 
       return id
+    },
+    getMediaUrl (id) {
+      if (!id) {
+        return null
+      }
+
+      if (id.startsWith('/')) {
+        return id
+      }
+
+      return this.media[id]
     }
   }
 })

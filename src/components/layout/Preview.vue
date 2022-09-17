@@ -16,9 +16,20 @@
           @click="$store.goLive(presentation)"
           @shortkey="$store.goLive(presentation)"
         >
-          <q-tooltip>
-            Zet het item in de preview op het scherm
-          </q-tooltip>
+          <q-menu context-menu no-focus>
+            <q-list dense>
+              <q-item-label header>
+                QUICK LIVE:
+              </q-item-label>
+
+              <q-item v-for="preset in presentationPresets" :key="preset.id" v-close-popup clickable @click="$store.goLive(preset, false)">
+                <q-item-section>{{ preset.settings.title }}</q-item-section>
+                <q-item-section avatar>
+                  <q-icon name="arrow_forward" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -37,10 +48,14 @@
 
 <script>
 import presentationTypes from '../presentation-types'
+import presentationPresets from '../presentation-presets'
 import OutputBoxes from '../output/OutputBoxes'
 
 export default {
   components: { OutputBoxes },
+  setup () {
+    return { presentationPresets }
+  },
   computed: {
     presentation () {
       return this.$store.previewPresentation
@@ -65,3 +80,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.q-item__label--header {
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+</style>

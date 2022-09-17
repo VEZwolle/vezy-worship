@@ -38,8 +38,7 @@ const rows = [
   { shortkey: 'ctrl + ➡', function: 'Preview naar live verplaatsen (Go Live)' },
   { shortkey: 'ctrl + N', function: 'Nieuwe dienst aanmaken' },
   { shortkey: 'ctrl + O', function: 'Opgeslagen dienst openen' },
-  { shortkey: 'ctrl + S', function: 'Huidige dienst opslaan' },
-  { shortkey: 'ctrl + R', function: 'Terug naar vorige actief na gebruik "toon direct..."' }
+  { shortkey: 'ctrl + S', function: 'Huidige dienst opslaan' }
 ]
 
 export default {

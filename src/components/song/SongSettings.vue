@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     backgroundUrl () {
-      return this.$store.media[this.settings.fileId || this.$store.service.backgroundImageId]
+      return this.$store.getMediaUrl(this.settings.fileId || this.$store.service.backgroundImageId)
     }
   },
   methods: {
