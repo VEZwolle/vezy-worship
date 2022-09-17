@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.getMediaUrl(this.settings.fileId)
     },
     player () {
       return this.$refs.player

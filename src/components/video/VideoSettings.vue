@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.getMediaUrl(this.settings.fileId)
     }
   },
   methods: {

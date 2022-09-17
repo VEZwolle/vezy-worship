@@ -136,7 +136,7 @@ export default {
       }))
     },
     backgroundUrl () {
-      return this.$store.media[this.settings.backgroundImageId || this.$store.service.backgroundImageId]
+      return this.$store.getMediaUrl(this.settings.backgroundImageId || this.$store.service.backgroundImageId)
     }
   },
   methods: {

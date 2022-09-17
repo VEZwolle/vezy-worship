@@ -13,7 +13,7 @@ export default {
   extends: BaseOutput,
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.getMediaUrl(this.settings.fileId)
     },
     factor () {
       return this.$store.outputRatio / this.settings.ratio

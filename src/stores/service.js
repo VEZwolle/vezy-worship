@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
+import presentationPresets from '../components/presentation-presets'
 
 export default defineStore('service', {
   state: () => ({
@@ -65,6 +66,8 @@ export default defineStore('service', {
           }
         })
       }
+
+      presentationPresets.forEach(this.upsertPresentation)
     },
 
     addPresentation (presentation) {
@@ -90,13 +93,15 @@ export default defineStore('service', {
 
       this.previewPresentation = cloneDeep(presentation)
     },
-    goLive (presentation) {
+    goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
-      const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-      const nextPresentation = this.service.presentations[i + 1]
-      if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
-        this.previewPresentation = cloneDeep(nextPresentation)
+      if (previewNextPresentation) {
+        const i = this.service.presentations.findIndex(s => s.id === presentation.id)
+        const nextPresentation = this.service.presentations[i + 1]
+        if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
+          this.previewPresentation = cloneDeep(nextPresentation)
+        }
       }
 
       this.livePresentation = cloneDeep(presentation)
@@ -121,6 +126,17 @@ export default defineStore('service', {
       this.media[id] = URL.createObjectURL(file)
 
       return id
+    },
+    getMediaUrl (id) {
+      if (!id) {
+        return null
+      }
+
+      if (id.startsWith('/')) {
+        return id
+      }
+
+      return this.media[id]
     }
   }
 })

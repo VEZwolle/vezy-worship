@@ -24,7 +24,7 @@ export default {
   extends: BaseControl,
   computed: {
     fileUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.getMediaUrl(this.settings.fileId)
     }
   },
   watch: {

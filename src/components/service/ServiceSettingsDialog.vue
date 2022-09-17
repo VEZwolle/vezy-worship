@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     backgroundImageUrl () {
-      return this.$store.media[this.service.backgroundImageId]
+      return this.$store.getMediaUrl(this.service.backgroundImageId)
     },
     isNew () {
       return !this.service.id
