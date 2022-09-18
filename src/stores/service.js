@@ -132,8 +132,9 @@ export default defineStore('service', {
         return null
       }
 
+      // Media from `/public` folder
       if (id.startsWith('/')) {
-        return id
+        return id.substring(1) // Remove leading slash to make it work on Electron
       }
 
       return this.media[id]
