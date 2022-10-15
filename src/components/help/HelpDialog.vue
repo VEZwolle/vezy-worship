@@ -23,6 +23,7 @@
                 class="text-teal"
               >
                 <q-tab name="main" icon="home" label="Basis" />
+                <q-tab name="mainapp" icon="input" label="Werking" />
                 <q-tab name="shortkey" icon="key" label="Sneltoetsen" />
                 <q-tab name="about" icon="build" label="Over" />
               </q-tabs>
@@ -39,6 +40,9 @@
               >
                 <q-tab-panel name="main">
                   <HelpMain />
+                </q-tab-panel>
+                <q-tab-panel name="mainapp">
+                  <HelpMainApp />
                 </q-tab-panel>
                 <q-tab-panel name="shortkey">
                   <HelpShortkey />
@@ -63,11 +67,12 @@
 
 <script>
 import HelpMain from './HelpMain.vue'
+import HelpMainApp from './HelpMainApp.vue'
 import HelpShortkey from './HelpShortkey.vue'
 import HelpAbout from './HelpAbout.vue'
 
 export default {
-  components: { HelpMain, HelpShortkey, HelpAbout },
+  components: { HelpMain, HelpMainApp, HelpShortkey, HelpAbout },
   data () {
     return {
       tab: 'main',
