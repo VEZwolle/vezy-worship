@@ -2,11 +2,11 @@
   <div>
     <div class="text-h4 q-mb-md">
       <img src="../../../public/icons/favicon-32x32.png">
-      VezyWorship: Snelkoppelingen
+      VezyWorship: Sneltoetsen
     </div>
     <div class="q-pa-md">
       <q-table
-        title="Snelkoppeningen"
+        title="Sneltoetsen"
         :rows="rows"
         :columns="columns"
         :rows-per-page-options="[0]"
