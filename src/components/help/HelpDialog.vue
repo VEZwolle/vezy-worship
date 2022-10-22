@@ -23,7 +23,7 @@
                 class="text-teal"
               >
                 <q-tab name="main" icon="home" label="Basis" />
-                <q-tab name="mainsetlist" icon="input" label="Werking setlist" />
+                <q-tab name="mainsetlist" icon="input" label="Dienst & setlist" />
                 <q-tab name="song" icon="music_note" label="Liederen" />
                 <q-tab name="scripture" icon="menu_book" label="Bijbelteksten" />
                 <q-tab name="shortkey" icon="key" label="Sneltoetsen" />
