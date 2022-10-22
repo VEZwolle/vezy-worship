@@ -24,6 +24,7 @@
               >
                 <q-tab name="main" icon="home" label="Basis" />
                 <q-tab name="mainsetlist" icon="input" label="Werking setlist" />
+                <q-tab name="song" icon="music_note" label="Liederen" />
                 <q-tab name="shortkey" icon="key" label="Sneltoetsen" />
                 <q-tab name="about" icon="build" label="Over" />
               </q-tabs>
@@ -43,6 +44,9 @@
                 </q-tab-panel>
                 <q-tab-panel name="mainsetlist">
                   <HelpMainSetlist />
+                </q-tab-panel>
+                <q-tab-panel name="song">
+                  <HelpSong />
                 </q-tab-panel>
                 <q-tab-panel name="shortkey">
                   <HelpShortkey />
@@ -68,11 +72,12 @@
 <script>
 import HelpMain from './HelpMain.vue'
 import HelpMainSetlist from './HelpMainSetlist.vue'
+import HelpSong from './HelpSong.vue'
 import HelpShortkey from './HelpShortkey.vue'
 import HelpAbout from './HelpAbout.vue'
 
 export default {
-  components: { HelpMain, HelpMainSetlist, HelpShortkey, HelpAbout },
+  components: { HelpMain, HelpMainSetlist, HelpSong, HelpShortkey, HelpAbout },
   data () {
     return {
       tab: 'main',
