@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!clear" class="caption-output" :class="'caption-output' + style">
+  <div v-if="!clear && settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" class="caption-output" :class="'caption-output' + style">
     <CaptionLivestream :title="settings.title" :text="settings.text" :format="style" :alpha="alpha" />
   </div>
 </template>
@@ -39,6 +39,6 @@ export default {
   padding: 0 0 0 55vw;
 }
 .caption-output-big-bottom {
-  padding: 0;
+  padding: 6vw;
 }
 </style>

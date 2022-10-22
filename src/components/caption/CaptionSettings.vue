@@ -3,7 +3,7 @@
     <label class="label">Titel</label>
     <q-input v-model="settings.title" outlined :rules="['required']" />
     <label class="label">Tekst</label>
-    <q-editor ref="editor" v-model="settings.text" min-height="80px" :toolbar="[['bold', 'italic', 'underline']]" class="q-mb-md" @paste.prevent.stop="pastePlainText" />
+    <q-editor ref="editor" v-model="settings.text" min-height="80px" :toolbar="[['bold', 'italic', 'underline', 'superscript']]" class="q-mb-md" @paste.prevent.stop="pastePlainText" />
 
     <div class="q-pa-md row q-gutter-md">
       <div class="col">
@@ -40,8 +40,9 @@ export default {
     return {
       formatLivestream: [
         'Standaard',
+        'Groot onder',
         'Groot rechts',
-        'Groot onder'
+        'Geen'
       ],
       formatBeamer: [
         'Geen',
