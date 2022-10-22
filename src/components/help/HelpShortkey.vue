@@ -2,7 +2,7 @@
   <div>
     <div class="text-h4 q-mb-md">
       <img src="../../../public/icons/favicon-32x32.png">
-      VezyWorship: Sneltoetsen
+      Sneltoetsen
     </div>
     <div class="q-pa-md">
       <q-table

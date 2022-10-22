@@ -2,7 +2,7 @@
   <div>
     <div class="text-h4 q-mb-md">
       <img src="../../../public/icons/favicon-32x32.png">
-      VezyWorship: Werking dienst onderdelen lijst
+      Werking dienst onderdelen lijst
     </div>
     <div class="text-h6 q-mb-md">
       Openen / opslaan dienst
