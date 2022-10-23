@@ -44,7 +44,7 @@
     </div>
     <p>
       Na opslaan/sluiten van het invoerscherm kan je in de basis omgeving een controle uitvoeren door de pagina te bekijken.<br>
-      Een ondertitel bestaant uit 1 pagina.<br>
+      Een ondertitel bestaat uit 1 pagina.<br>
       Onder in het scherm zie je een voorbeeld.<br>
       <img src="../../assets/help/captioncontrol.png">
     </p>
