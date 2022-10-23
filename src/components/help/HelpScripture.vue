@@ -8,7 +8,7 @@
       Nieuwe bijbeltekst toevoegen aan setlist:
     </div>
     <p>
-      Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddsong.png">
+      Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddscripture.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
