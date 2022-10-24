@@ -29,6 +29,7 @@
                 <q-tab name="scripture" icon="menu_book" label="Bijbelteksten" />
                 <q-tab name="image" icon="image" label="Afbeeldingen" />
                 <q-tab name="video" icon="smart_display" label="Film" />
+                <q-tab name="countdown" icon="alarm" label="Countdown" />
                 <q-tab name="shortkey" icon="key" label="Sneltoetsen" />
                 <q-tab name="about" icon="build" label="Over" />
               </q-tabs>
@@ -64,6 +65,9 @@
                 <q-tab-panel name="video">
                   <HelpVideo />
                 </q-tab-panel>
+                <q-tab-panel name="countdown">
+                  <HelpCountdown />
+                </q-tab-panel>
                 <q-tab-panel name="shortkey">
                   <HelpShortkey />
                 </q-tab-panel>
@@ -93,6 +97,7 @@ import HelpCaption from './HelpCaption.vue'
 import HelpScripture from './HelpScripture.vue'
 import HelpImage from './HelpImage.vue'
 import HelpVideo from './HelpVideo.vue'
+import HelpCountdown from './HelpCountdown.vue'
 import HelpShortkey from './HelpShortkey.vue'
 import HelpAbout from './HelpAbout.vue'
 
@@ -105,6 +110,7 @@ export default {
     HelpScripture,
     HelpImage,
     HelpVideo,
+    HelpCountdown,
     HelpShortkey,
     HelpAbout
   },
