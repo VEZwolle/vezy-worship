@@ -21,6 +21,7 @@
                 v-model="tab"
                 vertical
                 class="text-teal"
+                dense
               >
                 <q-tab name="main" icon="home" label="Basis" />
                 <q-tab name="mainsetlist" icon="input" label="Dienst & setlist" />
