@@ -24,6 +24,7 @@
                 dense
               >
                 <q-tab name="main" icon="home" label="Basis" />
+                <q-tab name="live" icon="live_tv" label="Bediening Live" />
                 <q-tab name="mainsetlist" icon="input" label="Dienst & setlist" />
                 <q-tab name="song" icon="music_note" label="Liederen" />
                 <q-tab name="caption" icon="short_text" label="Ondertitel" />
@@ -47,6 +48,9 @@
               >
                 <q-tab-panel name="main">
                   <HelpMain />
+                </q-tab-panel>
+                <q-tab-panel name="live">
+                  <HelpLive />
                 </q-tab-panel>
                 <q-tab-panel name="mainsetlist">
                   <HelpMainSetlist />
@@ -92,6 +96,7 @@
 
 <script>
 import HelpMain from './HelpMain.vue'
+import HelpLive from './HelpLive.vue'
 import HelpMainSetlist from './HelpMainSetlist.vue'
 import HelpSong from './HelpSong.vue'
 import HelpCaption from './HelpCaption.vue'
@@ -105,6 +110,7 @@ import HelpAbout from './HelpAbout.vue'
 export default {
   components: {
     HelpMain,
+    HelpLive,
     HelpMainSetlist,
     HelpSong,
     HelpCaption,
