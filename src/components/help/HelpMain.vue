@@ -42,4 +42,11 @@
       <li>Aftelklok of tijd tot begin van de dienst</li>
     </ul>
   </div>
+  <div class="text-h6 q-mb-md">
+    Basis instellingen output:
+  </div>
+  <p>
+    Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet. Na wijzigen moet de desktop app opnieuw opgestart worden.<br>
+    Bij de web-app is dit niet aanwezig; hier zijn 2 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer & van de livestream te tonen in een nieuw brouwser venster.
+  </p>
 </template>
