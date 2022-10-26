@@ -56,20 +56,20 @@
     <div class="text-h6 q-mb-md">
       Midden kolom: preview
     </div>
-    <P>
+    <p>
       In de preview kolom kan je door de verschillende pagina's heen klikken (of na 1x aan klikken met de pijltjes toetsen doorlopen). Om zo onder in het scherm het voorbeeld te bekijken.<br>
       De geselecteede pagina in de preview wordt na op de knop <img src="../../assets/help/golive.png"> klikken direct live gezet; Dit kan ook door te dubbelklikken op deze pagina/tekst. Wanneer er niets is geselecteerd wordt de 1e pagina van dat onderdeel live gezet na het klikken op de knop "Go Live".<br>
       Nadat een onderdeel naar live is verplaatst wordt automatisch het volgende onderdeel uit de setlist in de preview geplaatst.<br>
       Door met de rechtmuisknop op "Go Live" te klikken verschijnt er een Quick Live menu; <img src="../../assets/help/quickliverightkey.png"> hierin staat een aantal vaste onderdelen uit de dienst die je direct live kan zetten zoals de nazorg pagina en de collecte pagina.
-    </P>
+    </p>
     <div class="text-h6 q-mb-md">
       Rechter kolom: live
     </div>
-    <P>
+    <p>
       Alles wat je hier selecteerd is direct te zien op de livestream en op de beamer.<br>
       Om dit tijdelijk uit te zetten (lege pagina weergegeven) kan je op de "Clear" knop <img src="../../assets/help/clear.png"> recht boven klikken (of cntr+C). Dit nogmaals doen zet het weer aan. Onder in het scherm zie je bij de voorbeeld uitvoer ook een leeg beeld ontstaan, gelijk aan de beamer & livestream.<br>
       Let op dat voor een aantal tekst onderdelen het aantal pagina's op de livestream groter is dan op de beamer. In basis klik je livestream items door en gaat de beamer vanzelf mee wanneer je onderaan die pagina gekomen bent. Nadat je 1x wat geselecteerd het kan je daarna ook met de pijltjes toetsen van pagina wisselen.
-    </P>
+    </p>
     <div class="text-h6 q-mb-md">
       Voorbeeld uitvoer onderin "preview" & "live"
     </div>
