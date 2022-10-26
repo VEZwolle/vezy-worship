@@ -2,11 +2,11 @@
   <div>
     <div class="text-h4 q-mb-md">
       <img src="../../../public/icons/favicon-32x32.png">
-      VezyWorship: Snelkoppelingen
+      Sneltoetsen
     </div>
     <div class="q-pa-md">
       <q-table
-        title="Snelkoppeningen"
+        title="Sneltoetsen"
         :rows="rows"
         :columns="columns"
         :rows-per-page-options="[0]"
@@ -14,6 +14,13 @@
         dense
       />
     </div>
+    <div class="text-h6 q-mb-md">
+      Quick live
+    </div>
+    <p>
+      Door met de rechtermuisknop op de knop "GO LIVE" te klikken verschijnt een menu met een aantal standaard onderdelen die je direct live kan zetten. <i>(opmerking: dit zijn de standaard versies uit VezyWorship.)</i><br>
+      <img src="../../assets/help/quickliverightkey.png">
+    </p>
   </div>
 </template>
 
