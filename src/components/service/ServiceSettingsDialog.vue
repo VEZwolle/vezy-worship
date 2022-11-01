@@ -27,8 +27,8 @@
           </template>
         </q-input>
 
-        <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
-        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+        <q-input v-model="service.host" label="Host" placeholder="Bijv. Host Blokker" :rules="['required']" />
+        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Spreker van Zondag" :rules="['required']" />
 
         <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
           <template #prepend>
