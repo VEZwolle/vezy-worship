@@ -131,12 +131,12 @@ app.post('/api/pco', async (req, res) => {
 
   // check if loginauth
   if (!oAuthConfig.refreshToken) { // first login
-    return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=people services` }) // Inlog link
+    return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=services` }) // Inlog link
   }
   if (Date.now() > oAuthConfig.tokenExpiry) { // tokenHasExpired --> Refresh token
     await oauthRefresh(oAuthConfig.refreshToken)
     if (!oAuthConfig.refreshToken) { // refresh error --> first login
-      return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=people services` }) // Inlog link
+      return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=services` }) // Inlog link
     }
   }
   // set get data url
