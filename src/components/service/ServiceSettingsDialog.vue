@@ -5,57 +5,73 @@
         <q-toolbar-title>{{ isNew ? 'Nieuwe dienst' : 'Dienst bewerken' }}</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
+      <div>
+        <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+          <q-tab name="dienst" label="Dienst" />
+          <q-tab name="pco" label="PCO" />
+        </q-tabs>
+        <q-separator />
+        <q-tab-panels v-model="tab">
+          <q-tab-panel name="dienst">
+            <q-card-section>
+              <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
+                <template #append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="service.date" />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
 
-      <q-card-section>
-        <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
-          <template #append>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="service.date" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+              <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
+                <template #append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-time v-model="service.time" />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
 
-        <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
-          <template #append>
-            <q-icon name="access_time" class="cursor-pointer">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-time v-model="service.time" />
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+              <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
+              <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
 
-        <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
-        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+              <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
+                <template #prepend>
+                  <q-icon name="image" />
+                </template>
+              </q-file>
 
-        <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
-          <template #prepend>
-            <q-icon name="image" />
-          </template>
-        </q-file>
+              <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
+            </q-card-section>
 
-        <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
-      </q-card-section>
+            <q-separator />
 
-      <q-separator />
-
-      <q-card-actions align="right">
-        <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
-      </q-card-actions>
+            <q-card-actions align="right">
+              <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
+            </q-card-actions>
+          </q-tab-panel>
+          <q-tab-panel name="pco">
+            <Pco />
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
 import dayjs from 'dayjs'
+import Pco from './Pco.vue'
 
 export default {
+  components: { Pco },
   data () {
     return {
       service: null,
-      backgroundImageFile: null
+      backgroundImageFile: null,
+      tab: 'dienst'
     }
   },
   computed: {
