@@ -104,7 +104,7 @@ export default {
       pcoOutput: 'testwaarde',
       isPcoLoading: false,
       isPcoLogoutLoading: false,
-      serviceTypes: '',
+      serviceTypes: '', 
       serviceTypesShow: true,
       serviceTypesLabel: 'Dienst type',
       serviceTypeId: '', // default: 1150700 "05 VEZ-hallen zondagochtend"
@@ -263,10 +263,10 @@ export default {
               this.$q.notify({ type: 'negative', message: `Er zijn geen aanvullende onderdeelgegevens gevonden in PCO (id: ${this.itemId}).` })
               this.itemId = ''
             } else if (this.planId) { // return items plan
-              this.$q.notify({ type: 'negative', message: `Er zijn geen onderdelen van de dienst gevonden in PCO (id: ${this.planId}).` })
+              this.$q.notify({ type: 'negative', message: `Er zijn geen onderdelen van de dienst gevonden in PCO (id: ${this.plansLabel}).` })
               this.planId = ''
             } else if (this.serviceTypeId) { // return plans in future
-              this.$q.notify({ type: 'negative', message: `Er zijn geen toekomstige dienst gevonden in PCO (id: ${this.serviceTypeId}).` })
+              this.$q.notify({ type: 'negative', message: `Er zijn geen toekomstige dienst gevonden in PCO (id: ${this.serviceTypesLabel}).` })
               this.serviceTypeId = ''
             } else { // returns serviceTypes
               this.$q.notify({ type: 'negative', message: 'Er zijn geen dienst typen gevonden in PCO.' })
