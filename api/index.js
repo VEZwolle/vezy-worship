@@ -151,9 +151,11 @@ app.post('/api/pco', async (req, res) => {
     } else {
       URLAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items` // default 25st/page
     }
-  } else if (req.body.serviceType) { // get plans in future   : ../services/v2/service_types/ID/plans?order=sort_date&filter=future
+  } else if (req.body.serviceType) { // get plans in future   : ../services/v2/service_types/ID/plans?order=sort_date&filter=future&per_page=10
     URLAdd += `/${req.body.serviceType}/plans?order=sort_date&filter=future`
-  } // get service_types                                      : ../services/v2/service_types
+  } else { // get service_types                               : ../services/v2/service_types?order=name
+    URLAdd += `/${req.body.serviceType}?order=name`
+  }
 
   // get data
   try {
