@@ -104,7 +104,7 @@ export default {
       pcoOutput: 'testwaarde',
       isPcoLoading: false,
       isPcoLogoutLoading: false,
-      serviceTypes: '', 
+      serviceTypes: '',
       serviceTypesShow: true,
       serviceTypesLabel: 'Dienst type',
       serviceTypeId: '', // default: 1150700 "05 VEZ-hallen zondagochtend"
@@ -142,6 +142,15 @@ export default {
       this.planDate = startDate.slice(0, 10).replaceAll('-', '/')
       this.planTime = startDate.slice(11, 16)
     },
+    htmlToText () {
+      for (let i = 0; i < this.planItems.length; i++) {
+        if (this.planItems[i].html_details) {
+          this.planItems[i].html_details = this.planItems[i].html_details.replace(/(?:<br\s*[/]?>|<[/]p>)/g, '\n').replace(/<[^>]*>/g, '')
+        } else { // replace null with ''
+          this.planItems[i].html_details = ''
+        }
+      }
+    },
     setPlanItems (pItems) {
       this.planItems = []
       for (let i = 0; i < pItems.length; i++) {
@@ -160,6 +169,7 @@ export default {
           })
         }
       }
+      this.htmlToText()
     },
     planMembers () {
       for (let i = 0; i < this.teamMembers.length; i++) {
