@@ -73,7 +73,8 @@
         </q-item-section>
         <q-item-section avatar>
           <q-icon v-if="item.type === 'song'" color="blue" name="music_note" @click="toggleImportType(index)" />
-          <q-icon v-else color="primary" name="short_text" @click="toggleImportType(index)" />
+          <q-icon v-else-if="item.type === 'caption'" color="primary" name="short_text" @click="toggleImportType(index)" />
+          <q-icon v-else color="brown" name="menu_book" @click="toggleImportType(index)" />
         </q-item-section>
         <q-item-section>
           <q-item-label>
@@ -134,6 +135,9 @@ export default {
           this.planItems[index].type = 'caption'
           break
         case 'caption' :
+          this.planItems[index].type = 'scripture'
+          break
+        case 'scripture' :
         default :
           this.planItems[index].type = 'song'
       }
