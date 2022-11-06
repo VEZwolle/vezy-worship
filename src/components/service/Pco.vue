@@ -8,7 +8,7 @@
     @click="pcoLogout"
   />
   <q-btn
-    v-if="!serviceTypes"
+    v-if="!serviceTypes && !plans"
     stack
     dense
     color="primary"
@@ -39,6 +39,15 @@
         @click="pcoServiceType(serviceType.id, serviceType.attributes.name)"
       />
     </template>
+    <q-fab-action
+      v-if="!serviceTypes"
+      padding="none"
+      square
+      glossy
+      color="secondary"
+      label="Dienst types inladen"
+      @click="pcoServiceType('', 'Dienst type')"
+    />
   </q-fab>
   <br>
   <q-fab
@@ -106,9 +115,9 @@ export default {
       isPcoLoading: false,
       isPcoLogoutLoading: false,
       serviceTypes: '',
-      serviceTypesShow: true,
-      serviceTypesLabel: 'Dienst type',
-      serviceTypeId: '', // default: 1150700 "05 VEZ-hallen zondagochtend"
+      serviceTypesShow: false, //                          default false                        | true
+      serviceTypesLabel: '05 VEZ-hallen zondagochtend', // default: 05 VEZ-hallen zondagochtend | Dienst type
+      serviceTypeId: '1150700', //                         default: 1150700                     | ''
       plans: '',
       plansShow: true,
       plansLabel: 'Datum dienst',
@@ -209,9 +218,14 @@ export default {
       this.plans = ''
       this.plansShow = true
       this.serviceTypeId = serviceTypeId
-      this.serviceTypesShow = false
+      this.serviceTypesShow = serviceTypeId === ''
       this.serviceTypesLabel = serviceTypeName
       await this.pco()
+    },
+    onceFirstPlan () {
+      if (!this.serviceTypes && this.plans) {
+        this.pcoPlan(this.plans[0].id, this.plans[0].attributes.short_dates, this.plans[0].attributes.sort_date, this.plans[0].attributes.items_count, this.plans[0].attributes.title)
+      }
     },
     async pcoPlan (planid, planDates, planDate, planItemsCount, planTitle) {
       this.itemId = ''
@@ -264,6 +278,7 @@ export default {
               // console.log('--plans--')
               // console.log(result.data.data)
               this.plans = result.data.data
+              this.onceFirstPlan()
             } else { // returns serviceTypes
               // console.log('--serviceTypes--')
               // console.log(result.data.data)
