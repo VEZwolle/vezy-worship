@@ -85,7 +85,7 @@
           <q-icon v-else-if="item.type === 'caption'" color="primary" name="short_text" @click="toggleImportType(index)" />
           <q-icon v-else color="brown" name="menu_book" @click="toggleImportType(index)" />
         </q-item-section>
-        <q-item-section>
+        <q-item-section @dblclick="addPcoItemToService(index)">
           <q-item-label>
             {{ item.title }}
           </q-item-label>
@@ -121,11 +121,11 @@ export default {
       plans: '',
       plansShow: true,
       plansLabel: 'Datum dienst',
-      planId: '',
+      planId: '', // 55984013 // use for find this plan with serviceTypeId; do not use itemCount on the same time. | empty first plan of serviceTypeId will used
       itemCount: '',
       planItems: '',
       itemId: '',
-      itemsnotes: '',
+      itemsNotes: '',
       teamMembers: '',
       planDate: '',
       planTime: '',
@@ -155,15 +155,6 @@ export default {
       this.planDate = startDate.slice(0, 10).replaceAll('-', '/')
       this.planTime = startDate.slice(11, 16)
     },
-    htmlToText () {
-      for (let i = 0; i < this.planItems.length; i++) {
-        if (this.planItems[i].html_details) {
-          this.planItems[i].html_details = this.planItems[i].html_details.replace(/(?:<br\s*[/]?>|<[/]p>)/g, '\n').replace(/<[^>]*>/g, '')
-        } else { // replace null with ''
-          this.planItems[i].html_details = ''
-        }
-      }
-    },
     setPlanItems (pItems) {
       this.planItems = []
       for (let i = 0; i < pItems.length; i++) {
@@ -174,15 +165,21 @@ export default {
           }
           this.planItems.push({
             id: pItems[i].id,
-            title: pItems[i].attributes.title,
-            description: pItems[i].attributes.description,
-            html_details: pItems[i].attributes.html_details,
+            title: pItems[i].attributes.title || '',
+            description: pItems[i].attributes.description || '',
+            html_details: pItems[i].attributes.html_details || '',
             import: true,
             type: itemtype
           })
         }
       }
-      this.htmlToText()
+      // htmlToText
+      for (let i = 0; i < this.planItems.length; i++) {
+        if (this.planItems[i].html_details) {
+          this.planItems[i].html_details = this.planItems[i].html_details.replace(/(?: *<br\s*[/]?> *| *<[/]p> *)/gi, '\n').replace(/<[^>]*>/g, '')
+          this.planItems[i].description = this.planItems[i].description.replace(/<[^>]*>/g, '')
+        }
+      }
     },
     planMembers () {
       for (let i = 0; i < this.teamMembers.length; i++) {
@@ -223,6 +220,7 @@ export default {
       await this.pco()
     },
     onceFirstPlan () {
+      // console.log('onceFirstPlan')
       if (!this.serviceTypes && this.plans) {
         this.pcoPlan(this.plans[0].id, this.plans[0].attributes.short_dates, this.plans[0].attributes.sort_date, this.plans[0].attributes.items_count, this.plans[0].attributes.title)
       }
@@ -252,12 +250,25 @@ export default {
           itemCount: this.itemCount,
           item: this.itemId
         })
-        if (result.URL) { // first login
-          this.pcoOutput = result.URL
-          window.open(result.URL, '_blank')
+        if (result.url) { // first login
+          this.pcoOutput = result.url
+          window.open(result.url, '_blank')
         } else { // get data from response
-          console.log(result.data)
-          if (result.data.meta.count !== 0) {
+          // console.log(result.data)
+          if (typeof result.data.meta.count === 'undefined') {
+            // no array data --> one plan
+            if (result.data.data.type === 'Plan') {
+              // console.log('--plan global--')
+              // console.log(result.data.data)
+              this.plans = [result.data.data] // use array so it is the same al more services get back.
+              this.onceFirstPlan()
+            } else if (this.planId && !this.itemCount) {
+              this.$q.notify({ type: 'negative', message: `De dienst is niet gevonden in PCO (id: ${this.planId}).` })
+              this.planId = ''
+            } else { // notify | if perhapse her | no clou of the data came back
+              this.$q.notify({ type: 'negative', message: 'Error PCO.' })
+            }
+          } else if (result.data.meta.count !== 0) {
             this.pcoOutput = result.data.data[0].id
             // return data diferent inputs
             if (this.itemId === 'team') { // return team_members
@@ -268,10 +279,10 @@ export default {
             } else if (this.itemId) { // return item notes
               // console.log('--item notes--')
               // console.log(result.data.data)
-              this.itemsnotes = result.data.data // nog wijzigen nu elke keer overschreven
+              this.itemsNotes = result.data.data // nog wijzigen nu elke keer overschreven
             } else if (this.planId) { // return items plan
-              // console.log('--items--')
-              // console.log(result.data.data)
+              console.log('--items--')
+              console.log(result.data.data)
               const pItems = result.data.data
               this.setPlanItems(pItems)
             } else if (this.serviceTypeId) { // return plans in future
@@ -324,6 +335,59 @@ export default {
       } finally {
         this.isPcoLogoutLoading = false
       }
+    },
+    addPcoItemToService (id) {
+      console.log(`addPcoItemToService id:${id} count:${this.planItems.length}`)
+      if (id < this.planItems.length) {
+        switch (this.planItems[id].type) {
+          case 'song' :
+            console.log(`song id:${this.planItems[id].id}`)
+            this.$store.upsertPresentation({
+              id: `pcoSong${this.planItems[id].id}`,
+              type: 'song',
+              settings: {
+                title: this.planItems[id].title,
+                text: `${this.planItems[id].html_details}`,
+                translation: '',
+                fileId: null
+              }
+            })
+            break
+          case 'caption' :
+            console.log(`caption id:${this.planItems[id].id}`)
+            this.$store.upsertPresentation({
+              id: `pcoCapt${this.planItems[id].id}`,
+              type: 'caption',
+              settings: {
+                title: this.planItems[id].title,
+                text: `${this.planItems[id].description}${this.planItems[id].html_details}`
+              }
+            })
+            break
+          case 'scripture' :
+            console.log(`scripture id:${this.planItems[id].id}`)
+            this.$store.upsertPresentation({
+              id: `pcoScri${this.planItems[id].id}`,
+              type: 'scripture',
+              settings: {
+                bible: 'nbv21',
+                book: 'GEN',
+                chapter: null,
+                verseFrom: null,
+                verseTo: null,
+                text: `${this.planItems[id].title}\n${this.planItems[id].description}${this.planItems[id].html_details}`
+              }
+            })
+            break
+          default :
+            console.log(`error not found id:${this.planItems[id].id} type:${this.planItems[id].type}`)
+            // type not found
+        }
+      }
+    },
+    save () {
+      // nog geen check of er al gegevens zijn, anders eerst een dienst aanmaken met basis, zie save basis.
+      this.hide()
     }
   }
 }

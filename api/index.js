@@ -54,31 +54,31 @@ app.post('/api/translate', async (req, res) => {
  * PCO.
  */
 const oAuthConfig = {
-  URLBase: 'https://api.planningcenteronline.com',
+  urlBase: 'https://api.planningcenteronline.com',
   oAuthCode: "",
-  clientID: 'Hier de link naar client ID invullen',
+  clientId: 'Hier de link naar client ID invullen',
   clientSecret: 'Hier de link naar client Secret invullen',
-  redirectURI: 'http://localhost:5000/api/pco/auth/complete',
+  redirectUri: 'http://localhost:5000/api/pco/auth/complete',
   refreshToken: '',
   tokenExpiry: 0,
   token: ''
 };
 /** PCO, Oauth
- * Goto: `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=people services`
+ * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
  * werkt niet vanaf hier...  ivm redirect niet mag.... en window.open werkt ook niet --> via vezy kant nu gedaan.
  */
-// PCO, redirectURI
+// PCO, redirectUri
 app.get('/api/pco/auth/complete', async (req, res) => {
   oAuthConfig.oAuthCode = req.query.code
 	const params = new URLSearchParams()
   params.append('grant_type', 'authorization_code')
   params.append('code', oAuthConfig.oAuthCode)
-  params.append('client_id', oAuthConfig.clientID)
+  params.append('client_id', oAuthConfig.clientId)
   params.append('client_secret', oAuthConfig.clientSecret)
-  params.append('redirect_uri', oAuthConfig.redirectURI)
+  params.append('redirect_uri', oAuthConfig.redirectUri)
 
   try {
-    const response = await axios.post(`${oAuthConfig.URLBase}/oauth/token`, params)
+    const response = await axios.post(`${oAuthConfig.urlBase}/oauth/token`, params)
     console.log(response.data)
     oAuthConfig.token = `Bearer ${response.data.access_token}`
     // Token lifetime is given in seconds, so multiply by 1000, also subtract 60 seconds from lifetime on our end so we know to refresh the token early
@@ -95,13 +95,13 @@ app.get('/api/pco/auth/complete', async (req, res) => {
 async function oauthRefresh(refreshToken = null) {
   const params = {
     grant_type: 'refresh_token',
-    client_id: oAuthConfig.clientID,
+    client_id: oAuthConfig.clientId,
     client_secret: oAuthConfig.clientSecret,
     refresh_token: refreshToken || oAuthConfig.refreshToken,
   }
 
   try {
-    const response = await axios({ method: 'POST', url: `${oAuthConfig.URLBase}/oauth/token`, headers: { 'content-type': 'application/json' }, data: params })
+    const response = await axios({ method: 'POST', url: `${oAuthConfig.urlBase}/oauth/token`, headers: { 'content-type': 'application/json' }, data: params })
     console.log(response.data)
     oAuthConfig.token = `Bearer ${response.data.access_token}`
     oAuthConfig.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
@@ -131,35 +131,35 @@ app.post('/api/pco', async (req, res) => {
 
   // check if loginauth
   if (!oAuthConfig.refreshToken) { // first login
-    return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=services` }) // Inlog link
+    return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
   }
   if (Date.now() > oAuthConfig.tokenExpiry) { // tokenHasExpired --> Refresh token
     await oauthRefresh(oAuthConfig.refreshToken)
     if (!oAuthConfig.refreshToken) { // refresh error --> first login
-      return res.json({ URL : `${oAuthConfig.URLBase}/oauth/authorize?client_id=${oAuthConfig.clientID}&redirect_uri=${oAuthConfig.redirectURI}&response_type=code&scope=services` }) // Inlog link
+      return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
     }
   }
   // set get data url
-  let URLAdd = 'services/v2/service_types'
+  let urlAdd = 'services/v2/service_types'
   if (req.body.item === 'team') { // get team_members       : ../services/v2/service_types/ID/plans/DIENST/team_members?per_page=50
-    URLAdd += `/${req.body.serviceType}/plans/${req.body.plan}/team_members?per_page=50`
+    urlAdd += `/${req.body.serviceType}/plans/${req.body.plan}/team_members?per_page=50`
   } else if (req.body.item) { // get item notes             : ../services/v2/service_types/ID/plans/DIENST/items/ITEM?include=item_notes
-    URLAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items/${req.body.item}?include=item_notes`
+    urlAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items/${req.body.item}?include=item_notes`
   } else if (req.body.plan) { // get items plan             : ../services/v2/service_types/ID/plans/DIENST/items?per_page=COUNT
     if (req.body.itemCount) {
-      URLAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items?per_page=${req.body.itemCount}`
+      urlAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items?per_page=${req.body.itemCount}`
     } else {
-      URLAdd += `/${req.body.serviceType}/plans/${req.body.plan}/items` // default 25st/page
+      urlAdd += `/${req.body.serviceType}/plans/${req.body.plan}` // get global plan items
     }
   } else if (req.body.serviceType) { // get plans in future   : ../services/v2/service_types/ID/plans?order=sort_date&filter=future&per_page=10
-    URLAdd += `/${req.body.serviceType}/plans?order=sort_date&filter=future`
+    urlAdd += `/${req.body.serviceType}/plans?order=sort_date&filter=future`
   } else { // get service_types                               : ../services/v2/service_types?order=name
-    URLAdd += `/${req.body.serviceType}?order=name`
+    urlAdd += `/${req.body.serviceType}?order=name`
   }
 
   // get data
   try {
-    const response = await axios.get(`${oAuthConfig.URLBase}/${URLAdd}`, {
+    const response = await axios.get(`${oAuthConfig.urlBase}/${urlAdd}`, {
       headers: {
         'Authorization': oAuthConfig.token
       }
