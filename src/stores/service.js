@@ -19,16 +19,19 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
+    fillService ({ id, date, time, theme, host, preacher, worshiplead, backgroundImageId, pcoId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
           id: nanoid(),
           date,
           time,
+          theme,
           host,
           preacher,
+          worshiplead,
           backgroundImageId,
+          pcoId,
           presentations: []
         })
       }
@@ -42,6 +45,18 @@ export default defineStore('service', {
           type: 0
         }
       })
+
+      // Default host caption
+      if (theme && host && preacher && worshiplead) {
+        this.upsertPresentation({
+          id: 'info',
+          type: 'caption',
+          settings: {
+            title: theme,
+            text: 'Spreker      : ' + preacher + '\nAanbidding : ' + worshiplead + 'Host       : ' + host
+          }
+        })
+      }
 
       // Default host caption
       if (host) {

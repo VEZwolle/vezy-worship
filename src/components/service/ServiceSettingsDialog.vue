@@ -5,58 +5,66 @@
         <q-toolbar-title>{{ isNew ? 'Nieuwe dienst' : 'Dienst bewerken' }}</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
-      <div>
-        <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
-          <q-tab name="dienst" label="Dienst" />
-          <q-tab name="pco" label="PCO" />
-        </q-tabs>
-        <q-separator />
-        <q-tab-panels v-model="tab">
-          <q-tab-panel name="dienst">
-            <q-card-section>
-              <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
-                <template #append>
-                  <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="service.date" />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
 
-              <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
-                <template #append>
-                  <q-icon name="access_time" class="cursor-pointer">
-                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-time v-model="service.time" />
-                    </q-popup-proxy>
-                  </q-icon>
-                </template>
-              </q-input>
+      <q-separator />
 
-              <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
-              <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+      <div class="row">
+        <div class="col">
+          <q-card-section>
+            <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
+              <template #append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-date v-model="service.date" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
 
-              <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
-                <template #prepend>
-                  <q-icon name="image" />
-                </template>
-              </q-file>
+            <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
+              <template #append>
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-time v-model="service.time" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
 
-              <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
-            </q-card-section>
+            <q-input v-model="service.theme" label="Thema" placeholder="Bijv. Beter horen" :rules="['required']" />
+            <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
+            <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+            <q-input v-model="service.worshiplead" label="Aanbiddingsleider" placeholder="Bijv. Aanbidding Leider" :rules="['required']" />
 
-            <q-separator />
+            <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
+              <template #prepend>
+                <q-icon name="image" />
+              </template>
+            </q-file>
 
-            <q-card-actions align="right">
-              <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
-            </q-card-actions>
-          </q-tab-panel>
-          <q-tab-panel name="pco">
-            <Pco />
-          </q-tab-panel>
-        </q-tab-panels>
+            <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
+          </q-card-section>
+        </div>
+        <div class="col">
+          <Pco
+            ref="pco"
+            v-model:pcoId="service.pcoId"
+            v-model:theme="service.theme"
+            v-model:host="service.host"
+            v-model:preacher="service.preacher"
+            v-model:worshiplead="service.worshiplead"
+            v-model:date="service.date"
+            v-model:time="service.time"
+            v-model:isNew="isNew"
+          />
+        </div>
       </div>
+
+      <q-separator />
+
+      <q-card-actions align="right">
+        <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -70,8 +78,7 @@ export default {
   data () {
     return {
       service: null,
-      backgroundImageFile: null,
-      tab: 'dienst'
+      backgroundImageFile: null
     }
   },
   computed: {
@@ -86,7 +93,8 @@ export default {
     show (service = null) {
       const defaults = {
         date: dayjs().day(7).format('YYYY/MM/DD'), // Next sunday
-        time: '09:30'
+        time: '09:30',
+        pcoId: ''
       }
 
       this.service = service || defaults
@@ -98,6 +106,7 @@ export default {
         this.service.time = find('countdown').time || this.service.time
         this.service.host = find('host').text || this.service.host
         this.service.preacher = find('preacher').text || this.service.preacher
+        this.service.theme = find('info').title || this.service.theme
       }
 
       this.$refs.dialog.show()
@@ -110,7 +119,7 @@ export default {
     },
     save () {
       this.$store.fillService(this.service)
-
+      this.$refs.pco.addItems()
       this.hide()
     }
   }
@@ -119,6 +128,6 @@ export default {
 
 <style scoped>
 .q-card {
-  min-width: 500px;
+  min-width: 1000px;
 }
 </style>

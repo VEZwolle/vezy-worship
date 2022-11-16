@@ -1,13 +1,5 @@
 <template>
   <q-btn
-    stack
-    dense
-    color="primary"
-    label="PCO Logout"
-    :loading="isPcoLogoutLoading"
-    @click="pcoLogout"
-  />
-  <q-btn
     v-if="!serviceTypes && !plans"
     stack
     dense
@@ -21,20 +13,19 @@
     v-model="serviceTypesShow"
     :label="serviceTypesLabel"
     vertical-actions-align="left"
-    color="primary"
+    color="secondary"
     square
     glossy
     padding="none"
     icon="keyboard_arrow_down"
     direction="down"
-    :loading="isPcoLoading"
   >
     <template v-for="serviceType in serviceTypes" :key="serviceType.id">
       <q-fab-action
         padding="none"
         square
         glossy
-        color="secondary"
+        color="primary"
         :label="serviceType.attributes.name"
         @click="pcoServiceType(serviceType.id, serviceType.attributes.name)"
       />
@@ -44,24 +35,22 @@
       padding="none"
       square
       glossy
-      color="secondary"
+      color="primary"
       label="Dienst types inladen"
       @click="pcoServiceType('', 'Dienst type')"
     />
   </q-fab>
-  <br>
   <q-fab
     v-if="plans"
     v-model="plansShow"
     :label="plansLabel"
     vertical-actions-align="left"
-    color="primary"
+    color="secondary"
     square
     glossy
     padding="none"
     icon="keyboard_arrow_down"
     direction="down"
-    :loading="isPcoLoading"
   >
     <template v-for="plan in plans" :key="plan.id">
       <q-fab-action
@@ -74,7 +63,7 @@
       />
     </template>
   </q-fab>
-  <q-list v-if="planItems" bordered>
+  <q-list v-if="planItems" bordered class="pco-set-list">
     <template v-for="(item, index) in planItems" :key="index">
       <q-item v-ripple clickable>
         <q-item-section avatar>
@@ -99,16 +88,102 @@
       </q-item>
     </template>
   </q-list>
+  <!--
+  <q-list v-if="teamMembers" bordered>
+    <q-item v-ripple clickable>
+      <q-item-section avatar>
+        <q-checkbox />
+      </q-item-section>
+      <q-item-section avatar>
+        <q-icon color="primary" name="short_text" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>
+          {{ planTitle }}
+        </q-item-label>
+        <q-item-label caption>
+          Spreker: {{ planPreacher }}
+          Host: {{ planHost }}
+          Aanbidding: {{ planWorshipLead }}
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item v-ripple clickable>
+      <q-item-section avatar>
+        <q-checkbox />
+      </q-item-section>
+      <q-item-section avatar>
+        <q-icon color="primary" name="short_text" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>
+          Host
+        </q-item-label>
+        <q-item-label caption>
+          {{ planHost }}
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <q-item v-ripple clickable>
+      <q-item-section avatar>
+        <q-checkbox />
+      </q-item-section>
+      <q-item-section avatar>
+        <q-icon color="primary" name="short_text" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>
+          Spreker
+        </q-item-label>
+        <q-item-label caption>
+          {{ planPreacher }}
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+  </q-list>
+  -->
   <q-input
     v-model="pcoOutput"
     outlined
     label="pco"
     type="textarea"
   />
+  <q-btn
+    stack
+    dense
+    label="PCO Logout"
+    :loading="isPcoLogoutLoading"
+    @click="pcoLogout"
+  />
+  <q-inner-loading
+    :showing="isPcoLoading"
+    label="Bezig met laden..."
+    label-class="text-teal"
+    label-style="font-size: 1.1em"
+  />
 </template>
 
 <script>
 export default {
+  props: {
+    pcoId: String,
+    theme: String,
+    host: String,
+    preacher: String,
+    worshiplead: String,
+    date: String,
+    time: String,
+    isNew: Boolean
+  },
+  emits: [
+    'update:pcoId',
+    'update:theme',
+    'update:host',
+    'update:preacher',
+    'update:worshiplead',
+    'update:date',
+    'update:time'
+  ],
   data () {
     return {
       pcoOutput: 'testwaarde',
@@ -121,7 +196,7 @@ export default {
       plans: '',
       plansShow: true,
       plansLabel: 'Datum dienst',
-      planId: '', // 55984013 // use for find this plan with serviceTypeId; do not use itemCount on the same time. | empty first plan of serviceTypeId will used
+      planId: '55984013', // 55984013 // use for find this plan with serviceTypeId; do not use itemCount on the same time. | empty first plan of serviceTypeId will used
       itemCount: '',
       planItems: '',
       itemId: '',
@@ -137,6 +212,17 @@ export default {
   },
   computed: {
   },
+  created () {
+    if (this.pcoId) {
+      const i = this.pcoId.search('-')
+      if (i > 1 && this.pcoId.length > i) {
+        this.serviceTypeId = this.pcoId.substring(0, i)
+        if (this.pcoId.length > i) {
+          this.planId = this.pcoId.substring(i + 1)
+        }
+      }
+    }
+  },
   methods: {
     toggleImportType (index) {
       switch (this.planItems[index].type) {
@@ -150,6 +236,15 @@ export default {
         default :
           this.planItems[index].type = 'song'
       }
+    },
+    async updateService () {
+      this.$emit('update:pcoId', `${this.serviceTypeId}-${this.planId}`)
+      this.$emit('update:date', this.planDate)
+      this.$emit('update:time', this.planTime)
+      this.$emit('update:theme', this.planTitle)
+      this.$emit('update:host', this.planHost)
+      this.$emit('update:preacher', this.planPreacher)
+      this.$emit('update:worshiplead', this.planWorshipLead)
     },
     setDateTime (startDate) { // format: "2022-11-06T09:30:00Z"
       this.planDate = startDate.slice(0, 10).replaceAll('-', '/')
@@ -168,7 +263,7 @@ export default {
             title: pItems[i].attributes.title || '',
             description: pItems[i].attributes.description || '',
             html_details: pItems[i].attributes.html_details || '',
-            import: true,
+            import: this.isNew,
             type: itemtype
           })
         }
@@ -182,6 +277,9 @@ export default {
       }
     },
     planMembers () {
+      this.planWorshipLead = ''
+      this.planHost = ''
+      this.planPreacher = ''
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].attributes.status !== 'D') { // D = Declined
           switch (this.teamMembers[i].attributes.team_position_name) {
@@ -205,7 +303,7 @@ export default {
         }
       }
       if (this.planPreacher === '') { this.planPreacher = this.planTitle }
-      this.pcoOutput = `ServiceType: ${this.serviceTypesLabel}\nDatum: ${this.planDate}\nTijd: ${this.planTime}\nTitel: ${this.planTitle}\nAanbiddingsleider: ${this.planWorshipLead}\nHost: ${this.planHost}\nSpreker: ${this.planPreacher}\n`
+      this.pcoOutput = `ServiceType: ${this.serviceTypesLabel}<br>Datum: ${this.planDate}<br>Tijd: ${this.planTime}\nTitel: ${this.planTitle}\nAanbiddingsleider: ${this.planWorshipLead}\nHost: ${this.planHost}\nSpreker: ${this.planPreacher}\n`
     },
     async pcoServiceType (serviceTypeId, serviceTypeName) {
       this.itemId = ''
@@ -220,7 +318,6 @@ export default {
       await this.pco()
     },
     onceFirstPlan () {
-      // console.log('onceFirstPlan')
       if (!this.serviceTypes && this.plans) {
         this.pcoPlan(this.plans[0].id, this.plans[0].attributes.short_dates, this.plans[0].attributes.sort_date, this.plans[0].attributes.items_count, this.plans[0].attributes.title)
       }
@@ -239,27 +336,26 @@ export default {
       await this.pco() // get items
       this.itemId = 'team'
       await this.pco() // get teammembers
+      this.updateService()
     },
     async pco () {
       this.isPcoLoading = true
 
       try {
+        // console.log(`serviceType: ${this.serviceTypeId}\nplan: ${this.planId}`)
         const result = await this.$api.post('/pco', {
           serviceType: this.serviceTypeId,
           plan: this.planId,
           itemCount: this.itemCount,
           item: this.itemId
         })
+        // console.log(result.data)
         if (result.url) { // first login
           this.pcoOutput = result.url
           window.open(result.url, '_blank')
         } else { // get data from response
-          // console.log(result.data)
           if (typeof result.data.meta.count === 'undefined') {
-            // no array data --> one plan
-            if (result.data.data.type === 'Plan') {
-              // console.log('--plan global--')
-              // console.log(result.data.data)
+            if (result.data.data.type === 'Plan') { // no array data --> one plan
               this.plans = [result.data.data] // use array so it is the same al more services get back.
               this.onceFirstPlan()
             } else if (this.planId && !this.itemCount) {
@@ -272,27 +368,17 @@ export default {
             this.pcoOutput = result.data.data[0].id
             // return data diferent inputs
             if (this.itemId === 'team') { // return team_members
-              // console.log('--team members--')
-              // console.log(result.data.data)
               this.teamMembers = result.data.data
               this.planMembers()
             } else if (this.itemId) { // return item notes
-              // console.log('--item notes--')
-              // console.log(result.data.data)
               this.itemsNotes = result.data.data // nog wijzigen nu elke keer overschreven
             } else if (this.planId) { // return items plan
-              console.log('--items--')
-              console.log(result.data.data)
               const pItems = result.data.data
               this.setPlanItems(pItems)
             } else if (this.serviceTypeId) { // return plans in future
-              // console.log('--plans--')
-              // console.log(result.data.data)
               this.plans = result.data.data
               this.onceFirstPlan()
             } else { // returns serviceTypes
-              // console.log('--serviceTypes--')
-              // console.log(result.data.data)
               this.serviceTypes = result.data.data
             }
           } else { // no data --> error message
@@ -319,10 +405,8 @@ export default {
         this.isPcoLoading = false
       }
     },
-
     async pcoLogout () {
       this.isPcoLogoutLoading = true
-
       try {
         const result = await this.$api.get('/pco/auth/logout')
         if (result.logout) {
@@ -337,13 +421,11 @@ export default {
       }
     },
     addPcoItemToService (id) {
-      console.log(`addPcoItemToService id:${id} count:${this.planItems.length}`)
       if (id < this.planItems.length) {
         switch (this.planItems[id].type) {
           case 'song' :
-            console.log(`song id:${this.planItems[id].id}`)
             this.$store.upsertPresentation({
-              id: `pcoSong${this.planItems[id].id}`,
+              id: '', // `pcoSong${this.planItems[id].id}`,
               type: 'song',
               settings: {
                 title: this.planItems[id].title,
@@ -354,9 +436,8 @@ export default {
             })
             break
           case 'caption' :
-            console.log(`caption id:${this.planItems[id].id}`)
             this.$store.upsertPresentation({
-              id: `pcoCapt${this.planItems[id].id}`,
+              id: '', // `pcoCapt${this.planItems[id].id}`,
               type: 'caption',
               settings: {
                 title: this.planItems[id].title,
@@ -365,9 +446,8 @@ export default {
             })
             break
           case 'scripture' :
-            console.log(`scripture id:${this.planItems[id].id}`)
             this.$store.upsertPresentation({
-              id: `pcoScri${this.planItems[id].id}`,
+              id: '', // `pcoScri${this.planItems[id].id}`,
               type: 'scripture',
               settings: {
                 bible: 'nbv21',
@@ -385,13 +465,21 @@ export default {
         }
       }
     },
-    save () {
-      // nog geen check of er al gegevens zijn, anders eerst een dienst aanmaken met basis, zie save basis.
-      this.hide()
+    addItems () {
+      for (let i = 0; i < this.planItems.length; i++) {
+        if (this.planItems[i].import) {
+          this.addPcoItemToService(i)
+        }
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.pco-set-list {
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+
 </style>
