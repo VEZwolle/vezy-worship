@@ -1,4 +1,5 @@
 <template>
+  Gegevens uit PCO:<br>
   <q-btn
     v-if="!serviceTypes && !plans"
     stack
@@ -63,91 +64,61 @@
       />
     </template>
   </q-fab>
-  <q-list v-if="planItems" bordered class="pco-set-list">
-    <template v-for="(item, index) in planItems" :key="index">
+  <q-list v-if="teamMembers" bordered dense>
+    <template v-for="(item, index) in planGlobal" :key="index">
       <q-item v-ripple clickable>
         <q-item-section avatar>
-          <q-checkbox v-model="planItems[index].import" />
+          <q-icon color="blue" :name="planGlobal[index].import ? 'task_alt' : 'highlight_off'" />
         </q-item-section>
-        <q-item-section avatar>
-          <q-icon v-if="item.type === 'song'" color="blue" name="music_note" @click="toggleImportType(index)" />
-          <q-icon v-else-if="item.type === 'caption'" color="primary" name="short_text" @click="toggleImportType(index)" />
-          <q-icon v-else color="brown" name="menu_book" @click="toggleImportType(index)" />
-        </q-item-section>
-        <q-item-section @dblclick="addPcoItemToService(index)">
+        <q-item-section @dblclick="addPlanGlobal(index)">
           <q-item-label>
-            {{ item.title }}
-          </q-item-label>
-          <q-item-label overline lines="2">
-            {{ item.description }}
-          </q-item-label>
-          <q-item-label caption lines="2">
-            {{ item.html_details }}
+            {{ item.name }}: {{ item.value }}
           </q-item-label>
         </q-item-section>
       </q-item>
     </template>
   </q-list>
-  <!--
-  <q-list v-if="teamMembers" bordered>
-    <q-item v-ripple clickable>
-      <q-item-section avatar>
-        <q-checkbox />
-      </q-item-section>
-      <q-item-section avatar>
-        <q-icon color="primary" name="short_text" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>
-          {{ planTitle }}
-        </q-item-label>
-        <q-item-label caption>
-          Spreker: {{ planPreacher }}
-          Host: {{ planHost }}
-          Aanbidding: {{ planWorshipLead }}
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item v-ripple clickable>
-      <q-item-section avatar>
-        <q-checkbox />
-      </q-item-section>
-      <q-item-section avatar>
-        <q-icon color="primary" name="short_text" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>
-          Host
-        </q-item-label>
-        <q-item-label caption>
-          {{ planHost }}
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item v-ripple clickable>
-      <q-item-section avatar>
-        <q-checkbox />
-      </q-item-section>
-      <q-item-section avatar>
-        <q-icon color="primary" name="short_text" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>
-          Spreker
-        </q-item-label>
-        <q-item-label caption>
-          {{ planPreacher }}
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-  </q-list>
-  -->
-  <q-input
-    v-model="pcoOutput"
-    outlined
-    label="pco"
-    type="textarea"
+  <q-btn
+    v-if="teamMembers"
+    stack
+    dense
+    color="primary"
+    label="← Update Thema en Personen"
+    @click="addPlanGlobal()"
   />
+  <template v-if="planItems">
+    <q-list bordered class="pco-set-list">
+      <template v-for="(item, index) in planItems" :key="index">
+        <q-item v-ripple clickable>
+          <q-item-section avatar>
+            <q-checkbox v-model="planItems[index].import" />
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon v-if="item.type === 'song'" color="blue" name="music_note" @click="toggleImportType(index)" />
+            <q-icon v-else-if="item.type === 'caption'" color="primary" name="short_text" @click="toggleImportType(index)" />
+            <q-icon v-else color="brown" name="menu_book" @click="toggleImportType(index)" />
+          </q-item-section>
+          <q-item-section @dblclick="addPcoItemToService(index)">
+            <q-item-label>
+              {{ item.title }}
+            </q-item-label>
+            <q-item-label overline lines="2">
+              {{ item.description }}
+            </q-item-label>
+            <q-item-label caption lines="2">
+              {{ item.html_details }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-list>
+    <div class="bg-grey-2 rounded-borders">
+      aan/uit:
+      <template v-for="(type, index) in itemTypesSelect" :key="index">
+        <q-checkbox v-model="itemTypesSelect[index].selected" :label="type.label" @click="togglePlanItems(type.type, type.selected)" />
+      </template>
+    </div>
+  </template>
   <q-btn
     stack
     dense
@@ -186,7 +157,6 @@ export default {
   ],
   data () {
     return {
-      pcoOutput: 'testwaarde',
       isPcoLoading: false,
       isPcoLogoutLoading: false,
       serviceTypes: '',
@@ -204,10 +174,54 @@ export default {
       teamMembers: '',
       planDate: '',
       planTime: '',
-      planTitle: '',
-      planHost: '',
-      planPreacher: '',
-      planWorshipLead: ''
+      planGlobal: [
+        {
+          id: 'planTitle',
+          name: 'Thema',
+          import: this.isNew || this.theme === '',
+          value: ''
+        },
+        {
+          id: 'planHost',
+          name: 'Host',
+          import: this.isNew || this.host === '',
+          value: ''
+        },
+        {
+          id: 'planPreacher',
+          name: 'Spreker',
+          import: this.isNew || this.preacher === '',
+          value: ''
+        },
+        {
+          id: 'planWorshipLead',
+          name: 'Aanbiddingsleider',
+          import: this.isNew || this.worshiplead === '',
+          value: ''
+        }
+      ],
+      itemTypesSelect: [
+        {
+          type: null,
+          label: 'Alle',
+          selected: true
+        },
+        {
+          type: 'song',
+          label: 'Liederen',
+          selected: true
+        },
+        {
+          type: 'caption',
+          label: 'Titels',
+          selected: true
+        },
+        {
+          type: 'scripture',
+          label: 'Bijbeltekst',
+          selected: true
+        }
+      ]
     }
   },
   computed: {
@@ -224,6 +238,21 @@ export default {
     }
   },
   methods: {
+    getPlanGlobalId (id) {
+      return this.planGlobal.findIndex(p => p.id === id)
+    },
+    getPlanGlobalValue (id) {
+      return this.planGlobal.find(p => p.id === id).value
+    },
+    getPlanGlobalImport (id) {
+      return this.planGlobal.find(p => p.id === id).import
+    },
+    setPlanGlobalValue (id, value) {
+      this.planGlobal[this.getPlanGlobalId(id)].value = value
+    },
+    setPlanGlobalImport (id, value) {
+      this.planGlobal[this.getPlanGlobalId(id)].import = value
+    },
     toggleImportType (index) {
       switch (this.planItems[index].type) {
         case 'song' :
@@ -237,14 +266,46 @@ export default {
           this.planItems[index].type = 'song'
       }
     },
+    togglePlanItems (type, selected) {
+      if (type) {
+        for (let i = 0; i < this.planItems.length; i++) {
+          if (this.planItems[i].type === type) { this.planItems[i].import = selected }
+        }
+      } else {
+        for (let i = 0; i < this.planItems.length; i++) {
+          this.planItems[i].import = selected
+        }
+        for (let i = 0; i < this.itemTypesSelect.length; i++) {
+          this.itemTypesSelect[i].selected = selected
+        }
+      }
+    },
+    addPlanGlobal (index) {
+      if (index) {
+        this.planGlobal[index].import = true
+      } else {
+        for (let i = 0; i < this.planGlobal.length; i++) {
+          this.planGlobal[i].import = true
+        }
+      }
+      this.updateService()
+    },
+    checkPlanGlobal () {
+      if (!this.isNew) {
+        this.setPlanGlobalImport('planTitle', this.theme === this.getPlanGlobalValue('planTitle'))
+        this.setPlanGlobalImport('planHost', this.host === this.getPlanGlobalValue('planHost'))
+        this.setPlanGlobalImport('planPreacher', this.preacher === this.getPlanGlobalValue('planPreacher'))
+        this.setPlanGlobalImport('planWorshipLead', this.worshiplead === this.getPlanGlobalValue('planWorshipLead'))
+      }
+    },
     async updateService () {
       this.$emit('update:pcoId', `${this.serviceTypeId}-${this.planId}`)
       this.$emit('update:date', this.planDate)
       this.$emit('update:time', this.planTime)
-      this.$emit('update:theme', this.planTitle)
-      this.$emit('update:host', this.planHost)
-      this.$emit('update:preacher', this.planPreacher)
-      this.$emit('update:worshiplead', this.planWorshipLead)
+      if (this.getPlanGlobalImport('planTitle')) { this.$emit('update:theme', this.getPlanGlobalValue('planTitle')) }
+      if (this.getPlanGlobalImport('planHost')) { this.$emit('update:host', this.getPlanGlobalValue('planHost')) }
+      if (this.getPlanGlobalImport('planPreacher')) { this.$emit('update:preacher', this.getPlanGlobalValue('planPreacher')) }
+      if (this.getPlanGlobalImport('planWorshipLead')) { this.$emit('update:worshiplead', this.getPlanGlobalValue('planWorshipLead')) }
     },
     setDateTime (startDate) { // format: "2022-11-06T09:30:00Z"
       this.planDate = startDate.slice(0, 10).replaceAll('-', '/')
@@ -277,9 +338,9 @@ export default {
       }
     },
     planMembers () {
-      this.planWorshipLead = ''
-      this.planHost = ''
-      this.planPreacher = ''
+      this.setPlanGlobalValue('planWorshipLead', '')
+      this.setPlanGlobalValue('planHost', '')
+      this.setPlanGlobalValue('planPreacher', '')
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].attributes.status !== 'D') { // D = Declined
           switch (this.teamMembers[i].attributes.team_position_name) {
@@ -289,21 +350,20 @@ export default {
              * 05 Oudste van Dienst
              */
             case 'Aanbiddingsleider':
-              this.planWorshipLead = this.teamMembers[i].attributes.name
+              this.setPlanGlobalValue('planWorshipLead', this.teamMembers[i].attributes.name)
               break
             case '02 Host':
-              this.planHost = this.teamMembers[i].attributes.name
+              this.setPlanGlobalValue('planHost', this.teamMembers[i].attributes.name)
               break
             case '03 Spreker':
-              this.planPreacher = this.teamMembers[i].attributes.name
+              this.setPlanGlobalValue('planPreacher', this.teamMembers[i].attributes.name)
               break
             default:
               // skip
           }
         }
       }
-      if (this.planPreacher === '') { this.planPreacher = this.planTitle }
-      this.pcoOutput = `ServiceType: ${this.serviceTypesLabel}<br>Datum: ${this.planDate}<br>Tijd: ${this.planTime}\nTitel: ${this.planTitle}\nAanbiddingsleider: ${this.planWorshipLead}\nHost: ${this.planHost}\nSpreker: ${this.planPreacher}\n`
+      if (this.getPlanGlobalValue('planPreacher') === '') { this.setPlanGlobalValue('planPreacher', this.getPlanGlobalValue('planTitle')) }
     },
     async pcoServiceType (serviceTypeId, serviceTypeName) {
       this.itemId = ''
@@ -331,12 +391,13 @@ export default {
       // this.planDate = planDate // "2022-11-06T09:30:00Z"
       this.setDateTime(planDate)
       this.plansLabel = planDates
-      this.planTitle = planTitle
+      this.setPlanGlobalValue('planTitle', planTitle)
       this.plansShow = false
       await this.pco() // get items
       this.itemId = 'team'
       await this.pco() // get teammembers
-      this.updateService()
+      await this.updateService()
+      this.checkPlanGlobal()
     },
     async pco () {
       this.isPcoLoading = true
@@ -351,7 +412,6 @@ export default {
         })
         // console.log(result.data)
         if (result.url) { // first login
-          this.pcoOutput = result.url
           window.open(result.url, '_blank')
         } else { // get data from response
           if (typeof result.data.meta.count === 'undefined') {
@@ -365,7 +425,6 @@ export default {
               this.$q.notify({ type: 'negative', message: 'Error PCO.' })
             }
           } else if (result.data.meta.count !== 0) {
-            this.pcoOutput = result.data.data[0].id
             // return data diferent inputs
             if (this.itemId === 'team') { // return team_members
               this.teamMembers = result.data.data
@@ -478,7 +537,7 @@ export default {
 
 <style scoped>
 .pco-set-list {
-  max-height: 60vh;
+  max-height: 50vh;
   overflow-y: scroll;
 }
 
