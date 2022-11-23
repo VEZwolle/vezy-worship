@@ -124,10 +124,12 @@ app.get('/api/pco/auth/logout', async (req, res) => {
 })
 
 app.post('/api/pco', async (req, res) => {
+  /*
   console.log(req.body.serviceType)  
   console.log(req.body.plan)
   console.log(req.body.itemCount)
   console.log(req.body.item)
+  */
 
   // check if loginauth
   if (!oAuthConfig.refreshToken) { // first login
@@ -152,11 +154,10 @@ app.post('/api/pco', async (req, res) => {
       urlAdd += `/${req.body.serviceType}/plans/${req.body.plan}` // get global plan items
     }
   } else if (req.body.serviceType) { // get plans in future   : ../services/v2/service_types/ID/plans?order=sort_date&filter=future&per_page=10
-    urlAdd += `/${req.body.serviceType}/plans?order=sort_date&filter=future`
+    urlAdd += `/${req.body.serviceType}/plans?order=sort_date&filter=future&per_page=10`
   } else { // get service_types                               : ../services/v2/service_types?order=name
     urlAdd += `/${req.body.serviceType}?order=name`
   }
-
   // get data
   try {
     const response = await axios.get(`${oAuthConfig.urlBase}/${urlAdd}`, {
@@ -164,11 +165,21 @@ app.post('/api/pco', async (req, res) => {
         'Authorization': oAuthConfig.token
       }
     });
-    console.log(response.data)
+    // console.log(response.data)
     const data = response.data
     res.json({ data })
-  } catch {
-    res.status(500).json({ error: 'pco_error .../api/pco' })
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code that falls out of the range of 2xx
+      const status = error.response.data.errors[0].status
+      res.json({ errorStatus : `${status}` })
+    } else if (error.request) {
+      // The request was made but no response was received
+      res.status(500).json({ error: 'pco_error geen response .../api/pco' })
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      res.status(500).json({ error: 'pco_error .../api/pco' })
+    }
   }
 })
 

@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" persistent square>
-    <q-card>
+    <q-card :class="pcoDialog ? 'q-card-breed' : ''">
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>{{ isNew ? 'Nieuwe dienst' : 'Dienst bewerken' }}</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
@@ -11,26 +11,30 @@
       <div class="row">
         <div class="col">
           <q-card-section>
-            <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
-              <template #append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="service.date" />
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-
-            <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
-              <template #append>
-                <q-icon name="access_time" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-time v-model="service.time" />
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-
+            <div class="row">
+              <div class="col q-pr-md">
+                <q-input v-model="service.date" label="Datum" mask="date" :rules="['date']">
+                  <template #append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="service.date" />
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </div>
+              <div class="col q-pl-md">
+                <q-input v-model="service.time" label="Starttijd" hint="Meerdere diensten achter elkaar? Gebruik de starttijd van de 1e dienst." mask="time" :rules="['time']" class="q-mb-sm">
+                  <template #append>
+                    <q-icon name="access_time" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-time v-model="service.time" />
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </div>
+            </div>
             <q-input v-model="service.theme" label="Thema" placeholder="Bijv. Beter horen" :rules="['required']" />
             <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
             <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
@@ -45,7 +49,7 @@
             <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
           </q-card-section>
         </div>
-        <div class="col">
+        <div v-show="pcoDialog" class="col">
           <Pco
             ref="pco"
             v-model:pcoId="service.pcoId"
@@ -63,6 +67,8 @@
       <q-separator />
 
       <q-card-actions align="right">
+        <q-btn v-if="!pcoDialog" color="secondary" label="Importeer PCO" icon="list" @click="pco(true)" />
+        <q-btn v-else label="PCO Logout" icon="list" @click="pco(false)" />
         <q-btn color="secondary" label="Opslaan" icon="save" @click="save" />
       </q-card-actions>
     </q-card>
@@ -78,7 +84,8 @@ export default {
   data () {
     return {
       service: null,
-      backgroundImageFile: null
+      backgroundImageFile: null,
+      pcoDialog: false
     }
   },
   computed: {
@@ -121,6 +128,14 @@ export default {
       this.$store.fillService(this.service)
       this.$refs.pco.addItems()
       this.hide()
+    },
+    pco (load) {
+      if (load) {
+        this.pcoDialog = true
+        this.$refs.pco.pco()
+      } else {
+        this.$refs.pco.pcoLogout()
+      }
     }
   }
 }
@@ -128,6 +143,9 @@ export default {
 
 <style scoped>
 .q-card {
+  min-width: 500px;
+}
+.q-card-breed {
   min-width: 1000px;
 }
 </style>

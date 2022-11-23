@@ -47,12 +47,13 @@ export default defineStore('service', {
       })
 
       // Default host caption
-      if (theme && host && preacher && worshiplead) {
+      if (theme) {
         this.upsertPresentation({
           id: 'info',
           type: 'caption',
           settings: {
             title: theme,
+            // Waarom worden de spaties en nieuwe regeleinden verwijderd???
             text: 'Spreker      : ' + preacher + '\nAanbidding : ' + worshiplead + 'Host       : ' + host
           }
         })
