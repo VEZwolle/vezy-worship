@@ -53,8 +53,8 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: theme,
-            // Waarom worden de spaties en nieuwe regeleinden verwijderd???
-            text: 'Spreker      : ' + preacher + '\nAanbidding : ' + worshiplead + 'Host       : ' + host
+            // Waarom worden de spaties en nieuwe regeleinden (\r\n) verwijderd??? <br> & &nbsp; blijft wel staan
+            text: 'Spreker &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + preacher + '<br>Aanbidding : ' + worshiplead + '<br>Host &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + host
           }
         })
       }
