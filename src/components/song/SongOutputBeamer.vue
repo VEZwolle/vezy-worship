@@ -1,5 +1,5 @@
 <template>
-  <div class="song-output-beamer" :style="style">
+  <div class="bg-output-beamer song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
       <svg v-if="!clear">
         <text y="6.6vw">
@@ -25,18 +25,6 @@ export default {
     translatedLines () {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
-    },
-    backgroundImageUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId)
-    },
-    style () {
-      const style = {}
-
-      if (this.backgroundImageUrl) {
-        style.backgroundImage = `url(${this.backgroundImageUrl})`
-      }
-
-      return style
     }
   }
 }
@@ -48,10 +36,6 @@ export default {
 }
 
 .song-output-beamer {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
 
   svg {
     position: fixed;

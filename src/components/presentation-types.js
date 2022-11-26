@@ -10,7 +10,7 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null
+      bgfileId: null
     },
     description (settings) {
       return settings.text
@@ -31,7 +31,8 @@ export default [
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...'
+      text: 'Lorem ipsum...',
+      bgfileId: null
     },
     description (settings) {
       return settings.text
@@ -51,6 +52,7 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      bgfileId: null,
       beamer: {
         fileId: null,
         ratio: null,
@@ -133,7 +135,8 @@ export default [
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: ''
+      text: '',
+      bgfileId: null
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
