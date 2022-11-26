@@ -42,6 +42,7 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
       livestream: require('./caption/CaptionOutput.vue').default
     }
   },

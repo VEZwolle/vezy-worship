@@ -1,5 +1,5 @@
 <template>
-  <q-file v-model="background" accept="image/*" label="Selecteer achtergrondafbeelding" outlined @update:model-value="updateBackground">
+  <q-file v-model="background" accept="image/*" label="Selecteer eventueel een afwijkende achtergrondafbeelding" outlined @update:model-value="updateBackground">
     <template #prepend>
       <q-icon name="image" />
     </template>
