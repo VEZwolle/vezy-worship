@@ -1,32 +1,60 @@
 <template>
-  <q-card-section>
-    <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
-    <div class="inputs-header">
-      Selecteer afbeelding(en):
-      <q-toggle v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
-    </div>
+  <div>
+    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+      <q-tab name="image" label="Afbeelding" />
+      <q-tab name="background" label="Achtergrond" />
+    </q-tabs>
 
-    <div class="row q-gutter-md">
-      <div class="col">
-        <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
-      </div>
+    <q-separator />
 
-      <div class="col" :class="{ disabled: equal }">
-        <ImageSelect :key="equal" label="Livestream" :settings="equal ? settings.beamer : settings.livestream" />
-      </div>
-    </div>
-  </q-card-section>
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="image">
+        <q-card-section>
+          <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+          <div class="inputs-header">
+            Selecteer afbeelding(en):
+            <q-toggle v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
+          </div>
+
+          <div class="row q-gutter-md">
+            <div class="col">
+              <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle">
+                <OutputPreview :component="ImageOutputBeamer" :presentation="{ settings }" />
+              </ImageSelect>
+            </div>
+
+            <div class="col" :class="{ disabled: equal }">
+              <ImageSelect :key="equal" label="Livestream" :settings="equal ? settings.beamer : settings.livestream">
+                <OutputPreview :component="ImageOutputLivestream" :presentation="{ settings }" />
+              </ImageSelect>
+            </div>
+          </div>
+        </q-card-section>
+      </q-tab-panel>
+      <q-tab-panel name="background">
+        <BackgroundSetting v-model:bgfileId="settings.bgfileId" />
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
 import ImageSelect from './ImageSelect.vue'
+import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import OutputPreview from '../output/OutputPreview.vue'
+import ImageOutputBeamer from './ImageOutputBeamer.vue'
+import ImageOutputLivestream from './ImageOutputLivestream.vue'
 
 export default {
-  components: { ImageSelect },
+  components: { OutputPreview, ImageSelect, BackgroundSetting },
   extends: BaseSettings,
+  setup () {
+    return { ImageOutputBeamer, ImageOutputLivestream }
+  },
   data () {
     return {
+      tab: 'image',
       equal: !this.presentation.settings.livestream.fileId
     }
   },
