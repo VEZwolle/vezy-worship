@@ -109,7 +109,8 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      type: 0
+      type: 0,
+      bgfileId: null
     },
     description (settings) {
       if (settings.type === 1) {
@@ -122,6 +123,7 @@ export default [
       control: require('./countdown/CountdownControl.vue').default
     },
     outputs: {
+      beamer: require('./countdown/CountdownOutputBeamer.vue').default,
       livestream: require('./countdown/CountdownOutput.vue').default
     }
   },
