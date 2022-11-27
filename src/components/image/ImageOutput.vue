@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-output-beamer" :style="beamer ? style : ''">
+  <div class="bg-output-beamer" :style="beamer ? bgstyle : ''">
     <div v-if="!clear" class="image-output">
       <div :style="containerStyle">
         <img :src="fileUrl" :style="imageStyle">
@@ -44,6 +44,18 @@ export default {
       }
 
       return style
+    },
+    bgstyle () {
+      const bgstyle = {}
+      if (this.beamer) {
+        if (this.backgroundImageUrl) {
+          bgstyle.backgroundImage = `url(${this.backgroundImageUrl})`
+        } else {
+          const image = this.$store.getMediaUrl(this.$store.service?.backgroundImageId) || require('../../assets/bg.png')
+          bgstyle.backgroundImage = `url(${image})`
+        }
+      }
+      return bgstyle
     }
   }
 }
