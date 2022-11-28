@@ -39,7 +39,7 @@ const columns = [
 ]
 
 const rows = [
-  { shortkey: 'ctrl + C', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
+  { shortkey: 'ctrl + C of F6', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
   { shortkey: '➡  of  ⬇', function: 'Ga naar volgende regel/onderdeel in live' },
   { shortkey: '⬅  of  ⬆', function: 'Ga naar vorige regel/onderdeel in live' },
   { shortkey: 'ctrl + ➡', function: 'Preview naar live verplaatsen (Go Live)' },

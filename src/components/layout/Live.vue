@@ -10,14 +10,14 @@
 
         <q-checkbox
           v-model="$store.isClear"
-          v-shortkey="['ctrl', 'c']"
+          v-shortkey="{ctrlc: ['ctrl', 'c'], f6: ['f6']}"
           left-label
           label="Clear"
           color="red"
           @shortkey="$store.toggleClear"
         >
           <q-tooltip>
-            Vink aan om het scherm leeg te maken<br>(ctrl + c)
+            Vink aan om het scherm leeg te maken<br>(ctrl + c) of (F6)
           </q-tooltip>
         </q-checkbox>
       </q-toolbar>
