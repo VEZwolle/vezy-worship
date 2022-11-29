@@ -13,17 +13,19 @@
 
         <div class="row q-gutter-md">
           <div class="col">
-            <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" />
+            <q-input ref="inputSongRef" v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" @scroll="onScrollSong" />
           </div>
 
           <div class="col">
             <q-input
+              ref="inputTranslateRef"
               v-model="settings.translation"
               outlined
               label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
+              @scroll="onScrollTranslate"
             >
               <q-btn
                 v-if="!settings.translation"
@@ -65,7 +67,8 @@ export default {
     return {
       tab: 'text',
       isTranslating: false,
-      background: null
+      background: null,
+      ignoreSource: null
     }
   },
   computed: {
@@ -92,6 +95,26 @@ export default {
     resetBackground () {
       this.settings.fileId = null
       this.background = null
+    },
+    scroll (source) {
+      if (this.ignoreSource === source) {
+        this.ignoreSource = null
+        return
+      }
+
+      if (source === 'song') {
+        this.ignoreSource = 'translate'
+        this.$refs.inputTranslateRef.getNativeElement().scrollTop = this.$refs.inputSongRef.getNativeElement().scrollTop
+      } else {
+        this.ignoreSource = 'song'
+        this.$refs.inputSongRef.getNativeElement().scrollTop = this.$refs.inputTranslateRef.getNativeElement().scrollTop
+      }
+    },
+    onScrollSong () {
+      this.scroll('song')
+    },
+    onScrollTranslate () {
+      this.scroll('translate')
     }
   }
 }
