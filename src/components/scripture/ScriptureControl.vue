@@ -10,7 +10,11 @@ export default {
   components: { TextSlidesControl },
   extends: BaseControl,
   created () {
-    this.presentation.sections = splitScripture(this.presentation.settings.text)
+    if (this.$store.noLivestream) {
+      this.presentation.sections = splitScripture(this.presentation.settings.text, 10000)
+    } else {
+      this.presentation.sections = splitScripture(this.presentation.settings.text)
+    }
   }
 }
 

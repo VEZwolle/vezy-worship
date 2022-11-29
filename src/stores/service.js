@@ -11,6 +11,7 @@ export default defineStore('service', {
     previewPresentation: null,
     livePresentation: null,
     isClear: true,
+    noLivestream: false,
     message: ''
   }),
   actions: {
@@ -116,6 +117,9 @@ export default defineStore('service', {
     },
     toggleClear () {
       this.isClear = !this.isClear
+    },
+    toggleNoLivestream () {
+      this.noLivestream = !this.noLivestream
     },
 
     // Media
