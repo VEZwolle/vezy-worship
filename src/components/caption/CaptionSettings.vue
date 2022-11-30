@@ -47,7 +47,8 @@ export default {
       formatBeamer: [
         'Geen',
         'Standaard',
-        'Standaard omgekeerd'
+        'Standaard omgekeerd',
+        'Thema'
       ]
     }
   },
