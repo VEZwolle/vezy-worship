@@ -67,7 +67,7 @@ export default defineStore('service', {
         })
       }
 
-      presentationPresets.forEach(this.upsertPresentation)
+      presentationPresets.forEach(this.addNoExixtingPresentation)
     },
 
     addPresentation (presentation) {
@@ -83,6 +83,10 @@ export default defineStore('service', {
       existing
         ? this.updatePresentation(existing, presentation.settings)
         : this.addPresentation(presentation)
+    },
+    addNoExixtingPresentation (presentation) {
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
+      if (!existing) { this.addPresentation(presentation) }
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)
