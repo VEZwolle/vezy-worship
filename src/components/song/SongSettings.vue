@@ -3,6 +3,7 @@
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
       <q-tab name="background" label="Achtergrond" />
+      <q-tab name="arrange" label="Opdelen" />
     </q-tabs>
 
     <q-separator />
@@ -14,6 +15,28 @@
         <div class="row q-gutter-md">
           <div class="col">
             <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" />
+            <q-menu context-menu no-focus>
+              <q-list dense style="min-width: 100px">
+                <q-item v-close-popup clickable @click.stop="replaceDubbeleNewline(input='text')">
+                  <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="unfold_less" />
+                  </q-item-section>
+                  <q-item-section>Vervang 2 regeleinden door 1</q-item-section>
+                </q-item>
+                <q-item v-close-popup clickable @click.stop="trimLines(input='text')">
+                  <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="code" />
+                  </q-item-section>
+                  <q-item-section>Verwijder spaties begin/eind regels</q-item-section>
+                </q-item>
+                <q-item v-close-popup clickable @click.stop="restorBackup(input='text')">
+                  <q-item-section avatar>
+                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="settings_backup_restore" />
+                  </q-item-section>
+                  <q-item-section>Herstel opdracht</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </div>
 
           <div class="col">
@@ -52,15 +75,21 @@
 
         <img :src="backgroundUrl" class="q-mt-sm full-width">
       </q-tab-panel>
+
+      <q-tab-panel name="arrange">
+        <SongArrange :settings="settings" />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import SongSettingsTools from './SongSettingsTools.vue'
+import SongArrange from './SongArrange.vue'
 
 export default {
-  extends: BaseSettings,
+  components: { SongArrange },
+  extends: SongSettingsTools,
   data () {
     return {
       tab: 'text',
