@@ -74,6 +74,12 @@
         </q-list>
       </div>
     </div>
+    <q-separator />
+    <q-card-actions align="right">
+      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
+        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
+      </q-btn>
+    </q-card-actions>
   </q-card>
 </template>
 
@@ -82,8 +88,15 @@ import labels from './labels'
 
 export default {
   props: {
-    settings: Object
+    text: String,
+    translation: String,
+    tab: String
   },
+  emits: [
+    'update:text',
+    'update:translation',
+    'update:tab'
+  ],
   data () {
     return {
       lyricsLines: [],
@@ -129,7 +142,8 @@ export default {
   },
   created () {
     // nu alleen de text input gebruikt; nog aanpassen aan samenvoegen met translation bestaad wanneer gaan bewerken.
-    this.lyricsLines = splitToLines(this.settings.text)
+    this.lyricsLines = splitToLines(this.text)
+    // this.lyricsLines = splitToLines(this.translation)
   },
   methods: {
     showOutput (output, view) {
@@ -180,7 +194,33 @@ export default {
     },
     handleArrow () {
       this.temp = !this.temp
+    },
+    submitSong () {
+      let text = ''
+      let translation = ''
+      let translationAdd = false
+      for (let i = 0; i < this.lyricsLines.length; i++) {
+        switch (this.lyricsLines[i].output) {
+          case 0:
+            break
+          case 1:
+            text += `\r\n${this.lyricsLines[i].text}`
+            break
+          case 2:
+            translation += `\r\n${this.lyricsLines[i].text}`
+            translationAdd = true
+            break
+          default: // 3
+            text += `\r\n${this.lyricsLines[i].text}`
+            translation += `\r\n${this.lyricsLines[i].text}`
+            break
+        }
+      }
+      this.$emit('update:text', text)
+      if (translationAdd) { this.$emit('update:translation', translation) }
+      this.$emit('update:tab', 'text')
     }
+
   }
 }
 

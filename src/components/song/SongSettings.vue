@@ -77,7 +77,11 @@
       </q-tab-panel>
 
       <q-tab-panel name="arrange">
-        <SongArrange :settings="settings" />
+        <SongArrange
+          v-model:text="settings.text"
+          v-model:translation="settings.translation"
+          v-model:tab="tab"
+        />
       </q-tab-panel>
     </q-tab-panels>
   </div>
