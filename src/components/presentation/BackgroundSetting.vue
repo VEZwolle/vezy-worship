@@ -4,7 +4,7 @@
       <q-icon name="image" />
     </template>
 
-    <template v-if="bgfileId" #append>
+    <template v-if="bgFileId" #append>
       <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
     </template>
   </q-file>
@@ -15,9 +15,9 @@
 <script>
 export default {
   props: {
-    bgfileId: String
+    bgFileId: String
   },
-  emits: ['update:bgfileId'],
+  emits: ['update:bgFileId'],
   data () {
     return {
       background: null
@@ -25,15 +25,15 @@ export default {
   },
   computed: {
     backgroundUrl () {
-      return this.$store.getMediaUrl(this.bgfileId || this.$store.service.backgroundImageId)
+      return this.$store.getMediaUrl(this.bgFileId || this.$store.service.backgroundImageId)
     }
   },
   methods: {
     updateBackground (file) {
-      this.$emit('update:bgfileId', this.$store.addMedia(file))
+      this.$emit('update:bgFileId', this.$store.addMedia(file))
     },
     resetBackground () {
-      this.$emit('update:bgfileId', null)
+      this.$emit('update:bgFileId', null)
       this.background = null
     }
   }

@@ -92,7 +92,7 @@
       </q-tab-panel>
 
       <q-tab-panel name="background">
-        <BackgroundSetting v-model:bgfileId="settings.bgfileId" />
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" />
       </q-tab-panel>
     </q-tab-panels>
   </div>

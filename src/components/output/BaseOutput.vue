@@ -15,7 +15,7 @@ export default {
       return presentationTypes.find(t => t.id === this.presentation?.type)
     },
     backgroundImageUrl () {
-      return this.$store.getMediaUrl(this.settings.bgfileId)
+      return this.$store.getMediaUrl(this.settings.bgFileId)
     },
     style () {
       const style = {}
