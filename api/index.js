@@ -56,15 +56,15 @@ app.post('/api/translate', async (req, res) => {
 const oAuthConfig = {
   urlBase: 'https://api.planningcenteronline.com',
   oAuthCode: "",
-  clientId: 'Hier de link naar client ID invullen',
-  clientSecret: 'Hier de link naar client Secret invullen',
+  // clientId: `${process.env.PCOCLIENTID}`,
+  // clientSecret: `${process.env.PCOCLIENTSECRET}`,
   redirectUri: 'http://localhost:5000/api/pco/auth/complete',
   refreshToken: '',
   tokenExpiry: 0,
   token: ''
 };
 /** PCO, Oauth
- * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
+ * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
  * werkt niet vanaf hier...  ivm redirect niet mag.... en window.open werkt ook niet --> via vezy kant nu gedaan.
  */
 // PCO, redirectUri
@@ -73,8 +73,8 @@ app.get('/api/pco/auth/complete', async (req, res) => {
 	const params = new URLSearchParams()
   params.append('grant_type', 'authorization_code')
   params.append('code', oAuthConfig.oAuthCode)
-  params.append('client_id', oAuthConfig.clientId)
-  params.append('client_secret', oAuthConfig.clientSecret)
+  params.append('client_id', process.env.PCOCLIENTID)
+  params.append('client_secret', process.env.PCOCLIENTSECRET)
   params.append('redirect_uri', oAuthConfig.redirectUri)
 
   try {
@@ -95,8 +95,8 @@ app.get('/api/pco/auth/complete', async (req, res) => {
 async function oauthRefresh(refreshToken = null) {
   const params = {
     grant_type: 'refresh_token',
-    client_id: oAuthConfig.clientId,
-    client_secret: oAuthConfig.clientSecret,
+    client_id: process.env.PCOCLIENTID,
+    client_secret: process.env.PCOCLIENTSECRET,
     refresh_token: refreshToken || oAuthConfig.refreshToken,
   }
 
@@ -133,12 +133,12 @@ app.post('/api/pco', async (req, res) => {
 
   // check if loginauth
   if (!oAuthConfig.refreshToken) { // first login
-    return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
+    return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
   }
   if (Date.now() > oAuthConfig.tokenExpiry) { // tokenHasExpired --> Refresh token
     await oauthRefresh(oAuthConfig.refreshToken)
     if (!oAuthConfig.refreshToken) { // refresh error --> first login
-      return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${oAuthConfig.clientId}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
+      return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
     }
   }
   // set get data url
