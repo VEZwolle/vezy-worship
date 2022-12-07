@@ -55,13 +55,7 @@ app.post('/api/translate', async (req, res) => {
  */
 const oAuthConfig = {
   urlBase: 'https://api.planningcenteronline.com',
-  oAuthCode: "",
-  // clientId: `${process.env.PCOCLIENTID}`,
-  // clientSecret: `${process.env.PCOCLIENTSECRET}`,
   redirectUri: 'http://localhost:5000/api/pco/auth/complete',
-  refreshToken: '',
-  tokenExpiry: 0,
-  token: ''
 };
 /** PCO, Oauth
  * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
@@ -69,23 +63,29 @@ const oAuthConfig = {
  */
 // PCO, redirectUri
 app.get('/api/pco/auth/complete', async (req, res) => {
-  oAuthConfig.oAuthCode = req.query.code
+  const oAuthCode = req.query.code
 	const params = new URLSearchParams()
   params.append('grant_type', 'authorization_code')
-  params.append('code', oAuthConfig.oAuthCode)
+  params.append('code', oAuthCode)
   params.append('client_id', process.env.PCOCLIENTID)
   params.append('client_secret', process.env.PCOCLIENTSECRET)
   params.append('redirect_uri', oAuthConfig.redirectUri)
 
+  const pcoTokens = {
+    refreshToken: '',
+    tokenExpiry: 0,
+    token: ''
+  };
+
   try {
     const response = await axios.post(`${oAuthConfig.urlBase}/oauth/token`, params)
     console.log(response.data)
-    oAuthConfig.token = `Bearer ${response.data.access_token}`
+    pcoTokens.token = response.data.access_token
     // Token lifetime is given in seconds, so multiply by 1000, also subtract 60 seconds from lifetime on our end so we know to refresh the token early
-    oAuthConfig.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
-    oAuthConfig.refreshToken = response.data.refresh_token
+    pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
+    pcoTokens.refreshToken = response.data.refresh_token
     // const scopes = response.data.scope.split(' ') // onderdelen van PCO waar je toegang toe hebt gekregen met Vezy.
-    if (oAuthConfig.refreshToken) return res.send('VezyWorship is ingelogd op PCO; u kunt dit venster sluiten & verdergaan met ophalen gegevens uit PCO')
+    if (pcoTokens.refreshToken) return res.send(`<!DOCTYPE html><html><head><title>VezyWorship inlog Planning center online</title></head><body><script>window.localStorage.setItem('pcoToken', '${pcoTokens.token}'); window.localStorage.setItem('pcoTokenExpiry', ${pcoTokens.tokenExpiry}); window.localStorage.setItem('pcoRefreshToken', '${pcoTokens.refreshToken}');</script><h1>VezyWorship is ingelogd op PCO</h1><p>u kunt dit venster sluiten & verdergaan met ophalen gegevens uit PCO</p></body></html>`)
     res.send('Could not log in to Planning Center API using oAuth')
   } catch {
     res.status(500).json({ error: 'Could not log in to Planning Center API using oAuth' })
@@ -97,31 +97,29 @@ async function oauthRefresh(refreshToken = null) {
     grant_type: 'refresh_token',
     client_id: process.env.PCOCLIENTID,
     client_secret: process.env.PCOCLIENTSECRET,
-    refresh_token: refreshToken || oAuthConfig.refreshToken,
+    refresh_token: refreshToken // || oAuthConfig.refreshToken,
   }
+
+  const pcoTokens = {
+    refreshToken: '',
+    tokenExpiry: 0,
+    token: ''
+  };
 
   try {
     const response = await axios({ method: 'POST', url: `${oAuthConfig.urlBase}/oauth/token`, headers: { 'content-type': 'application/json' }, data: params })
     console.log(response.data)
-    oAuthConfig.token = `Bearer ${response.data.access_token}`
-    oAuthConfig.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
-    oAuthConfig.refreshToken = response.data.refresh_token
+    pcoTokens.token = response.data.access_token
+    pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
+    pcoTokens.refreshToken = response.data.refresh_token
   } catch {
     // 'Could not refresh oAuth Token with Planning Center API')
-    oAuthConfig.token = ''
-    oAuthConfig.tokenExpiry = 0
-    oAuthConfig.refreshToken = ''
+    pcoTokens.token = ''
+    pcoTokens.tokenExpiry = 0
+    pcoTokens.refreshToken = ''
   }
+  return pcoTokens
 }
-
-// no logout in api PCO? --> clean token's
-app.get('/api/pco/auth/logout', async (req, res) => {
-  oAuthConfig.token = ''
-  oAuthConfig.tokenExpiry = 0
-  oAuthConfig.refreshToken = ''
-
-  res.json({ logout : true })
-})
 
 app.post('/api/pco', async (req, res) => {
   /*
@@ -129,15 +127,29 @@ app.post('/api/pco', async (req, res) => {
   console.log(req.body.plan)
   console.log(req.body.itemCount)
   console.log(req.body.item)
+  console.log(req.body.token)
+  console.log(req.body.tokenExpiry)
+  console.log(req.body.refreshToken)
   */
+  const pcoTokens = {
+    refreshToken: req.body.refreshToken || '',
+    tokenExpiry: req.body.tokenExpiry || 0,
+    token: req.body.token || ''
+  };
 
   // check if loginauth
-  if (!oAuthConfig.refreshToken) { // first login
+  if (!pcoTokens.refreshToken) { // first login
     return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
   }
-  if (Date.now() > oAuthConfig.tokenExpiry) { // tokenHasExpired --> Refresh token
-    await oauthRefresh(oAuthConfig.refreshToken)
-    if (!oAuthConfig.refreshToken) { // refresh error --> first login
+  if (Date.now() > pcoTokens.tokenExpiry) { // tokenHasExpired --> Refresh token
+    const responsePcoTokens = await oauthRefresh(pcoTokens.refreshToken)
+    // console.log(responsePcoTokens)
+    pcoTokens.refreshToken = responsePcoTokens.refreshToken
+    pcoTokens.tokenExpiry = responsePcoTokens.tokenExpiry
+    pcoTokens.token = responsePcoTokens.token
+    // console.log('pcoTokens:')
+    // console.log(pcoTokens)
+    if (!pcoTokens.refreshToken) { // refresh error --> first login
       return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
     }
   }
@@ -162,17 +174,16 @@ app.post('/api/pco', async (req, res) => {
   try {
     const response = await axios.get(`${oAuthConfig.urlBase}/${urlAdd}`, {
       headers: {
-        'Authorization': oAuthConfig.token
+        'Authorization': `Bearer ${pcoTokens.token}`
       }
     });
-    // console.log(response.data)
     const data = response.data
-    res.json({ data })
+    res.json({ data: data, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
   } catch (error) {
     if (error.response) {
       // The request was made and the server responded with a status code that falls out of the range of 2xx
       const status = error.response.data.errors[0].status
-      res.json({ errorStatus : `${status}` })
+      res.json({ errorStatus : `${status}`, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
     } else if (error.request) {
       // The request was made but no response was received
       res.status(500).json({ error: 'pco_error geen response .../api/pco' })
