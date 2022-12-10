@@ -13,7 +13,7 @@
         </q-tooltip>
       </q-checkbox>
       <q-btn color="secondary" label="Zoek taal via DeepL" @click.stop="language">
-        <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op.</q-tooltip>
+        <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op (alleen uit songtekst).</q-tooltip>
       </q-btn>
       <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
         <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
@@ -21,17 +21,19 @@
     </q-toolbar>
     <div class="row">
       <div v-for="editorCol in editorCols" :key="editorCol.id" class="col">
-        {{ editorCol.label }}
+        <q-toolbar v-if="editorCol.show" class="bg-secondary text-white">
+          {{ oneListView ? 'Songtext, Vertaling & verwijdere regels': editorCol.label }}
+        </q-toolbar>
         <q-list v-if="editorCol.show" dense bordered padding class="rounded-borders">
           <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
             <q-item
               v-if="showOutput(lyricsLine.output, editorCol.id)"
-              v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+              v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insert: ['enter'] }"
               clickable
               :class="lineClass(lyricsLine)"
               :active="isSelectedLabel(lyricsIndex)"
-              active-class="bg-secondary text-white"
-              @click="select(lyricsIndex, lyricsLine.output)"
+              active-class="bg-yellow text-white"
+              @click="select(lyricsIndex)"
               @shortkey="handleArrow"
             >
               <q-item-section avatar>
@@ -43,6 +45,17 @@
 
               <q-item-section side class="setlist-actions">
                 <div class="text-grey-8 q-gutter-xs">
+                  <q-btn
+                    class="gt-xs"
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="publish"
+                    @click.stop="insertLine(lyricsIndex, editorCol.output)"
+                  >
+                    <q-tooltip>Lege regel hierboven</q-tooltip>
+                  </q-btn>
                   <q-btn
                     v-for="outputOption in outputOptions"
                     :key="outputOption.id"
@@ -62,6 +75,16 @@
               <q-menu context-menu no-focus>
                 <q-list dense style="min-width: 100px">
                   <q-item
+                    v-close-popup
+                    clickable
+                    @click.stop="insertLine(lyricsIndex, editorCol.output)"
+                  >
+                    <q-item-section>Lege regel hierboven</q-item-section>
+                    <q-item-section avatar>
+                      <q-avatar color="primary" text-color="white" size="28px" flat round icon="publish" />
+                    </q-item-section>
+                  </q-item>
+                  <q-item
                     v-for="outputOption in outputOptions"
                     :key="outputOption.id"
                     v-close-popup
@@ -80,8 +103,14 @@
         </q-list>
       </div>
     </div>
+    <q-separator />
+    <q-card-actions align="right">
+      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
+        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
+      </q-btn>
+    </q-card-actions>
     <q-inner-loading
-      :showing="isGetLanguage"
+      :showing="isLoading"
       label="Bezig met laden..."
       label-class="text-teal"
       label-style="font-size: 1.1em"
@@ -106,9 +135,8 @@ export default {
   data () {
     return {
       lyricsLines: [],
-      oneListView: true,
+      oneListView: false,
       selectIndex: 0,
-      selectOutput: 0,
       outputOptions: [
         {
           id: 0,
@@ -135,22 +163,27 @@ export default {
         {
           id: 'text',
           label: 'Lied tekst',
-          show: true
+          show: true,
+          output: 1
         },
         {
           id: 'translation',
           label: 'Vertaling',
-          show: !this.oneListView
+          show: !this.oneListView,
+          output: 2
         }
       ],
-      isGetLanguage: false,
-      temp: true
+      isLoading: false
     }
   },
-  created () {
-    // nu alleen de text input gebruikt; nog aanpassen aan samenvoegen met translation bestaad wanneer gaan bewerken.
-    this.lyricsLines = splitToLines(this.text)
-    // this.lyricsLines = splitToLines(this.translation)
+  mounted () {
+    this.isLoading = true
+    if (!this.translation) {
+      this.lyricsLines = splitToLines(this.text)
+    } else {
+      this.lyricsLines = CombiSplitToLines(this.text, this.translation)
+    }
+    this.isLoading = false
   },
   methods: {
     showOutput (output, view) {
@@ -189,18 +222,49 @@ export default {
     toggleListView () {
       this.editorCols.find(t => t.id === 'translation').show = !this.oneListView
     },
+    insertLine (index, outputNr) {
+      if (this.lyricsLines[index].output === 3) { outputNr = 3 }
+      const newLine = {
+        empty: true,
+        label: null,
+        text: '',
+        output: outputNr // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
+      }
+      this.lyricsLines.splice(index, 0, newLine)
+    },
     lineOutput (index, output) {
       this.lyricsLines[index].output = output
     },
     isSelectedLabel (index) {
       return this.selectIndex === index
     },
-    select (index, output) {
+    select (index) {
       this.selectIndex = index
-      this.selectOutput = output
     },
-    handleArrow () {
-      this.temp = !this.temp
+    handleArrow (event) {
+      switch (event.srcKey) {
+        case 'up':
+          this.selectIndex -= 1
+          break
+        case 'left':
+          this.lyricsLines[this.selectIndex].output = 1
+          break
+        case 'down':
+          this.selectIndex += 1
+          break
+        case 'right':
+          this.lyricsLines[this.selectIndex].output = 2
+          break
+        case 'space':
+          this.lyricsLines[this.selectIndex].output = 3
+          break
+        case 'delete':
+          this.lyricsLines[this.selectIndex].output = 0
+          break
+        case 'insert':
+          this.insertLine(this.selectIndex, this.lyricsLines[this.selectIndex].output)
+          break
+      }
     },
     submitSong () {
       let text = ''
@@ -211,15 +275,15 @@ export default {
           case 0:
             break
           case 1:
-            text += `\r\n${this.lyricsLines[i].text}`
+            text += text ? `\r\n${this.lyricsLines[i].text}` : this.lyricsLines[i].text
             break
           case 2:
-            translation += `\r\n${this.lyricsLines[i].text}`
+            translation += translation ? `\r\n${this.lyricsLines[i].text}` : this.lyricsLines[i].text
             translationAdd = true
             break
           default: // 3
-            text += `\r\n${this.lyricsLines[i].text}`
-            translation += `\r\n${this.lyricsLines[i].text}`
+            text += text ? `\r\n${this.lyricsLines[i].text}` : this.lyricsLines[i].text
+            translation += translation ? `\r\n${this.lyricsLines[i].text}` : this.lyricsLines[i].text
             break
         }
       }
@@ -228,7 +292,7 @@ export default {
       this.$emit('update:tab', 'text')
     },
     async language () {
-      this.isGetLanguage = true
+      this.isLoading = true
 
       const getLanguage = []
       const lines = []
@@ -240,7 +304,7 @@ export default {
         }
       }
       if (!lines.length) {
-        this.isGetLanguage = false
+        this.isLoading = false
         return
       }
       console.log(getLanguage)
@@ -260,33 +324,33 @@ export default {
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
-        this.isGetLanguage = false
+        this.isLoading = false
       }
     }
   }
 }
 
-function splitToLines (text) {
+function splitToLines (text, outputNr = 1) {
   if (!text) return []
 
   return text
     .replace(/\r?\n/g, '<br>')
     .split('<br>')
-    // .trim()
     .map((lines) => {
+      const line = lines.trim()
       const result = {
         empty: false,
         label: null,
         text: '',
-        output: 1 // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
+        output: outputNr // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
       }
 
-      if (lines === '') {
+      if (line === '') {
         result.empty = true
         result.output = 3
       } else {
         for (const label of labels) {
-          if (!lines?.toLowerCase().startsWith(label.key)) {
+          if (!line?.toLowerCase().startsWith(label.key)) {
             continue
           }
           result.label = { ...label, value: lines }
@@ -295,11 +359,63 @@ function splitToLines (text) {
         }
       }
 
-      result.text = lines
+      result.text = line
 
       return result
     })
 }
+function CombiSplitToLines (text, translation) {
+  const lyricsLines = []
+  if (!text && !translation) return []
+  const stlText = splitToLines(text)
+  const stlTranslation = splitToLines(translation, 2)
+  let iText = 0
+  let iTranslation = 0
+  while (iText < stlText.length && iTranslation < stlTranslation.length) {
+    /*
+    splisten gebeurt na een lege regel
+    label hoort bij volgende regel.
+    - start met text en vul aan met translation per blok
+    - verwijder(negeer) uit vertaling de lege regels & labels; deze komen uit de songtext
+    */
+    let i = 0
+    while (!stlText[iText + i].empty && iText + i + 1 < stlText.length) { i++ }
+
+    console.log(iText + i)
+    if (iText) { // newline of last sheet?
+      lyricsLines.push(stlText[iText - 1])
+    }
+    for (let j = 0; j < i; j++) {
+      console.log(stlText[iText + j].text)
+      lyricsLines.push(stlText[iText + j])
+    }
+    if (!stlText[iText + i].empty) { // last line not new line = last line of text
+      lyricsLines.push(stlText[iText + i])
+    }
+    iText += i + 1
+    i = 0
+    while (!stlTranslation[iTranslation + i].empty && iTranslation + i + 1 < stlTranslation.length) { i++ }
+    for (let j = 0; j <= i; j++) {
+      console.log(stlTranslation[iTranslation + j].output)
+      if (stlTranslation[iTranslation + j].output !== 3) {
+        lyricsLines.push(stlTranslation[iTranslation + j])
+      }
+    }
+    iTranslation += i + 1
+  }
+  if (iText < stlText.length) {
+    for (let j = iText; j <= stlText.length; j++) {
+      lyricsLines.push(stlText[j])
+    }
+  }
+  if (iTranslation < stlTranslation.length) {
+    for (let j = iTranslation; j <= stlTranslation.length; j++) {
+      lyricsLines.push(stlTranslation[j])
+    }
+  }
+  return lyricsLines
+}
+
 </script>
 
 <style scoped lang="scss">

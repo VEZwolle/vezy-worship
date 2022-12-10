@@ -15,13 +15,13 @@ export default {
   },
   methods: {
     cpReplaceDubbeleNewline (text) {
-      return text.replace(/\r?\n/g, '<br>').replace(/<br><br>/g, '<br>').replace(/<br>/g, '\n')
+      return text.replace(/\r?\n/g, '<br>').replace(/<br><br>/g, '<br>').replace(/<br>/g, '\r\n')
     },
     cpTrimLines (text) {
       const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
       text = ''
       for (let i = 0; i < lines.length; i++) {
-        text += lines[i].trim() + '\n'
+        text += text ? '\r\n' + lines[i].trim() : lines[i].trim()
       }
       return text
     },
