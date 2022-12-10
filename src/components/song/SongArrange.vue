@@ -12,6 +12,12 @@
           Vink aan om allesonder elkaar te zien of<br>laat leeg om tekst en vertaling naast elkaar te zien.
         </q-tooltip>
       </q-checkbox>
+      <q-btn color="secondary" label="Zoek taal via DeepL" @click.stop="language">
+        <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op.</q-tooltip>
+      </q-btn>
+      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
+        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
+      </q-btn>
     </q-toolbar>
     <div class="row">
       <div v-for="editorCol in editorCols" :key="editorCol.id" class="col">
@@ -74,12 +80,12 @@
         </q-list>
       </div>
     </div>
-    <q-separator />
-    <q-card-actions align="right">
-      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
-        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
-      </q-btn>
-    </q-card-actions>
+    <q-inner-loading
+      :showing="isGetLanguage"
+      label="Bezig met laden..."
+      label-class="text-teal"
+      label-style="font-size: 1.1em"
+    />
   </q-card>
 </template>
 
@@ -137,6 +143,7 @@ export default {
           show: !this.oneListView
         }
       ],
+      isGetLanguage: false,
       temp: true
     }
   },
@@ -219,8 +226,43 @@ export default {
       this.$emit('update:text', text)
       if (translationAdd) { this.$emit('update:translation', translation) }
       this.$emit('update:tab', 'text')
-    }
+    },
+    async language () {
+      this.isGetLanguage = true
 
+      const getLanguage = []
+      const lines = []
+      let language = []
+      for (let i = 0; i < this.lyricsLines.length; i++) {
+        if (this.lyricsLines[i].output === 1) {
+          getLanguage.push(this.lyricsLines[i].text)
+          lines.push(i)
+        }
+      }
+      if (!lines.length) {
+        this.isGetLanguage = false
+        return
+      }
+      console.log(getLanguage)
+
+      try {
+        const result = await this.$api.post('/language', { textLines: getLanguage })
+        console.log(result)
+        language = result.resultLanguage
+        // if (lines.length !== language.length)
+        for (let i = 0; i < language.length; i++) {
+          if (language[i] === 'NL') {
+            this.lyricsLines[lines[i]].output = 2
+          } else {
+            this.lyricsLines[lines[i]].output = 1
+          }
+        }
+      } catch {
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
+      } finally {
+        this.isGetLanguage = false
+      }
+    }
   }
 }
 
