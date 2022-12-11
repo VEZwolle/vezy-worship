@@ -14,6 +14,11 @@ export default {
     this.backupSettingTranslation = this.settings.translation
   },
   methods: {
+    arrange () {
+      this.backupSettingText = this.settings.text
+      this.backupSettingTranslation = this.settings.translation
+      this.$refs.SongArrangeDialog.show()
+    },
     cpReplaceDubbeleNewline (text) {
       return text.replace(/\r?\n/g, '<br>').replace(/<br><br>/g, '<br>').replace(/<br>/g, '\r\n')
     },

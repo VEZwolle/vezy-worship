@@ -3,7 +3,6 @@
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
       <q-tab name="background" label="Achtergrond" />
-      <q-tab name="arrange" label="Opdelen" />
     </q-tabs>
 
     <q-separator />
@@ -15,28 +14,23 @@
         <div class="row q-gutter-md">
           <div class="col">
             <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" />
-            <q-menu context-menu no-focus>
-              <q-list dense style="min-width: 100px">
-                <q-item v-close-popup clickable @click.stop="replaceDubbeleNewline(input='text')">
-                  <q-item-section avatar>
-                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="unfold_less" />
-                  </q-item-section>
-                  <q-item-section>Vervang 2 regeleinden door 1</q-item-section>
-                </q-item>
-                <q-item v-close-popup clickable @click.stop="trimLines(input='text')">
-                  <q-item-section avatar>
-                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="code" />
-                  </q-item-section>
-                  <q-item-section>Verwijder spaties begin/eind regels</q-item-section>
-                </q-item>
-                <q-item v-close-popup clickable @click.stop="restorBackup(input='text')">
-                  <q-item-section avatar>
-                    <q-avatar color="primary" text-color="white" size="28px" flat round icon="settings_backup_restore" />
-                  </q-item-section>
-                  <q-item-section>Herstel opdracht</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
+            <q-toolbar class="bg-grey-3 text-dark">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='text')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='text')">
+                <q-tooltip>Herstel opdracht (songtekst)</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
 
           <div class="col">
@@ -58,6 +52,23 @@
                 @click="translate"
               />
             </q-input>
+            <q-toolbar v-if="settings.translation" class="bg-grey-3 text-dark">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='translation')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='translation')">
+                <q-tooltip>Herstel opdracht (vertaling)</q-tooltip>
+              </q-btn>
+              <span class="q-px-md" />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
         </div>
       </q-tab-panel>
@@ -75,24 +86,22 @@
 
         <img :src="backgroundUrl" class="q-mt-sm full-width">
       </q-tab-panel>
-
-      <q-tab-panel name="arrange">
-        <SongArrange
-          v-model:text="settings.text"
-          v-model:translation="settings.translation"
-          v-model:tab="tab"
-        />
-      </q-tab-panel>
     </q-tab-panels>
   </div>
+
+  <SongArrangeDialog
+    ref="SongArrangeDialog"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
 </template>
 
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
-import SongArrange from './SongArrange.vue'
+import SongArrangeDialog from './SongArrangeDialog.vue'
 
 export default {
-  components: { SongArrange },
+  components: { SongArrangeDialog },
   extends: SongSettingsTools,
   data () {
     return {
@@ -132,7 +141,7 @@ export default {
 
 <style scoped>
 .input-songtext::v-deep(textarea) {
-  height: 60vh;
+  height: 50vh;
 }
 
 .input-songtext::v-deep(textarea:read-only) {

@@ -1,121 +1,136 @@
 <template>
-  <q-card>
-    <q-toolbar class="bg-grey-3 text-dark">
-      <q-checkbox
-        v-model="oneListView"
-        left-label
-        label="1 kolom weergave"
-        color="red"
-        @click="toggleListView"
-      >
-        <q-tooltip>
-          Vink aan om allesonder elkaar te zien of<br>laat leeg om tekst en vertaling naast elkaar te zien.
-        </q-tooltip>
-      </q-checkbox>
-      <q-btn color="secondary" label="Zoek taal via DeepL" @click.stop="language">
-        <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op (alleen uit songtekst).</q-tooltip>
-      </q-btn>
-      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
-        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
-      </q-btn>
-    </q-toolbar>
-    <div class="row">
-      <div v-for="editorCol in editorCols" :key="editorCol.id" class="col">
-        <q-toolbar v-if="editorCol.show" class="bg-secondary text-white">
-          {{ oneListView ? 'Songtext, Vertaling & verwijdere regels': editorCol.label }}
-        </q-toolbar>
-        <q-list v-if="editorCol.show" dense bordered padding class="rounded-borders">
-          <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
-            <q-item
-              v-if="showOutput(lyricsLine.output, editorCol.id)"
-              v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insert: ['enter'] }"
-              clickable
-              :class="lineClass(lyricsLine)"
-              :active="isSelectedLabel(lyricsIndex)"
-              active-class="bg-yellow text-white"
-              @click="select(lyricsIndex)"
-              @shortkey="handleArrow"
-            >
-              <q-item-section avatar>
-                <q-avatar round dense size="sm" color="text-grey" text-color="text-grey" :icon="lineAvatar(lyricsLine.output)" />
-              </q-item-section>
-              <q-item-section no-wrap>
-                <div v-html="lyricsLine.text" />
-              </q-item-section>
-
-              <q-item-section side class="setlist-actions">
-                <div class="text-grey-8 q-gutter-xs">
-                  <q-btn
-                    class="gt-xs"
-                    size="12px"
-                    flat
-                    dense
-                    round
-                    icon="publish"
-                    @click.stop="insertLine(lyricsIndex, editorCol.output)"
-                  >
-                    <q-tooltip>Lege regel hierboven</q-tooltip>
-                  </q-btn>
-                  <q-btn
-                    v-for="outputOption in outputOptions"
-                    :key="outputOption.id"
-                    class="gt-xs"
-                    size="12px"
-                    flat
-                    dense
-                    round
-                    :icon="outputOption.icon"
-                    @click.stop="lineOutput(lyricsIndex, outputOption.id)"
-                  >
-                    <q-tooltip>{{ outputOption.label }}</q-tooltip>
-                  </q-btn>
-                </div>
-              </q-item-section>
-
-              <q-menu context-menu no-focus>
-                <q-list dense style="min-width: 100px">
+  <q-dialog ref="dialogArrange" persistent square>
+    <q-card>
+      <q-toolbar class="bg-secondary text-white">
+        <q-toolbar-title>
+          <span>Liedtekst ordenen</span>
+        </q-toolbar-title>
+        <q-btn v-close-popup flat round dense icon="close" />
+      </q-toolbar>
+      <div v-if="lyricsLines">
+        <div class="row">
+          <div class="col">
+            <q-toolbar class="bg-grey-3 text-dark">
+              <q-toolbar-title>
+                <span>{{ oneListView ? 'Songtext, Vertaling & verwijdere regels': 'Lied tekst' }}</span>
+              </q-toolbar-title>
+              <q-btn v-show="oneListView" color="secondary" label="II >" @click.stop="toggleListView(false)">
+                <q-tooltip>Klik aan om tekst en vertaling naast elkaar te zien.</q-tooltip>
+              </q-btn>
+            </q-toolbar>
+          </div>
+          <div class="col">
+            <q-toolbar class="bg-grey-3 text-dark">
+              <q-toolbar-title>
+                <span>{{ oneListView ? '' : 'Vertaling' }}</span>
+              </q-toolbar-title>
+              <q-btn color="secondary" label="Zoek & splits taal via DeepL" @click.stop="language">
+                <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op (alleen uit songtekst).</q-tooltip>
+              </q-btn>
+              <q-btn v-show="!oneListView" color="secondary" label="< I" @click.stop="toggleListView(true)">
+                <q-tooltip>Klik aan om alles onder elkaar te zien of.<br>laat leeg om tekst en vertaling naast elkaar te zien. </q-tooltip>
+              </q-btn>
+            </q-toolbar>
+          </div>
+        </div>
+        <div class="row lyrics">
+          <template v-for="editorCol in editorCols" :key="editorCol.id">
+            <div v-if="editorCol.show" class="col">
+              <q-list dense bordered padding class="rounded-borders">
+                <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
                   <q-item
-                    v-close-popup
+                    v-if="showOutput(lyricsLine.output, editorCol.id)"
+                    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insert: ['enter'] }"
                     clickable
-                    @click.stop="insertLine(lyricsIndex, editorCol.output)"
+                    :class="lineClass(lyricsLine)"
+                    :active="isSelectedLabel(lyricsIndex)"
+                    active-class="bg-yellow text-white"
+                    @click="select(lyricsIndex)"
+                    @shortkey="handleArrow"
                   >
-                    <q-item-section>Lege regel hierboven</q-item-section>
                     <q-item-section avatar>
-                      <q-avatar color="primary" text-color="white" size="28px" flat round icon="publish" />
+                      <q-avatar round dense size="sm" color="text-grey" text-color="text-grey" :icon="lineAvatar(lyricsLine.output)" />
                     </q-item-section>
-                  </q-item>
-                  <q-item
-                    v-for="outputOption in outputOptions"
-                    :key="outputOption.id"
-                    v-close-popup
-                    clickable
-                    @click.stop="lineOutput(lyricsIndex, outputOption.id)"
-                  >
-                    <q-item-section>{{ outputOption.label }}</q-item-section>
-                    <q-item-section avatar>
-                      <q-avatar color="primary" text-color="white" size="28px" flat round :icon="outputOption.icon" />
+                    <q-item-section no-wrap>
+                      <div v-html="lyricsLine.text" />
                     </q-item-section>
+
+                    <q-item-section side class="setlist-actions">
+                      <div class="text-grey-8 q-gutter-xs">
+                        <q-btn
+                          class="gt-xs"
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="publish"
+                          @click.stop="insertLine(lyricsIndex, editorCol.output)"
+                        >
+                          <q-tooltip>Lege regel hierboven</q-tooltip>
+                        </q-btn>
+                        <q-btn
+                          v-for="outputOption in outputOptions"
+                          :key="outputOption.id"
+                          class="gt-xs"
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          :icon="outputOption.icon"
+                          @click.stop="lineOutput(lyricsIndex, outputOption.id)"
+                        >
+                          <q-tooltip>{{ outputOption.label }}</q-tooltip>
+                        </q-btn>
+                      </div>
+                    </q-item-section>
+
+                    <q-menu context-menu no-focus>
+                      <q-list dense style="min-width: 100px">
+                        <q-item
+                          v-close-popup
+                          clickable
+                          @click.stop="insertLine(lyricsIndex, editorCol.output)"
+                        >
+                          <q-item-section>Lege regel hierboven</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="publish" />
+                          </q-item-section>
+                        </q-item>
+                        <q-item
+                          v-for="outputOption in outputOptions"
+                          :key="outputOption.id"
+                          v-close-popup
+                          clickable
+                          @click.stop="lineOutput(lyricsIndex, outputOption.id)"
+                        >
+                          <q-item-section>{{ outputOption.label }}</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round :icon="outputOption.icon" />
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
                   </q-item>
-                </q-list>
-              </q-menu>
-            </q-item>
+                </template>
+              </q-list>
+            </div>
           </template>
-        </q-list>
+        </div>
       </div>
-    </div>
-    <q-separator />
-    <q-card-actions align="right">
-      <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
-        <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
-      </q-btn>
-    </q-card-actions>
-    <q-inner-loading
-      :showing="isLoading"
-      label="Bezig met laden..."
-      label-class="text-teal"
-      label-style="font-size: 1.1em"
-    />
-  </q-card>
+      <q-separator />
+      <q-card-actions align="right">
+        <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
+          <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
+        </q-btn>
+      </q-card-actions>
+      <q-inner-loading
+        :showing="isLoading"
+        label="Bezig met laden..."
+        label-class="text-teal"
+        label-style="font-size: 1.1em"
+      />
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -124,13 +139,11 @@ import labels from './labels'
 export default {
   props: {
     text: String,
-    translation: String,
-    tab: String
+    translation: String
   },
   emits: [
     'update:text',
-    'update:translation',
-    'update:tab'
+    'update:translation'
   ],
   data () {
     return {
@@ -162,13 +175,11 @@ export default {
       editorCols: [
         {
           id: 'text',
-          label: 'Lied tekst',
           show: true,
           output: 1
         },
         {
           id: 'translation',
-          label: 'Vertaling',
           show: !this.oneListView,
           output: 2
         }
@@ -176,16 +187,21 @@ export default {
       isLoading: false
     }
   },
-  mounted () {
-    this.isLoading = true
-    if (!this.translation) {
-      this.lyricsLines = splitToLines(this.text)
-    } else {
-      this.lyricsLines = CombiSplitToLines(this.text, this.translation)
-    }
-    this.isLoading = false
-  },
   methods: {
+    show () {
+      this.lyricsLines = []
+      this.$refs.dialogArrange.show()
+      this.isLoading = true
+      if (!this.translation) {
+        this.lyricsLines = splitToLines(this.text)
+      } else {
+        this.lyricsLines = CombiSplitToLines(this.text, this.translation)
+      }
+      this.isLoading = false
+    },
+    hide () {
+      this.$refs.dialogArrange.hide()
+    },
     showOutput (output, view) {
       if (this.oneListView) {
         return view === 'text'
@@ -219,7 +235,8 @@ export default {
     lineAvatar (output) {
       return this.outputOptions.find(t => t.id === output).icon
     },
-    toggleListView () {
+    toggleListView (oneListView) {
+      this.oneListView = oneListView
       this.editorCols.find(t => t.id === 'translation').show = !this.oneListView
     },
     insertLine (index, outputNr) {
@@ -289,7 +306,7 @@ export default {
       }
       this.$emit('update:text', text)
       if (translationAdd) { this.$emit('update:translation', translation) }
-      this.$emit('update:tab', 'text')
+      this.hide()
     },
     async language () {
       this.isLoading = true
@@ -307,11 +324,9 @@ export default {
         this.isLoading = false
         return
       }
-      console.log(getLanguage)
 
       try {
         const result = await this.$api.post('/language', { textLines: getLanguage })
-        console.log(result)
         language = result.resultLanguage
         // if (lines.length !== language.length)
         for (let i = 0; i < language.length; i++) {
@@ -381,12 +396,10 @@ function CombiSplitToLines (text, translation) {
     let i = 0
     while (!stlText[iText + i].empty && iText + i + 1 < stlText.length) { i++ }
 
-    console.log(iText + i)
     if (iText) { // newline of last sheet?
       lyricsLines.push(stlText[iText - 1])
     }
     for (let j = 0; j < i; j++) {
-      console.log(stlText[iText + j].text)
       lyricsLines.push(stlText[iText + j])
     }
     if (!stlText[iText + i].empty) { // last line not new line = last line of text
@@ -396,7 +409,6 @@ function CombiSplitToLines (text, translation) {
     i = 0
     while (!stlTranslation[iTranslation + i].empty && iTranslation + i + 1 < stlTranslation.length) { i++ }
     for (let j = 0; j <= i; j++) {
-      console.log(stlTranslation[iTranslation + j].output)
       if (stlTranslation[iTranslation + j].output !== 3) {
         lyricsLines.push(stlTranslation[iTranslation + j])
       }
@@ -419,6 +431,15 @@ function CombiSplitToLines (text, translation) {
 </script>
 
 <style scoped lang="scss">
+.lyrics {
+  height: 70vh;
+  overflow-y: scroll;
+}
+
+.q-card {
+  min-width: 60vw;
+  min-height: 80vh;
+}
 .q-item {
   user-select: none;
   cursor: default !important;
