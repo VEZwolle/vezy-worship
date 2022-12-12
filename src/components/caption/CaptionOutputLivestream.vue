@@ -39,6 +39,6 @@ export default {
   padding: 0 0 0 55vw;
 }
 .caption-output-big-bottom {
-  padding: 6vw;
+  padding: 5vw;
 }
 </style>

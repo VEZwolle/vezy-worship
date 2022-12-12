@@ -60,10 +60,10 @@ export default {
   }
   .text-big-bottom {
     text-align: justify;
-    padding: 2vw 4vw 4vw 4vw;
+    padding: 2vw 2vw 1.5vw 2vw;
     width: 100vw;
-    font-size: 3.0vw;
-    line-height: 3.4vw;
+    font-size: 2.2vw;
+    line-height: 2.7vw;
   }
   .text-big-right {
     text-align: left;
