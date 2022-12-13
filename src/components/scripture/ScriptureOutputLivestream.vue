@@ -1,6 +1,6 @@
 <template>
   <div v-if="!clear" class="scripture-output">
-    <CaptionLivestream :title="title" :text="text" :alpha="alpha" />
+    <CaptionLivestream :title="title" :text="text" format="-full" :alpha="alpha" />
   </div>
 </template>
 
