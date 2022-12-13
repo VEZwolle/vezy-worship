@@ -42,6 +42,8 @@ export default {
           style.top = '67vh'
           style.right = '4vw'
           style.textAlign = 'right'
+          style.fontWeight = '400'
+          style.color = '#999999'
           break
         case 'Alleen tekst':
           style.display = 'none'
