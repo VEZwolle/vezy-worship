@@ -40,8 +40,7 @@ export default {
     return {
       formatLivestream: [
         'Standaard',
-        'Groot onder',
-        'Groot rechts',
+        'Breed',
         'Geen'
       ],
       formatBeamer: [
