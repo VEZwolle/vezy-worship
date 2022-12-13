@@ -40,7 +40,7 @@ export default {
     max-width: 100%;
     font-size: 2.2vw;
     line-height: 2.7vw;
-    padding: 2vw 1.5vw 1.5vw 2vw;
+    padding: 2.2vw 1.5vw 1.5vw 2vw;
   }
   .text-default {
     width: max-content;

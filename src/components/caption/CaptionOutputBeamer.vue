@@ -36,7 +36,7 @@ export default {
   top: 0;
   width: 100vw;
   height: 100vh;
-  padding: 6.6vw 4vw 4vw 4vw;
+  padding: 5.4vw 4vw 4vw 4vw;
   background-size: cover;
 }
 </style>

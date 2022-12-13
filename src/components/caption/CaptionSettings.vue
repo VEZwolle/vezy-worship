@@ -46,7 +46,8 @@ export default {
       formatBeamer: [
         'Geen',
         'Standaard',
-        'Standaard omgekeerd',
+        'Bijbeltekst',
+        'Alleen tekst',
         'Thema'
       ]
     }
