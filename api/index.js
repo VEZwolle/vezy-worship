@@ -56,8 +56,8 @@ app.post('/api/translate', async (req, res) => {
 const oAuthConfig = {
   urlBase: 'https://api.planningcenteronline.com',
   oAuthCode: "",
-  clientId: 'Hier de link naar client ID invullen',
-  clientSecret: 'Hier de link naar client Secret invullen',
+  clientId: process.env.PCOCLIENTID,
+  clientSecret: process.env.PCOCLIENTSECRET,
   redirectUri: 'http://localhost:5000/api/pco/auth/complete',
   refreshToken: '',
   tokenExpiry: 0,
