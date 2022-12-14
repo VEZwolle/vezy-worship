@@ -40,7 +40,7 @@
                 <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
                   <q-item
                     v-if="showOutput(lyricsLine.output, editorCol.id)"
-                    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insert: ['enter'] }"
+                    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insertOne: ['i'], insert: ['enter'] }"
                     clickable
                     :class="lineClass(lyricsLine)"
                     :active="isSelectedLabel(lyricsIndex)"
@@ -69,6 +69,17 @@
                           <q-tooltip>Lege regel hierboven</q-tooltip>
                         </q-btn>
                         <q-btn
+                          class="gt-xs"
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="keyboard_double_arrow_up"
+                          @click.stop="insertLine(lyricsIndex, 3)"
+                        >
+                          <q-tooltip>Lege regel hierboven (beide kolommen)</q-tooltip>
+                        </q-btn>
+                        <q-btn
                           v-for="outputOption in outputOptions"
                           :key="outputOption.id"
                           class="gt-xs"
@@ -94,6 +105,16 @@
                           <q-item-section>Lege regel hierboven</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="publish" />
+                          </q-item-section>
+                        </q-item>
+                        <q-item
+                          v-close-popup
+                          clickable
+                          @click.stop="insertLine(lyricsIndex, 3)"
+                        >
+                          <q-item-section>Lege regel hierboven (beide)</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="keyboard_double_arrow_up" />
                           </q-item-section>
                         </q-item>
                         <q-item
@@ -278,8 +299,11 @@ export default {
         case 'delete':
           this.lyricsLines[this.selectIndex].output = 0
           break
-        case 'insert':
+        case 'insertOne':
           this.insertLine(this.selectIndex, this.lyricsLines[this.selectIndex].output)
+          break
+        case 'insert':
+          this.insertLine(this.selectIndex, 3)
           break
       }
     },
