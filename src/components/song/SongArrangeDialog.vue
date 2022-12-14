@@ -390,30 +390,30 @@ function CombiSplitToLines (text, translation) {
     /*
     splisten gebeurt na een lege regel
     label hoort bij volgende regel.
-    - start met text en vul aan met translation per blok
+    - start met text en vul aan met translation per regel
     - verwijder(negeer) uit vertaling de lege regels & labels; deze komen uit de songtext
     */
-    let i = 0
-    while (!stlText[iText + i].empty && iText + i + 1 < stlText.length) { i++ }
-
-    if (iText) { // newline of last sheet?
-      lyricsLines.push(stlText[iText - 1])
+    if ((stlText[iText].empty && stlTranslation[iTranslation].empty) || (stlText[iText].label && stlTranslation[iTranslation].label)) {
+      lyricsLines.push(stlText[iText])
+      iText++
+      iTranslation++
+    } else if (!stlText[iText].empty && stlTranslation[iTranslation].empty) {
+      lyricsLines.push(stlText[iText])
+      iText++
+    } else if (stlText[iText].empty && !stlTranslation[iTranslation].empty) {
+      if (!stlTranslation[iTranslation].label) { lyricsLines.push(stlTranslation[iTranslation]) }
+      iTranslation++
+    } else if (stlText[iText].label) {
+      lyricsLines.push(stlText[iText])
+      iText++
+    } else if (stlTranslation[iTranslation].label) {
+      iTranslation++
+    } else {
+      lyricsLines.push(stlText[iText])
+      lyricsLines.push(stlTranslation[iTranslation])
+      iText++
+      iTranslation++
     }
-    for (let j = 0; j < i; j++) {
-      lyricsLines.push(stlText[iText + j])
-    }
-    if (!stlText[iText + i].empty) { // last line not new line = last line of text
-      lyricsLines.push(stlText[iText + i])
-    }
-    iText += i + 1
-    i = 0
-    while (!stlTranslation[iTranslation + i].empty && iTranslation + i + 1 < stlTranslation.length) { i++ }
-    for (let j = 0; j <= i; j++) {
-      if (stlTranslation[iTranslation + j].output !== 3) {
-        lyricsLines.push(stlTranslation[iTranslation + j])
-      }
-    }
-    iTranslation += i + 1
   }
   if (iText < stlText.length) {
     for (let j = iText; j <= stlText.length; j++) {
