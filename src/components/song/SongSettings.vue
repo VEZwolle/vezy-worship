@@ -18,15 +18,26 @@
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
               <q-btn flat dense label="> ... <" @click.stop="trimLines(input='text')">
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
+              <q-btn-dropdown split flat dense label="tag" @click="insertLabelsLines(input='text', label='vers')">
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='text', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
+              </q-btn-dropdown>
+              <q-space />
               <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='text')">
                 <q-tooltip>Herstel opdracht (songtekst)</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen</q-tooltip>
               </q-btn>
@@ -56,15 +67,26 @@
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
               <q-btn flat dense label="> ... <" @click.stop="trimLines(input='translation')">
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
+              <q-btn-dropdown split flat dense label="tag" @click="insertLabelsLines(input='translation', label='vers')">
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='translation', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
+              </q-btn-dropdown>
+              <q-space />
               <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='translation')">
                 <q-tooltip>Herstel opdracht (vertaling)</q-tooltip>
               </q-btn>
-              <span class="q-px-md" />
+              <q-space />
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen</q-tooltip>
               </q-btn>

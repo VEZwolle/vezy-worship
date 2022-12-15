@@ -97,33 +97,33 @@
 
                     <q-menu context-menu no-focus>
                       <q-list dense style="min-width: 100px">
-                        <q-item
-                          v-close-popup
-                          clickable
-                          @click.stop="insertLine(lyricsIndex, editorCol.output)"
-                        >
-                          <q-item-section>Lege regel hierboven</q-item-section>
+                        <q-item v-close-popup clickable @click.stop="insertLabel(lyricsIndex, { key: 'vers', color: 'blue' }, 3)">
+                          <q-item-section>Invoegen: 'vers' (beide)</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="label_important_outline" />
+                          </q-item-section>
+                          <q-menu context-menu no-focus>
+                            <q-list dense style="min-width: 100px">
+                              <q-item v-for="label, index of labels" :key="index" v-close-popup clickable @click.stop="insertLabel(lyricsIndex, label, 3)">
+                                <q-item-section>{{ label.key }}</q-item-section>
+                              </q-item>
+                            </q-list>
+                          </q-menu>
+                          <q-tooltip>Klik rechts voor meer label opties.</q-tooltip>
+                        </q-item>
+                        <q-item v-close-popup clickable @click.stop="insertLine(lyricsIndex, editorCol.output)">
+                          <q-item-section>Invoegen: Lege regel</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="publish" />
                           </q-item-section>
                         </q-item>
-                        <q-item
-                          v-close-popup
-                          clickable
-                          @click.stop="insertLine(lyricsIndex, 3)"
-                        >
-                          <q-item-section>Lege regel hierboven (beide)</q-item-section>
+                        <q-item v-close-popup clickable @click.stop="insertLine(lyricsIndex, 3)">
+                          <q-item-section>Invoegen: Lege regel (beide)</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="keyboard_double_arrow_up" />
                           </q-item-section>
                         </q-item>
-                        <q-item
-                          v-for="outputOption in outputOptions"
-                          :key="outputOption.id"
-                          v-close-popup
-                          clickable
-                          @click.stop="lineOutput(lyricsIndex, outputOption.id)"
-                        >
+                        <q-item v-for="outputOption in outputOptions" :key="outputOption.id" v-close-popup clickable @click.stop="lineOutput(lyricsIndex, outputOption.id)">
                           <q-item-section>{{ outputOption.label }}</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round :icon="outputOption.icon" />
@@ -142,6 +142,9 @@
       <q-card-actions align="right">
         <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
+        </q-btn>
+        <q-btn color="secondary" label="Annuleren" @click.stop="hide">
+          <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
       </q-card-actions>
       <q-inner-loading
@@ -208,6 +211,11 @@ export default {
       isLoading: false
     }
   },
+  computed: {
+    labels () {
+      return labels
+    }
+  },
   methods: {
     show () {
       this.lyricsLines = []
@@ -259,6 +267,16 @@ export default {
     toggleListView (oneListView) {
       this.oneListView = oneListView
       this.editorCols.find(t => t.id === 'translation').show = !this.oneListView
+    },
+    insertLabel (index, label, outputNr) {
+      if (this.lyricsLines[index].output === 3) { outputNr = 3 }
+      const newLine = {
+        empty: false,
+        label,
+        text: label.key,
+        output: outputNr // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
+      }
+      this.lyricsLines.splice(index, 0, newLine)
     },
     insertLine (index, outputNr) {
       if (this.lyricsLines[index].output === 3) { outputNr = 3 }
