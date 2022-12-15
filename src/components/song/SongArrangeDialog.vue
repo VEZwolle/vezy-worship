@@ -80,6 +80,17 @@
                           <q-tooltip>Lege regel hierboven (beide kolommen)</q-tooltip>
                         </q-btn>
                         <q-btn
+                          class="gt-xs"
+                          size="12px"
+                          flat
+                          dense
+                          round
+                          icon="move_up"
+                          @click.stop="moveLineToLabel(lyricsIndex)"
+                        >
+                          <q-tooltip>Voeg tekst toe aan label</q-tooltip>
+                        </q-btn>
+                        <q-btn
                           v-for="outputOption in outputOptions"
                           :key="outputOption.id"
                           class="gt-xs"
@@ -121,6 +132,12 @@
                           <q-item-section>Invoegen: Lege regel (beide)</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="keyboard_double_arrow_up" />
+                          </q-item-section>
+                        </q-item>
+                        <q-item v-close-popup clickable @click.stop="moveLineToLabel(lyricsIndex)">
+                          <q-item-section>Voeg toe aan label</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="move_up" />
                           </q-item-section>
                         </q-item>
                         <q-item v-for="outputOption in outputOptions" :key="outputOption.id" v-close-popup clickable @click.stop="lineOutput(lyricsIndex, outputOption.id)">
@@ -287,6 +304,27 @@ export default {
         output: outputNr // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
       }
       this.lyricsLines.splice(index, 0, newLine)
+    },
+    moveLineToLabel (index) {
+      let labelIndex = -1
+      for (let i = index - 1; i >= 0; i--) {
+        if (this.lyricsLines[i].label && this.lyricsLines[i].output) {
+          labelIndex = i
+          break
+        }
+      }
+      this.lyricsLines[index].output = 0 // remove line
+      if (labelIndex > -1) {
+        this.lyricsLines[labelIndex].text += ` (${this.lyricsLines[index].text})`
+      } else {
+        const newLine = {
+          empty: false,
+          label: { key: 'tag', color: 'deep-purple' },
+          text: `tag (${this.lyricsLines[index].text})`,
+          output: 3 // 0 = none, 1 = only text, 2 = only translation, 3 = text + translation
+        }
+        this.lyricsLines.splice(0, 0, newLine)
+      }
     },
     lineOutput (index, output) {
       this.lyricsLines[index].output = output
