@@ -63,32 +63,10 @@
                           flat
                           dense
                           round
-                          icon="publish"
-                          @click.stop="insertLine(lyricsIndex, editorCol.output)"
-                        >
-                          <q-tooltip>Lege regel hierboven</q-tooltip>
-                        </q-btn>
-                        <q-btn
-                          class="gt-xs"
-                          size="12px"
-                          flat
-                          dense
-                          round
                           icon="keyboard_double_arrow_up"
                           @click.stop="insertLine(lyricsIndex, 3)"
                         >
                           <q-tooltip>Lege regel hierboven (beide kolommen)</q-tooltip>
-                        </q-btn>
-                        <q-btn
-                          class="gt-xs"
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          icon="move_up"
-                          @click.stop="moveLineToLabel(lyricsIndex)"
-                        >
-                          <q-tooltip>Voeg tekst toe aan label</q-tooltip>
                         </q-btn>
                         <q-btn
                           v-for="outputOption in outputOptions"
@@ -109,7 +87,7 @@
                     <q-menu context-menu no-focus>
                       <q-list dense style="min-width: 100px">
                         <q-item v-close-popup clickable @click.stop="insertLabel(lyricsIndex, { key: 'vers', color: 'blue' }, 3)">
-                          <q-item-section>Invoegen: 'vers' (beide)</q-item-section>
+                          <q-item-section>Invoegen label: 'vers' (beide)</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="label_important_outline" />
                           </q-item-section>
@@ -135,7 +113,7 @@
                           </q-item-section>
                         </q-item>
                         <q-item v-close-popup clickable @click.stop="moveLineToLabel(lyricsIndex)">
-                          <q-item-section>Voeg toe aan label</q-item-section>
+                          <q-item-section>Verplaats naar label</q-item-section>
                           <q-item-section avatar>
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="move_up" />
                           </q-item-section>
