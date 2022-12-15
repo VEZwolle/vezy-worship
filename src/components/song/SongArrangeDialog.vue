@@ -118,6 +118,24 @@
                             <q-avatar color="primary" text-color="white" size="28px" flat round icon="move_up" />
                           </q-item-section>
                         </q-item>
+                        <q-item v-close-popup clickable @click.stop="copyText(lyricsIndex)">
+                          <q-item-section>Kopieer onderdeel</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="content_copy" />
+                          </q-item-section>
+                        </q-item>
+                        <q-item v-close-popup :disable="!ifCopyLyrics" clickable @click.stop="pasteText(lyricsIndex, true)">
+                          <q-item-section>Plak onderdeel onder (met label)</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="content_paste" />
+                          </q-item-section>
+                        </q-item>
+                        <q-item v-close-popup :disable="!ifCopyLyrics" clickable @click.stop="pasteText(lyricsIndex, false)">
+                          <q-item-section>Plak onderdeel onder (zonder label)</q-item-section>
+                          <q-item-section avatar>
+                            <q-avatar color="primary" text-color="white" size="28px" flat round icon="content_paste" />
+                          </q-item-section>
+                        </q-item>
                         <q-item v-for="outputOption in outputOptions" :key="outputOption.id" v-close-popup clickable @click.stop="lineOutput(lyricsIndex, outputOption.id)">
                           <q-item-section>{{ outputOption.label }}</q-item-section>
                           <q-item-section avatar>
@@ -203,12 +221,16 @@ export default {
           output: 2
         }
       ],
-      isLoading: false
+      isLoading: false,
+      copyLyrics: []
     }
   },
   computed: {
     labels () {
       return labels
+    },
+    ifCopyLyrics () {
+      return this.copyLyrics.length > 0
     }
   },
   methods: {
@@ -274,7 +296,7 @@ export default {
       this.lyricsLines.splice(index, 0, newLine)
     },
     insertLine (index, outputNr) {
-      if (this.lyricsLines[index].output === 3) { outputNr = 3 }
+      if (outputNr !== 3 && index < this.lyricsLines.length - 1 && this.lyricsLines[index].output === 3) { outputNr = 3 }
       const newLine = {
         empty: true,
         label: null,
@@ -303,6 +325,34 @@ export default {
         }
         this.lyricsLines.splice(0, 0, newLine)
       }
+    },
+    copyText (index) {
+      let labelStartIndex = 0
+      let labelEndIndex = this.lyricsLines.length
+      for (let i = index; i >= 0; i--) {
+        if (this.lyricsLines[i].label && this.lyricsLines[i].output) {
+          labelStartIndex = i
+          break
+        }
+      }
+      for (let i = index + 1; i < this.lyricsLines.length; i++) {
+        if (this.lyricsLines[i].label && this.lyricsLines[i].output) {
+          labelEndIndex = i
+          break
+        }
+      }
+      this.copyLyrics = this.lyricsLines.slice(labelStartIndex, labelEndIndex)
+    },
+    pasteText (index, withLabel) {
+      this.isLoading = true
+      let startIndex = 0
+      if (!withLabel && this.copyLyrics[0].label) { startIndex = 1 }
+      if (withLabel && !this.copyLyrics[this.copyLyrics.length - 1].empty) { this.insertLine(index + 1, 3) }
+      for (let i = this.copyLyrics.length - 1; i >= startIndex; i--) {
+        this.lyricsLines.splice(index + 1, 0, this.copyLyrics[i])
+      }
+      if (withLabel && !this.copyLyrics[0].empty) { this.insertLine(index + 1, 3) }
+      this.isLoading = false
     },
     lineOutput (index, output) {
       this.lyricsLines[index].output = output
