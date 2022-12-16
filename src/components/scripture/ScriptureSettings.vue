@@ -40,8 +40,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Hoofdstuk"
-              :rules="['required']"
+              :rules="['required', val => val > 0 || 'Kies minimaal 1' ]"
             />
           </div>
 
@@ -51,8 +52,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Vers van"
-              :rules="['required']"
+              :rules="['required', val => val > 0 || 'Kies minimaal 1']"
             />
           </div>
 
@@ -62,8 +64,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Vers t/m"
-              :rules="['required']"
+              :rules="['required', val => val > 0 || 'Kies minimaal 1']"
             />
           </div>
 
