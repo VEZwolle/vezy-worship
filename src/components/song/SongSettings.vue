@@ -23,7 +23,7 @@
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
               <q-space />
-              <q-btn-dropdown split flat dense label="tag" @click="insertLabelsLines(input='text', label='vers')">
+              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='text', label='vers')">
                 <q-list dense>
                   <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='text', label=label.key)">
                     <q-item-section>
@@ -72,7 +72,7 @@
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
               <q-space />
-              <q-btn-dropdown split flat dense label="tag" @click="insertLabelsLines(input='translation', label='vers')">
+              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='translation', label='vers')">
                 <q-list dense>
                   <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='translation', label=label.key)">
                     <q-item-section>

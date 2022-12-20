@@ -524,12 +524,12 @@ function CombiSplitToLines (text, translation) {
     }
   }
   if (iText < stlText.length) {
-    for (let j = iText; j <= stlText.length; j++) {
+    for (let j = iText; j < stlText.length; j++) {
       lyricsLines.push(stlText[j])
     }
   }
   if (iTranslation < stlTranslation.length) {
-    for (let j = iTranslation; j <= stlTranslation.length; j++) {
+    for (let j = iTranslation; j < stlTranslation.length; j++) {
       lyricsLines.push(stlTranslation[j])
     }
   }
