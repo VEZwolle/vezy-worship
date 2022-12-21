@@ -1,6 +1,21 @@
 <template>
   <q-card-section>
-    <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+    <div class="row q-gutter-md">
+      <div class="col">
+        <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+      </div>
+      <div class="col2">
+        <q-btn-dropdown color="primary" label="standaard afbeeldingen">
+          <q-list>
+            <q-item v-for="preset, index of presentationPresets" :key="index" v-close-popup clickable @click="setPreset(preset.id)">
+              <q-item-section>
+                <q-item-label>{{ preset.settings.title }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </div>
+    </div>
     <div class="inputs-header">
       Selecteer afbeelding(en):
       <q-toggle v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
@@ -21,6 +36,7 @@
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
 import ImageSelect from './ImageSelect.vue'
+import presentationPresets from '../presentation-presets'
 
 export default {
   components: { ImageSelect },
@@ -28,6 +44,11 @@ export default {
   data () {
     return {
       equal: !this.presentation.settings.livestream.fileId
+    }
+  },
+  computed: {
+    presentationPresets () {
+      return presentationPresets
     }
   },
   methods: {
@@ -48,6 +69,13 @@ export default {
     },
     updateTitle (file) {
       this.settings.title = file.name
+    },
+    setPreset (id) {
+      const preset = this.presentationPresets.find(p => p.id === id)
+      this.settings.livestream = { ...preset.settings.livestream }
+      this.settings.beamer = { ...preset.settings.beamer }
+      this.equal = !this.settings.livestream.fileId
+      this.settings.title = preset.settings.title
     }
   }
 }
