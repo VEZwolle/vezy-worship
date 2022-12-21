@@ -1,6 +1,7 @@
 <template>
   <q-responsive :ratio="$store.outputRatio" class="output-preview">
     <iframe ref="iframe" />
+    <img v-if="visualView" src="../../assets/viewbeamer.png" class="overlay">
   </q-responsive>
 </template>
 
@@ -9,7 +10,11 @@ import { createApp } from 'vue'
 
 export default {
   props: {
-    component: Object
+    component: Object,
+    visualView: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
@@ -41,5 +46,15 @@ export default {
 
 iframe {
   border: none;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  opacity: 0.4;
 }
 </style>
