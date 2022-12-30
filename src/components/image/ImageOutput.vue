@@ -1,6 +1,6 @@
 <template>
   <div class="bg-output-beamer" :style="beamer ? style : ''">
-    <div v-if="!clear" class="image-output">
+    <div v-if="!clear" class="image-output" :style="beamer ? styleOpacity : ''">
       <div :style="containerStyle">
         <img :src="fileUrl" :style="imageStyle">
       </div>

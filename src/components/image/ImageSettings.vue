@@ -32,7 +32,7 @@
         </q-card-section>
       </q-tab-panel>
       <q-tab-panel name="background">
-        <BackgroundSetting v-model:bgFileId="settings.bgFileId" />
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
     </q-tab-panels>
   </div>

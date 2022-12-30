@@ -10,6 +10,7 @@ export default [
       title: '',
       text: '',
       translation: '',
+      bgOpacity: 0,
       bgFileId: null
     },
     description (settings) {
@@ -32,6 +33,7 @@ export default [
     settings: {
       title: 'Titel',
       text: 'Lorem ipsum...',
+      bgOpacity: 0,
       bgFileId: null
     },
     description (settings) {
@@ -53,6 +55,7 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      bgOpacity: 0,
       bgFileId: null,
       beamer: {
         fileId: null,
@@ -110,6 +113,7 @@ export default [
     settings: {
       time: null,
       type: 0,
+      bgOpacity: 0,
       bgFileId: null
     },
     description (settings) {
@@ -139,6 +143,7 @@ export default [
       verseFrom: null,
       verseTo: null,
       text: '',
+      bgOpacity: 0,
       bgFileId: null
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
