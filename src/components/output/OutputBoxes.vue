@@ -12,7 +12,7 @@
               :alpha="view.alpha"
               :show-background="view.showBackground"
               :show-messages="view.showMessages"
-              :visual-view="view.id === 'beamer' && visualViewBeamer"
+              :visual-view="visualViewBeamer ? view.id : ''"
             />
           </Transition>
         </div>
@@ -26,7 +26,7 @@
         size="xs"
         label="check zichtbaarheid"
       >
-        <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer voorbeeld</q-tooltip>
+        <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer & voor livestream bij tv randen</q-tooltip>
       </q-checkbox>
       <q-space />
       <q-checkbox

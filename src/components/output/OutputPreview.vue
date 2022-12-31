@@ -1,7 +1,7 @@
 <template>
   <q-responsive :ratio="$store.outputRatio" class="output-preview">
     <iframe ref="iframe" />
-    <img v-if="visualView" src="../../assets/viewbeamer.png" class="overlay">
+    <img v-if="visualView" :src="require(`../../assets/view${visualView}.png`)" class="overlay">
   </q-responsive>
 </template>
 
@@ -12,8 +12,8 @@ export default {
   props: {
     component: Object,
     visualView: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: ''
     }
   },
   mounted () {
