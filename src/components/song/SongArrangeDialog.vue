@@ -24,6 +24,9 @@
               <q-toolbar-title>
                 <span>{{ oneListView ? '' : 'Vertaling' }}</span>
               </q-toolbar-title>
+              <q-btn color="secondary" :label="lineEditText ? 'tekst toepassen' : 'tekst bewerken'" @click.stop="toggleLineEdit">
+                <q-tooltip>Schakel tussen ordenen en tekst bewerken.</q-tooltip>
+              </q-btn>
               <q-btn color="secondary" label="Zoek & splits taal via DeepL" @click.stop="language">
                 <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op (alleen uit songtekst).</q-tooltip>
               </q-btn>
@@ -40,7 +43,7 @@
                 <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
                   <q-item
                     v-if="showOutput(lyricsLine.output, editorCol.id)"
-                    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insertOne: ['i'], insert: ['enter'] }"
+                    v-shortkey="lineEditText ? { } : { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insertOne: ['i'], insert: ['enter'] }"
                     clickable
                     :class="lineClass(lyricsLine)"
                     :active="isSelectedLabel(lyricsIndex)"
@@ -52,7 +55,9 @@
                       <q-avatar round dense size="sm" color="text-grey" text-color="text-grey" :icon="lineAvatar(lyricsLine.output)" />
                     </q-item-section>
                     <q-item-section no-wrap>
-                      <div v-html="lyricsLine.text" />
+                      <div :ref="`line_${lyricsIndex}`" :contenteditable="lineEditText">
+                        {{ lyricsLine.text }}
+                      </div>
                     </q-item-section>
 
                     <q-item-section side class="setlist-actions">
@@ -222,6 +227,7 @@ export default {
         }
       ],
       isLoading: false,
+      lineEditText: false,
       copyLyrics: []
     }
   },
@@ -353,6 +359,28 @@ export default {
       }
       if (withLabel && !this.copyLyrics[0].empty) { this.insertLine(index + 1, 3) }
       this.isLoading = false
+    },
+    toggleLineEdit () {
+      if (this.lineEditText) {
+        this.updateLyricsLines()
+      }
+      this.lineEditText = !this.lineEditText
+    },
+    updateLyricsLines () {
+      for (let i = 0; i < this.lyricsLines.length; i++) {
+        this.updateLyricsLine(i)
+      }
+    },
+    updateLyricsLine (index) {
+      const lineElement = this.$refs[`line_${index}`][0]
+      lineElement.blur()
+      this.lyricsLines[index].text = lineElement.innerText.trim()
+      if (!this.lyricsLines[index].text) {
+        this.lyricsLines[index].empty = true
+      } else {
+        this.lyricsLines[index].empty = false
+      }
+      // check label toevoegen
     },
     lineOutput (index, output) {
       this.lyricsLines[index].output = output
