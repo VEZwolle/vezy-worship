@@ -24,9 +24,6 @@
               <q-toolbar-title>
                 <span>{{ oneListView ? '' : 'Vertaling' }}</span>
               </q-toolbar-title>
-              <q-btn color="secondary" :label="lineEditText ? 'tekst toepassen' : 'tekst bewerken'" @click.stop="toggleLineEdit">
-                <q-tooltip>Schakel tussen ordenen en tekst bewerken.</q-tooltip>
-              </q-btn>
               <q-btn color="secondary" label="Zoek & splits taal via DeepL" @click.stop="language">
                 <q-tooltip>Laat via DeepL de taal herkennen en splits de songtext op (alleen uit songtekst).</q-tooltip>
               </q-btn>
@@ -43,7 +40,7 @@
                 <template v-for="(lyricsLine, lyricsIndex) in lyricsLines" :key="lyricsIndex">
                   <q-item
                     v-if="showOutput(lyricsLine.output, editorCol.id)"
-                    v-shortkey="lineEditText ? { } : { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insertOne: ['i'], insert: ['enter'] }"
+                    v-shortkey="lineEditText ? { } : { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], space: ['space'], delete: ['del'], insertOne: ['i'], insert: ['u'] }"
                     clickable
                     :class="lineClass(lyricsLine)"
                     :active="isSelectedLabel(lyricsIndex)"
@@ -58,7 +55,7 @@
                       <div
                         :ref="`line_${lyricsIndex}`"
                         :contenteditable="lineEditText"
-                        @dblclick="toggleLineEdit"
+                        @dblclick="toggleLineEdit(lyricsIndex)"
                         @blur="updateLyricsLine(lyricsIndex)"
                         @input="updateLyricsLine(lyricsIndex)"
                         @keydown.enter="updateLyricsLine(lyricsIndex, true)"
@@ -164,6 +161,11 @@
       </div>
       <q-separator />
       <q-card-actions align="right">
+        ordenen
+        <q-toggle v-model="lineEditText" :icon="lineEditText ? 'edit' : 'sync_alt'" keep-color color="secondary" label="tekst bewerken">
+          <q-tooltip>Schakel tussen ordenen en tekst bewerken.</q-tooltip>
+        </q-toggle>
+        <q-space />
         <q-btn color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas de georganiseerde tekst toe op het lied in basis tab.</q-tooltip>
         </q-btn>
@@ -308,7 +310,6 @@ export default {
       this.lyricsLines.splice(index, 0, newLine)
     },
     insertLine (index, outputNr) {
-      if (outputNr !== 3 && index < this.lyricsLines.length - 1 && this.lyricsLines[index].output === 3) { outputNr = 3 }
       const newLine = {
         empty: true,
         label: null,
@@ -366,8 +367,21 @@ export default {
       if (withLabel && !this.copyLyrics[0].empty) { this.insertLine(index + 1, 3) }
       this.isLoading = false
     },
-    toggleLineEdit () {
+    toggleLineEdit (index) {
       this.lineEditText = !this.lineEditText
+      if (this.lineEditText) {
+        const lineElement = this.$refs[`line_${index}`][0]
+        setTimeout(() => { lineElement.focus() }, 0)
+        if (lineElement.hasChildNodes()) { // if the element is not empty
+          const s = window.getSelection()
+          const r = document.createRange()
+          const e = lineElement.childElementCount > 0 ? lineElement.lastChild : lineElement
+          r.setStart(e, 1)
+          r.setEnd(e, 1)
+          s.removeAllRanges()
+          s.addRange(r)
+        }
+      }
     },
     updateLyricsLine (index, finisch = false) {
       const lineElement = this.$refs[`line_${index}`][0]
@@ -387,7 +401,7 @@ export default {
         break
       }
       if (finisch) {
-        this.toggleLineEdit()
+        this.lineEditText = false
       }
     },
     lineOutput (index, output) {
