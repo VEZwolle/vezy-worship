@@ -55,9 +55,15 @@
                       <q-avatar round dense size="sm" color="text-grey" text-color="text-grey" :icon="lineAvatar(lyricsLine.output)" />
                     </q-item-section>
                     <q-item-section no-wrap>
-                      <div :ref="`line_${lyricsIndex}`" :contenteditable="lineEditText">
-                        {{ lyricsLine.text }}
-                      </div>
+                      <div
+                        :ref="`line_${lyricsIndex}`"
+                        :contenteditable="lineEditText"
+                        @dblclick="toggleLineEdit"
+                        @blur="updateLyricsLine(lyricsIndex)"
+                        @input="updateLyricsLine(lyricsIndex)"
+                        @keydown.enter="updateLyricsLine(lyricsIndex, true)"
+                        v-text="lyricsLine.text"
+                      />
                     </q-item-section>
 
                     <q-item-section side class="setlist-actions">
@@ -361,26 +367,28 @@ export default {
       this.isLoading = false
     },
     toggleLineEdit () {
-      if (this.lineEditText) {
-        this.updateLyricsLines()
-      }
       this.lineEditText = !this.lineEditText
     },
-    updateLyricsLines () {
-      for (let i = 0; i < this.lyricsLines.length; i++) {
-        this.updateLyricsLine(i)
-      }
-    },
-    updateLyricsLine (index) {
+    updateLyricsLine (index, finisch = false) {
       const lineElement = this.$refs[`line_${index}`][0]
-      lineElement.blur()
       this.lyricsLines[index].text = lineElement.innerText.trim()
       if (!this.lyricsLines[index].text) {
         this.lyricsLines[index].empty = true
       } else {
         this.lyricsLines[index].empty = false
       }
-      // check label toevoegen
+      this.lyricsLines[index].label = null
+      for (const label of labels) {
+        if (!this.lyricsLines[index].text.toLowerCase().startsWith(label.key)) {
+          continue
+        }
+        this.lyricsLines[index].label = { ...label, value: this.lyricsLines[index].text }
+        // this.lyricsLines[index].output = 3
+        break
+      }
+      if (finisch) {
+        this.toggleLineEdit()
+      }
     },
     lineOutput (index, output) {
       this.lyricsLines[index].output = output
