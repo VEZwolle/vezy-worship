@@ -17,7 +17,7 @@
           @shortkey="$store.toggleClear"
         >
           <q-tooltip>
-            Vink aan om het scherm leeg te maken<br>(ctrl + c) of (F6)
+            Vink aan om het scherm leeg te maken<br>(Ctrl + C of F6)
           </q-tooltip>
         </q-checkbox>
       </q-toolbar>
