@@ -78,7 +78,7 @@ export default {
       tab: 'text',
       isTranslating: false,
       background: null,
-      ignoreEl: null
+      ignoreInput: null
     }
   },
   computed: {
@@ -117,25 +117,25 @@ export default {
       this.settings.fileId = null
       this.background = null
     },
-    sync (el, prop) {
-      if (this.ignoreEl === el) {
-        this.ignoreEl = null
+    syncInputs (input, prop) {
+      if (this.ignoreInput === input) {
+        this.ignoreInput = null
         return
       }
 
-      if (el === 'song') {
-        this.ignoreEl = 'translate'
+      if (input === 'song') {
+        this.ignoreInput = 'translate'
         set(this.$refs.inputTranslate.nativeEl, prop, get(this.$refs.inputSong.nativeEl, prop))
       } else {
-        this.ignoreEl = 'song'
+        this.ignoreInput = 'song'
         set(this.$refs.inputSong.nativeEl, prop, get(this.$refs.inputTranslate.nativeEl, prop))
       }
     },
-    scroll (el) {
-      this.sync(el, 'scrollTop')
+    scroll (input) {
+      this.syncInputs(input, 'scrollTop')
     },
-    resize (el) {
-      return () => this.sync(el, 'style.height')
+    resize (input) {
+      return () => this.syncInputs(input, 'style.height')
     }
   }
 }
