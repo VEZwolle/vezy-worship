@@ -13,19 +13,27 @@
 
         <div class="row q-gutter-md">
           <div class="col">
-            <q-input ref="inputSongRef" v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" @scroll="onScrollSong" />
+            <q-input
+              ref="inputSong"
+              v-model="settings.text"
+              outlined
+              label="Tekst"
+              type="textarea"
+              class="input-songtext"
+              @scroll="scroll('song')"
+            />
           </div>
 
           <div class="col">
             <q-input
-              ref="inputTranslateRef"
+              ref="inputTranslate"
               v-model="settings.translation"
               outlined
               label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
-              @scroll="onScrollTranslate"
+              @scroll="scroll('translate')"
             >
               <q-btn
                 v-if="!settings.translation"
@@ -60,6 +68,8 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
+import get from 'lodash/get'
+import set from 'lodash/set'
 
 export default {
   extends: BaseSettings,
@@ -68,13 +78,24 @@ export default {
       tab: 'text',
       isTranslating: false,
       background: null,
-      ignoreSource: null
+      ignoreEl: null
     }
   },
   computed: {
     backgroundUrl () {
       return this.$store.getMediaUrl(this.settings.fileId || this.$store.service.backgroundImageId)
     }
+  },
+  mounted () {
+    this.songObserver = new ResizeObserver(this.resize('song'))
+    this.songObserver.observe(this.$refs.inputSong.nativeEl)
+
+    this.translateObserver = new ResizeObserver(this.resize('translate'))
+    this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+  },
+  beforeUnmount () {
+    this.songObserver.disconnect()
+    this.translateObserver.disconnect()
   },
   methods: {
     async translate () {
@@ -96,25 +117,25 @@ export default {
       this.settings.fileId = null
       this.background = null
     },
-    scroll (source) {
-      if (this.ignoreSource === source) {
-        this.ignoreSource = null
+    sync (el, prop) {
+      if (this.ignoreEl === el) {
+        this.ignoreEl = null
         return
       }
 
-      if (source === 'song') {
-        this.ignoreSource = 'translate'
-        this.$refs.inputTranslateRef.getNativeElement().scrollTop = this.$refs.inputSongRef.getNativeElement().scrollTop
+      if (el === 'song') {
+        this.ignoreEl = 'translate'
+        set(this.$refs.inputTranslate.nativeEl, prop, get(this.$refs.inputSong.nativeEl, prop))
       } else {
-        this.ignoreSource = 'song'
-        this.$refs.inputSongRef.getNativeElement().scrollTop = this.$refs.inputTranslateRef.getNativeElement().scrollTop
+        this.ignoreEl = 'song'
+        set(this.$refs.inputSong.nativeEl, prop, get(this.$refs.inputTranslate.nativeEl, prop))
       }
     },
-    onScrollSong () {
-      this.scroll('song')
+    scroll (el) {
+      this.sync(el, 'scrollTop')
     },
-    onScrollTranslate () {
-      this.scroll('translate')
+    resize (el) {
+      return () => this.sync(el, 'style.height')
     }
   }
 }
