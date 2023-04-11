@@ -71,7 +71,6 @@
     <div>VezyWorship v{{ version }}</div>
 
     <q-btn
-      v-if="$q.platform.is.electron"
       flat
       icon="settings"
       dense
