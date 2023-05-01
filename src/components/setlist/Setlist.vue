@@ -9,6 +9,19 @@
             <q-tooltip>Dienst bewerken</q-tooltip>
           </q-btn>
         </q-toolbar-title>
+
+        <q-checkbox
+          v-model="$store.noLivestream"
+          left-label
+          label="Alleen beamer"
+          color="red"
+          @shortkey="$store.toggleNoLivestream"
+        >
+          <q-tooltip>
+            Vink aan om teksten niet op te splitsen voor de livestream<br>
+            (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
+          </q-tooltip>
+        </q-checkbox>
       </q-toolbar>
     </q-header>
 
