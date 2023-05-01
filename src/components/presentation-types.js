@@ -32,7 +32,9 @@ export default [
     settings: {
       title: 'Titel',
       text: 'Lorem ipsum...',
-      bgFileId: null
+      bgFileId: null,
+      formatBeamer: 'Geen',
+      formatLivestream: 'Standaard'
     },
     description (settings) {
       return settings.text
@@ -43,7 +45,7 @@ export default [
     },
     outputs: {
       beamer: require('./caption/CaptionOutputBeamer.vue').default,
-      livestream: require('./caption/CaptionOutput.vue').default
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   },
   {
