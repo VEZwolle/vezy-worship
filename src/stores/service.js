@@ -11,6 +11,7 @@ export default defineStore('service', {
     previewPresentation: null,
     livePresentation: null,
     isClear: true,
+    noLivestream: false,
     message: ''
   }),
   actions: {
@@ -34,7 +35,7 @@ export default defineStore('service', {
       }
 
       // Default countdown
-      this.upsertPresentation({
+      this.addOrUpdatePresentation({
         id: 'countdown',
         type: 'countdown',
         settings: {
@@ -45,29 +46,33 @@ export default defineStore('service', {
 
       // Default host caption
       if (host) {
-        this.upsertPresentation({
+        this.addOrUpdatePresentation({
           id: 'host',
           type: 'caption',
           settings: {
             title: 'Host',
-            text: host
+            text: host,
+            formatBeamer: 'Geen',
+            formatLivestream: 'Standaard'
           }
         })
       }
 
       // Default preacher caption
       if (preacher) {
-        this.upsertPresentation({
+        this.addOrUpdatePresentation({
           id: 'preacher',
           type: 'caption',
           settings: {
             title: 'Spreker',
-            text: preacher
+            text: preacher,
+            formatBeamer: 'Geen',
+            formatLivestream: 'Standaard'
           }
         })
       }
 
-      presentationPresets.forEach(this.upsertPresentation)
+      presentationPresets.forEach(this.addOrIgnorePresentation)
     },
 
     addPresentation (presentation) {
@@ -77,12 +82,21 @@ export default defineStore('service', {
     updatePresentation (presentation, settings) {
       Object.assign(presentation.settings, settings)
     },
-    upsertPresentation (presentation) {
+    addOrUpdatePresentation (presentation) {
       const existing = this.service.presentations.find(p => p.id === presentation.id)
 
       existing
         ? this.updatePresentation(existing, presentation.settings)
         : this.addPresentation(presentation)
+    },
+    addOrIgnorePresentation (presentation) {
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
+
+      if (existing) {
+        return // ignore
+      }
+
+      this.addPresentation(presentation)
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)
@@ -116,6 +130,9 @@ export default defineStore('service', {
     },
     toggleClear () {
       this.isClear = !this.isClear
+    },
+    toggleNoLivestream () {
+      this.noLivestream = !this.noLivestream
     },
 
     // Media

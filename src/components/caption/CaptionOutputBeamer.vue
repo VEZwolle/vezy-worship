@@ -1,18 +1,33 @@
 <template>
   <div class="bg-output-beamer" :style="style">
-    <div v-if="!clear" class="full" :style="styleOpacity" />
+    <Transition name="q-transition--fade">
+      <div v-if="!clear && settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" class="full" :style="styleOpacity">
+        <div class="caption-output">
+          <CaptionBeamer :title="settings.title" :text="settings.text" :format="settings.formatBeamer" />
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
+import CaptionBeamer from './CaptionBeamer.vue'
 
 export default {
+  components: { CaptionBeamer },
   extends: BaseOutput
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+.caption-output {
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 5.4vw 4vw 4vw 4vw;
+}
+
 .full {
   position: absolute;
   width: 100%;

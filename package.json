@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "1.4.1",
+  "version": "1.6.0-beta",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
@@ -14,7 +14,7 @@
     "api:serve": "firebase emulators:start"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.15.10",
     "@zip.js/zip.js": "^2.4.11",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
@@ -24,7 +24,7 @@
     "nanoid": "^3.3.3",
     "pinia": "^2.0.11",
     "pinia-shared-state": "^0.2.3",
-    "quasar": "^2.6.0",
+    "quasar": "^2.11.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vue-three-shortkey": "^4.0.0",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@quasar/app-webpack": "^3.0.0",
+    "@quasar/app-webpack": "^3.7.1",
     "electron": "^18.1.0",
     "electron-builder": "^22.14.13",
     "electron-packager": "^15.5.1",
