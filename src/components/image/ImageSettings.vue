@@ -4,8 +4,8 @@
       <div class="col">
         <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
       </div>
-      <div class="col2">
-        <q-btn-dropdown color="primary" label="standaard afbeeldingen">
+      <div v-if="!defaultPresetId" class="col2">
+        <q-btn-dropdown color="primary" label="standaard" class="q-mt-sm">
           <q-list>
             <q-item v-for="preset, index of presentationPresets" :key="index" v-close-popup clickable @click="setPreset(preset.id)">
               <q-item-section>
@@ -21,7 +21,7 @@
       <q-toggle v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
 
-    <div class="row q-gutter-md">
+    <div v-if="showPreview" class="row q-gutter-md">
       <div class="col">
         <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
       </div>
@@ -49,6 +49,9 @@ export default {
   computed: {
     presentationPresets () {
       return presentationPresets
+    },
+    defaultPresetId () {
+      return this.presentationPresets.find(p => p.id === this.presentation.id) !== undefined
     }
   },
   methods: {
