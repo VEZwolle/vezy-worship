@@ -50,7 +50,9 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: 'Host',
-            text: host
+            text: host,
+            formatBeamer: 'Geen',
+            formatLivestream: 'Standaard'
           }
         })
       }
@@ -62,7 +64,9 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: 'Spreker',
-            text: preacher
+            text: preacher,
+            formatBeamer: 'Geen',
+            formatLivestream: 'Standaard'
           }
         })
       }
