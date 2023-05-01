@@ -1,5 +1,5 @@
 <template>
-  <TextSlidesControl :presentation="presentation" :preview="preview" />
+  <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
 </template>
 
 <script>
