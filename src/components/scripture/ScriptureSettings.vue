@@ -40,8 +40,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Hoofdstuk"
-              :rules="['required']"
+              :rules="[required, min1]"
             />
           </div>
 
@@ -51,8 +52,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Vers van"
-              :rules="['required']"
+              :rules="[required, min1]"
             />
           </div>
 
@@ -62,8 +64,9 @@
               type="number"
               outlined
               stack-label
+              min="1"
               label="Vers t/m"
-              :rules="['required']"
+              :rules="[min1]"
             />
           </div>
 
@@ -136,7 +139,7 @@ export default {
       }))
     },
     backgroundUrl () {
-      return this.$store.media[this.settings.backgroundImageId || this.$store.service.backgroundImageId]
+      return this.$store.getMediaUrl(this.settings.backgroundImageId || this.$store.service.backgroundImageId)
     }
   },
   methods: {
@@ -173,6 +176,16 @@ export default {
     resetBackground () {
       this.settings.backgroundImageId = null
       this.background = null
+    },
+    required (val) {
+      return !!val || 'Verplicht'
+    },
+    min1 (val) {
+      if (typeof val !== 'number') {
+        return
+      }
+
+      return val > 0 || 'Minimaal 1'
     }
   }
 }

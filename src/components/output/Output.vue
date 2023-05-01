@@ -35,7 +35,7 @@ export default {
       return this.presentationType?.outputs?.[this.id]
     },
     backgroundImageUrl () {
-      return this.$store.media[this.$store.service?.backgroundImageId]
+      return this.$store.getMediaUrl(this.$store.service?.backgroundImageId)
     },
     isClear () {
       return this.preview

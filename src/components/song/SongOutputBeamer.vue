@@ -27,7 +27,7 @@ export default {
       return section?.slides.flat() || []
     },
     backgroundImageUrl () {
-      return this.$store.media[this.settings.fileId]
+      return this.$store.getMediaUrl(this.settings.fileId)
     },
     style () {
       const style = {}

@@ -27,8 +27,8 @@
           </template>
         </q-input>
 
-        <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
-        <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
+        <q-input v-model="service.host" label="Host" :rules="['required']" />
+        <q-input v-model="service.preacher" label="Spreker" :rules="['required']" />
 
         <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
           <template #prepend>
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     backgroundImageUrl () {
-      return this.$store.media[this.service.backgroundImageId]
+      return this.$store.getMediaUrl(this.service.backgroundImageId)
     },
     isNew () {
       return !this.service.id

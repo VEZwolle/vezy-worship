@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
+import presentationPresets from '../components/presentation-presets'
 
 export default defineStore('service', {
   state: () => ({
@@ -33,7 +34,7 @@ export default defineStore('service', {
       }
 
       // Default countdown
-      this.upsertPresentation({
+      this.addOrUpdatePresentation({
         id: 'countdown',
         type: 'countdown',
         settings: {
@@ -44,7 +45,7 @@ export default defineStore('service', {
 
       // Default host caption
       if (host) {
-        this.upsertPresentation({
+        this.addOrUpdatePresentation({
           id: 'host',
           type: 'caption',
           settings: {
@@ -58,7 +59,7 @@ export default defineStore('service', {
 
       // Default preacher caption
       if (preacher) {
-        this.upsertPresentation({
+        this.addOrUpdatePresentation({
           id: 'preacher',
           type: 'caption',
           settings: {
@@ -69,6 +70,8 @@ export default defineStore('service', {
           }
         })
       }
+
+      presentationPresets.forEach(this.addOrIgnorePresentation)
     },
 
     addPresentation (presentation) {
@@ -78,12 +81,21 @@ export default defineStore('service', {
     updatePresentation (presentation, settings) {
       Object.assign(presentation.settings, settings)
     },
-    upsertPresentation (presentation) {
+    addOrUpdatePresentation (presentation) {
       const existing = this.service.presentations.find(p => p.id === presentation.id)
 
       existing
         ? this.updatePresentation(existing, presentation.settings)
         : this.addPresentation(presentation)
+    },
+    addOrIgnorePresentation (presentation) {
+      const existing = this.service.presentations.find(p => p.id === presentation.id)
+
+      if (existing) {
+        return // ignore
+      }
+
+      this.addPresentation(presentation)
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)
@@ -94,13 +106,15 @@ export default defineStore('service', {
 
       this.previewPresentation = cloneDeep(presentation)
     },
-    goLive (presentation) {
+    goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
-      const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-      const nextPresentation = this.service.presentations[i + 1]
-      if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
-        this.previewPresentation = cloneDeep(nextPresentation)
+      if (previewNextPresentation) {
+        const i = this.service.presentations.findIndex(s => s.id === presentation.id)
+        const nextPresentation = this.service.presentations[i + 1]
+        if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
+          this.previewPresentation = cloneDeep(nextPresentation)
+        }
       }
 
       this.livePresentation = cloneDeep(presentation)
@@ -125,6 +139,18 @@ export default defineStore('service', {
       this.media[id] = URL.createObjectURL(file)
 
       return id
+    },
+    getMediaUrl (id) {
+      if (!id) {
+        return null
+      }
+
+      // Media from `/public` folder
+      if (id.startsWith('/')) {
+        return id.substring(1) // Remove leading slash to make it work on Electron
+      }
+
+      return this.media[id]
     }
   }
 })
