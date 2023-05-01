@@ -1,10 +1,12 @@
 <template>
-  <div v-if="!clear" class="scripture-output">
-    <div class="scripture-text">
-      <span v-for="(line, i) in lines" :key="i" v-html="line" />
-    </div>
+  <div class="bg-output-beamer" :style="style">
+    <div v-if="!clear" class="scripture-output">
+      <div class="scripture-text">
+        <span v-for="(line, i) in lines" :key="i" v-html="line" />
+      </div>
 
-    <div class="scripture-title" v-html="title" />
+      <div class="scripture-title" v-html="title" />
+    </div>
   </div>
 </template>
 
@@ -20,9 +22,7 @@ export default {
     lines () {
       const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
       const lines = section?.slides.flat() || []
-
-      console.log(lines)
-
+      // console.log(lines)
       return lines
     }
   }

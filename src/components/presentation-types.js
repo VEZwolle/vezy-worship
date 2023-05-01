@@ -10,7 +10,7 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null
+      bgFileId: null
     },
     description (settings) {
       return settings.text
@@ -32,6 +32,7 @@ export default [
     settings: {
       title: 'Titel',
       text: 'Lorem ipsum...',
+      bgFileId: null,
       formatBeamer: 'Geen',
       formatLivestream: 'Standaard'
     },
@@ -54,6 +55,7 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      bgFileId: null,
       beamer: {
         fileId: null,
         ratio: null,
@@ -109,7 +111,8 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      type: 0
+      type: 0,
+      bgFileId: null
     },
     description (settings) {
       if (settings.type === 1) {
@@ -122,6 +125,7 @@ export default [
       control: require('./countdown/CountdownControl.vue').default
     },
     outputs: {
+      beamer: require('./countdown/CountdownOutputBeamer.vue').default,
       livestream: require('./countdown/CountdownOutput.vue').default
     }
   },
@@ -136,7 +140,8 @@ export default [
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: ''
+      text: '',
+      bgFileId: null
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)

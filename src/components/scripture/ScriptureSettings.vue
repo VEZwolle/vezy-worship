@@ -95,17 +95,7 @@
       </q-tab-panel>
 
       <q-tab-panel name="background">
-        <q-file v-model="background" accept="image/*" label="Selecteer achtergrondafbeelding" outlined @update:model-value="updateBackground">
-          <template #prepend>
-            <q-icon name="image" />
-          </template>
-
-          <template v-if="settings.backgroundImageId" #append>
-            <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
-          </template>
-        </q-file>
-
-        <img :src="backgroundUrl" class="q-mt-sm full-width">
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" />
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -115,13 +105,14 @@
 import BaseSettings from '../presentation/BaseSettings.vue'
 import bibles from './bibles'
 import books from './books'
+import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 
 export default {
+  components: { BackgroundSetting },
   extends: BaseSettings,
   data () {
     return {
       tab: 'text',
-      background: null,
       isLoadingScripture: false
     }
   },
@@ -137,9 +128,6 @@ export default {
         label: b.name,
         value: b.id
       }))
-    },
-    backgroundUrl () {
-      return this.$store.getMediaUrl(this.settings.backgroundImageId || this.$store.service.backgroundImageId)
     }
   },
   methods: {
@@ -170,13 +158,6 @@ export default {
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
     },
-    updateBackground (file) {
-      this.settings.backgroundImageId = this.$store.addMedia(file)
-    },
-    resetBackground () {
-      this.settings.backgroundImageId = null
-      this.background = null
-    },
     required (val) {
       return !!val || 'Verplicht'
     },
@@ -184,7 +165,6 @@ export default {
       if (typeof val !== 'number') {
         return
       }
-
       return val > 0 || 'Minimaal 1'
     }
   }
