@@ -21,7 +21,7 @@
       <q-toggle v-model="equal" label="Zelfde bestand & positie voor beamer & livestream" @update:model-value="toggleEqual" />
     </div>
 
-    <div v-if="showPreview" class="row q-gutter-md">
+    <div class="row q-gutter-md">
       <div class="col">
         <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
       </div>
