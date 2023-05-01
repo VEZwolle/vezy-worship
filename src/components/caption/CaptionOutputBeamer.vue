@@ -1,8 +1,10 @@
 <template>
-  <div class="bg-output-beamer caption-output" :style="style">
+  <div class="bg-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <div v-if="!clear && settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined">
-        <CaptionBeamer :title="settings.title" :text="settings.text" :format="settings.formatBeamer" />
+      <div v-if="!clear && settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" class="full" :style="styleOpacity">
+        <div class="caption-output">
+          <CaptionBeamer :title="settings.title" :text="settings.text" :format="settings.formatBeamer" />
+        </div>
       </div>
     </Transition>
   </div>
@@ -24,5 +26,11 @@ export default {
   left: 0;
   top: 0;
   padding: 5.4vw 4vw 4vw 4vw;
+}
+
+.full {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -25,6 +25,15 @@ export default {
       }
 
       return style
+    },
+    styleOpacity () {
+      const style = {}
+
+      if (this.settings.bgOpacity) {
+        style.background = `rgba(0, 0, 0, ${this.settings.bgOpacity})`
+      }
+
+      return style
     }
   }
 }

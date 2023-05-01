@@ -1,6 +1,6 @@
 <template>
   <div class="bg-output-beamer" :style="style">
-    <div v-if="!clear" class="scripture-output">
+    <div v-if="!clear" class="scripture-output" :style="styleOpacity">
       <div class="scripture-text">
         <span v-for="(line, i) in lines" :key="i" v-html="line" />
       </div>
@@ -36,7 +36,6 @@ export default {
   justify-content: space-between;
   height: 100%;
   padding: 5.4vw 4vw 4vw 4vw;
-  background: rgba(0, 0, 0, 0.5);
 }
 
 .scripture-text {

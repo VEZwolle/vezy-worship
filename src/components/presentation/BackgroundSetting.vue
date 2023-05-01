@@ -8,27 +8,72 @@
       <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
     </template>
   </q-file>
-
-  <img :src="backgroundUrl" class="q-mt-sm full-width">
+  <div class="q-mt-sm preview">
+    <q-responsive :ratio="ratio" class="output-preview">
+      <div class="bg-output-beamer" :style="style">
+        <div class="full" :style="styleOpacity" />
+      </div>
+    </q-responsive>
+    <div class="slider">
+      <q-slider
+        v-model="opacity"
+        :min="0"
+        :max="1"
+        :step="0.05"
+        label
+        :label-value="'Donkerder: ' + (opacity * 100).toFixed(0) + '%'"
+        label-always
+        switch-label-side
+        @update:model-value="updateOpacity"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    bgFileId: String
+    bgFileId: String,
+    bgOpacity: {
+      type: Number,
+      default: 0
+    }
   },
-  emits: ['update:bgFileId'],
+  emits: [
+    'update:bgFileId',
+    'update:bgOpacity'
+  ],
   data () {
     return {
-      background: null
+      background: null,
+      opacity: this.bgOpacity
     }
   },
   computed: {
     backgroundUrl () {
       return this.$store.getMediaUrl(this.bgFileId || this.$store.service.backgroundImageId)
+    },
+    style () {
+      const style = {}
+      const image = this.backgroundUrl || require('../../assets/bg.png')
+      style.backgroundImage = `url(${image})`
+      return style
+    },
+    styleOpacity () {
+      const style = {}
+      if (this.opacity) {
+        style.background = `rgba(0, 0, 0, ${this.opacity})`
+      }
+      return style
+    },
+    ratio () {
+      return this.$store.outputRatio
     }
   },
   methods: {
+    updateOpacity () {
+      this.$emit('update:bgOpacity', this.opacity)
+    },
     updateBackground (file) {
       this.$emit('update:bgFileId', this.$store.addMedia(file))
     },
@@ -40,3 +85,34 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.preview {
+  width: 70%;
+}
+
+.output-preview {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-output-beamer {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+.slider {
+  height: 6vh;
+  padding: 0 2vw 0 2vw;
+}
+</style>
