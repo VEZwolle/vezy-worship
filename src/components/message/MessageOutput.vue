@@ -33,7 +33,7 @@ export default {
   margin: auto;
   padding: 1.5vw;
   text-align: center;
-  font-size: 3vw;
+  font-size: 3.4vw;
   letter-spacing: 0.01vw;
   color: #fff;
   width: 100%;
