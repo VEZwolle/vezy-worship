@@ -13,17 +13,27 @@
 
         <div class="row q-gutter-md">
           <div class="col">
-            <q-input v-model="settings.text" outlined label="Tekst" type="textarea" class="input-songtext" />
+            <q-input
+              ref="inputSong"
+              v-model="settings.text"
+              outlined
+              label="Tekst"
+              type="textarea"
+              class="input-songtext"
+              @scroll="scroll('song')"
+            />
           </div>
 
           <div class="col">
             <q-input
+              ref="inputTranslate"
               v-model="settings.translation"
               outlined
               label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
+              @scroll="scroll('translate')"
             >
               <q-btn
                 v-if="!settings.translation"
@@ -48,6 +58,8 @@
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import get from 'lodash/get'
+import set from 'lodash/set'
 
 export default {
   components: { BackgroundSetting },
@@ -55,8 +67,20 @@ export default {
   data () {
     return {
       tab: 'text',
-      isTranslating: false
+      isTranslating: false,
+      ignoreInput: null
     }
+  },
+  mounted () {
+    this.songObserver = new ResizeObserver(this.resize('song'))
+    this.songObserver.observe(this.$refs.inputSong.nativeEl)
+
+    this.translateObserver = new ResizeObserver(this.resize('translate'))
+    this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+  },
+  beforeUnmount () {
+    this.songObserver.disconnect()
+    this.translateObserver.disconnect()
   },
   methods: {
     async translate () {
@@ -70,6 +94,25 @@ export default {
       } finally {
         this.isTranslating = false
       }
+    },
+    syncInputs (input, prop) {
+      if (this.ignoreInput === input) {
+        this.ignoreInput = null
+        return
+      }
+      if (input === 'song') {
+        this.ignoreInput = 'translate'
+        set(this.$refs.inputTranslate.nativeEl, prop, get(this.$refs.inputSong.nativeEl, prop))
+      } else {
+        this.ignoreInput = 'song'
+        set(this.$refs.inputSong.nativeEl, prop, get(this.$refs.inputTranslate.nativeEl, prop))
+      }
+    },
+    scroll (input) {
+      this.syncInputs(input, 'scrollTop')
+    },
+    resize (input) {
+      return () => this.syncInputs(input, 'style.height')
     }
   }
 }
