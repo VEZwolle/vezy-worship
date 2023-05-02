@@ -22,6 +22,34 @@
               class="input-songtext"
               @scroll="scroll('song')"
             />
+            <q-toolbar class="bg-grey-3 text-dark">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='text')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='text', label='vers')">
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='text', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
+              </q-btn-dropdown>
+              <q-space />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='text')">
+                <q-tooltip>Herstel opdracht (songtekst)</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
 
           <div class="col">
@@ -45,6 +73,34 @@
                 @click="translate"
               />
             </q-input>
+            <q-toolbar v-if="settings.translation" class="bg-grey-3 text-dark">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='translation')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='translation', label='vers')">
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='translation', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
+              </q-btn-dropdown>
+              <q-space />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='translation')">
+                <q-tooltip>Herstel opdracht (vertaling)</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
         </div>
       </q-tab-panel>
@@ -53,17 +109,24 @@
       </q-tab-panel>
     </q-tab-panels>
   </div>
+
+  <SongArrangeDialog
+    ref="SongArrangeDialog"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import SongSettingsTools from './SongSettingsTools.vue'
+import SongArrangeDialog from './SongArrangeDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting },
-  extends: BaseSettings,
+  components: { BackgroundSetting, SongArrangeDialog },
+  extends: SongSettingsTools,
   data () {
     return {
       tab: 'text',
@@ -120,7 +183,7 @@ export default {
 
 <style scoped>
 .input-songtext::v-deep(textarea) {
-  height: 60vh;
+  height: 50vh;
 }
 
 .input-songtext::v-deep(textarea:read-only) {
