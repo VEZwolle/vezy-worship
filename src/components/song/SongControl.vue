@@ -48,6 +48,7 @@ function splitSong (text, linesPerSlide) {
       }
 
       result.slides = chunk(lines, linesPerSlide)
+      if (!result.slides.length) { result.slides = [['']] }
 
       return result
     })
