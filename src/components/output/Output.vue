@@ -22,6 +22,14 @@ export default {
     showMessages: Boolean,
     muted: Boolean
   },
+  data () {
+    return {
+      backgroundColor: {
+        beamer: '',
+        livestream: ''
+      }
+    }
+  },
   computed: {
     presentation () {
       return this.preview
@@ -46,18 +54,29 @@ export default {
       const style = {}
 
       if (this.showBackground) {
-        const image = this.backgroundImageUrl || require('../../assets/bg.png')
-        style.backgroundImage = `url(${image})`
+        if (this.backgroundColor.beamer && !this.backgroundImageUrl) {
+          style.backgroundColor = this.backgroundColor.beamer || '#000'
+        } else {
+          const image = this.backgroundImageUrl || require('../../assets/bg.png')
+          style.backgroundImage = `url(${image})`
+        }
+      } else if (this.id === 'livestream' && !this.alpha && this.backgroundColor.livestream) {
+        style.backgroundColor = this.backgroundColor.livestream
       }
 
       return style
     }
+  },
+  mounted () {
+    this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
+    this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
   }
 }
 </script>
 
 <style>
 .output {
+  user-select: none;
   position: relative;
   width: 100vw;
   height: 100vh;

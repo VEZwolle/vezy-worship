@@ -7,7 +7,8 @@
       </q-toolbar>
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
-        <q-tab name="displays" label="Output monitoren" />
+        <q-tab name="background" label="Achtergrond" />
+        <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
       </q-tabs>
 
       <q-separator />
@@ -17,6 +18,26 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+        </q-tab-panel>
+        <q-tab-panel name="background">
+          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
+            <template #append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-color v-model="backgroundColor.beamer" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+          <q-input v-model="backgroundColor.livestream" clearable :rules="['anyColor']" label="Livestream achtergrond kleur (leeg voor zwart)" class="q-mb-sm">
+            <template #append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-color v-model="backgroundColor.livestream" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </q-tab-panel>
       </q-tab-panels>
 
@@ -33,7 +54,11 @@ export default {
     return {
       availableDisplays: [],
       displays: {},
-      tab: 'displays'
+      backgroundColor: {
+        beamer: '',
+        livestream: ''
+      },
+      tab: 'background'
     }
   },
   computed: {
@@ -53,11 +78,19 @@ export default {
       this.$refs.dialog.hide()
     },
     async load () {
-      this.availableDisplays = await this.$electron.getAllDisplays()
-      this.displays = await this.$electron.getConfig('displays') || {}
+      if (this.$q.platform.is.electron) {
+        this.availableDisplays = await this.$electron.getAllDisplays()
+        this.displays = await this.$electron.getConfig('displays') || {}
+      }
+      this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
+      this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
     },
     async save () {
-      await this.$electron.setConfig('displays', { ...this.displays })
+      if (this.$q.platform.is.electron) {
+        await this.$electron.setConfig('displays', { ...this.displays })
+      }
+      localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
+      localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
