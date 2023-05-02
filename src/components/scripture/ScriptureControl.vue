@@ -1,5 +1,5 @@
 <template>
-  <TextSlidesControl :presentation="presentation" :preview="preview" />
+  <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
 </template>
 
 <script>
@@ -10,7 +10,11 @@ export default {
   components: { TextSlidesControl },
   extends: BaseControl,
   created () {
-    this.presentation.sections = splitScripture(this.presentation.settings.text)
+    if (this.$store.noLivestream) {
+      this.presentation.sections = splitScripture(this.presentation.settings.text, 10000)
+    } else {
+      this.presentation.sections = splitScripture(this.presentation.settings.text)
+    }
   }
 }
 
@@ -25,8 +29,10 @@ function splitScripture (text, maxCharsPerSlide = 350) {
   return text
     .split(new RegExp(lineBreaks.join('|')))
     .map((section) => {
-      const sentenceEndChars = '.?!'
-      const regex = new RegExp(`.{1,${maxCharsPerSlide}}[${sentenceEndChars}]`, 'g')
+      const sentenceEndChars1 = '.?!’”\'";'
+      const sentenceEndChars2 = ',:'
+      const minMaxChars = `.{1,${maxCharsPerSlide}}`
+      const regex = new RegExp(`${minMaxChars}$|${minMaxChars}<div>|${minMaxChars}[${sentenceEndChars1}]|${minMaxChars}[${sentenceEndChars2}]|${minMaxChars} |${minMaxChars}.`, 'g')
 
       const slides = section
         .match(regex)
