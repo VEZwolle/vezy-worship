@@ -56,6 +56,7 @@ export default {
 /* transition message-box */
 .message-enter-active, .message-leave-active {
   transition: all 1.5s ease-in-out;
+  transform: translateY(0%);
 }
 /* delay leave of parent element */
 .message-leave-active {
@@ -64,8 +65,7 @@ export default {
 
 .message-enter-from,
 .message-leave-to {
-  transform: translateY(0%);
-  opacity: 0;
+  transform: translateY(-100%);
 }
 
 /* transition message-text */
@@ -80,10 +80,8 @@ export default {
 
 .message-enter-from .message-text {
   transform: translateX(200%);
-  /* opacity: 0.001; */
 }
 .message-leave-to .message-text {
   transform: translateX(-100%);
-  /* opacity: 0.001; */
 }
 </style>
