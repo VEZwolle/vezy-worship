@@ -1,7 +1,7 @@
 <template>
-  <div class="song-output-beamer" :style="style">
+  <div class="bg-output-beamer song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <svg v-if="!clear">
+      <svg v-if="!clear" :style="styleOpacity">
         <text y="6.6vw">
           <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
           <tspan x="50%" dy="3vw">&nbsp;</tspan>
@@ -25,18 +25,6 @@ export default {
     translatedLines () {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
-    },
-    backgroundImageUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId)
-    },
-    style () {
-      const style = {}
-
-      if (this.backgroundImageUrl) {
-        style.backgroundImage = `url(${this.backgroundImageUrl})`
-      }
-
-      return style
     }
   }
 }
@@ -48,10 +36,6 @@ export default {
 }
 
 .song-output-beamer {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
 
   svg {
     position: fixed;

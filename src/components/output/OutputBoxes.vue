@@ -12,6 +12,7 @@
               :alpha="view.alpha"
               :show-background="view.showBackground"
               :show-messages="view.showMessages"
+              :visual-view="visualViewBeamer ? view.id : ''"
             />
           </Transition>
         </div>
@@ -19,6 +20,15 @@
     </div>
 
     <div class="output-boxes-selection text-caption text-dark">
+      <q-checkbox
+        v-model="visualViewBeamer"
+        right-label
+        size="xs"
+        label="check zichtbaarheid"
+      >
+        <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer & voor livestream bij tv randen</q-tooltip>
+      </q-checkbox>
+      <q-space />
       <q-checkbox
         v-for="view in views"
         :key="view.id"
@@ -75,7 +85,8 @@ export default {
           showMessages: false,
           isActive: this.alpha
         }
-      ]
+      ],
+      visualViewBeamer: false
     }
   },
   computed: {

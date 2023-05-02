@@ -50,8 +50,9 @@
     <p>
       Het onderdeel wat geselecteerd wordt in de setlist wordt weergegeven in de preview (midden kolom).<br>
       Dubbelklikken op een onderdeel zet dat onderdeel direct in de live kolom en de volgende in de previewkolom.<br>
-      Onder in de setlist staat een <img scr="../../assets/help/setlistadd.png"> waarmee je onderdelen aan de setlist kan toevoegen.<br>
-      Door met de rechtermuis knop op een onderdeel te klikken verschijnt er een menu <img src="../../assets/help/setlistmenu.png"> waarmee je het onderdeel in de preview of direct live kan zetten. Tevens kan je hiermee het onderdeel bewerken of verwijderen.
+      Onder in de setlist staat een <img src="../../assets/help/setlistadd.png"> waarmee je onderdelen aan de setlist kan toevoegen.<br>
+      Door met de rechtermuis knop op een onderdeel te klikken verschijnt er een menu <img src="../../assets/help/setlistmenu.png"> waarmee je het onderdeel in de preview of direct live kan zetten. Tevens kan je hiermee het onderdeel bewerken of verwijderen.<br>
+      Door bovenin <img src="../../assets/help/onlybeamer.png"> aan te vinken wordt er voor nieuw geselecteerde onderdelen in de Preview of GoLive geen onderverdeling meer gemaakt met minder regels op de livestream. Hierdoor kan je met minder klikken door de dienstvoor alleen de beamer gaan.
     </p>
     <div class="text-h6 q-mb-md">
       Midden kolom: preview
