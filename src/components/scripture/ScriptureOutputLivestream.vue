@@ -1,15 +1,15 @@
 <template>
   <div v-if="!clear" class="scripture-output">
-    <Caption :title="title" :text="text" :alpha="alpha" />
+    <CaptionLivestream :title="title" :text="text" format="-full" :alpha="alpha" />
   </div>
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
-import Caption from '../caption/Caption.vue'
+import CaptionLivestream from '../caption/CaptionLivestream.vue'
 
 export default {
-  components: { Caption },
+  components: { CaptionLivestream },
   extends: BaseOutput,
   computed: {
     title () {
