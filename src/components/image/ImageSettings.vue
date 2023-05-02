@@ -23,11 +23,11 @@
 
     <div class="row q-gutter-md">
       <div class="col">
-        <ImageSelect :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
+        <ImageSelect :key="resetPreview" :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle" />
       </div>
 
       <div class="col" :class="{ disabled: equal }">
-        <ImageSelect :key="equal" label="Livestream" :settings="equal ? settings.beamer : settings.livestream" />
+        <ImageSelect :key="equal + resetPreview" label="Livestream" :settings="equal ? settings.beamer : settings.livestream" />
       </div>
     </div>
   </q-card-section>
@@ -43,7 +43,8 @@ export default {
   extends: BaseSettings,
   data () {
     return {
-      equal: !this.presentation.settings.livestream.fileId
+      equal: !this.presentation.settings.livestream.fileId,
+      resetPreview: 0
     }
   },
   computed: {
@@ -77,6 +78,7 @@ export default {
       const preset = this.presentationPresets.find(p => p.id === id)
       this.settings.livestream = { ...preset.settings.livestream }
       this.settings.beamer = { ...preset.settings.beamer }
+      this.resetPreview += 1
       this.equal = !this.settings.livestream.fileId
       this.settings.title = preset.settings.title
     }
