@@ -58,6 +58,7 @@ export default {
 
 <style>
 .output {
+  user-select: none;
   position: relative;
   width: 100vw;
   height: 100vh;
