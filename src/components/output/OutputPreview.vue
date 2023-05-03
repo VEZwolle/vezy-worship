@@ -37,9 +37,9 @@ export default {
 
 <style scoped>
 .output-preview {
+  overflow: hidden;
   width: 100%;
   pointer-events: none;
-
   background-image: repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px);
   background-blend-mode: screen;
 }

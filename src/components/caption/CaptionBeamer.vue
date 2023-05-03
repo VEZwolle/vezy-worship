@@ -75,6 +75,7 @@ export default {
   @return drop-shadow(0.3vw 0.3vw 0.3vw rgba(0, 0, 0, $opacity));
 }
 .caption {
+  overflow: hidden;
   position: relative;
   width: 100%;
   height: 100%;
