@@ -41,6 +41,7 @@ export default {
 
 <style>
 .bg-output-beamer {
+  overflow: hidden;
   width: 100%;
   height: 100%;
   background-size: cover;
