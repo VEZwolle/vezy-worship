@@ -35,10 +35,10 @@
                 </q-input>
               </div>
             </div>
-            <q-input v-model="service.theme" label="Thema" placeholder="Bijv. Beter horen" :rules="['required']" />
-            <q-input v-model="service.host" label="Host" placeholder="Bijv. Cor van den Belt" :rules="['required']" />
-            <q-input v-model="service.preacher" label="Spreker" placeholder="Bijv. Olaf ten Napel" :rules="['required']" />
-            <q-input v-model="service.worshiplead" label="Aanbiddingsleider" placeholder="Bijv. Aanbidding Leider" :rules="['required']" />
+            <q-input v-model="service.theme" label="Thema" :rules="['required']" />
+            <q-input v-model="service.host" label="Host" :rules="['required']" />
+            <q-input v-model="service.preacher" label="Spreker" :rules="['required']" />
+            <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="['required']" />
 
             <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
               <template #prepend>

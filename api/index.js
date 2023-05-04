@@ -32,6 +32,34 @@ app.post('/api/scripture', async (req, res) => {
 })
 
 /**
+ * Get language from array lines.
+ */
+ app.post('/api/language', async (req, res) => {
+  const textLines = req.body.textLines
+  const resultLanguage = []
+  for (let k=0; k<textLines.length; k += 50) { // max 50/sessie
+    const data = new URLSearchParams({
+      target_lang: 'NL'
+    })  
+    for (let i=k; i < Math.min(textLines.length, k+50); i++) {
+      data.append('text', textLines[i])  
+    }
+    try {
+      const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+      const translations = result.data.translations
+      for (let translation of translations) {
+        resultLanguage.push(translation.detected_source_language)
+      }
+    } catch {
+      res.status(500).json({ error: 'deepl_error' })
+      return
+    }  
+  }
+  res.json({ resultLanguage })  
+})
+
+
+/**
  * Translate text into Dutch.
  */
 app.post('/api/translate', async (req, res) => {

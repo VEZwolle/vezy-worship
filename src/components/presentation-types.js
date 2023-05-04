@@ -10,7 +10,8 @@ export default [
       title: '',
       text: '',
       translation: '',
-      fileId: null
+      bgOpacity: 0,
+      bgFileId: null
     },
     description (settings) {
       return settings.text
@@ -31,7 +32,11 @@ export default [
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...'
+      text: 'Lorem ipsum...',
+      bgOpacity: 0,
+      bgFileId: null,
+      formatBeamer: 'Geen',
+      formatLivestream: 'Standaard'
     },
     description (settings) {
       return settings.text
@@ -41,7 +46,8 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      livestream: require('./caption/CaptionOutput.vue').default
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   },
   {
@@ -51,6 +57,8 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      bgOpacity: 0,
+      bgFileId: null,
       beamer: {
         fileId: null,
         ratio: null,
@@ -106,7 +114,9 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      type: 0
+      type: 0,
+      bgOpacity: 0,
+      bgFileId: null
     },
     description (settings) {
       if (settings.type === 1) {
@@ -119,6 +129,7 @@ export default [
       control: require('./countdown/CountdownControl.vue').default
     },
     outputs: {
+      beamer: require('./countdown/CountdownOutputBeamer.vue').default,
       livestream: require('./countdown/CountdownOutput.vue').default
     }
   },
@@ -133,7 +144,9 @@ export default [
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: ''
+      text: '',
+      bgOpacity: 0,
+      bgFileId: null
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)

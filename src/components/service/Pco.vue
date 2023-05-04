@@ -611,29 +611,34 @@ export default {
         if (id < this.planItems.length) {
           switch (this.planItems[id].type) {
             case 'song' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoSong${this.planItems[id].id}`,
                 type: 'song',
                 settings: {
                   title: this.planItems[id].title,
                   text: `${this.planItems[id].html_details}`,
                   translation: '',
-                  fileId: null
+                  bgOpacity: 0,
+                  bgFileId: null
                 }
               })
               break
             case 'caption' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoCapt${this.planItems[id].id}`,
                 type: 'caption',
                 settings: {
                   title: this.planItems[id].title,
-                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`
+                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  bgOpacity: 0,
+                  bgFileId: null,
+                  formatBeamer: 'Geen',
+                  formatLivestream: 'Standaard'
                 }
               })
               break
             case 'scripture' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoScri${this.planItems[id].id}`,
                 type: 'scripture',
                 settings: {
@@ -642,7 +647,9 @@ export default {
                   chapter: null,
                   verseFrom: null,
                   verseTo: null,
-                  text: `${this.planItems[id].title}\n${this.planItems[id].description}${this.planItems[id].html_details}`
+                  text: `${this.planItems[id].title}<br>${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  bgOpacity: 0,
+                  bgFileId: null
                 }
               })
               break
