@@ -607,7 +607,8 @@ export default {
                   title: this.planItems[id].title,
                   text: `${this.planItems[id].html_details}`,
                   translation: '',
-                  fileId: null
+                  bgOpacity: 0,
+                  bgFileId: null
                 }
               })
               break
@@ -617,7 +618,11 @@ export default {
                 type: 'caption',
                 settings: {
                   title: this.planItems[id].title,
-                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`
+                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  bgOpacity: 0,
+                  bgFileId: null,
+                  formatBeamer: 'Geen',
+                  formatLivestream: 'Standaard'
                 }
               })
               break
@@ -631,7 +636,9 @@ export default {
                   chapter: null,
                   verseFrom: null,
                   verseTo: null,
-                  text: `${this.planItems[id].title}\n${this.planItems[id].description}${this.planItems[id].html_details}`
+                  text: `${this.planItems[id].title}<br>${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  bgOpacity: 0,
+                  bgFileId: null
                 }
               })
               break
