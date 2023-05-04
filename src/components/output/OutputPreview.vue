@@ -1,6 +1,7 @@
 <template>
   <q-responsive :ratio="$store.outputRatio" class="output-preview">
     <iframe ref="iframe" />
+    <img v-if="visualView" :src="require(`../../assets/view${visualView}.png`)" class="overlay">
   </q-responsive>
 </template>
 
@@ -9,7 +10,11 @@ import { createApp } from 'vue'
 
 export default {
   props: {
-    component: Object
+    component: Object,
+    visualView: {
+      type: String,
+      default: ''
+    }
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
@@ -32,14 +37,24 @@ export default {
 
 <style scoped>
 .output-preview {
+  overflow: hidden;
   width: 100%;
   pointer-events: none;
-
   background-image: repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px);
   background-blend-mode: screen;
 }
 
 iframe {
   border: none;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  opacity: 0.4;
 }
 </style>

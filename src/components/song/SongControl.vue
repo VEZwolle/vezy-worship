@@ -1,5 +1,5 @@
 <template>
-  <TextSlidesControl :presentation="presentation" :preview="preview" />
+  <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
 </template>
 
 <script>
@@ -12,13 +12,14 @@ export default {
   components: { TextSlidesControl },
   extends: BaseControl,
   created () {
+    const split = this.$store.noLivestream ? 100 : 1
     if (this.presentation.settings.translation) {
       // Use 1 line per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 1)
-      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1)
+      this.presentation.sections = splitSong(this.presentation.settings.text, 1 * split)
+      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1 * split)
     } else {
       // Use 2 lines per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 2)
+      this.presentation.sections = splitSong(this.presentation.settings.text, 2 * split)
     }
   }
 }

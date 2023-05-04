@@ -46,7 +46,9 @@
     Basis instellingen output:
   </div>
   <p>
-    Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet. Na wijzigen moet de desktop app opnieuw opgestart worden.<br>
+    Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.<br>
+    Tevens kan je hier eventueel een achtergrond kleur instellen voor de livestream en beamer bijv. voor grbruik van de chroma key.<br>
+    Na wijzigen moet de desktop app opnieuw opgestart worden.<br>
     Bij de web-app is dit niet aanwezig; hier zijn 2 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer & van de livestream te tonen in een nieuw brouwser venster.
   </p>
 </template>
