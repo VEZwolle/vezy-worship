@@ -51,6 +51,9 @@ export default {
       this.presentation.selectedSlideIndex = 0
     }
   },
+  mounted () {
+    this.select(this.presentation.selectedSectionIndex, this.presentation.selectedSlideIndex, true)
+  },
   methods: {
     select (sectionIndex, slideIndex, scroll = false) {
       this.presentation.selectedSectionIndex = sectionIndex
@@ -58,7 +61,7 @@ export default {
 
       if (scroll) {
         const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`][0].$el
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
     },
     jump (change = +1) {

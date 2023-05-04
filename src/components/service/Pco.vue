@@ -600,7 +600,7 @@ export default {
         if (id < this.planItems.length) {
           switch (this.planItems[id].type) {
             case 'song' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoSong${this.planItems[id].id}`,
                 type: 'song',
                 settings: {
@@ -612,7 +612,7 @@ export default {
               })
               break
             case 'caption' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoCapt${this.planItems[id].id}`,
                 type: 'caption',
                 settings: {
@@ -622,7 +622,7 @@ export default {
               })
               break
             case 'scripture' :
-              this.$store.upsertPresentation({
+              this.$store.addOrUpdatePresentation({
                 id: '', // `pcoScri${this.planItems[id].id}`,
                 type: 'scripture',
                 settings: {
