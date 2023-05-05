@@ -269,6 +269,10 @@ export default {
       }
     }
   },
+  mounted () {
+    // Event Listener for pcoInlogEvent
+    window.addEventListener('message', this.pcoInlogEvent, false)
+  },
   methods: {
     getPlanGlobalId (id) {
       return this.planGlobal.findIndex(p => p.id === id)
@@ -483,14 +487,32 @@ export default {
     async pco () {
       this.isPcoLoading = true
 
+      /*
+      localStorage.setItem('pcoToken', '....')
+      localStorage.setItem('pcoTokenExpiry', 0)
+      localStorage.setItem('pcoRefreshToken', '....')
+      */
+
+      const pcoToken = localStorage.getItem('pcoToken') || ''
+      const pcoTokenExpiry = localStorage.getItem('pcoTokenExpiry') || 0
+      const pcoRefreshToken = localStorage.getItem('pcoRefreshToken') || ''
+
       try {
         const result = await this.$api.post('/pco', {
           serviceType: this.serviceTypeId,
           plan: this.planId,
           itemCount: this.itemCount,
-          item: this.itemId
+          item: this.itemId,
+          token: pcoToken,
+          tokenExpiry: pcoTokenExpiry,
+          refreshToken: pcoRefreshToken
         })
-        // console.log(result.data)
+        // console.log(result)
+        if (result.pcoTokens) {
+          localStorage.setItem('pcoToken', result.pcoTokens.token)
+          localStorage.setItem('pcoTokenExpiry', result.pcoTokens.tokenExpiry)
+          localStorage.setItem('pcoRefreshToken', result.pcoTokens.refreshToken)
+        }
         if (result.url) { // first login
           window.open(result.url, '_blank')
         } else if (result.errorStatus) { // Error return PCO API
@@ -581,18 +603,11 @@ export default {
     },
     async pcoLogout () {
       this.isPcoLoading = true
-      try {
-        const result = await this.$api.get('/pco/auth/logout')
-        if (result.logout) {
-          this.$q.notify({ type: 'positive', message: 'Uitgelogd bij PCO.' })
-        } else { // fout
-          this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met uitloggen bij PCO. Probeer het later opnieuw.' })
-        }
-      } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met uitloggen bij PCO. Probeer het later opnieuw.' })
-      } finally {
-        this.isPcoLoading = false
-      }
+      localStorage.removeItem('pcoToken')
+      localStorage.removeItem('pcoTokenExpiry')
+      localStorage.removeItem('pcoRefreshToken')
+      this.$q.notify({ type: 'positive', message: 'Uitgelogd bij PCO.' })
+      this.isPcoLoading = false
     },
     addPcoItemToService (id) {
       // no PCO id item to service to update by accent ; maby in futer bij live add
@@ -655,6 +670,14 @@ export default {
           this.addPcoItemToService(i)
         }
       }
+    },
+    pcoInlogEvent (event) {
+      // Verify App - api Domain
+      if (event.origin !== 'http://localhost:5000') return
+      // console.log(event.data)
+      if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
+      if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
+      if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
     }
   }
 }
