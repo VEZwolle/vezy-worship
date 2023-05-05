@@ -190,19 +190,19 @@ export default {
       // dienst met song + geen tekst: 1043892 | 50034546
       isPcoLoading: false,
       isPcoItemsLoading: false,
-      serviceTypes: '', // array of serviceTypes
+      serviceTypes: '', //        array of serviceTypes
       serviceTypesShow: false, // collaps dropdownbox      default false                        | true
       serviceTypesLabel: '05 VEZ-hallen zondagochtend', // default: 05 VEZ-hallen zondagochtend | Dienst type
       serviceTypeId: '1150700', //                         default: 1150700                     | ''
-      plans: '', // array op plans
-      plansShow: true, // collaps dropdownbox
+      plans: '', //               array op plans
+      plansShow: true, //         collaps dropdownbox
       plansLabel: 'Datum dienst', // label dropdownbox
-      planId: '', // use for find this plan with serviceTypeId; do not use itemCount & itemId on the same time. | empty first plan of serviceTypeId will used
-      itemCount: '', // count items of plan
-      planItems: '', // array of plan items
+      planId: '', //              use for find this plan with serviceTypeId; do not use itemCount & itemId on the same time. | empty first plan of serviceTypeId will used
+      itemCount: '', //           count items of plan
+      planItems: '', //           array of plan items
       itemId: '',
-      itemsNotes: '', // array of item notes
-      teamMembers: '', // array of teammembers
+      itemsNotes: '', //          array of item notes
+      teamMembers: '', //         array of teammembers
       planDate: '',
       planTime: '',
       planGlobal: [
@@ -270,7 +270,6 @@ export default {
     }
   },
   mounted () {
-    // Event Listener for pcoInlogEvent
     window.addEventListener('message', this.pcoInlogEvent, false)
   },
   methods: {
@@ -395,11 +394,6 @@ export default {
       for (let i = 0; i < this.teamMembers.length; i++) {
         if (this.teamMembers[i].attributes.status !== 'D') { // D = Declined
           switch (this.teamMembers[i].attributes.team_position_name) {
-            /**
-             * Floormanager
-             * 01 Coördinator van dienst
-             * 05 Oudste van Dienst
-             */
             case 'Aanbiddingsleider':
               this.setPlanGlobalValue('planWorshipLead', this.teamMembers[i].attributes.name)
               break
@@ -446,22 +440,21 @@ export default {
       this.setPlanGlobalImport('planTitle', this.isNew)
       this.plansShow = false
       this.itemId = 'team'
-      await this.pco() // get teammembers
+      await this.pco() //         get teammembers
       this.itemId = ''
-      await this.pco() // get planitems
+      await this.pco() //         get planitems
       await this.updateService()
       this.checkPlanGlobal()
     },
     async pcoSongArrangement (itemId) {
       this.itemId = `${itemId}/arrangement`
-      await this.pco() // get arrangement
-      this.itemId = '' // reset when data is return
+      await this.pco() //         get arrangement
+      this.itemId = '' //         reset when data is return
       if (this.itemsNotes.length) {
-        return this.itemsNotes[0].attributes.lyrics || '' // this.itemsNotes[0].attributes.chord_chart
+        return this.itemsNotes[0].attributes.lyrics || ''
       }
       return ''
     },
-    // error steeds 1 minder ingevuld nog verwerken..... nu alles direct leeg gedaan.
     errorReturn () {
       if (this.serviceTypeId) {
         if (this.planId) {
@@ -487,12 +480,6 @@ export default {
     async pco () {
       this.isPcoLoading = true
 
-      /*
-      localStorage.setItem('pcoToken', '....')
-      localStorage.setItem('pcoTokenExpiry', 0)
-      localStorage.setItem('pcoRefreshToken', '....')
-      */
-
       const pcoToken = localStorage.getItem('pcoToken') || ''
       const pcoTokenExpiry = localStorage.getItem('pcoTokenExpiry') || 0
       const pcoRefreshToken = localStorage.getItem('pcoRefreshToken') || ''
@@ -507,7 +494,6 @@ export default {
           tokenExpiry: pcoTokenExpiry,
           refreshToken: pcoRefreshToken
         })
-        // console.log(result)
         if (result.pcoTokens) {
           localStorage.setItem('pcoToken', result.pcoTokens.token)
           localStorage.setItem('pcoTokenExpiry', result.pcoTokens.tokenExpiry)
@@ -610,7 +596,7 @@ export default {
       this.isPcoLoading = false
     },
     addPcoItemToService (id) {
-      // no PCO id item to service to update by accent ; maby in futer bij live add
+      // no PCO id item to service to update by accent
       if (this.isCreated) {
         if (id < this.planItems.length) {
           switch (this.planItems[id].type) {
@@ -674,11 +660,10 @@ export default {
     pcoInlogEvent (event) {
       // Verify App - api Domain
       if (event.origin !== 'http://localhost:5000') return
-      // console.log(event.data)
       if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
       if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
       if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
-    }
+      }
   }
 }
 </script>
