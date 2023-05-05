@@ -113,7 +113,26 @@ app.get('/api/pco/auth/complete', async (req, res) => {
     pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
     pcoTokens.refreshToken = response.data.refresh_token
     // const scopes = response.data.scope.split(' ') // onderdelen van PCO waar je toegang toe hebt gekregen met Vezy.
-    if (pcoTokens.refreshToken) return res.send(`<!DOCTYPE html><html><head><title>VezyWorship inlog Planning center online</title></head><body><script>window.localStorage.setItem('pcoToken', '${pcoTokens.token}'); window.localStorage.setItem('pcoTokenExpiry', ${pcoTokens.tokenExpiry}); window.localStorage.setItem('pcoRefreshToken', '${pcoTokens.refreshToken}');</script><h1>VezyWorship is ingelogd op PCO</h1><p>u kunt dit venster sluiten & verdergaan met ophalen gegevens uit PCO</p></body></html>`)
+    // if (pcoTokens.refreshToken) return res.send(`<!DOCTYPE html><html><head><title>VezyWorship inlog Planning center online</title></head><body><script>window.localStorage.setItem('pcoToken', '${pcoTokens.token}'); window.localStorage.setItem('pcoTokenExpiry', ${pcoTokens.tokenExpiry}); window.localStorage.setItem('pcoRefreshToken', '${pcoTokens.refreshToken}');</script><h1>VezyWorship is ingelogd op PCO</h1><p>u kunt dit venster sluiten & verdergaan met ophalen gegevens uit PCO</p></body></html>`)
+    if (pcoTokens.refreshToken) return res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head><title>VezyWorship inlog Planning center online</title></head>
+        <body>
+          <script>
+            const pcoTokens = {
+              token: '${pcoTokens.token}',
+              tokenExpiry: ${pcoTokens.tokenExpiry},
+              refreshToken: '${pcoTokens.refreshToken}'
+            };
+            window.opener.postMessage(pcoTokens, 'http://localhost:8080');
+            window.close();
+          </script>
+          <h1>VezyWorship is ingelogd op PCO</h1>
+          <p>u kunt dit venster sluiten & verdergaan met ophalen gegevens uit PCO</p>
+        </body>
+      </html>
+    `)
     res.send('Could not log in to Planning Center API using oAuth')
   } catch {
     res.status(500).json({ error: 'Could not log in to Planning Center API using oAuth' })

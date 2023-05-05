@@ -269,6 +269,10 @@ export default {
       }
     }
   },
+  mounted () {
+    // Event Listener for pcoInlogEvent
+    window.addEventListener('message', this.pcoInlogEvent, false)
+  },
   methods: {
     getPlanGlobalId (id) {
       return this.planGlobal.findIndex(p => p.id === id)
@@ -666,6 +670,14 @@ export default {
           this.addPcoItemToService(i)
         }
       }
+    },
+    pcoInlogEvent (event) {
+      // Verify App - api Domain
+      if (event.origin !== 'http://localhost:5000') return
+      // console.log(event.data)
+      if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
+      if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
+      if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
     }
   }
 }
