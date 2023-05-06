@@ -269,8 +269,8 @@ export default {
       }
     }
   },
-  mounted () {
-    window.addEventListener('message', this.pcoInlogEvent, false)
+  unmounted () {
+    window.removeEventListener('message', this.pcoInlogEvent, false)
   },
   methods: {
     getPlanGlobalId (id) {
@@ -500,6 +500,8 @@ export default {
           localStorage.setItem('pcoRefreshToken', result.pcoTokens.refreshToken)
         }
         if (result.url) { // first login
+          window.removeEventListener('message', this.pcoInlogEvent, false)
+          window.addEventListener('message', this.pcoInlogEvent, false)
           window.open(result.url, '_blank')
         } else if (result.errorStatus) { // Error return PCO API
           switch (result.errorStatus) {
@@ -663,7 +665,8 @@ export default {
       if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
       if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
       if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
-      }
+      window.removeEventListener('message', this.pcoInlogEvent, false)
+    }
   }
 }
 </script>
