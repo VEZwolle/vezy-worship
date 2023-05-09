@@ -83,7 +83,7 @@ app.post('/api/translate', async (req, res) => {
  */
 const oAuthConfig = {
   urlBase: 'https://api.planningcenteronline.com',
-  redirectUri: 'http://localhost:5000/api/pco/auth/complete',
+  redirectUri: `${process.env.API_URL}/pco/auth/complete`
 };
 /** PCO, Oauth
  * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
@@ -106,7 +106,6 @@ app.get('/api/pco/auth/complete', async (req, res) => {
 
   try {
     const response = await axios.post(`${oAuthConfig.urlBase}/oauth/token`, params)
-    console.log(response.data)
     pcoTokens.token = response.data.access_token
     // Token lifetime is given in seconds, so multiply by 1000, also subtract 60 seconds from lifetime on our end so we know to refresh the token early
     pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
@@ -122,7 +121,7 @@ app.get('/api/pco/auth/complete', async (req, res) => {
               tokenExpiry: ${pcoTokens.tokenExpiry},
               refreshToken: '${pcoTokens.refreshToken}'
             };
-            window.opener.postMessage(pcoTokens, 'http://localhost:8080');
+            window.opener.postMessage(pcoTokens, '${process.env.APP_HOST_URL}');
             window.close();
           </script>
           <h1>VezyWorship is ingelogd op PCO</h1>
@@ -151,7 +150,6 @@ async function oauthRefresh(refreshToken = null) {
 
   try {
     const response = await axios({ method: 'POST', url: `${oAuthConfig.urlBase}/oauth/token`, headers: { 'content-type': 'application/json' }, data: params })
-    console.log(response.data)
     pcoTokens.token = response.data.access_token
     pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
     pcoTokens.refreshToken = response.data.refresh_token

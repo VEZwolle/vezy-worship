@@ -59,7 +59,10 @@ module.exports = configure(function (ctx) {
       env: {
         API_URL: ctx.dev
           ? 'http://localhost:5000/api'
-          : 'https://vezy-worship.web.app/api'
+          : 'https://vezy-worship.web.app/api',
+        API_HOST_URL: ctx.dev
+          ? 'http://localhost:5000'
+          : 'https://vezy-worship.web.app'
       },
 
       // transpile: false,

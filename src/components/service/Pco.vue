@@ -269,7 +269,7 @@ export default {
       }
     }
   },
-  unmounted () {
+  beforeUnmount () {
     window.removeEventListener('message', this.pcoInlogEvent, false)
   },
   methods: {
@@ -661,7 +661,7 @@ export default {
     },
     pcoInlogEvent (event) {
       // Verify App - api Domain
-      if (event.origin !== 'http://localhost:5000') return
+      if (event.origin !== process.env.API_HOST_URL) return
       if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
       if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
       if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
