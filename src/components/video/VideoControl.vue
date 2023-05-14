@@ -15,11 +15,13 @@
       @canplaythrough="canplaythrough"
     />
   </div>
-  <div v-if="duration" class="q-pa-md row">
+  <div v-if="duration" class="q-px-md row">
     <div class="q-pa-md col2">
-      <q-btn round color="primary" :icon="iconPlayPause" @click="togglePlayPause" />
+      <q-btn round color="primary" :icon="iconPlayPause" @click="togglePlayPause">
+        <q-tooltip>Start/Pause</q-tooltip>
+      </q-btn>
     </div>
-    <div class="q-pa-md col">
+    <div class="q-px-md col">
       <q-badge color="secondary">
         {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
       </q-badge>
@@ -39,13 +41,9 @@
         @click="moveTime"
       />
     </div>
-    <div class="q-pa-md col2">
+    <div class="q-px-md col2">
       <h6>{{ remainingF }}</h6>
     </div>
-  </div>
-  <div v-if="duration">
-    settings.time: {{ settings.time }}<br>
-    readyState: {{ player.readyState || '?' }} | {{ readyStateFirst }} | {{ readyStateF }}
   </div>
 </template>
 
@@ -79,12 +77,6 @@ export default {
     },
     currentTimeF () {
       return timeFormat(this.currentTime)
-    },
-    durationF () {
-      return timeFormat(this.duration)
-    },
-    readyStateF () {
-      return readyStateFormat(this.readyStateFirst)
     }
   },
   watch: {
@@ -118,6 +110,7 @@ export default {
   },
   methods: {
     togglePlayPause () {
+      if (!this.settings.play && this.currentTime >= this.settings.endTime) return
       this.settings.play = !this.settings.play
     },
     moveTime (phase) {
@@ -141,7 +134,17 @@ export default {
       this.currentTime = e.target.currentTime
     },
     loadedmetadata (e) {
-      console.log(`loadedmetadata(${e.target.readyState})`)
+      /* e.target.readyState
+        0 = HAVE_NOTHING - no information whether or not the video is ready
+        1 = HAVE_METADATA - metadata for the video is ready
+        .loadedmetadata
+        2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond
+        .loadeddata
+        3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available
+        .canplay
+        4 = HAVE_ENOUGH_DATA - enough data available to start playing
+        .canplaythrough
+      */
       if (this.readyStateFirst < 1 && e.target.readyState > 0) {
         // start time
         if (this.settings.time < this.settings.startTime || 0) {
@@ -154,10 +157,8 @@ export default {
         if (this.settings.endTime <= this.settings.startTime || 0) this.settings.endTime = this.duration
         // labels slider
         this.markerLabels = [
-          // { value: 0, label: timeFormat(0) },
           { value: this.settings.startTime, label: timeFormat(this.settings.startTime) },
           { value: this.settings.endTime, label: timeFormat(this.settings.endTime) }
-          // { value: this.duration, label: timeFormat(this.duration) }
         ]
         this.readyStateFirst = 1
       }
@@ -179,6 +180,7 @@ export default {
 
 function timeFormat (totalSeconds) {
   if (typeof totalSeconds !== 'number') return ''
+  if (totalSeconds < 0) return '0:00'
 
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
@@ -187,36 +189,6 @@ function timeFormat (totalSeconds) {
   if (totalSeconds >= 3600) return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds}`
 
   return `${minutes}:${seconds}`
-}
-
-function readyStateFormat (readyState) {
-  /*
-    0 = HAVE_NOTHING - no information whether or not the video is ready
-    1 = HAVE_METADATA - metadata for the video is ready
-    .loadedmetadata
-    2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond
-    .loadeddata
-    3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available
-    .canplay
-    4 = HAVE_ENOUGH_DATA - enough data available to start playing
-    .canplaythrough
-  */
-  switch (readyState) {
-    case -1:
-      return '-1 = Status onbekend'
-    case 0:
-      return '0 = HAVE_NOTHING - no information whether or not the video is ready'
-    case 1:
-      return '1 = HAVE_METADATA - metadata for the video is ready'
-    case 2:
-      return '2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond'
-    case 3:
-      return '3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available'
-    case 4:
-      return '4 = HAVE_ENOUGH_DATA - enough data available to start playing'
-    default:
-      return 'Status onbekend'
-  }
 }
 </script>
 
