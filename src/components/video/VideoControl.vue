@@ -3,17 +3,49 @@
     <video
       ref="player"
       :src="fileUrl"
-      controls
+      preload="auto"
       muted
       class="full-width"
       playsinline
       disablePictureInPicture
       controlsList="nodownload noremoteplayback noplaybackrate"
       x-webkit-airplay="deny"
-      @play="play"
-      @pause="pause"
-      @seeked="seeked"
+      @timeupdate="timeupdate"
+      @loadedmetadata="loadedmetadata"
+      @canplaythrough="canplaythrough"
     />
+  </div>
+  <div v-if="duration" class="q-pa-md row">
+    <div class="q-pa-md col2">
+      <q-btn round color="primary" :icon="iconPlayPause" @click="togglePlayPause" />
+    </div>
+    <div class="q-pa-md col">
+      <q-badge color="secondary">
+        {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
+      </q-badge>
+      <q-slider
+        v-model="currentTime"
+        track-size="1vh"
+        color="primary"
+        inner-track-color="secondary"
+        :min="0"
+        :max="duration"
+        :inner-min="settings.startTime"
+        :inner-max="settings.endTime"
+        label
+        :label-value="currentTimeF"
+        :marker-labels="markerLabels"
+        @pan="moveTime"
+        @click="moveTime"
+      />
+    </div>
+    <div class="q-pa-md col2">
+      <h6>{{ remainingF }}</h6>
+    </div>
+  </div>
+  <div v-if="duration">
+    settings.time: {{ settings.time }}<br>
+    readyState: {{ player.readyState || '?' }} | {{ readyStateFirst }} | {{ readyStateF }}
   </div>
 </template>
 
@@ -22,40 +54,168 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
+  data () {
+    return {
+      currentTime: 0,
+      duration: 0,
+      readyStateFirst: -1,
+      moveSlider: false,
+      movePlayState: false,
+      markerLabels: []
+    }
+  },
   computed: {
     fileUrl () {
       return this.$store.getMediaUrl(this.settings.fileId)
+    },
+    player () {
+      return this.$refs.player
+    },
+    iconPlayPause () {
+      return this.settings.play ? 'pause' : 'play_arrow'
+    },
+    remainingF () {
+      return timeFormat((this.settings.endTime || this.duration) - this.currentTime)
+    },
+    currentTimeF () {
+      return timeFormat(this.currentTime)
+    },
+    durationF () {
+      return timeFormat(this.duration)
+    },
+    readyStateF () {
+      return readyStateFormat(this.readyStateFirst)
     }
   },
   watch: {
+    'settings.play' (val) {
+      if (!this.player) return
+      val ? this.player.play() : this.player.pause()
+    },
+    'settings.time' (val) {
+      if (!this.player) return
+      this.player.currentTime = val
+    },
+    'currentTime' (val) {
+      if (val >= this.settings.endTime) this.end()
+      if (!this.moveSlider) return
+      this.settings.time = val
+    },
     clear (val) {
-      if (this.preview) {
-        return
-      }
+      if (this.preview) return
 
       if (val === false) {
-        this.$refs.player.play()
+        this.play()
         return
       }
 
-      setTimeout(() => this.$refs.player.pause(), 300)
+      setTimeout(() => this.pause(), 300)
     }
   },
   mounted () {
-    if (!this.clear && !this.preview) {
-      this.$refs.player.play()
-    }
+    this.pause()
+    this.readyStateFirst = -1
   },
   methods: {
+    togglePlayPause () {
+      this.settings.play = !this.settings.play
+    },
+    moveTime (phase) {
+      if (phase === 'start') {
+        this.movePlayState = this.settings.play
+        this.pause()
+        this.moveSlider = true
+      } else {
+        this.moveSlider = false
+        this.settings.play = this.movePlayState
+      }
+      this.settings.time = this.currentTime
+    },
     play () {
       this.settings.play = true
     },
     pause () {
       this.settings.play = false
     },
-    seeked (e) {
-      this.settings.time = e.target.currentTime
+    timeupdate (e) {
+      this.currentTime = e.target.currentTime
+    },
+    loadedmetadata (e) {
+      console.log(`loadedmetadata(${e.target.readyState})`)
+      if (this.readyStateFirst < 1 && e.target.readyState > 0) {
+        // start time
+        if (this.settings.time < this.settings.startTime || 0) {
+          this.settings.time = (this.settings.startTime || 0) + 0.0001 * (Math.random() + 0.0001)
+        } else { // altijd ander startpunt dan vorige film om te resetten naar dat punt
+          this.settings.time += 0.0001 * (Math.random() + 0.0001)
+        }
+        // end time
+        this.duration = e.target.duration
+        if (this.settings.endTime <= this.settings.startTime || 0) this.settings.endTime = this.duration
+        // labels slider
+        this.markerLabels = [
+          // { value: 0, label: timeFormat(0) },
+          { value: this.settings.startTime, label: timeFormat(this.settings.startTime) },
+          { value: this.settings.endTime, label: timeFormat(this.settings.endTime) }
+          // { value: this.duration, label: timeFormat(this.duration) }
+        ]
+        this.readyStateFirst = 1
+      }
+    },
+    canplaythrough (e) {
+      console.log(`canplaythrough(${e.target.readyState})`)
+      if (this.readyStateFirst < 4 && e.target.readyState === 4) {
+        if (!this.clear && !this.preview) {
+          this.play()
+        }
+        this.readyStateFirst = 4
+      }
+    },
+    end () {
+      this.pause()
     }
+  }
+}
+
+function timeFormat (totalSeconds) {
+  if (typeof totalSeconds !== 'number') return ''
+
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = (totalSeconds % 60).toFixed(0).toString().padStart(2, '0')
+
+  if (totalSeconds >= 3600) return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds}`
+
+  return `${minutes}:${seconds}`
+}
+
+function readyStateFormat (readyState) {
+  /*
+    0 = HAVE_NOTHING - no information whether or not the video is ready
+    1 = HAVE_METADATA - metadata for the video is ready
+    .loadedmetadata
+    2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond
+    .loadeddata
+    3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available
+    .canplay
+    4 = HAVE_ENOUGH_DATA - enough data available to start playing
+    .canplaythrough
+  */
+  switch (readyState) {
+    case -1:
+      return '-1 = Status onbekend'
+    case 0:
+      return '0 = HAVE_NOTHING - no information whether or not the video is ready'
+    case 1:
+      return '1 = HAVE_METADATA - metadata for the video is ready'
+    case 2:
+      return '2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond'
+    case 3:
+      return '3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available'
+    case 4:
+      return '4 = HAVE_ENOUGH_DATA - enough data available to start playing'
+    default:
+      return 'Status onbekend'
   }
 }
 </script>
