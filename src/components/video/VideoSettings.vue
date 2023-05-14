@@ -37,6 +37,9 @@
           color="secondary"
           @change="rangeChange"
         />
+        <q-badge color="secondary">
+          {{ currentTimeF }}
+        </q-badge>
       </div>
       <div class="q-pa-md row">
         <div class="col2">
@@ -72,7 +75,8 @@ export default {
         min: 0,
         max: this.duration
       },
-      endPause: false
+      endPause: false,
+      currentTime: 0
     }
   },
   computed: {
@@ -84,6 +88,9 @@ export default {
     },
     rangeTimeMaxFormat () {
       return timeFormat(this.range.max)
+    },
+    currentTimeF () {
+      return timeFormat(this.currentTime)
     }
   },
   methods: {
@@ -100,7 +107,8 @@ export default {
     update (file) {
       this.settings.fileId = this.$store.addMedia(file)
       this.settings.title = file.name
-      this.settings.setStartTime = 0
+      this.range.min = 0
+      this.settings.startTime = 0
       this.settings.endTime = -1
     },
     rangeChange () {
@@ -108,13 +116,16 @@ export default {
       this.settings.endTime = this.range.max
     },
     timeupdate (e) {
+      this.currentTime = e.target.currentTime
       if (this.endPause && e.target.currentTime >= this.settings.endTime) e.target.pause()
     },
     loadedmetadata (e) {
       if (e.target.readyState > 0) {
         // end time
         this.duration = e.target.duration
-        if (this.settings.endTime <= this.settings.startTime || 0) this.settings.endTime = this.duration
+        if (this.settings.endTime <= (this.settings.startTime || 0)) this.settings.endTime = this.duration
+        if (this.settings.endTime > this.duration) this.settings.endTime = this.duration
+        if (this.settings.startTime > this.duration) this.settings.startTime = 0
         // range
         this.range = {
           min: this.settings.startTime,

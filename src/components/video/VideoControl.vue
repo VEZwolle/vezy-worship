@@ -54,7 +54,7 @@ export default {
   extends: BaseControl,
   data () {
     return {
-      currentTime: 0,
+      currentTime: null,
       duration: 0,
       readyStateFirst: -1,
       moveSlider: false,
@@ -107,11 +107,13 @@ export default {
   mounted () {
     this.pause()
     this.readyStateFirst = -1
+    if (this.preview) this.settings.time = this.settings.startTime
   },
   methods: {
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
       this.settings.play = !this.settings.play
+      if (!this.settings.play) this.settings.time = this.currentTime
     },
     moveTime (phase) {
       if (phase === 'start') {
@@ -134,27 +136,16 @@ export default {
       this.currentTime = e.target.currentTime
     },
     loadedmetadata (e) {
-      /* e.target.readyState
-        0 = HAVE_NOTHING - no information whether or not the video is ready
-        1 = HAVE_METADATA - metadata for the video is ready
-        .loadedmetadata
-        2 = HAVE_CURRENT_DATA - data for the current playback position is available, but not enough data to play next frame/millisecond
-        .loadeddata
-        3 = HAVE_FUTURE_DATA - data for the current and at least the next frame is available
-        .canplay
-        4 = HAVE_ENOUGH_DATA - enough data available to start playing
-        .canplaythrough
-      */
       if (this.readyStateFirst < 1 && e.target.readyState > 0) {
         // start time
-        if (this.settings.time < this.settings.startTime || 0) {
+        if (this.settings.time < (this.settings.startTime || 0)) {
           this.settings.time = (this.settings.startTime || 0) + 0.0001 * (Math.random() + 0.0001)
-        } else { // altijd ander startpunt dan vorige film om te resetten naar dat punt
+        } else { // always different starting point from previous movie to reset to that point
           this.settings.time += 0.0001 * (Math.random() + 0.0001)
         }
         // end time
         this.duration = e.target.duration
-        if (this.settings.endTime <= this.settings.startTime || 0) this.settings.endTime = this.duration
+        if (this.settings.endTime <= (this.settings.startTime || 0)) this.settings.endTime = this.duration
         // labels slider
         this.markerLabels = [
           { value: this.settings.startTime, label: timeFormat(this.settings.startTime) },
@@ -164,7 +155,6 @@ export default {
       }
     },
     canplaythrough (e) {
-      console.log(`canplaythrough(${e.target.readyState})`)
       if (this.readyStateFirst < 4 && e.target.readyState === 4) {
         if (!this.clear && !this.preview) {
           this.play()
