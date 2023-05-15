@@ -112,8 +112,12 @@ export default {
   methods: {
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
-      this.settings.play = !this.settings.play
-      if (!this.settings.play) this.settings.time = this.currentTime
+      if (this.settings.play) {
+        this.settings.play = false
+        this.settings.time = this.currentTime
+      } else {
+        this.play()
+      }
     },
     moveTime (phase) {
       if (phase === 'start') {
@@ -127,6 +131,10 @@ export default {
       this.settings.time = this.currentTime
     },
     play () {
+      if (this.player.readyState < 4) {
+        setTimeout(() => this.play(), 50)
+        return
+      }
       this.settings.play = true
     },
     pause () {
