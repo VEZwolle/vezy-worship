@@ -121,7 +121,7 @@ app.get('/api/pco/auth/complete', async (req, res) => {
               tokenExpiry: ${pcoTokens.tokenExpiry},
               refreshToken: '${pcoTokens.refreshToken}'
             };
-            window.opener.postMessage(pcoTokens, '${process.env.APP_HOST_URL}');
+            window.opener.postMessage(pcoTokens, '*');
             window.close();
           </script>
           <h1>VezyWorship is ingelogd op PCO</h1>
@@ -233,8 +233,7 @@ const secrets = [
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL',
-  'APP_HOST_URL'
+  'API_URL'
 ]
 
 exports.api = functions
