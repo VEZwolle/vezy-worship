@@ -229,6 +229,14 @@ app.post('/api/pco', async (req, res) => {
   }
 })
 
+const secrets = [
+  'PCOCLIENTID',
+  'PCOCLIENTSECRET',
+  'DEEPL_API_KEY',
+  'API_URL',
+  'APP_HOST_URL'
+]
+
 exports.api = functions
-  .runWith({ secrets: ['DEEPL_API_KEY'] })
+  .runWith({ secrets })
   .https.onRequest(app)
