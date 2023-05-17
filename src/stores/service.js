@@ -20,16 +20,19 @@ export default defineStore('service', {
       this.previewPresentation = null
       this.livePresentation = null
     },
-    fillService ({ id, date, time, host, preacher, backgroundImageId }) {
+    fillService ({ id, date, time, theme, host, preacher, worshiplead, backgroundImageId, pcoId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
           id: nanoid(),
           date,
           time,
+          theme,
           host,
           preacher,
+          worshiplead,
           backgroundImageId,
+          pcoId,
           presentations: []
         })
       }
@@ -43,6 +46,21 @@ export default defineStore('service', {
           type: 0
         }
       })
+
+      // Default host caption
+      if (theme) {
+        this.addOrUpdatePresentation({
+          id: 'info',
+          type: 'caption',
+          settings: {
+            title: theme,
+            // Waarom worden de spaties en nieuwe regeleinden (\r\n) verwijderd??? <br> & &nbsp; blijft wel staan
+            text: 'Spreker &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + preacher + '<br>Aanbidding : ' + worshiplead + '<br>Host &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + host,
+            formatBeamer: 'Thema',
+            formatLivestream: 'Breed'
+          }
+        })
+      }
 
       // Default host caption
       if (host) {
