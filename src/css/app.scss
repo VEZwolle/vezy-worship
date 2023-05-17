@@ -64,7 +64,10 @@
 
 // Global styles
 sup {
-  vertical-align: top;
   font-size: 0.8em;
   opacity: 0.6;
+}
+
+[class*="output"] sup {
+  vertical-align: top;
 }
