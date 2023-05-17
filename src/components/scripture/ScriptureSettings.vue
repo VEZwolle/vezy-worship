@@ -89,7 +89,7 @@
           ref="editor"
           v-model="settings.text"
           min-height="60vh"
-          :toolbar="[['bold', 'italic', 'underline', 'superscript']]"
+          :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]"
           @paste.prevent.stop="pastePlainText"
         />
       </q-tab-panel>

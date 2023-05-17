@@ -18,7 +18,9 @@
       :active-class="!preview ? 'bg-secondary text-white' : null"
       @dblclick="goLive"
     >
-      <q-item-section v-html="settings.text" />
+      <q-item-section>
+        <div v-html="settings.text" />
+      </q-item-section>
     </q-item>
   </q-list>
 </template>
