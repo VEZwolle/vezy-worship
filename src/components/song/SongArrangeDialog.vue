@@ -393,7 +393,7 @@ export default {
       }
       this.lyricsLines[index].label = null
       for (const label of labels) {
-        if (!this.lyricsLines[index].text.toLowerCase().startsWith(`${label.key} (`) && this.lyricsLines[index].text.toLowerCase() !== label.key) {
+        if (((this.lyricsLines[index].text.toLowerCase().startsWith(label.key) && this.lyricsLines[index].text.toLowerCase().includes('(')) || this.lyricsLines[index].text.toLowerCase() === label.key) === false) {
           continue
         }
         this.lyricsLines[index].label = { ...label, value: this.lyricsLines[index].text }
