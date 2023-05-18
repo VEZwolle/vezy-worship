@@ -393,7 +393,7 @@ export default {
       }
       this.lyricsLines[index].label = null
       for (const label of labels) {
-        if (!this.lyricsLines[index].text.toLowerCase().startsWith(label.key)) {
+        if (!this.lyricsLines[index].text.toLowerCase().startsWith(`${label.key} (`) && this.lyricsLines[index].text.toLowerCase() !== label.key) {
           continue
         }
         this.lyricsLines[index].label = { ...label, value: this.lyricsLines[index].text }
@@ -523,7 +523,7 @@ function splitToLines (text, outputNr = 1) {
         result.output = 3
       } else {
         for (const label of labels) {
-          if (!line?.toLowerCase().startsWith(label.key)) {
+          if (!line?.toLowerCase().startsWith(`${label.key} (`) && line?.toLowerCase() !== label.key) {
             continue
           }
           result.label = { ...label, value: lines }
