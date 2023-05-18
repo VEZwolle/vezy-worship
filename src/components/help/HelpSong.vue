@@ -28,7 +28,7 @@
       Voor overzicht kan er een hulpregel worden toegevoegd met een label.
       <ul>
         <li>
-          Deze moet dan starten met een label.<br>
+          Deze moet dan starten met <i>label (</i> met 1 spatie of alleen het <i>label</i> zonder spaties.<br>
           bijv. "infro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
           Zie onderaan deze pagina voor een complete lijst van opties.
         </li>
