@@ -28,7 +28,7 @@
       Voor overzicht kan er een hulpregel worden toegevoegd met een label.
       <ul>
         <li>
-          Deze moet dan starten met <i>label</i> en een <i>(</i> in de tekst of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
+          Deze moet dan starten met <i>label</i> en een <i>( { [</i> teken of een <i>getal</i> in de tekst of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
           bijv. "infro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
           Zie onderaan deze pagina voor een complete lijst van opties.
         </li>
