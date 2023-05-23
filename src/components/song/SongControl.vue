@@ -39,7 +39,7 @@ function splitSong (text, linesPerSlide) {
       const lines = section.split('<br>')
 
       for (const label of labels) {
-        if (((lines[0]?.toLowerCase().startsWith(label.key) && lines[0]?.toLowerCase().includes('(')) || lines[0]?.toLowerCase() === label.key) === false) {
+        if (((lines[0]?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(lines[0]?.toLowerCase())) || lines[0]?.toLowerCase() === label.key) === false) {
           continue
         }
 
