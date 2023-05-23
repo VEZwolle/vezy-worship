@@ -356,9 +356,9 @@ export default {
           if (pItems[i].attributes.item_type === 'song' && pItems[i].relationships.arrangement.data !== null) {
             songArrangement = await this.pcoSongArrangement(pItems[i].id)
             if (songArrangement) {
-              songArrangement = `tag PCO song lyrics:\n\n${songArrangement}`
+              songArrangement = `tag (PCO) song lyrics:\n\n${songArrangement}`
               if (pItems[i].attributes.html_details) {
-                songArrangement = `tag PCO Details:\n\n${pItems[i].attributes.html_details}\n \n\n${songArrangement}`
+                songArrangement = `tag (PCO) Details:\n\n${pItems[i].attributes.html_details}\n \n\n${songArrangement}`
               }
             }
           }
