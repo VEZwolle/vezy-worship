@@ -29,7 +29,8 @@
           <u><b>Onderdelenlijst/setlist:</b> Linker kolom</u><br>
           Hier kan je de verschillende onderdelen van de dienst terug vinden, gesorteerd op de volgorde van de dienst.<br>
           1x aanklikken zorgt er voor dat het onderdeel in de preview kolom zichtbaar wordt.<br>
-          Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.
+          Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.<br>
+          Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opspitsing van teksten te krijgen.
         </li>
         <li>
           <u><b>Voorbeeld/preview:</b> Midden kolom</u><br>
@@ -88,6 +89,10 @@
         <li>
           Het alpha channel van de livestream.<br>
           <i>Deze geeft met zwart/wit aan welke onderdelen wel of niet transparant moeten worden van de livestream uitvoer over de film beelden heen. (Zwart = op deze plek filmbeeld behouden; Wit = hier de livestream output tonen.)</i>
+        </li>
+        <li>
+          Tevens kan je hier ook een overlay over je preview zetten om te beoordelen of de gegevens goed zichtbaar zijn in alle hoeken van de zaal.<br>
+          Vink daarvoor "check zichtbaarheid" aan.
         </li>
       </ul>
     </p>
