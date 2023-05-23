@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
+import PACKAGE from '../../package.json'
 import presentationPresets from '../components/presentation-presets'
+import { versionUpdate } from './versionUpdate'
 
 export default defineStore('service', {
   state: () => ({
@@ -19,12 +21,17 @@ export default defineStore('service', {
       this.service = cloneDeep(data)
       this.previewPresentation = null
       this.livePresentation = null
+      if (this.service.version !== PACKAGE.version) {
+        this.service = versionUpdate(this.service)
+        this.service.version = PACKAGE.version
+      }
     },
     fillService ({ id, date, time, theme, host, preacher, worshiplead, backgroundImageId, pcoId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
         this.loadService({
           id: nanoid(),
+          version: PACKAGE.version,
           date,
           time,
           theme,
