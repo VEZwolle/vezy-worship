@@ -45,14 +45,16 @@
           <li>Er kan vooraf een start en eindpunt worden ingesteld voor afspelen van een deel</li>
         </ul>
       </li>
-      <li>Titels (naambalk, melding, etc.)
+      <li>
+        Titels (naambalk, melding, etc.)
         <ul>
           <li>Ondertitels (naambalk, melding, etc.) voor op de livestream</li>
           <li>Verschillende opmaken om dezelfde teksten op de beamer te tonen.</li>
         </ul>
       </li>
       <li>Aftelklok of tijd tot begin van de dienst</li>
-      <li>Importeren gegevens uit <a href="https://planningcenteronline.com" target="_blank">PCO</a>
+      <li>
+        Importeren gegevens uit <a href="https://planningcenteronline.com" target="_blank">PCO</a>
         <ul>
           <li>Importeren van de onderdelen/setlist tijdens dienst</li>
           <li>Keuze voor import van import naar Song/Titel/Bijbeltekst</li>
