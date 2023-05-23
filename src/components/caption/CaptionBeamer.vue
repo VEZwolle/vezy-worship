@@ -98,7 +98,7 @@ export default {
     filter: shadow(0.8);
   }
   .theme {
-    padding: 15vh 0 0 2vw;
+    padding: 9vh 0 0 2vw;
     width: 100%;
     color: #fff;
     text-align: left;
