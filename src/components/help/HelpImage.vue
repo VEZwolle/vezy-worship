@@ -18,6 +18,7 @@
       Hierna kan je eventueel de <i>naam</i> nog invullen.<br>
       In basis wordt de afbeelding op de beamer en op de livestream getoond.<br>
       Dit kan je veranderen door op de knop <img src="../../assets/help/imagezelfde.png"> te klikken en dan via <img src="../../assets/help/imageselecteerlivestream.png"> een ander bestand te kiezen.<br>
+      Via de knop "Standaard" zijn de standaard sheets uit VezyWorship (extra) toe te voegen.<br>
       Zie onder wat aandachtspunten & andere opties.<br>
       <img src="../../assets/help/imagedialog.png">
     </p>
