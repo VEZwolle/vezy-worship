@@ -110,6 +110,15 @@
       </q-list>
     </p>
     <div class="text-h6 q-mb-md">
+      Afwijkende achtergrond
+    </div>
+    <p>
+      Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten.<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
+    </p>
+    <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
     </div>
     <p>

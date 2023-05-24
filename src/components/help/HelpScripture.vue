@@ -76,9 +76,10 @@
       Afwijkende achtergrond
     </div>
     <p>
-      <i>Dit onderdeel werkt nog niet in de output naar de beamer.</i><br>
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png">
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten.<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken
