@@ -84,18 +84,56 @@
           <img src="../../assets/help/addsongdialog2to1enter.png"> Deze knop vervangt in de tekst alle dubbele regeleinden door een enkele.
         </li>
         <li>
-          <img src="../../assets/help/addsongdialogspaceremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels.
+          <img src="../../assets/help/addsongdialogspaceremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels.<br>
+          <i>Dit voorkomt vaak vreemde fouten in de splitsing van liederen of uitlijningsverschillen van dezelfde teksten.</i>
         </li>
         <li>
-          <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen; dit gebeurt niet wanneer de zin reeds met een label begint.
+          <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen;<br>
+          Dit gebeurt niet wanneer de zin reeds met een label begint.
         </li>
         <li>
-          <img src="../../assets/help/addsongdialogundu.png">
+          <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je 1 van de gebruikte tools, 1x ongedaan maken.<br>
+          <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i>
         </li>
         <li>
-          <img src="../../assets/help/addsongdialogordenen.png">
+          <img src="../../assets/help/addsongdialogordenen.png"> Hiermee start je het tekst ordenen dialoog op.<br>
+          Zie onder voor verdere uitleg.
         </li>
       </ul>
+    </p>
+    <p>
+      <b><u>Bewerkingshulpmiddel - Ordenen</u></b><br>
+      Deze tool is via de knop "ordenen" op te starten.<br>
+      Bij het opstarten worden gelijk alle voor en achterloop spaties verwijderd. Tevens worden alleen de labels van de tekst gebruikt, zowel voor tekst als voor de vertaling.<br>
+      <img src="../../assets/help/songdialogordenen.png">
+      <ul>
+        <li>
+          <img src="../../assets/help/songdialogordenen1kolom.png"> & <img src="../../assets/help/songdialogordenen2kolom.png"> Hiermee kan je switschen tussen de 1 & 2 kolommen weergave. In de 1 kolom weergave staat de tekst en vertaling onder elkaar en kan je ook de verwijderde regels zien (en herstellen). (het symbool geeft aan wat het is.)
+        </li>
+        <li>
+          Wanneer je met de muis boven een regel staat krijg je een aantal opties te zien.<img src="../../assets/help/songdialogordenenoptiesregel.png"><br>
+          - voeg een lege regel in.<br>
+          - verwijder de regel<br>
+          - verplaats naar de tekst<br>
+          - verplaats naar de vertaling<br>
+          - pas bei beide toe<br>
+        </li>
+        <li>
+          Wanneer je met de rechter muisknop op een regel klikt krijg je de onderstaande opties te zien.<br>
+          <img src="../../assets/help/songdialogordenenoptiesregelright.png"><br>
+          - Door met rechts op de optie "label..." te klikken krijg je de andere labels te zien om uit te kiezen<br>
+          - Lege regel invoegen is alleen voor de huidige kolom; bij (beide) voor beide kolommen
+          - Kopieren van onderdeel kopieerd het geheel; hierna kan je op een andere positie uit het menu kiezen voor plakken (met of zonder het label)<br>
+          - de onderste opties zijn gelijk aan bovenstaande knoppen wanneer je de muis boven de regel houdt.<br>
+        </li>
+        <li>
+          <img src="../../assets/help/songdialogordenenzoektaal.png"> Deze knop haalt de nederlandse tekst uit de liedtekst en verplaatst deze naar de vertaling van het lied. Dit gebeurt via taalherkenning van DeepL. Hierdoor wordt 95-100% in de juiste kolom geplaatst. De labels blijven ongewijzigd in beide kolommen staan.
+        </li>
+        <li>
+          <img src="../../assets/help/songdialogordenenswitch.png"> Door deze switch om te zetten kan je de tekst in de regel bewerken. Dubbel klik met de muis op de regel activeerd deze bewerkmodus ook. Met "enter" ga je weer uit de bewerkmodes.
+        </li>
+      </ul>
+      Alleen na gebruik van de knop "toepassen" wordt de bewerking opgeslagen naar je liedtekst in de setlist; "annuleren" sluit het venster zonder opslaan.
     </p>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
