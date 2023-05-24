@@ -2,7 +2,7 @@
   <div>
     <div class="text-h4 q-mb-md">
       <img src="../../../public/icons/favicon-32x32.png">
-      Ondertitels/teksten toevoegen / wijzigen
+      Titels/teksten toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
       Nieuwe ondertitels en/of tekst toevoegen aan setlist:
@@ -13,8 +13,7 @@
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
       Vul hier de <i>titel</i> en de <i>tekst</i> in de betreffende vakken in. Onder <i>preview</i> zie je een voorbeeld.<br>
-      De opmaak van de teksten wordt grotendeels door het programma geregeld.<br>
-      De groote van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.<br>
+      De opmaak van de teksten wordt grotendeels door het programma geregeld, je kan hier kiezen uit een aantal opmaken.<br>
       Zie onder wat aandachtspunten.<br>
       <img src="../../assets/help/addcaptiondialog.png">
     </p>
@@ -27,15 +26,50 @@
       Vul hier de titel in die boven de tekst wordt weergegeven.
     </p>
     <p>
-      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden.<br>
+      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden,<br>
+      verkleind en grijs als vers nummer weergegeven of alle opmaak verwijderd worden.<br>
       <img src="../../assets/help/captionfontsetting.png">
     </p>
     <p>
-      <i><u>aandachtspunten / opmerkingen:</u></i>
+      <b><u>Opmaak</u></b><br>
+      <i><u>Opties Beamer:</u></i>
       <ul>
         <li>
-          Op dit moment is er alleen een livestream ondertitel.<br>
-          Er wordt aan gewerkt om dit uit te breiden naar beamer & livesteam met diverse opties.
+          <b>Standaard</b><br>
+          Titel boven aan en tekst hier onder weergegeven.
+        </li>
+        <li>
+          <b>Bijbeltekst</b><br>
+          Titel rechts onder, op rand zichtgebied van de zaal en tekst vanaf boven weergegeven.
+        </li>
+        <li>
+          <b>Alleen tekst</b><br>
+          Alleen de tekst wordt weergegeven, de titel niet.
+        </li>
+        <li>
+          <b>Thema</b><br>
+          De titel komt onder de tekst thema te staan en de tekst onderin het zichtbare gebied.
+        </li>
+        <li>
+          <b>Geen</b><br>
+          Er niets weergegeven.
+        </li>
+      </ul>
+    </p>
+    <p>
+      <i><u>Opties Livestream:</u></i>
+      <ul>
+        <li>
+          <b>Standaard</b><br>
+          De groote van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.
+        </li>
+        <li>
+          <b>Breed</b><br>
+          Het onderdeel vak wordt over de hele breedte weergeven.
+        </li>
+        <li>
+          <b>Geen</b><br>
+          Er niets weergegeven.
         </li>
       </ul>
     </p>
