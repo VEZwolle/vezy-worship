@@ -1,74 +1,92 @@
 <template>
-  <q-card-section>
-    <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+  <div>
+    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+      <q-tab name="video" label="Film" />
+      <q-tab name="background" label="Achtergrond" />
+    </q-tabs>
 
-    <q-file v-model="file" accept="video/*" label="Selecteer video" outlined @update:model-value="update">
-      <template #prepend>
-        <q-icon name="smart_display" />
-      </template>
-    </q-file>
+    <q-separator />
 
-    <div v-if="fileUrl">
-      <div class="q-pa-md row">
-        <video
-          v-if="fileUrl"
-          ref="player"
-          :src="fileUrl"
-          controls
-          muted
-          playsinline
-          disablePictureInPicture
-          controlsList="nodownload noremoteplayback noplaybackrate"
-          x-webkit-airplay="deny"
-          class="full-width"
-          @timeupdate="timeupdate"
-          @loadedmetadata="loadedmetadata"
-        />
-      </div>
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="video">
+        <q-card-section>
+          <q-input v-if="fileUrl" v-model="settings.title" outlined label="Naam" :rules="['required']" />
 
-      <div class="q-px-xl q-py-md row">
-        <q-range
-          v-model="range"
-          :min="0"
-          :max="duration"
-          :left-label-value="rangeTimeMinFormat"
-          :right-label-value="rangeTimeMaxFormat"
-          label-always
-          color="secondary"
-          @change="rangeChange"
-        />
-        <q-badge color="secondary">
-          {{ currentTimeF }}
-        </q-badge>
-      </div>
-      <div class="q-pa-md row">
-        <div class="col2">
-          <q-btn color="primary" icon="first_page" label="huidig = start positie" class="float-left" dense @click="setStartTime" />
-          <q-btn round color="secondary" icon="play_arrow" class="float-left" dense @click="playStart">
-            <q-tooltip>speel vanaf start positie af</q-tooltip>
-          </q-btn>
-        </div>
-        <div class="col" />
-        <div class="col2">
-          <q-btn color="primary" icon-right="last_page" label="huidig = stop positie" dense class="float-right" @click="setEndTime" />
-          <q-btn round color="secondary" icon="play_arrow" class="float-right" dense @click="playEnd">
-            <q-tooltip>speel laatste 5 sec af</q-tooltip>
-          </q-btn>
-          <br>
-          <q-toggle v-model="endPause" label="Stop op 'stop positie'" left-label class="float-right" />
-        </div>
-      </div>
-    </div>
-  </q-card-section>
+          <q-file v-model="file" accept="video/*" label="Selecteer video" outlined @update:model-value="update">
+            <template #prepend>
+              <q-icon name="smart_display" />
+            </template>
+          </q-file>
+
+          <div v-if="fileUrl">
+            <div class="q-pa-md row">
+              <video
+                v-if="fileUrl"
+                ref="player"
+                :src="fileUrl"
+                controls
+                muted
+                playsinline
+                disablePictureInPicture
+                controlsList="nodownload noremoteplayback noplaybackrate"
+                x-webkit-airplay="deny"
+                class="full-width"
+                @timeupdate="timeupdate"
+                @loadedmetadata="loadedmetadata"
+              />
+            </div>
+
+            <div class="q-px-xl q-py-md row">
+              <q-range
+                v-model="range"
+                :min="0"
+                :max="duration"
+                :left-label-value="rangeTimeMinFormat"
+                :right-label-value="rangeTimeMaxFormat"
+                label-always
+                color="secondary"
+                @change="rangeChange"
+              />
+              <q-badge color="secondary">
+                {{ currentTimeF }}
+              </q-badge>
+            </div>
+            <div class="q-px-md row">
+              <div class="col2">
+                <q-btn color="primary" icon="first_page" label="huidig = start positie" class="float-left" dense @click="setStartTime" />
+                <q-btn round color="secondary" icon="play_arrow" class="float-left" dense @click="playStart">
+                  <q-tooltip>speel vanaf start positie af</q-tooltip>
+                </q-btn>
+              </div>
+              <div class="col" />
+              <div class="col2">
+                <q-btn color="primary" icon-right="last_page" label="huidig = stop positie" dense class="float-right" @click="setEndTime" />
+                <q-btn round color="secondary" icon="play_arrow" class="float-right" dense @click="playEnd">
+                  <q-tooltip>speel laatste 5 sec af</q-tooltip>
+                </q-btn>
+                <q-toggle v-model="endPause" label="Stop op 'stop positie'" left-label class="float-right" />
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+      </q-tab-panel>
+      <q-tab-panel name="background">
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
+import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 
 export default {
+  components: { BackgroundSetting },
   extends: BaseSettings,
   data () {
     return {
+      tab: 'video',
       file: null,
       duration: 0,
       range: {

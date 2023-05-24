@@ -1,6 +1,8 @@
 <template>
-  <div v-if="!clear && alpha" class="alpha" />
-  <video v-else v-show="!clear" ref="player" :muted="muted" :src="fileUrl" class="video" />
+  <div class="bg-output-beamer" :style="style">
+    <div v-if="!clear && alpha" class="alpha" :style="styleOpacity" />
+    <video v-else v-show="!clear" ref="player" :muted="muted" :src="fileUrl" class="video" />
+  </div>
 </template>
 
 <script>

@@ -17,6 +17,7 @@ export function versionUpdate (service) {
             presentation.settings.formatLivestream = presentation.settings.formatLivestream || 'Standaard'
             // eslint-disable-next-line
           case 'image':
+          case 'video':
           case 'countdown':
           case 'scripture':
             presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
@@ -25,8 +26,6 @@ export function versionUpdate (service) {
           default:
         }
       })
-      // eslint-disable-next-line
-    case version <= 1.0600: // 1.6.0-beta "no version"
       service.pcoId = ''
       service.presentations.forEach(presentation => {
         if (presentation.type === 'video') {
@@ -35,7 +34,6 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
-    case version <= 1.0601: // 1.6.1-beta "no version"
     case version <= 1.0602: // 1.6.2-beta first version white number
     default: // no changes
       // console.log(`version file: ${version}`)
