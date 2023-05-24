@@ -42,7 +42,7 @@ export default {
       for (let i = 0; i < lines.length; i++) {
         let hasLabel = false
         for (const label of labels) {
-          if (lines[i]?.toLowerCase().startsWith(label.key)) {
+          if (((lines[i]?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(lines[i]?.toLowerCase())) || lines[i]?.toLowerCase().startsWith(`${label.key}<br>`))) {
             hasLabel = true
             break
           }
