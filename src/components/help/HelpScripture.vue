@@ -33,7 +33,7 @@
       VezyWorship zorgt voor verdeling van de beamer tekst op de livestream aan de hand van regels & een maximale lengte aan tekens.
     </p>
     <p>
-      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden.<br>
+      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden, of alle opmaak van de tekst verwijderd worden.<br>
       <img src="../../assets/help/scripturefontsetting.png">
     </p>
     <p>
@@ -49,8 +49,15 @@
           Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
         </li>
         <li>
-          Er zitten nog een aantal <a href="https://github.com/VEZwolle/vezy-worship/issues?q=is%3Aissue+is%3Aopen+label%3Ascripture" target="_blank">fouten</a> in deze module wanneer je zelf tekst invult;<br>
-          controleer jezelf met het voorbeeld in de bedienging of het juiste wordt weergegeven.<br>
+          Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+          <sup>
+            Zoek eerst of minder dan 350 tekens<br>
+            Dan naar een regeleinde<br>
+            Dan naar [.?!]+['"’]<br>
+            Dan naar [.?!]<br>
+            Dan naar [,:; spatie]<br>
+            Dan naar iets binnen 350 tekens.
+          </sup>
         </li>
       </ul>
     </p>
@@ -69,9 +76,10 @@
       Afwijkende achtergrond
     </div>
     <p>
-      <i>Dit onderdeel werkt nog niet in de output naar de beamer.</i><br>
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png">
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten.<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken

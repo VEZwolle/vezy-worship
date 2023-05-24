@@ -27,7 +27,7 @@
                 <q-tab name="live" icon="live_tv" label="Bediening Live" />
                 <q-tab name="mainsetlist" icon="input" label="Dienst & setlist" />
                 <q-tab name="song" icon="music_note" label="Liederen" />
-                <q-tab name="caption" icon="short_text" label="Ondertitel" />
+                <q-tab name="caption" icon="short_text" label="Titels" />
                 <q-tab name="scripture" icon="menu_book" label="Bijbelteksten" />
                 <q-tab name="image" icon="image" label="Afbeeldingen" />
                 <q-tab name="video" icon="smart_display" label="Film" />
