@@ -94,6 +94,8 @@ export default [
     color: 'red',
     settings: {
       title: '',
+      bgOpacity: 0,
+      bgFileId: null,
       fileId: null,
       play: false,
       time: 0,
