@@ -115,7 +115,7 @@
     </div>
     <p>
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
-      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten.<br>
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
       <img src="../../assets/help/scriptureachtergronddialog.png"><br>
       <img src="../../assets/help/achtergronddonkerder.png">
     </p>
