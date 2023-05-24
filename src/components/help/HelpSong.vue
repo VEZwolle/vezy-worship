@@ -24,19 +24,23 @@
       <b><u>Tekst</u></b><br>
       De verdeling voor de beamer bepaal je zelf.<br>
       Gebruik een <i>lege regel</i> voor de verdeling naar een nieuwe pagina.<br>
-      VezyWorship zorgt voor verdeling van de beamer tekst naar maximaal 2 regels op de livestream.<br>
+      VezyWorship zorgt voor verdeling van de beamer tekst naar maximaal 2 regels op de livestream.
+    </p>
+    <p>
       Voor overzicht kan er een hulpregel worden toegevoegd met een label.
       <ul>
         <li>
-          Deze moet dan starten met <i>label</i> en een <i>( { [</i> teken of een <i>getal</i> in de tekst of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
+          Deze moet dan starten met<br>
+          of<i>label</i> en een <i>( { [</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
+          of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
           bijv. "infro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
           Zie onderaan deze pagina voor een complete lijst van opties.
         </li>
         <li>
-          Na de bovenstaande tekst een spatie en daarna kan je willekeurige hulpteksten plaatsen die je wilt.
-        </li>
-        <li>
-          voorbeeld: refrein (2x)
+          voorbeelden:<br>
+          refrein (2x)
+          refrein
+          refrein 2
         </li>
         <li>
           De hulpregels krijgen na opslaan in de preview en liveweergave een apparte kleur meegegeven;<br>
@@ -71,6 +75,27 @@
       Er is een mogelijkheid om de tekst automatisch te laten vertalen. Hiervoor wordt "DeepL Translator" gebruikt.<br>
       De knop hiervoor wordt alleen weergegeven wanneer er geen enkel teken in het vak vertaling staat.<br>
       <i>Let op, dit is een machine vertaling en is niet altijd juist; gebruik bij voorkeur de vertaling gemaakt door een vertaler.</i>
+    </p>
+    <p>
+      <b><u>Bewerkingshulpmiddelen</u></b><br>
+      Onder aan het venster ziet u een aantal knoppen staan die kunnen helpen bij het bewerken van de teksten.
+      <ul>
+        <li>
+          <img src="../../assets/help/addsongdialog2to1enter.png"> Deze knop vervangt in de tekst alle dubbele regeleinden door een enkele.
+        </li>
+        <li>
+          <img src="../../assets/help/addsongdialogspaceremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels.
+        </li>
+        <li>
+          <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen; dit gebeurt niet wanneer de zin reeds met een label begint.
+        </li>
+        <li>
+          <img src="../../assets/help/addsongdialogundu.png">
+        </li>
+        <li>
+          <img src="../../assets/help/addsongdialogordenen.png">
+        </li>
+      </ul>
     </p>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening

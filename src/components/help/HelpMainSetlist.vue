@@ -88,7 +88,7 @@
     <p>
       Wanneer u een account op PCO hebt kan je de dienst onderdelen importeren.<br>
       Klik hiervoor in het "Nieuwe/bewerken dienst" dialoog venster op <img src="../../assets/help/importknoppco.png">.<br>
-      De eerste keer wordt u gevraagd worden om in te loggen, en toestemming te geven dat VezyWorship toegang heeft via uw account.
+      De eerste keer wordt u gevraagd worden om in te loggen, en toestemming te geven dat VezyWorship toegang heeft via uw account.<img src="../../assets/help/pcoaccess.png">
     </p>
     <p>
       Nadat u ingelogd bent krijgt u direct de eerstvolgende dienst te zien (waar u toegang tot hebt)
