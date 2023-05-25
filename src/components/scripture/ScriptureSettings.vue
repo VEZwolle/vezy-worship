@@ -10,6 +10,15 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
         <div class="row">
+          <div class="col">
+            <q-input v-model="titleBook" outlined label="Titel (boek, vers)" :rules="['required']" @change="titleUpdate" />
+          </div>
+          <div class="col q-pl-sm">
+            <q-input v-model="titleBible" outlined label="Titel (vertaling)" :rules="['required']" @change="titleUpdate" />
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-4">
             <q-select
               v-model="settings.bible"
@@ -88,7 +97,7 @@
         <q-editor
           ref="editor"
           v-model="settings.text"
-          min-height="60vh"
+          min-height="50vh"
           :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]"
           @paste.prevent.stop="pastePlainText"
         />
@@ -113,10 +122,20 @@ export default {
   data () {
     return {
       tab: 'text',
+      titleBook: '',
+      titleBible: '',
       isLoadingScripture: false
     }
   },
   computed: {
+    title () {
+      const bookDefinition = books.find(b => b.id === this.settings.book)
+      let title = `${bookDefinition.name} ${this.settings.chapter}:${this.settings.verseFrom}`
+      if (this.settings.verseTo) {
+        title += `-${this.settings.verseTo}`
+      }
+      return `${title}`
+    },
     bibleOptions () {
       return bibles.map(b => ({
         label: b.name,
@@ -130,7 +149,17 @@ export default {
       }))
     }
   },
+  mounted () {
+    if (this.settings.title) {
+      const i = this.settings.title.indexOf('<small>(')
+      this.titleBook = i > -1 ? this.settings.title.substring(0, i - 1).trim() : this.settings.title
+      this.titleBible = i > -1 ? this.settings.title.substring(i + 8, this.settings.title.length - 9).trim() : ''
+    }
+  },
   methods: {
+    titleUpdate () {
+      this.settings.title = this.titleBible ? `${this.titleBook} <small>(${this.titleBible})</small>` : `${this.titleBook}`
+    },
     async loadScripture () {
       this.isLoadingScripture = true
 
@@ -153,6 +182,9 @@ export default {
       } finally {
         this.isLoadingScripture = false
       }
+      this.titleBook = this.title
+      this.titleBible = this.settings.bible
+      this.titleUpdate()
     },
     pastePlainText (e) {
       const text = e.clipboardData.getData('text/plain')

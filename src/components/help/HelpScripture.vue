@@ -12,7 +12,8 @@
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
-      Vul hier de <i>bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
+      Op de eerste regel kan je de titel (bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
+      Vul op de 2e regel de <i>bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
       Klik hiernaa op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
       <img src="../../assets/help/addscripturedialog.png">
@@ -43,7 +44,7 @@
           Er is een internet verbinding nodig om de tekst vanuit de database te kunnen inladen.
         </li>
         <li>
-          Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst.
+          Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst en titel.
         </li>
         <li>
           Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.

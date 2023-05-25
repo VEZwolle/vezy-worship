@@ -143,6 +143,7 @@ export default [
     icon: 'menu_book',
     color: 'brown',
     settings: {
+      title: '',
       bible: 'nbv21',
       book: 'GEN',
       chapter: null,
