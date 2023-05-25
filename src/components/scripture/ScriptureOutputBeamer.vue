@@ -17,7 +17,7 @@ export default {
   extends: BaseOutput,
   computed: {
     title () {
-      return this.presentationType.title(this.settings)
+      return this.settings.title ? this.settings.title : this.presentationType.title(this.settings)
     },
     lines () {
       const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]

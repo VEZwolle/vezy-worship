@@ -9,30 +9,35 @@ export function versionUpdate (service) {
       service.presentations.forEach(presentation => {
         switch (presentation.type) {
           case 'song':
-            presentation.settings.bgFileId = presentation.settings.bgFileId || presentation.settings.fileId || null
             presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
+            presentation.settings.bgFileId = presentation.settings.bgFileId || presentation.settings.fileId || null
             break
           case 'caption':
+            presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
+            presentation.settings.bgFileId = presentation.settings.bgFileId || null
             presentation.settings.formatBeamer = presentation.settings.formatBeamer || 'Geen'
             presentation.settings.formatLivestream = presentation.settings.formatLivestream || 'Standaard'
-            // eslint-disable-next-line
-          case 'image':
-          case 'video':
-          case 'countdown':
+            break
           case 'scripture':
             presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
             presentation.settings.bgFileId = presentation.settings.bgFileId || null
+            presentation.settings.title = ''
+            break
+          case 'image':
+          case 'countdown':
+            presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
+            presentation.settings.bgFileId = presentation.settings.bgFileId || null
+            break
+          case 'video':
+            presentation.settings.bgOpacity = presentation.settings.bgOpacity || 0
+            presentation.settings.bgFileId = presentation.settings.bgFileId || null
+            presentation.settings.startTime = presentation.settings.startTime || 0
+            presentation.settings.endTime = presentation.settings.endTime || -1
             break
           default:
         }
       })
       service.pcoId = ''
-      service.presentations.forEach(presentation => {
-        if (presentation.type === 'video') {
-          presentation.settings.startTime = presentation.settings.startTime || 0
-          presentation.settings.endTime = presentation.settings.endTime || -1
-        }
-      })
       // eslint-disable-next-line
     case version <= 1.0602: // 1.6.2-beta first version white number
     default: // no changes
