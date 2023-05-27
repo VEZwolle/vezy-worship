@@ -589,11 +589,13 @@ export default {
         this.pco()
       }
     },
-    async pcoLogout () {
+    pcoLogout () {
       this.isPcoLoading = true
       localStorage.removeItem('pcoToken')
       localStorage.removeItem('pcoTokenExpiry')
       localStorage.removeItem('pcoRefreshToken')
+      const pcoWindow = window.open('https://login.planningcenteronline.com/logout', '_blank')
+      setTimeout(() => { pcoWindow.close() }, 1000)
       this.$q.notify({ type: 'positive', message: 'Uitgelogd bij PCO.' })
       this.isPcoLoading = false
     },
