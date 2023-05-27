@@ -40,6 +40,7 @@ export function versionUpdate (service) {
       service.pcoId = ''
       // eslint-disable-next-line
     case version <= 1.0602: // 1.6.2-beta first version white number
+    case version <= 1.0603:
     default: // no changes
       // console.log(`version file: ${version}`)
       break
