@@ -589,13 +589,27 @@ export default {
         this.pco()
       }
     },
-    pcoLogout () {
+    async pcoLogout () {
       this.isPcoLoading = true
+
+      // revoke token at PCO server
+      const pcoToken = localStorage.getItem('pcoToken') || ''
+      try {
+        const result = await this.$api.post('/pco/auth/logout', {
+          token: pcoToken
+        })
+        if (result.status !== 200) this.$q.notify({ type: 'negative', message: 'Terug trekken token PCO mislukt.' })
+      } catch {
+        console.log('PCO uitlog fout')
+      }
+      // remove tokens local
       localStorage.removeItem('pcoToken')
       localStorage.removeItem('pcoTokenExpiry')
       localStorage.removeItem('pcoRefreshToken')
+      // remove cookies web-inlog
       const pcoWindow = window.open('https://login.planningcenteronline.com/logout', '_blank')
       setTimeout(() => { pcoWindow.close() }, 1000)
+
       this.$q.notify({ type: 'positive', message: 'Uitgelogd bij PCO.' })
       this.isPcoLoading = false
     },
