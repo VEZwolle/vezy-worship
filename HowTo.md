@@ -32,16 +32,16 @@ in terminal:
   - Selecteer map waar bestanden komen.
   - Open --> cloned repository
 - in terminal, in rootmap van project uitvoeren:
-  `npm install`
-  `npm i-g firebase-tools`
+  - `npm install`
+  - `npm i-g firebase-tools`
 - in terminal, in rootmap\api van project uitvoeren:
-  `npm install`
+  - `npm install`
 - in terminal, in rootmap van project uitvoeren: 
-  `npm run serve`   --> Start Vezyworship web-app: `https://localhost:8080`
+  - `npm run serve`   --> Start Vezyworship web-app: `https://localhost:8080`
 - in terminal, in rootmap van project uitvoeren: 
-  `npm run api:serve`   --> Start Vezyworship-API : `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
+  - `npm run api:serve`   --> Start Vezyworship-API : `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
   - opmerking: api-key's & secrets los instellen ( niet algemeen toegankelijk, voor testen zelf aanmaken )
-    `.env` bestand in api map: (deze ook in firebase secrets voor api zijde deploy)
+   - `.env` bestand in api map: (deze ook in firebase secrets voor api zijde deploy)
     ```
       PCOCLIENTID=...
       PCOCLIENTSECRET=...
@@ -49,7 +49,7 @@ in terminal:
       API_URL=http://localhost:5000/api of .../api
     ```
 - in terminal, in rootmap van project uitvoeren: (niet gelijk met webapp; wel api benodigd)
-  `npm run electron:serve`   --> Start Vezyworship desktop app
+  - `npm run electron:serve`   --> Start Vezyworship desktop app
 ### firebase functions:
 - Inloggen / uitloggen
   - `firebase login` 
@@ -76,9 +76,9 @@ in terminal:
 - in terminal, in rootmap\api van project uitvoeren: (bij wijziging van dependancy)
     `npm install`
 - in terminal, in rootmap van project uitvoeren: 
-    `npm run electron:build`
-    --> installatie bestand: `...\dist\electron\Packaged\...exe`
-    --> gebuikt de firebase api voor connectie met DeepL, PCO, Bible import
+    - `npm run electron:build`
+    - -> installatie bestand: `...\dist\electron\Packaged\...exe`
+    - -> gebuikt de firebase api voor connectie met DeepL, PCO, Bible import
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html
