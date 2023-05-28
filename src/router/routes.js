@@ -1,6 +1,7 @@
 
 import App from 'components/App.vue'
 import Output from 'components/output/Output.vue'
+import Help from 'components/help/Help.vue'
 
 export default [
   {
@@ -21,5 +22,9 @@ export default [
     path: '/output/livestream/alpha',
     component: Output,
     props: () => ({ id: 'livestream', alpha: true })
+  },
+  {
+    path: '/help',
+    component: Help
   }
 ]

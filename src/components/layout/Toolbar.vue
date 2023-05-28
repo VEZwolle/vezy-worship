@@ -93,19 +93,17 @@
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
-  <HelpDialog ref="helpDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
-import HelpDialog from '../help/HelpDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, HelpDialog, MessageControl },
+  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -140,7 +138,7 @@ export default {
       this.$refs.appSettingsDialog.show()
     },
     openHelp () {
-      this.$refs.helpDialog.show()
+      window.open('/#/help', 'vezyWorshipHelp', 'popup,width=1000,height=800')
     }
   }
 }
