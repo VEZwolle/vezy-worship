@@ -135,6 +135,22 @@ app.get('/api/pco/auth/complete', async (req, res) => {
   }
 })
 
+app.post('/api/pco/auth/logout', async (req, res) => {
+  const token = req.body.token || ''
+	const params = new URLSearchParams()
+  params.append('token', token)
+  params.append('client_id', process.env.PCOCLIENTID)
+  params.append('client_secret', process.env.PCOCLIENTSECRET)
+  
+  try {
+    const response = await axios.post(`${oAuthConfig.urlBase}/oauth/revoke`, params)
+    const status = response.status
+    res.json({ status: status})
+  } catch {
+    res.status(500).json({ error: 'Could not logout to Planning Center API' })
+  }
+})
+
 async function oauthRefresh(refreshToken = null) {
   const params = {
     grant_type: 'refresh_token',
