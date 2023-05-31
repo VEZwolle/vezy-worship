@@ -15,9 +15,11 @@ const filePickerOptions = {
 const fs = {
   fileHandle: null,
 
-  async open () {
+  async open (add = false) {
     const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
-    fs.fileHandle = fileHandle
+    if (!add) {
+      fs.fileHandle = fileHandle
+    }
 
     const file = await fileHandle.getFile()
 
@@ -47,8 +49,13 @@ const fs = {
       store.media[file.filename] = URL.createObjectURL(blob)
     }
 
-    // Add loaded service to store
-    store.loadService(service)
+    if (add) {
+      // add service to existing service store
+      store.addService(service)
+    } else {
+      // Add loaded service to store
+      store.loadService(service)
+    }
 
     await zipReader.close()
   },

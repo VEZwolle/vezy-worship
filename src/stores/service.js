@@ -26,6 +26,17 @@ export default defineStore('service', {
         this.service.version = PACKAGE.version
       }
     },
+    addService (data) {
+      if (data.version !== PACKAGE.version) {
+        data = versionUpdate(data)
+        data.version = PACKAGE.version
+      }
+      data.presentations.forEach(presentation => {
+        const existing = this.service.presentations.find(p => p.id === presentation.id)
+        if (existing) presentation.id = nanoid()
+        this.addPresentation(presentation)
+      })
+    },
     fillService ({ id, date, time, theme, host, preacher, worshiplead, backgroundImageId, pcoId }) {
       // Create if is a new service (so has no id yet)
       if (!id) {
