@@ -52,7 +52,7 @@ app.whenReady().then(() => {
             height: 750
           }
         }
-      case (url === process.env.APP_URL + '/#/help'):
+      default:
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
@@ -60,8 +60,6 @@ app.whenReady().then(() => {
             autoHideMenuBar: true
           }
         }
-      default:
-        return { action: 'allow' }
     }
   })
 
