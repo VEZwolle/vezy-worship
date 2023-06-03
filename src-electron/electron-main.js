@@ -37,6 +37,32 @@ app.whenReady().then(() => {
     app.quit()
   })
 
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    // options: https://www.electronjs.org/docs/latest/api/browser-window
+    switch (true) {
+      case (url.toLowerCase().startsWith('https://login.planningcenteronline.com')):
+      case (url.toLowerCase().startsWith('https://api.planningcenteronline.com')):
+        return {
+          action: 'allow',
+          overrideBrowserWindowOptions: {
+            icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+            title: 'VezyWorship | Planning Center Online',
+            autoHideMenuBar: true,
+            width: 750,
+            height: 750
+          }
+        }
+      default:
+        return {
+          action: 'allow',
+          overrideBrowserWindowOptions: {
+            icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+            autoHideMenuBar: true
+          }
+        }
+    }
+  })
+
   // Output windows (fullscreen)
   const displays = screen.getAllDisplays()
   const outputDisplays = config.get('displays') || {}
