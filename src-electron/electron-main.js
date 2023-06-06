@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, screen, ipcMain } from 'electron'
+import { app, BrowserWindow, nativeTheme, screen, ipcMain, shell } from 'electron'
 import Store from 'electron-store'
 import path from 'path'
 import os from 'os'
@@ -37,11 +37,28 @@ app.whenReady().then(() => {
     app.quit()
   })
 
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+  // help window, create & hide, prevent closing
+  let helpWindow = createWindow('/help', primaryDisplay, false, 1000, 800)
+  helpWindow.hide()
+  helpWindow.on('close', (event) => {
+    if (app.quitting) {
+      helpWindow = null
+    } else {
+      event.preventDefault()
+      helpWindow.hide()
+    }
+  })
+  // open links external
+  helpWindow.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url)
+    return { action: 'deny' }
+  })
+
+  mainWindow.webContents.setWindowOpenHandler((details) => {
     // options: https://www.electronjs.org/docs/latest/api/browser-window
     switch (true) {
-      case (url.toLowerCase().startsWith('https://login.planningcenteronline.com')):
-      case (url.toLowerCase().startsWith('https://api.planningcenteronline.com')):
+      case (details.url.toLowerCase().startsWith('https://login.planningcenteronline.com')):
+      case (details.url.toLowerCase().startsWith('https://api.planningcenteronline.com')):
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
@@ -52,6 +69,9 @@ app.whenReady().then(() => {
             height: 750
           }
         }
+      case (details.url.toLowerCase().endsWith('/#/help')):
+        helpWindow.show()
+        return { action: 'deny' }
       default:
         return {
           action: 'allow',
@@ -78,7 +98,9 @@ app.on('window-all-closed', () => {
   }
 })
 
-function createWindow (url, display, fullscreen = false) {
+app.on('before-quit', () => { app.quitting = true })
+
+function createWindow (url, display, fullscreen = false, width = 1000, height = 600) {
   if (!display) {
     return // Display not found
   }
@@ -87,8 +109,8 @@ function createWindow (url, display, fullscreen = false) {
 
   const window = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
-    width: 1000,
-    height: 600,
+    width,
+    height,
     x: x + 50,
     y: y + 50,
     useContentSize: true,
