@@ -11,15 +11,24 @@
       @shortkey="create"
     />
 
-    <q-btn
+    <q-btn-dropdown
       v-shortkey="['ctrl', 'o']"
+      split
       flat
       icon="folder_open"
       label="Open dienst"
       :loading="isLoading"
-      @click="open"
-      @shortkey="open"
-    />
+      @click="open(false)"
+      @shortkey="open(false)"
+    >
+      <q-list>
+        <q-item v-close-popup clickable :disable="!$store.service" @click="open(true)">
+          <q-item-section>
+            <q-item-label>Toevoegen aan...</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
 
     <q-btn-dropdown
       v-shortkey="['ctrl', 's']"
@@ -117,9 +126,9 @@ export default {
     create () {
       this.$refs.serviceSettingsDialog.show()
     },
-    open () {
+    open (add) {
       this.isLoading = true
-      this.$fs.open()
+      this.$fs.open(add)
         .finally(() => {
           this.isLoading = false
         })

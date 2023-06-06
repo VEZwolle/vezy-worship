@@ -29,6 +29,10 @@ function splitScripture (text, maxCharsPerSlide = 350) {
   return text
     .split(new RegExp(lineBreaks.join('|')))
     .map((section) => {
+      if (!section) {
+        const slides = [['']]
+        return { slides }
+      }
       const sentenceEndChars1 = '.?!’”\'";'
       const sentenceEndChars2 = ',:'
       const minMaxChars = `.{1,${maxCharsPerSlide}}`
