@@ -9,8 +9,16 @@
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
-        <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
-
+        <div class="row q-gutter-md">
+          <div class="col">
+            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+          </div>
+          <div class="col2">
+            <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb()">
+              <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+            </q-btn>
+          </div>
+        </div>
         <div class="row q-gutter-md">
           <div class="col">
             <q-input
@@ -115,17 +123,24 @@
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
+  <SongDatabaseDialog
+    ref="SongDatabaseDialog"
+    v-model:title="settings.title"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
 </template>
 
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
+import SongDatabaseDialog from './SongDatabaseDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog },
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseDialog },
   extends: SongSettingsTools,
   data () {
     return {
@@ -146,6 +161,9 @@ export default {
     this.translateObserver.disconnect()
   },
   methods: {
+    importSongDb () {
+      this.$refs.SongDatabaseDialog.show()
+    },
     async translate () {
       this.isTranslating = true
 
@@ -159,6 +177,7 @@ export default {
       }
     },
     syncInputs (input, prop) {
+      if (!this.settings.translation) return
       if (this.ignoreInput === input) {
         this.ignoreInput = null
         return

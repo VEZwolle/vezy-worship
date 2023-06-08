@@ -27,6 +27,7 @@ module.exports = configure(function (ctx) {
       'store',
       'api',
       'filesystem',
+      'filesystemdb',
       'electron',
       'date',
       'strip',
