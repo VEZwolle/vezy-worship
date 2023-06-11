@@ -12,12 +12,25 @@ const filePickerOptionsDb = {
 }
 
 const fsdb = {
-  fileHandleSongDatabase: null,
   localSongDatabase: null,
 
-  async openSongDatabase (dbFileHandle = '') {
-    const [fileHandleSongDatabase] = dbFileHandle || await window.showOpenFilePicker(filePickerOptionsDb)
-    const file = await fileHandleSongDatabase.getFile()
+  async openSongDatabase (dbFile = '') {
+    let file
+
+    if (dbFile) { // electron
+      try {
+        // nog uitwerken
+        // file = ....
+      } catch {
+        Notify.create({ type: 'negative', message: 'Fout bij inladen VezyWorship song database bestand' })
+      }
+    }
+
+    if (!file) {
+      // ask file location
+      const [fileHandleSongDatabase] = await window.showOpenFilePicker(filePickerOptionsDb)
+      file = await fileHandleSongDatabase.getFile()
+    }
 
     // Read file list from zip
     const zipReader = new zip.ZipReader(new zip.BlobReader(file))
@@ -30,8 +43,6 @@ const fsdb = {
       await zipReader.close()
       return
     }
-
-    fsdb.fileHandleSongDatabase = fileHandleSongDatabase
 
     songdatabase = await songdatabase.getData(new zip.TextWriter())
     fsdb.localSongDatabase = JSON.parse(songdatabase)

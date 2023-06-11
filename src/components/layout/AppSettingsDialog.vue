@@ -8,6 +8,7 @@
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
         <q-tab name="background" label="Achtergrond" />
+        <q-tab v-if="$q.platform.is.electron" name="database" label="Database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
       </q-tabs>
 
@@ -39,6 +40,10 @@
             </template>
           </q-input>
         </q-tab-panel>
+        <q-tab-panel name="database">
+          <q-btn label="Liederen Database locatie" @click="loadSongDatabase" />
+          <br>geladen: {{ songDatabase }}
+        </q-tab-panel>
       </q-tab-panels>
 
       <q-card-actions align="right">
@@ -58,6 +63,7 @@ export default {
         beamer: '',
         livestream: ''
       },
+      songDatabase: '',
       tab: 'background'
     }
   },
@@ -77,10 +83,21 @@ export default {
     hide () {
       this.$refs.dialog.hide()
     },
+    async loadSongDatabase () {
+      const dialogOptions = {
+        title: 'Open VezyWorship Liederen database bestand',
+        filters: [
+          { name: 'Vezy Liederen database', extentions: ['vezdb'] }
+        ],
+        properties: ['openFile']
+      }
+      this.songDatabase = await this.$electron.openFile(dialogOptions)
+    },
     async load () {
       if (this.$q.platform.is.electron) {
         this.availableDisplays = await this.$electron.getAllDisplays()
         this.displays = await this.$electron.getConfig('displays') || {}
+        this.songDatabase = await this.$electron.getConfig('songDatabase') || ''
       }
       this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
@@ -88,6 +105,7 @@ export default {
     async save () {
       if (this.$q.platform.is.electron) {
         await this.$electron.setConfig('displays', { ...this.displays })
+        await this.$electron.setConfig('songDatabase', this.songDatabase || '')
       }
       localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')

@@ -22,5 +22,6 @@ import { contextBridge, ipcRenderer } from 'electron'
 contextBridge.exposeInMainWorld('electron', {
   getConfig: (key) => ipcRenderer.invoke('getConfig', key),
   setConfig: (key, val) => ipcRenderer.invoke('setConfig', key, val),
-  getAllDisplays: () => ipcRenderer.invoke('getAllDisplays')
+  getAllDisplays: () => ipcRenderer.invoke('getAllDisplays'),
+  openFile: (options) => ipcRenderer.invoke('openFile', options)
 })

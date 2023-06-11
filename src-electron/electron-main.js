@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, screen, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, nativeTheme, screen, ipcMain, shell, dialog } from 'electron'
 import Store from 'electron-store'
 import path from 'path'
 import os from 'os'
@@ -23,6 +23,13 @@ ipcMain.handle('setConfig', (e, key, val) => {
 })
 ipcMain.handle('getAllDisplays', () => {
   return screen.getAllDisplays()
+})
+
+ipcMain.handle('openFile', async (e, options) => {
+  const { canceled, filePaths } = await dialog.showOpenDialog(options)
+  if (!canceled) {
+    return filePaths[0]
+  }
 })
 
 // Needed to use FileSystem API

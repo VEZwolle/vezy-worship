@@ -120,12 +120,6 @@
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
       </q-card-actions>
-      <q-inner-loading
-        :showing="isLoading"
-        label="Bezig met laden..."
-        label-class="text-teal"
-        label-style="font-size: 1.1em"
-      />
     </q-card>
   </q-dialog>
 </template>
@@ -190,7 +184,14 @@ export default {
     async show () {
       this.$refs.dialogDatabase.show()
       this.isLoading = true
-      if (!this.$fsdb.localSongDatabase) await this.$fsdb.openSongDatabase()
+      if (!this.$fsdb.localSongDatabase) {
+        if (this.$q.platform.is.electron) {
+          const dbFile = await this.$electron.getConfig('songDatabase') || ''
+          await this.$fsdb.openSongDatabase(dbFile)
+        } else {
+          await this.$fsdb.openSongDatabase()
+        }
+      }
       this.collections = [...new Set(this.$fsdb.localSongDatabase.map(d => d.collection))]
       this.collections.sort()
       this.filterSearchResults()
