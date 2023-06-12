@@ -120,12 +120,6 @@
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
       </q-card-actions>
-      <q-inner-loading
-        :showing="isLoading"
-        label="Bezig met laden..."
-        label-class="text-teal"
-        label-style="font-size: 1.1em"
-      />
     </q-card>
   </q-dialog>
 </template>
