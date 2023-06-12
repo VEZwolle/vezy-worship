@@ -20,7 +20,7 @@ const fsdb = {
     if (dbFile) { // electron
       try {
         // nog uitwerken
-        // file = ....
+        // file = ...getFile...(dbFile)
       } catch {
         Notify.create({ type: 'negative', message: 'Fout bij inladen VezyWorship song database bestand' })
       }

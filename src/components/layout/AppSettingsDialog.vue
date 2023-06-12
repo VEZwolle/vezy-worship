@@ -91,7 +91,7 @@ export default {
         ],
         properties: ['openFile']
       }
-      this.songDatabase = await this.$electron.openFile(dialogOptions)
+      this.songDatabase = await this.$electron.openFileDialog(dialogOptions)
     },
     async load () {
       if (this.$q.platform.is.electron) {

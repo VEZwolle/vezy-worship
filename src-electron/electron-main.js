@@ -25,7 +25,7 @@ ipcMain.handle('getAllDisplays', () => {
   return screen.getAllDisplays()
 })
 
-ipcMain.handle('openFile', async (e, options) => {
+ipcMain.handle('openFileDialog', async (e, options) => {
   const { canceled, filePaths } = await dialog.showOpenDialog(options)
   if (!canceled) {
     return filePaths[0]
