@@ -11,7 +11,15 @@
     <div v-if="format !== 'Bijbeltekst'" class="title" :style="titleStyle">
       <svg>
         <text x="0" y="0">
-          <tspan v-for="(titleLine, i) in titleLines" :key="-i" :x="titleTspanX" :dy="titleTspanDy" :class="titleTspanClass">{{ titleLine.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+          <tspan
+            v-for="(titleLine, i) in titleLines"
+            :key="-i"
+            :x="titleLine.newLine ? titleTspanX : null"
+            :dy="titleLine.newLine ? titleTspanDy : null"
+            :class="[titleTspanClass, titleLine.class].filter(Boolean).join(' ')"
+          >
+            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+          </tspan>
         </text>
       </svg>
     </div>
@@ -19,7 +27,15 @@
     <div class="text" :style="textStyle">
       <svg>
         <text x="0" y="0">
-          <tspan v-for="(line, i) in textLines" :key="i" :x="line.newLine ? '0' : null" :dy="line.newLine ? '4.4vw' : null" :class="line.class">{{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+          <tspan
+            v-for="(line, i) in textLines"
+            :key="i"
+            :x="line.newLine ? '0' : null"
+            :dy="line.newLine ? '4.4vw' : null"
+            :class="line.class"
+          >
+            {{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}
+          </tspan>
         </text>
       </svg>
     </div>
@@ -27,7 +43,15 @@
     <div v-if="format === 'Bijbeltekst'" class="title" :style="titleStyle">
       <svg>
         <text x="0" y="0">
-          <tspan v-for="(titleLine, i) in titleLines" :key="-i" :x="titleTspanX" :dy="titleTspanDy" :class="titleTspanClass">{{ titleLine.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+          <tspan
+            v-for="(titleLine, i) in titleLines"
+            :key="-i"
+            :x="titleLine.newLine ? titleTspanX : null"
+            :dy="titleLine.newLine ? titleTspanDy : null"
+            :class="[titleTspanClass, titleLine.class].filter(Boolean).join(' ')"
+          >
+            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+          </tspan>
         </text>
       </svg>
     </div>
@@ -35,7 +59,7 @@
 </template>
 
 <script>
-import { wrapTextLines, wrapTextLinesFormat } from '../common/WrapText'
+import { wrapTextLinesFormat } from '../common/WrapText'
 
 export default {
   props: {
@@ -54,26 +78,26 @@ export default {
         .replace(/<\/div>/g, '')
         .split('<br>')
 
-      return wrapTextLinesFormat(lines, 0.92 * window.innerWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '3.4vw', '3vw', '0')
+      return wrapTextLinesFormat(lines, 0.92 * window.innerWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '3.4vw', '3vw', '3vw', '', '0')
     },
     titleLines () {
-      let font = ' Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
+      let fontBold = '700'
+      let fontSize = '4.6vw'
       switch (this.format) {
         case 'Thema':
-          font = '700 5.8vw' + font
+          fontSize = '5.8vw'
           break
         case 'Bijbeltekst':
-          font = '400 4.6vw' + font
+          fontBold = '300'
           break
         case 'Alleen tekst':
           return []
         default:
-          font = '700 4.6vw' + font
       }
       const letterSpacing = '0.01vw'
       const maxWidth = 0.92 * window.innerWidth
 
-      return wrapTextLines([this.title], maxWidth, font, letterSpacing)
+      return wrapTextLinesFormat([this.title], maxWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize, '3vw', '3vw', fontBold, letterSpacing)
     },
     textStyle () {
       const style = {}
@@ -136,7 +160,7 @@ export default {
 
     svg {
       position: relative;
-      background-color: rgb(0, 255, 55);
+      // background-color: rgb(0, 255, 55);
       width: 100%;
       height: 4vw;
 
@@ -163,7 +187,7 @@ export default {
 
     svg {
       position: relative;
-      background-color: rgb(0, 255, 157);
+      // background-color: rgb(0, 255, 157);
       width: 100%;
 
       tspan {
@@ -188,8 +212,26 @@ export default {
     }
     .scripture{
       text-anchor: end;
-      font-weight: 400;
-      fill: #999999;
+      font-weight: 300;
+      fill: rgba(255, 255, 255, 0.6);
+      stroke: rgba(0, 0, 0, 0.6);
+    }
+    .bold {
+      font-weight: bold;
+    }
+    .italic {
+      font-style: italic;
+    }
+    .underline {
+      text-decoration: underline;
+    }
+    .sup {
+      fill: gray;
+      font-size: 3vw;
+      baseline-shift: 3;
+    }
+    .small {
+      font-size: 3vw;
     }
   }
 
@@ -197,7 +239,7 @@ export default {
 
     svg {
       position: relative;
-      background-color: blue;
+      // background-color: blue;
       width: 100%;
       height: 100vh;
 
@@ -230,6 +272,10 @@ export default {
       fill: gray;
       font-size: 3vw;
       baseline-shift: 3;
+    }
+    .small {
+      fill: gray;
+      font-size: 3vw;
     }
   }
 }

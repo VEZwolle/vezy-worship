@@ -49,7 +49,7 @@ export function wrapTextLines (lines, maxWidth, font, letterSpacing) {
   return allLines
 }
 
-export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, letterSpacing) {
+export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, fontSizeSmall, fontBold, letterSpacing) {
   const allLines = []
 
   // start format
@@ -57,6 +57,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
   let italic = false
   let underline = false
   let sup = false
+  let small = false
 
   for (let i = 0; i < lines.length; i++) {
     // split main line into different formatting pieces
@@ -98,6 +99,14 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
           sup = false
           linePieceText = linePiece.slice(5)
           break
+        case linePiece.startsWith('small>'):
+          small = true
+          linePieceText = linePiece.slice(6)
+          break
+        case linePiece.startsWith('/small>'):
+          small = false
+          linePieceText = linePiece.slice(7)
+          break
         default:
           linePieceText = linePiece
       }
@@ -109,10 +118,11 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
         resultClass += italic ? ' italic' : ''
         resultClass += underline ? ' underline' : ''
         resultClass += sup ? ' sup' : ''
+        resultClass += small ? ' small' : ''
         // getTextWidth font & space
         let font = italic ? 'italic ' : ''
-        font += bold ? 'bold ' : ''
-        font += sup ? `${fontSizeSup} ` : `${fontSize} `
+        font += bold ? 'bold ' : fontBold ? `${fontBold} ` : ''
+        font += sup ? `${fontSizeSup} ` : small ? `${fontSizeSmall} ` : `${fontSize} `
         font += fonttype
         // line pieces Result Format Segments
         lineRFS.push({
@@ -169,6 +179,8 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
 
       firstlinePiece = false
     }
+    // empty lines add
+    if (lines[i].replace(/<.+>/g, '') === '') allLines.push({ text: '  ', class: null, newLine: true })
   }
   return allLines
 }
