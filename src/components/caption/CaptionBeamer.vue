@@ -1,19 +1,42 @@
 <template>
   <div class="caption">
-    <Transition name="q-transition--fade">
-      <div>
-        <div v-if="format === 'Thema'" class="theme">
-          Thema:
-        </div>
-        <div v-if="format !== 'Bijbeltekst'" class="title" :style="styleTitle" v-html="title" />
-        <div class="text" :style="styleText" v-html="text" />
-        <div v-if="format === 'Bijbeltekst'" class="title" :style="styleTitle" v-html="title" />
-      </div>
-    </Transition>
+    <div v-if="format === 'Thema'" class="theme">
+      <svg>
+        <text x="0" y="0">
+          <tspan x="0" dy="2.6vw">Thema:</tspan>
+        </text>
+      </svg>
+    </div>
+
+    <div v-if="format !== 'Bijbeltekst'" class="title" :style="titleStyle">
+      <svg>
+        <text x="0" y="0">
+          <tspan v-for="(titleLine, i) in titleLines" :key="-i" :x="titleTspanX" :dy="titleTspanDy" :class="titleTspanClass">{{ titleLine.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+        </text>
+      </svg>
+    </div>
+
+    <div class="text" :style="textStyle">
+      <svg>
+        <text x="0" y="0">
+          <tspan v-for="(line, i) in textLines" :key="i" :x="line.newLine ? '0' : null" :dy="line.newLine ? '4.4vw' : null" :class="line.class">{{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+        </text>
+      </svg>
+    </div>
+
+    <div v-if="format === 'Bijbeltekst'" class="title" :style="titleStyle">
+      <svg>
+        <text x="0" y="0">
+          <tspan v-for="(titleLine, i) in titleLines" :key="-i" :x="titleTspanX" :dy="titleTspanDy" :class="titleTspanClass">{{ titleLine.replace(/  /g, '&nbsp;&nbsp;') }}</tspan>
+        </text>
+      </svg>
+    </div>
   </div>
 </template>
 
 <script>
+import { wrapTextLines, wrapTextLinesFormat } from '../common/WrapText'
+
 export default {
   props: {
     title: String,
@@ -21,29 +44,57 @@ export default {
     format: String
   },
   computed: {
-    styleTitle () {
+    textLines () {
+      // split text to main lines
+      const lines = this.text
+        .replace(/<\/?span(.*?)>/gi, '')
+        .replace(/ style="(.*?);">/gi, '>')
+        .replace(/<br>/g, '&nbsp;&nbsp;')
+        .replace(/<div>/g, '<br>')
+        .replace(/<\/div>/g, '')
+        .split('<br>')
+
+      return wrapTextLinesFormat(lines, 0.92 * window.innerWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '3.4vw', '3vw', '0')
+    },
+    titleLines () {
+      let font = ' Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
+      switch (this.format) {
+        case 'Thema':
+          font = '700 5.8vw' + font
+          break
+        case 'Bijbeltekst':
+          font = '400 4.6vw' + font
+          break
+        case 'Alleen tekst':
+          return []
+        default:
+          font = '700 4.6vw' + font
+      }
+      const letterSpacing = '0.01vw'
+      const maxWidth = 0.92 * window.innerWidth
+
+      return wrapTextLines([this.title], maxWidth, font, letterSpacing)
+    },
+    textStyle () {
       const style = {}
-      style.color = '#fff'
+      if (this.format === 'Thema') style.padding = '0 0 0 2vw'
+      return style
+    },
+    titleStyle () {
+      const style = {}
       style.padding = '0.0vw 0 1.0vw 0'
-      style.lineHeight = '5.0vw'
-      style.fontSize = '4.6vw'
-      style.fontWeight = '700'
+      style.height = `${this.titleLines.length * 5 + 2}vw`
       switch (this.format) {
         case 'Thema':
           style.position = 'relative'
           style.top = '-1vh'
           style.height = '26vh'
           style.padding = '0 0 0 2vw'
-          style.lineHeight = '6.6vw'
-          style.fontSize = '5.8vw'
           break
         case 'Bijbeltekst':
           style.position = 'fixed'
           style.top = '67vh'
           style.right = '4vw'
-          style.textAlign = 'right'
-          style.fontWeight = '400'
-          style.color = '#999999'
           break
         case 'Alleen tekst':
           style.display = 'none'
@@ -52,19 +103,19 @@ export default {
       }
       return style
     },
-    styleText () {
-      const style = {}
-      style.lineHeight = '4.4vw'
-      style.fontSize = '3.4vw'
+    titleTspanX () {
+      return this.format === 'Bijbeltekst' ? '100%' : '0'
+    },
+    titleTspanDy () {
+      return this.format === 'Thema' ? '6.6vw' : '5.0vw'
+    },
+    titleTspanClass () {
       switch (this.format) {
-        case 'Thema':
-          style.padding = '0 0 0 2vw'
-          style.lineHeight = '3.1vw'
-          style.fontSize = '2.5vw'
-          break
-        default:
+        case 'Thema': return 'thema'
+        case 'Bijbeltekst': return 'scripture'
+        case 'Alleen tekst':
+        default: return ''
       }
-      return style
     }
   }
 }
@@ -80,34 +131,107 @@ export default {
   width: 100%;
   height: 100%;
 
+  .theme {
+    padding: 9vh 0 0 2vw;
+
+    svg {
+      position: relative;
+      background-color: rgb(0, 255, 55);
+      width: 100%;
+      height: 4vw;
+
+      tspan {
+        font-size: 2.6vw;
+        letter-spacing: 0.01vw;
+        font-style: italic;
+
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 0.3vw;
+        stroke-linejoin: round;
+        paint-order: stroke;
+
+        text-anchor: left;
+        dominant-baseline: Auto;
+
+        filter: shadow(0.8);
+      }
+    }
+  }
   .title {
-    width: 100%;
-    text-align: left;
-    letter-spacing: 0.01vw;
-    // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    filter: shadow(0.8);
+    width: 92vw;
+
+    svg {
+      position: relative;
+      background-color: rgb(0, 255, 157);
+      width: 100%;
+
+      tspan {
+        font-size: 4.6vw;
+        letter-spacing: 0.01vw;
+        font-weight: 700;
+
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 0.5vw;
+        stroke-linejoin: round;
+        paint-order: stroke;
+
+        text-anchor: left;
+        dominant-baseline: Auto;
+
+        filter: shadow(0.8);
+      }
+    }
+    .thema {
+      font-size: 5.8vw;
+    }
+    .scripture{
+      text-anchor: end;
+      font-weight: 400;
+      fill: #999999;
+    }
   }
 
   .text {
-    padding: 0vw;
-    width: 100%;
-    text-align: left;
-    letter-spacing: 0.00vw;
-    color: #fff;
-    // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    filter: shadow(0.8);
-  }
-  .theme {
-    padding: 9vh 0 0 2vw;
-    width: 100%;
-    color: #fff;
-    text-align: left;
-    font-style: italic;
-    line-height: 4.4vw;
-    font-size: 2.6vw;
-    letter-spacing: 0.01vw;
-    // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    filter: shadow(0.8);
+
+    svg {
+      position: relative;
+      background-color: blue;
+      width: 100%;
+      height: 100vh;
+
+      tspan {
+        font-size: 3.4vw;
+        letter-spacing: 0.00vw;
+
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 0.5vw;
+        stroke-linejoin: round;
+        paint-order: stroke;
+
+        text-anchor: left;
+        dominant-baseline: Auto;
+
+        filter: shadow(0.8);
+      }
+    }
+    .bold {
+      font-weight: bold;
+    }
+    .italic {
+      font-style: italic;
+    }
+    .underline {
+      text-decoration: underline;
+    }
+    .sup {
+      fill: gray;
+      font-size: 3vw;
+      baseline-shift: 3;
+    }
   }
 }
+
 </style>
