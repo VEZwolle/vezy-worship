@@ -75,6 +75,8 @@ export default {
     pastePlainText (e) {
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
+      // eslint-disable-next-line
+      this.settings.text = this.settings.text.replace(/  /g, '&nbsp;&nbsp;')
     },
     removeTextSize (e) {
       this.settings.text = this.settings.text

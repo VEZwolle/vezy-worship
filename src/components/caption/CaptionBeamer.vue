@@ -78,26 +78,32 @@ export default {
       const lines = this.text
         .replace(/<\/?span(.*?)>/gi, '')
         .replace(/ style="(.*?);">/gi, '>')
-        .replace(/<br>/g, '&nbsp;&nbsp;')
-        .replace(/<div>/g, '<br>')
-        .replace(/<\/div>/g, '')
+        .replace(/^<div>/, '') // remove 1e div wanneer opmaak niet standaard
+        .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<br>') // lege regel tussenregel met alinea einden en eventuele opmaak
+        .replace(/<div>/g, '<br>') // overige alinea regeleinden
+        .replace(/<\/div>/g, '') // icm bovenstaand
         .split('<br>')
 
       // for measurement text wrap (same as css)
-      const maxWidth = 0.92 * window.innerWidth
+      let maxWidth = window.innerWidth
       const letterSpacing = '0'
       let fontSize = 3.4 // vw
       const fontBold = ''
 
-      if (this.format === 'Thema') {
-        fontSize = 2.5 // vw
+      switch (this.format) {
+        case 'Thema':
+          fontSize = 2.5 // vw
+          maxWidth *= 0.90
+          break
+        default:
+          maxWidth *= 0.92
       }
 
       return wrapTextLinesFormat(lines, maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
     },
     titleLines () {
       // for measurement text wrap (same as css)
-      const maxWidth = 0.92 * window.innerWidth
+      let maxWidth = window.innerWidth
       const letterSpacing = '0.01vw'
       let fontSize = 4.6 // vw
       let fontBold = '700'
@@ -105,6 +111,7 @@ export default {
       switch (this.format) {
         case 'Thema':
           fontSize = 5.8 // vw
+          maxWidth *= 0.90
           break
         case 'Bijbeltekst':
           fontBold = '300'
@@ -112,6 +119,7 @@ export default {
         case 'Alleen tekst':
           return []
         default:
+          maxWidth *= 0.92
       }
 
       return wrapTextLinesFormat([this.title], maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)

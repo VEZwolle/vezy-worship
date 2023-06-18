@@ -180,7 +180,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
       firstlinePiece = false
     }
     // empty lines add
-    if (lines[i].replace(/<.+>/g, '') === '') allLines.push({ text: '  ', class: null, newLine: true })
+    if (lines[i].replace(/([biuspmal/]*?)/g, '') === '') allLines.push({ text: '  ', class: null, newLine: true })
   }
   return allLines
 }
