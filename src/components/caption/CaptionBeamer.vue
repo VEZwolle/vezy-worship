@@ -10,13 +10,13 @@
 
     <div v-if="format !== 'Bijbeltekst'" class="title" :style="titleStyle">
       <svg>
-        <text x="0" y="0">
+        <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(titleLine, i) in titleLines"
             :key="-i"
             :x="titleLine.newLine ? titleTspanX : null"
             :dy="titleLine.newLine ? titleTspanDy : null"
-            :class="[titleTspanClass, titleLine.class].filter(Boolean).join(' ')"
+            :class="titleLine.class"
           >
             {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
           </tspan>
@@ -26,12 +26,12 @@
 
     <div class="text" :style="textStyle">
       <svg>
-        <text x="0" y="0">
+        <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(line, i) in textLines"
             :key="i"
             :x="line.newLine ? '0' : null"
-            :dy="line.newLine ? '4.4vw' : null"
+            :dy="line.newLine ? textTspanDy : null"
             :class="line.class"
           >
             {{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}
@@ -42,13 +42,13 @@
 
     <div v-if="format === 'Bijbeltekst'" class="title" :style="titleStyle">
       <svg>
-        <text x="0" y="0">
+        <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(titleLine, i) in titleLines"
             :key="-i"
             :x="titleLine.newLine ? titleTspanX : null"
             :dy="titleLine.newLine ? titleTspanDy : null"
-            :class="[titleTspanClass, titleLine.class].filter(Boolean).join(' ')"
+            :class="titleLine.class"
           >
             {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
           </tspan>
@@ -67,6 +67,11 @@ export default {
     text: String,
     format: String
   },
+  data () {
+    return {
+      font: 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
+    }
+  },
   computed: {
     textLines () {
       // split text to main lines
@@ -78,14 +83,28 @@ export default {
         .replace(/<\/div>/g, '')
         .split('<br>')
 
-      return wrapTextLinesFormat(lines, 0.92 * window.innerWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '3.4vw', '3vw', '3vw', '', '0')
+      // for measurement text wrap (same as css)
+      const maxWidth = 0.92 * window.innerWidth
+      const letterSpacing = '0'
+      let fontSize = 3.4 // vw
+      const fontBold = ''
+
+      if (this.format === 'Thema') {
+        fontSize = 2.5 // vw
+      }
+
+      return wrapTextLinesFormat(lines, maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
     },
     titleLines () {
+      // for measurement text wrap (same as css)
+      const maxWidth = 0.92 * window.innerWidth
+      const letterSpacing = '0.01vw'
+      let fontSize = 4.6 // vw
       let fontBold = '700'
-      let fontSize = '4.6vw'
+
       switch (this.format) {
         case 'Thema':
-          fontSize = '5.8vw'
+          fontSize = 5.8 // vw
           break
         case 'Bijbeltekst':
           fontBold = '300'
@@ -94,30 +113,38 @@ export default {
           return []
         default:
       }
-      const letterSpacing = '0.01vw'
-      const maxWidth = 0.92 * window.innerWidth
 
-      return wrapTextLinesFormat([this.title], maxWidth, 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize, '3vw', '3vw', fontBold, letterSpacing)
+      return wrapTextLinesFormat([this.title], maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
     },
     textStyle () {
       const style = {}
-      if (this.format === 'Thema') style.padding = '0 0 0 2vw'
+      style.position = 'relative'
+      style.padding = '0 0 0 0'
+      style.width = '92vw'
+      style.height = '100%'
+      if (this.format === 'Thema') {
+        style.position = 'fixed'
+        style.top = '28.5vw'
+        style.padding = '0 0 0 2vw'
+      }
       return style
     },
     titleStyle () {
       const style = {}
-      style.padding = '0.0vw 0 1.0vw 0'
-      style.height = `${this.titleLines.length * 5 + 2}vw`
+      style.padding = '0'
+      style.top = '0'
+      style.width = '92vw'
+      style.height = `${this.titleLines.length * 5 + 1}vw`
       switch (this.format) {
         case 'Thema':
-          style.position = 'relative'
-          style.top = '-1vh'
-          style.height = '26vh'
+          style.position = 'fixed'
+          style.top = '13vw'
+          style.height = '14.6vw'
           style.padding = '0 0 0 2vw'
           break
         case 'Bijbeltekst':
           style.position = 'fixed'
-          style.top = '67vh'
+          style.top = '65vh'
           style.right = '4vw'
           break
         case 'Alleen tekst':
@@ -133,10 +160,13 @@ export default {
     titleTspanDy () {
       return this.format === 'Thema' ? '6.6vw' : '5.0vw'
     },
-    titleTspanClass () {
+    textTspanDy () {
+      return this.format === 'Thema' ? '3.1vw' : '4.4vw'
+    },
+    formatTextClass () {
       switch (this.format) {
-        case 'Thema': return 'thema'
-        case 'Bijbeltekst': return 'scripture'
+        case 'Thema': return 'textTheme'
+        case 'Bijbeltekst': return 'textScripture'
         case 'Alleen tekst':
         default: return ''
       }
@@ -156,15 +186,15 @@ export default {
   height: 100%;
 
   .theme {
-    padding: 9vh 0 0 2vw;
+    padding: 6vw 0 0 2vw;
 
     svg {
       position: relative;
-      // background-color: rgb(0, 255, 55);
+      // background-color: rgba(0, 255, 55, 0.5);
       width: 100%;
-      height: 4vw;
+      height: 3.5vw;
 
-      tspan {
+      text {
         font-size: 2.6vw;
         letter-spacing: 0.01vw;
         font-style: italic;
@@ -183,14 +213,13 @@ export default {
     }
   }
   .title {
-    width: 92vw;
-
     svg {
       position: relative;
-      // background-color: rgb(0, 255, 157);
+      // background-color: rgba(0, 255, 157, 0.5);
       width: 100%;
+      height: 100%;
 
-      tspan {
+      text {
         font-size: 4.6vw;
         letter-spacing: 0.01vw;
         font-weight: 700;
@@ -207,10 +236,10 @@ export default {
         filter: shadow(0.8);
       }
     }
-    .thema {
+    .textTheme {
       font-size: 5.8vw;
     }
-    .scripture{
+    .textScripture{
       text-anchor: end;
       font-weight: 300;
       fill: rgba(255, 255, 255, 0.6);
@@ -226,12 +255,13 @@ export default {
       text-decoration: underline;
     }
     .sup {
-      fill: gray;
-      font-size: 3vw;
+      stroke-width: 0.3vw;
+      font-size: 0.7em;
       baseline-shift: 3;
     }
     .small {
-      font-size: 3vw;
+      stroke-width: 0.3vw;
+      font-size: 0.7em;
     }
   }
 
@@ -239,11 +269,11 @@ export default {
 
     svg {
       position: relative;
-      // background-color: blue;
+      // background-color: rgba(76, 0, 255, 0.5);
       width: 100%;
-      height: 100vh;
+      height: 100%;
 
-      tspan {
+      text {
         font-size: 3.4vw;
         letter-spacing: 0.00vw;
 
@@ -259,6 +289,9 @@ export default {
         filter: shadow(0.8);
       }
     }
+    .textTheme {
+      font-size: 2.5vw;
+    }
     .bold {
       font-weight: bold;
     }
@@ -270,12 +303,13 @@ export default {
     }
     .sup {
       fill: gray;
-      font-size: 3vw;
+      stroke-width: 0.3vw;
+      font-size: 0.7em;
       baseline-shift: 3;
     }
     .small {
-      fill: gray;
-      font-size: 3vw;
+      stroke-width: 0.3vw;
+      font-size: 0.7em;
     }
   }
 }

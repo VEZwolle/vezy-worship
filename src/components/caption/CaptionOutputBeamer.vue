@@ -27,7 +27,7 @@ export default {
   height: 100%;
   left: 0;
   top: 0;
-  padding: 5.4vw 4vw 4vw 4vw;
+  padding: 4.4vw 4vw 4vw 4vw;
 }
 
 .full {
