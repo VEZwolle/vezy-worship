@@ -100,6 +100,7 @@
           min-height="50vh"
           :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]"
           @paste.prevent.stop="pastePlainText"
+          @dragend="removeTextSize"
         />
       </q-tab-panel>
 
@@ -189,6 +190,11 @@ export default {
     pastePlainText (e) {
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
+    },
+    removeTextSize (e) {
+      this.settings.text = this.settings.text
+        .replace(/<\/?span(.*?)>/gi, '')
+        .replace(/ style="(.*?);">/gi, '>')
     },
     required (val) {
       return !!val || 'Verplicht'
