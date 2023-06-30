@@ -197,6 +197,8 @@ export default {
       this.settings.text = this.settings.text
         .replace(/<\/?span(.*?)>/gi, '')
         .replace(/ style="(.*?);">/gi, '>')
+        .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line
+        .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>') // drag-drop to empy line
     },
     required (val) {
       return !!val || 'Verplicht'

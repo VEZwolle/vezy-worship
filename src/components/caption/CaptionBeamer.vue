@@ -76,8 +76,10 @@ export default {
     textLines () {
       // split text to main lines
       const lines = this.text
-        .replace(/<\/?span(.*?)>/gi, '')
-        .replace(/ style="(.*?);">/gi, '>')
+        .replace(/<\/?span(.*?)>/gi, '') // remove drag-drop style text-size
+        .replace(/ style="(.*?);">/gi, '>') // remove drag-drop style text-size
+        .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line
+        .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>') // drag-drop to empy line
         .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<br>') // lege regel tussenregel met alinea einden en eventuele opmaak
         .replace(/^<div>/, '') // remove 1e div wanneer opmaak niet standaard
         .replace(/<div>/g, '<br>') // overige alinea regeleinden
