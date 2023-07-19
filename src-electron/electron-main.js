@@ -33,6 +33,16 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow('/', primaryDisplay)
 
+  if (process.env.DEBUGGING) {
+    // if on DEV or Production with debug enabled
+    mainWindow.webContents.openDevTools()
+  } else {
+    // we're on production; no access to devtools pls
+    mainWindow.webContents.on('devtools-opened', () => {
+      mainWindow.webContents.closeDevTools()
+    })
+  }
+
   mainWindow.on('close', () => {
     app.quit()
   })
