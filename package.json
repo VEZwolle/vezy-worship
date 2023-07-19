@@ -39,7 +39,6 @@
     "@quasar/app-webpack": "^3.9.2",
     "electron": "^25.3.0",
     "electron-builder": "^24.4.0",
-    "electron-packager": "^17.1.1",
     "eslint": "^8.45.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
