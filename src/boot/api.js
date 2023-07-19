@@ -1,9 +1,7 @@
 import axios from 'axios'
-import http from 'axios/lib/adapters/http'
 
 const api = axios.create({
-  baseURL: process.env.API_URL,
-  adapter: http
+  baseURL: process.env.API_URL
 })
 
 api.interceptors.response.use(
