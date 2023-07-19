@@ -33,13 +33,16 @@ in terminal:
   - Open --> cloned repository
 - in terminal, in rootmap van project uitvoeren:
   - `npm install`
-  - `npm i-g firebase-tools`
+  - `npm i -g firebase-tools`
 - in terminal, in rootmap\api van project uitvoeren:
   - `npm install`
 - in terminal, in rootmap van project uitvoeren: 
   - `npm run serve`   --> Start Vezyworship web-app: `https://localhost:8080`
 - in terminal, in rootmap van project uitvoeren: 
   - `npm run api:serve`   --> Start Vezyworship-API : `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
+  - `npm run api:get-data`  --> get firestore export data uit google cloud to local emulator
+  - `npm run api:update-data` --> export data firesore to google cloud to local emulator
+  - `npm run api:serve-data`   --> Start Vezyworship-API + locale database: `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
   - opmerking: api-key's & secrets los instellen ( niet algemeen toegankelijk, voor testen zelf aanmaken )
    - `.env` bestand in api map: (deze ook in firebase secrets voor api zijde deploy)
     ```
@@ -48,9 +51,12 @@ in terminal:
       DEEPL_API_KEY=...
       API_URL=http://localhost:5000/api of .../api
     ```
+  - opmerking: locale database bestanden eerst uit firestore halen; zie onder.
 - in terminal, in rootmap van project uitvoeren: (niet gelijk met webapp; wel api benodigd)
   - `npm run electron:serve`   --> Start Vezyworship desktop app
 ### firebase functions:
+- Install
+  - `npm i -g firebase-tools`
 - Inloggen / uitloggen
   - `firebase login` 
   - `firebase logout`
@@ -69,6 +75,30 @@ in terminal:
   - `firebase deploy --only functions`
 - Deploy web-app
   - github actions: zie `.github\workflows\firebase-deploy.yml`
+### google cloud functions:
+- Install Google cloud SDK: 
+  - https://cloud.google.com/sdk/docs/install-sdk --> windows installatie + standaard instellingen
+- Inloggen / uitloggen
+  - `gcloud auth login` 
+  - `gcloud auth revoke`
+- Show google cloud projecten
+  - `gcloud projects list`
+- Koppel / ontkoppel google cloud project vezy-worship
+  - `gcloud config set project vezy-worship`
+  - `gcloud config unset project`
+### export firestore database to google cloud to local emulator firestore
+- Maak storage bucket aan in google cloud voor export van firestore database
+  - https://console.cloud.google.com/ --> Cloud Storage --> Buckets --> +create
+  - bucket name: `export-import-vezy-worship`
+- Export your production data to a Google Cloud Storage bucket
+  - `gcloud firestore export gs://export-import-vezy-worship/export-firestore`
+- copy this folder to your local machine
+  - `cd dev` > `gsutil -m cp -r gs://export-import-vezy-worship/export-firestore .`
+- Updaten? eerst map lokaal en storage legen; daarna opnieuw exporteren
+  - Remove local map:
+    - `cd dev` > `rm -r ./export-firestore`
+  - Remove data uit cloud storage (voor nieuwe export):
+    - `gsutil -m rm -r gs://export-import-vezy-worship/export-firestore`
 
 ### build desktop app:
 - in terminal, in rootmap van project uitvoeren: (bij wijziging van dependency)
