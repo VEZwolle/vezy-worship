@@ -90,9 +90,7 @@ const fs = {
       await zipWriter.add(fileId, reader)
     }
 
-    await zipWriter.close()
-
-    const blob = blobWriter.getData()
+    const blob = await zipWriter.close()
 
     // Write zip file to disk
     try {

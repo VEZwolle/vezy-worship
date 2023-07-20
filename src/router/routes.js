@@ -1,4 +1,3 @@
-
 import App from 'components/App.vue'
 import Output from 'components/output/Output.vue'
 import Help from 'components/help/Help.vue'
