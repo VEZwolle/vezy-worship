@@ -50,11 +50,17 @@ app.whenReady().then(() => {
   autoUpdater.logger = require('electron-log')
   autoUpdater.logger.transports.file.level = 'info' // debug info
   mainWindow.on('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify()
+    const autoupdateCheck = config.get('autoupdate')
+    if (autoupdateCheck === undefined || autoupdateCheck) autoUpdater.checkForUpdatesAndNotify()
   })
 
   mainWindow.on('close', () => {
-    if (autoUpdaterDownloaded) autoUpdater.quitAndInstall(false, false)
+    const autoupdateCheck = config.get('autoupdate')
+    if (autoupdateCheck === undefined || autoupdateCheck) {
+      if (autoUpdaterDownloaded) autoUpdater.quitAndInstall(false, false)
+    } else {
+      autoUpdater.autoInstallOnAppQuit = false
+    }
     app.quit()
   })
 
