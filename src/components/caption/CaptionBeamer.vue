@@ -3,7 +3,7 @@
     <div v-if="format === 'Thema'" class="theme">
       <svg>
         <text x="0" y="0">
-          <tspan x="0" dy="2.6vw">Thema:</tspan>
+          <tspan x="4vw" dy="2.6vw">Thema:</tspan>
         </text>
       </svg>
     </div>
@@ -30,7 +30,7 @@
           <tspan
             v-for="(line, i) in textLines"
             :key="i"
-            :x="line.newLine ? '0' : null"
+            :x="line.newLine ? '4vw' : null"
             :dy="line.newLine ? textTspanDy : null"
             :class="line.class"
           >
@@ -132,7 +132,7 @@ export default {
       const style = {}
       style.position = 'relative'
       style.padding = '0 0 0 0'
-      style.width = '92vw'
+      style.width = '100vw'
       style.height = '100%'
       if (this.format === 'Thema') {
         style.position = 'fixed'
@@ -145,7 +145,7 @@ export default {
       const style = {}
       style.padding = '0'
       style.top = '0'
-      style.width = '92vw'
+      style.width = '100vw'
       style.height = `${this.titleLines.length * 5 + 1}vw`
       switch (this.format) {
         case 'Thema':
@@ -157,7 +157,7 @@ export default {
         case 'Bijbeltekst':
           style.position = 'fixed'
           style.top = '65vh'
-          style.right = '4vw'
+          style.right = '0'
           break
         case 'Alleen tekst':
           style.display = 'none'
@@ -167,7 +167,7 @@ export default {
       return style
     },
     titleTspanX () {
-      return this.format === 'Bijbeltekst' ? '100%' : '0'
+      return this.format === 'Bijbeltekst' ? '96vw' : '4vw'
     },
     titleTspanDy () {
       return this.format === 'Thema' ? '6.6vw' : '5.0vw'
