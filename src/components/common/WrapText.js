@@ -50,6 +50,46 @@ export function wrapTextLines (lines, maxWidth, font, letterSpacing) {
 }
 
 export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, fontSizeSmall, fontBold, letterSpacing) {
+  /*
+  * lines[] = array van verschillende alinea's/regels
+  *      Hierin zit geen <div><br> meer in (regeleinden), alleen nog opmaak: <b><i><u><sup><small>
+  * maxWith = regellengte maximaal
+  * overige verschillende font opmaken.
+  *
+  * Stappen: lines[i] -sub-> linePieces[] >= lineRFS[n] -sub-> wrapLineRFS[j] =totaal=> allLines[]
+  * --------
+  * Per line in lines[], eindstaties verwijderen & opdelen op wisseling opmaak (<..>) --> linePieces[]
+  *
+  ** Lees per onderdeel in linePieces opmaak(wijziging uit)
+  ** --> Wanneer de tekst aanwezig (lengte > 0): voeg deze toe aan "line pieces Result Format Segments" --> lineRFS[]
+  **    lineRFS.push({text, class, font, letterSpacing, firstCharSpace: boolean, lastCharSpace: boolean})
+  **
+  ** controleer of er een lege regel voor komt met alleen een spatie (kan wanneer er "spatie<i></i>"" bijvoorbeeld als basis stond.)
+  **
+  ** wrap tekst (totale regel is lineRFS[], met per onderdeel een opmaakwijziging.)
+  ** - controleer eerst of het woord uit het opmaakdeel in lineRFS[] compleet is (opmaakdeel eindigd met spatie.)
+  **   --> zo niet berekend hoeveel lengte je nog extra nodig hebt voor het laatste woord compleet te maken.
+  ** - splits het opmaakdeel in losse regels, rekening houden met --> wrapLineRFS[]
+  **     - hoeveel ruimte er nog is op de huidige regel (remainingWidth)
+  **     - de lengte van een hele regel (maxWidth)
+  **     - hoeveel ruimte het laatste woord nog extra nodig heeft. (lastWordAddLength)
+  ** - eerste lineRFS[0] wordt altjd op nieuwe regel begonnen, andere niet
+  **
+  ** - voeg gevonden regels toe aan output svg segmenten --> allLines[]
+  ***      - bij 1e (wrapLineRFS[0]) (& bij array.lengte=1):
+  ***          controleer of deze op huidige regel pas of op nieuwe begint en bereken overblijvende ruimte op de regel.
+  ***           --> voeg toe aan allLines[].push({ text, class, newLine: boolean })
+  ***      - bij laatste (wrapLineRFS[Laatste] & [1 tot laatste-1])
+  ***          --> bij laatste bereken overblijvende lengte en voeg toe aan allLines[].push({ text, class, newLine: true })
+  ***      - tussenliggende (wrapLineRFS[1 tot laatste-1])
+  ***          --> voeg toe aan allLines[].push({ text, class, newLine: true })
+  *
+  * Bij een lege regel, voeg deze toe met 2 spaties als tekst (anders niet weergegeven)
+  *   (wel controle op aanwezigheidn van opmaak onderdelen, deze eerst verwijderd <..> --> '')
+  *   --> allLines[].push({ text = '', class = null, newLine: true })
+  *
+  * Na alle lines[] gehad te hebben geef allLines[] retour
+  */
   const allLines = []
 
   // start format
@@ -61,7 +101,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
 
   for (let i = 0; i < lines.length; i++) {
     // split main line into different formatting pieces
-    const linePieces = lines[i].trimEnd().split('<')
+    const linePieces = lines[i].trimEnd().split(/<(?=b>|\/b>|i>|\/i>|u>|\/u>|sup>|\/sup>|small>|\/small>)/) // /<(?=([biuspmal/]*?)>)/) // '<')
     const lineRFS = [] // line pieces Result Format Segments
     // get format change
     linePieces.forEach(linePiece => {
@@ -135,6 +175,13 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
         })
       }
     })
+
+    // empty lines add
+    if (lineRFS.length === 0) { // || (lineRFS.length === 1 && lineRFS[0]?.text === ' ')) {
+      allLines.push({ text: '  ', class: null, newLine: true })
+      continue // for lines[n]
+    }
+
     // wrapText
     let remainingWidth = maxWidth
     let firstlinePiece = true
@@ -159,7 +206,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
             // eslint-disable-next-line
             const pieceWidth = getTextWidth(wrapLineRFS[j], lineRFS[n].font, lineRFS[n].letterSpacing)
             switch (true) {
-              case (j + 1 === wrapLineRFS.length && pieceWidth + lastWordAddLength > remainingWidth):
+              case (wrapLineRFS.length === 1 && pieceWidth + lastWordAddLength > remainingWidth):
               case (pieceWidth > remainingWidth):
                 firstlinePiece = true
                 remainingWidth = maxWidth - pieceWidth
@@ -179,8 +226,6 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
 
       firstlinePiece = false
     }
-    // empty lines add
-    if (lines[i].replace(/([biuspmal/]*?)/g, '') === '') allLines.push({ text: '  ', class: null, newLine: true })
   }
   return allLines
 }

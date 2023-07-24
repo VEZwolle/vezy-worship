@@ -191,12 +191,20 @@ export default {
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
       // eslint-disable-next-line
-      this.settings.text = this.settings.text.replace(/  /g, '&nbsp;&nbsp;')
+      this.settings.text = this.settings.text.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
     },
     removeTextSize (e) {
       this.settings.text = this.settings.text
         .replace(/<\/?span(.*?)>/gi, '')
         .replace(/ style="(.*?);">/gi, '>')
+        .replace(/\r*\n/g, '<br>') // nieuwe regeleinde vervangen door <br>, soms door plakken/drag-drop.
+        .replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // opmaak aan & direct weer uit <i></i> of andersom </i><i> er uit halen. (5x?? genesteld mogelijk)
+        .replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // herhaal
+        .replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // herhaal
+        .replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // herhaal
+        .replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // herhaal
+        .replace(/(<div>){2,}/g, '<div>').replace(/(<\/div>){2,}/g, '</div>') // vervang dubbele (of meer) <div> door een enkele
+        .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;') // losse spaties als ' ' plaatsen, tenzij tussen <div> </div>
         .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line
         .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>') // drag-drop to empy line
     },
