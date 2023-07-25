@@ -175,6 +175,13 @@ export default {
         }
       })
     }
+    window.addEventListener('beforeunload', (event) => {
+      if (JSON.stringify(this.$store.service) === this.$store.serviceSaved) {
+        event.preventDefault()
+      } else {
+        event.returnValue = ''
+      }
+    })
   },
   methods: {
     create () {
