@@ -175,13 +175,16 @@ export default {
         }
       })
     }
-    window.addEventListener('beforeunload', (event) => {
-      if (JSON.stringify(this.$store.service) === this.$store.serviceSaved) {
-        event.preventDefault()
-      } else {
-        event.returnValue = ''
+    if (!this.$q.platform.is.electron) {
+      // not working on electron -> blijft open.... en geen vraag.
+      window.onbeforeunload = (event) => {
+        if (JSON.stringify(this.$store.service) === this.$store.serviceSaved) {
+          event.preventDefault()
+        } else {
+          event.returnValue = 'false'
+        }
       }
-    })
+    }
   },
   methods: {
     create () {
