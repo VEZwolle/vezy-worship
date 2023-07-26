@@ -1,4 +1,4 @@
-name: build
+name: Electron - Build and Release
 
 on:
   push:
