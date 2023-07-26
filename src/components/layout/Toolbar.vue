@@ -148,32 +148,35 @@ export default {
   },
   created () {
     if (this.$q.platform.is.electron) {
-      window.electron.onAutoUpdate((event, status, percent, message) => {
-        switch (status) {
-          case -1:
-          case 0:
-          case 1:
-            this.autoupdate.message = message
-            break
-          case 2:
-            this.autoupdate.indeterminateProgress = true
-            this.autoupdate.percent = percent
-            this.autoupdate.message = message
-            Notify.create({ type: 'positive', message: this.autoupdate.message })
-            break
-          case 3:
-            this.autoupdate.indeterminateProgress = false
-            this.autoupdate.percent = Math.round(percent)
-            break
-          case 4:
-            this.autoupdate.indeterminateProgress = false
-            this.autoupdate.message = message
-            this.autoupdate.percent = percent
-            Notify.create({ type: 'positive', message: this.autoupdate.message })
-            break
-          default:
-        }
-      })
+      const autoupdateCheck = this.$electron.getConfig('autoupdate')
+      if (autoupdateCheck === undefined || autoupdateCheck) {
+        window.electron.onAutoUpdate((event, status, percent, message) => {
+          switch (status) {
+            case -1:
+            case 0:
+            case 1:
+              this.autoupdate.message = message
+              break
+            case 2:
+              this.autoupdate.indeterminateProgress = true
+              this.autoupdate.percent = percent
+              this.autoupdate.message = message
+              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              break
+            case 3:
+              this.autoupdate.indeterminateProgress = false
+              this.autoupdate.percent = Math.round(percent)
+              break
+            case 4:
+              this.autoupdate.indeterminateProgress = false
+              this.autoupdate.message = message
+              this.autoupdate.percent = percent
+              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              break
+            default:
+          }
+        })
+      }
     }
   },
   methods: {
