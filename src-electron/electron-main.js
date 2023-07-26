@@ -47,8 +47,6 @@ app.whenReady().then(() => {
     })
   }
 
-  autoUpdater.logger = require('electron-log')
-  autoUpdater.logger.transports.file.level = 'info' // debug info
   mainWindow.on('ready-to-show', () => {
     const autoupdateCheck = config.get('autoupdate')
     if (autoupdateCheck === undefined || autoupdateCheck) autoUpdater.checkForUpdatesAndNotify()

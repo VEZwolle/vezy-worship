@@ -25,7 +25,6 @@
     "axios": "^1.4.0",
     "core-js": "^3.31.1",
     "dayjs": "^1.11.9",
-    "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.1",
     "lodash": "^4.17.21",
