@@ -146,8 +146,18 @@ export default {
       }
     }
   },
+  computed: {
+    saved () {
+      return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
+    }
+  },
   created () {
     if (this.$q.platform.is.electron) {
+      window.electron.onAppClose((event, key) => {
+        if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
+          this.$electron.closeApp()
+        }
+      })
       window.electron.onAutoUpdate((event, status, percent, message) => {
         switch (status) {
           case -1:
@@ -174,11 +184,10 @@ export default {
           default:
         }
       })
-    }
-    if (!this.$q.platform.is.electron) {
+    } else {
       // not working on electron -> blijft open.... en geen vraag.
       window.onbeforeunload = (event) => {
-        if (JSON.stringify(this.$store.service) === this.$store.serviceSaved) {
+        if (this.saved) {
           event.preventDefault()
         } else {
           event.returnValue = 'false'
@@ -188,14 +197,16 @@ export default {
   },
   methods: {
     create () {
-      this.$refs.serviceSettingsDialog.show()
+      if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) this.$refs.serviceSettingsDialog.show()
     },
     open (add) {
-      this.isLoading = true
-      this.$fs.open(add)
-        .finally(() => {
-          this.isLoading = false
-        })
+      if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
+        this.isLoading = true
+        this.$fs.open(add)
+          .finally(() => {
+            this.isLoading = false
+          })
+      }
     },
     save (showPicker) {
       this.isSaving = true
