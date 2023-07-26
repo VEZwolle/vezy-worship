@@ -153,6 +153,8 @@ export default {
         window.electron.onAutoUpdate((event, status, percent, message) => {
           switch (status) {
             case -1:
+              this.autoupdate.percent = percent
+              // eslint-disable-next-line
             case 0:
             case 1:
               this.autoupdate.message = message
