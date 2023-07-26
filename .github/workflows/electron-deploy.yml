@@ -30,10 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build app
-        if: github.ref == 'refs/heads/dev'
+        if: github.ref != 'refs/heads/dev'
         run: npm run electron:build
       - name: Build & deploy app
-        if: github.ref != 'refs/heads/dev'
+        if: github.ref == 'refs/heads/dev'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:release
