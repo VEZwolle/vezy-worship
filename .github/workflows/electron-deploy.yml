@@ -31,7 +31,7 @@ jobs:
         run: npm ci
       - name: Build app
         if: github.ref != 'refs/heads/dev'
-        run: npm run electron:build
+        run: npm run electron:release
       - name: Build & deploy app
         if: github.ref == 'refs/heads/dev'
         env:
