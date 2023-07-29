@@ -8,6 +8,7 @@ import { versionUpdate } from './versionUpdate'
 export default defineStore('service', {
   state: () => ({
     service: null,
+    serviceSaved: null,
     media: {},
     outputRatio: 16 / 9,
     previewPresentation: null,
@@ -17,6 +18,9 @@ export default defineStore('service', {
     message: ''
   }),
   actions: {
+    setServiceSaved () {
+      this.serviceSaved = JSON.stringify(this.service)
+    },
     loadService (data) {
       this.service = cloneDeep(data)
       this.previewPresentation = null
@@ -25,6 +29,7 @@ export default defineStore('service', {
         this.service = versionUpdate(this.service)
         this.service.version = PACKAGE.version
       }
+      this.serviceSaved = JSON.stringify(this.service)
     },
     addService (data) {
       if (data.version !== PACKAGE.version) {
@@ -53,6 +58,7 @@ export default defineStore('service', {
           pcoId,
           presentations: []
         })
+        this.serviceSaved = null
       }
 
       // Default countdown

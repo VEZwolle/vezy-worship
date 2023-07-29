@@ -146,8 +146,18 @@ export default {
       }
     }
   },
+  computed: {
+    saved () {
+      return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
+    }
+  },
   created () {
     if (this.$q.platform.is.electron) {
+      window.electron.onAppClose((event, key) => {
+        if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
+          this.$electron.closeApp()
+        }
+      })
       const autoupdateCheck = this.$electron.getConfig('autoupdate')
       if (autoupdateCheck === undefined || autoupdateCheck) {
         window.electron.onAutoUpdate((event, status, percent, message) => {
@@ -179,18 +189,29 @@ export default {
           }
         })
       }
+    } else {
+      // not working on electron -> blijft open.... en geen vraag.
+      window.onbeforeunload = (event) => {
+        if (this.saved) {
+          event.preventDefault()
+        } else {
+          event.returnValue = 'false'
+        }
+      }
     }
   },
   methods: {
     create () {
-      this.$refs.serviceSettingsDialog.show()
+      if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) this.$refs.serviceSettingsDialog.show()
     },
     open (add) {
-      this.isLoading = true
-      this.$fs.open(add)
-        .finally(() => {
-          this.isLoading = false
-        })
+      if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
+        this.isLoading = true
+        this.$fs.open(add)
+          .finally(() => {
+            this.isLoading = false
+          })
+      }
     },
     save (showPicker) {
       this.isSaving = true

@@ -28,6 +28,16 @@ ipcMain.handle('setConfig', (e, key, val) => {
 ipcMain.handle('getAllDisplays', () => {
   return screen.getAllDisplays()
 })
+ipcMain.on('closeApp', () => {
+  const autoupdateCheck = config.get('autoupdate')
+  if (autoupdateCheck === undefined || autoupdateCheck) {
+    if (autoUpdaterDownloaded) autoUpdater.quitAndInstall(false, false)
+  } else {
+    autoUpdater.autoInstallOnAppQuit = false
+  }
+  mainWindow = null
+  app.quit()
+})
 
 // Needed to use FileSystem API
 app.commandLine.appendSwitch('enable-experimental-web-platform-features')
@@ -52,14 +62,11 @@ app.whenReady().then(() => {
     if (autoupdateCheck === undefined || autoupdateCheck) autoUpdater.checkForUpdatesAndNotify()
   })
 
-  mainWindow.on('close', () => {
-    const autoupdateCheck = config.get('autoupdate')
-    if (autoupdateCheck === undefined || autoupdateCheck) {
-      if (autoUpdaterDownloaded) autoUpdater.quitAndInstall(false, false)
-    } else {
-      autoUpdater.autoInstallOnAppQuit = false
+  mainWindow.on('close', (e) => {
+    if (mainWindow) {
+      e.preventDefault()
+      mainWindow.webContents.send('appClose', true)
     }
-    app.quit()
   })
 
   // help window, create & hide, prevent closing
