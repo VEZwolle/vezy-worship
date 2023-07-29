@@ -9,6 +9,7 @@
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
         <q-tab name="background" label="Achtergrond" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
+        <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
 
       <q-separator />
@@ -18,6 +19,10 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+        </q-tab-panel>
+        <q-tab-panel name="autoupdate">
+          <q-checkbox v-model="autoupdate" label="Automatisch download & update Vezyworship" />
+          <div>Wanneer er een update beschikbaar is wordt deze gedownload en na afsluiten van Vezyworship geinstalleerd.</div>
         </q-tab-panel>
         <q-tab-panel name="background">
           <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
@@ -58,6 +63,7 @@ export default {
         beamer: '',
         livestream: ''
       },
+      autoupdate: true,
       tab: 'background'
     }
   },
@@ -81,6 +87,8 @@ export default {
       if (this.$q.platform.is.electron) {
         this.availableDisplays = await this.$electron.getAllDisplays()
         this.displays = await this.$electron.getConfig('displays') || {}
+        this.autoupdate = await this.$electron.getConfig('autoupdate')
+        if (this.autoupdate === undefined) this.autoupdate = true
       }
       this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
@@ -88,6 +96,7 @@ export default {
     async save () {
       if (this.$q.platform.is.electron) {
         await this.$electron.setConfig('displays', { ...this.displays })
+        await this.$electron.setConfig('autoupdate', this.autoupdate)
       }
       localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')

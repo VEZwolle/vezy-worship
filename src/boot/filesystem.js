@@ -99,6 +99,7 @@ const fs = {
       await writable.close()
 
       Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+      store.setServiceSaved()
     } catch {
       Notify.create({ type: 'negative', message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
     }
