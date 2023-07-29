@@ -1,16 +1,20 @@
 import { app, BrowserWindow, nativeTheme, screen, ipcMain, shell } from 'electron'
 import Store from 'electron-store'
+import { autoUpdater } from 'electron-updater'
 import path from 'path'
 import os from 'os'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
+let autoUpdaterDownloaded = false
 
 try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     require('fs').unlinkSync(path.join(app.getPath('userData'), 'DevTools Extensions'))
   }
 } catch (_) { }
+
+let mainWindow
 
 const config = new Store()
 
@@ -31,7 +35,7 @@ app.commandLine.appendSwitch('enable-experimental-web-platform-features')
 app.whenReady().then(() => {
   const primaryDisplay = screen.getPrimaryDisplay()
 
-  const mainWindow = createWindow('/', primaryDisplay)
+  mainWindow = createWindow('/', primaryDisplay)
 
   if (process.env.DEBUGGING) {
     // if on DEV or Production with debug enabled
@@ -43,7 +47,18 @@ app.whenReady().then(() => {
     })
   }
 
+  mainWindow.on('ready-to-show', () => {
+    const autoupdateCheck = config.get('autoupdate')
+    if (autoupdateCheck === undefined || autoupdateCheck) autoUpdater.checkForUpdatesAndNotify()
+  })
+
   mainWindow.on('close', () => {
+    const autoupdateCheck = config.get('autoupdate')
+    if (autoupdateCheck === undefined || autoupdateCheck) {
+      if (autoUpdaterDownloaded) autoUpdater.quitAndInstall(false, false)
+    } else {
+      autoUpdater.autoInstallOnAppQuit = false
+    }
     app.quit()
   })
 
@@ -143,3 +158,31 @@ function createWindow (url, display, fullscreen = false, width = 1000, height = 
 
   return window
 }
+
+/* New Update Available */
+autoUpdater.on('error', (error) => {
+  console.error(error)
+  mainWindow.webContents.send('autoUpdate', -1, 0, 'Updates controle app fout, probeer het later opnieuw')
+})
+
+autoUpdater.on('checking-for-update', () => {
+  mainWindow.webContents.send('autoUpdate', 0, 0, 'Controle op app updates...')
+})
+
+autoUpdater.on('update-not-available', (info) => {
+  mainWindow.webContents.send('autoUpdate', 1, 0, 'Geen updates beschikbaar')
+})
+
+autoUpdater.on('update-available', (info) => {
+  mainWindow.webContents.send('autoUpdate', 2, 1, `Update versie ${info.version} beschikbaar`)
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+  // const message = (`Download speed: ${(progressObj.bytesPerSecond / 1028576).toFixed(2)} Mb/sec (${(progressObj.transferred / 1028576).toFixed(2)}/${(progressObj.total / 1028576).toFixed(2)} Mb)`)
+  mainWindow.webContents.send('autoUpdate', 3, progressObj.percent, 'downloading')
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+  autoUpdaterDownloaded = true
+  mainWindow.webContents.send('autoUpdate', 4, 100, `Versie ${info.version} gedownload, wordt na afsluiten geinstalleerd.`)
+})

@@ -77,7 +77,25 @@
       <span class="q-px-md">|</span>
     </div>
 
-    <div>VezyWorship v{{ version }}</div>
+    <div>
+      VezyWorship v{{ version }}
+      <q-tooltip v-if="autoupdate.message">
+        {{ autoupdate.message }}
+      </q-tooltip>
+    </div>
+    <q-circular-progress
+      v-if="autoupdate.percent"
+      :indeterminate="autoupdate.indeterminateProgress"
+      :show-value="!autoupdate.indeterminateProgress"
+      :value="autoupdate.percent"
+      size="md"
+      class="q-ml-sm"
+    >
+      {{ autoupdate.percent }}%
+      <q-tooltip>
+        {{ autoupdate.message }}
+      </q-tooltip>
+    </q-circular-progress>
 
     <q-btn
       flat
@@ -110,6 +128,7 @@ import AppSettingsDialog from './AppSettingsDialog'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
+import { Notify } from 'quasar'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
@@ -119,7 +138,47 @@ export default {
   data () {
     return {
       isSaving: false,
-      isLoading: false
+      isLoading: false,
+      autoupdate: {
+        message: '',
+        percent: 0,
+        indeterminateProgress: false
+      }
+    }
+  },
+  created () {
+    if (this.$q.platform.is.electron) {
+      const autoupdateCheck = this.$electron.getConfig('autoupdate')
+      if (autoupdateCheck === undefined || autoupdateCheck) {
+        window.electron.onAutoUpdate((event, status, percent, message) => {
+          switch (status) {
+            case -1:
+              this.autoupdate.percent = percent
+              // eslint-disable-next-line
+            case 0:
+            case 1:
+              this.autoupdate.message = message
+              break
+            case 2:
+              this.autoupdate.indeterminateProgress = true
+              this.autoupdate.percent = percent
+              this.autoupdate.message = message
+              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              break
+            case 3:
+              this.autoupdate.indeterminateProgress = false
+              this.autoupdate.percent = Math.round(percent)
+              break
+            case 4:
+              this.autoupdate.indeterminateProgress = false
+              this.autoupdate.message = message
+              this.autoupdate.percent = percent
+              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              break
+            default:
+          }
+        })
+      }
     }
   },
   methods: {
