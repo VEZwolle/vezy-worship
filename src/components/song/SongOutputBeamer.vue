@@ -3,9 +3,9 @@
     <Transition name="q-transition--fade">
       <svg v-if="!clear" :style="styleOpacity">
         <text y="6.6vw">
-          <tspan v-for="(line, i) in wrapLines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
+          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
           <tspan x="50%" dy="3vw">&nbsp;</tspan>
-          <tspan v-for="(line, i) in wrapTranslatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
+          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
         </text>
       </svg>
     </Transition>
@@ -14,7 +14,6 @@
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
-import { wrapTextLines } from '../common/WrapText'
 
 export default {
   extends: BaseOutput,
@@ -26,12 +25,6 @@ export default {
     translatedLines () {
       const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
-    },
-    wrapLines () {
-      return wrapTextLines(this.lines, 0.97 * window.innerWidth, '3.8vw Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '0.1vw')
-    },
-    wrapTranslatedLines () {
-      return wrapTextLines(this.translatedLines, 0.97 * window.innerWidth, 'italic 3.4vw Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif', '0')
     }
   }
 }
