@@ -1,7 +1,7 @@
 <template>
   <q-editor
     ref="editor"
-    v-model="text"
+    v-model="content"
     :min-height="minHeight"
     :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]"
     class="q-mb-md"
@@ -14,7 +14,10 @@
 <script>
 export default {
   props: {
-    modelValue: String,
+    modelValue: {
+      type: String,
+      required: true
+    },
     minHeight: String
   },
   emits: [
@@ -22,21 +25,39 @@ export default {
   ],
   data () {
     return {
-      text: this.modelValue
+      content: '',
+      lastEmit: ''
     }
+  },
+  watch: {
+    'modelValue' (val) {
+      if (this.lastEmit !== val) {
+        this.lastEmit = val
+        this.content = val
+      }
+    }
+  },
+  mounted () {
+    this.content = this.modelValue
+    this.cleanText()
+  },
+  beforeUnmount () {
+    this.cleanText()
+    this.update()
   },
   methods: {
     update () {
-      this.$emit('update:modelValue', this.text)
+      this.lastEmit = this.content
+      this.$emit('update:modelValue', this.content)
     },
     pastePlainText (e) {
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
       // eslint-disable-next-line
-      this.text = this.text.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
+      this.content = this.content.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
     },
     cleanText (e) {
-      let text = this.text
+      let text = this.content
         .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
         .replace(/ style="(.*?);">/gi, '>') // verwijder alle extra "style" elementen
         .replace(/\r*\n/g, '<br>') //          nieuwe regeleinde vervangen door <br>, soms door plakken/drag-drop.
@@ -48,12 +69,8 @@ export default {
         textStep = text
         text = text.replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '') // opmaak aan & direct weer uit <i></i> of andersom </i><i> er uit halen. (5x?? genesteld mogelijk)
       }
-      this.text = text.replace(/(<div>){2,}/g, '<div>').replace(/(<\/div>){2,}/g, '</div>') // vervang dubbele (of meer) <div> door een enkele
+      this.content = text.replace(/(<div>){2,}/g, '<div>').replace(/(<\/div>){2,}/g, '</div>') // vervang dubbele (of meer) <div> door een enkele
     }
   }
 }
 </script>
-
-<style>
-
-</style>
