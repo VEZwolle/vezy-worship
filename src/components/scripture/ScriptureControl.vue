@@ -22,11 +22,11 @@ function splitScripture (text, maxCharsPerSlide = 350) {
   if (!text) return []
 
   const lineBreaks = [
-    '<div><br></div>',
-    '<div><sup><br></sup></div>'
+    '<div><br></div>'
   ]
 
   return text
+    .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<div><br></div>')
     .split(new RegExp(lineBreaks.join('|')))
     .map((section) => {
       if (!section) {

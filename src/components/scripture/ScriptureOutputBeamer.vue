@@ -1,19 +1,19 @@
 <template>
   <div class="bg-output-beamer" :style="style">
-    <div v-if="!clear" class="scripture-output" :style="styleOpacity">
-      <div class="scripture-text">
-        <span v-for="(line, i) in lines" :key="i" v-html="line" />
+    <div v-if="!clear" class="full" :style="styleOpacity">
+      <div class="scripture-output">
+        <CaptionBeamer :title="title" :text="lines" format="Bijbeltekst" />
       </div>
-
-      <div class="scripture-title" v-html="title" />
     </div>
   </div>
 </template>
 
 <script>
 import BaseOutput from '../output/BaseOutput.vue'
+import CaptionBeamer from '../caption/CaptionBeamer.vue'
 
 export default {
+  components: { CaptionBeamer },
   extends: BaseOutput,
   computed: {
     title () {
@@ -22,8 +22,11 @@ export default {
     lines () {
       const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
       const lines = section?.slides.flat() || []
-      // console.log(lines)
-      return lines
+      let totalSection = ''
+      lines.forEach(line => {
+        totalSection = [totalSection, line].filter(Boolean).join('')
+      })
+      return totalSection.replace(/<br>/g, '<div></div>')
     }
   }
 }
@@ -31,27 +34,17 @@ export default {
 
 <style scoped>
 .scripture-output {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding: 5.4vw 4vw 4vw 4vw;
-}
-
-.scripture-text {
-  text-align: left;
-  font-size: 3.4vw;
-  line-height: 4.4vw;
-  color: #fff;
-}
-
-.scripture-title {
   position: fixed;
-  top:65vh;
-  right: 4vw;
-  text-align: right;
-  font-size: 4.6vw;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.6)
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  padding: 4.4vw 0 0 0;
+}
+
+.full {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

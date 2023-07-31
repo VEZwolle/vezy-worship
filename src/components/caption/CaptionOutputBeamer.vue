@@ -23,14 +23,16 @@ export default {
 <style scoped lang="scss">
 .caption-output {
   position: fixed;
+  width: 100%;
+  height: 100%;
   left: 0;
   top: 0;
-  padding: 5.4vw 4vw 4vw 4vw;
+  padding: 4.4vw 0 0 0;
 }
 
 .full {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 </style>
