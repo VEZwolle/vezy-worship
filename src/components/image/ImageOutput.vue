@@ -1,9 +1,9 @@
 <template>
   <div class="bg-output-beamer" :style="beamer ? style : ''">
     <Transition name="q-transition--fade">
-      <div v-show="!clear" class="image-output" :style="beamer ? styleOpacity : ''">
+      <div v-show="!clear && imgLoaded" class="image-output" :style="beamer ? styleOpacity : ''">
         <div :style="containerStyle">
-          <img :src="fileUrl" :style="imageStyle">
+          <img :src="fileUrl" loading="eager" :style="imageStyle" @load="imgLoad">
         </div>
       </div>
     </Transition>
@@ -15,6 +15,11 @@ import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
   extends: BaseOutput,
+  data () {
+    return {
+      imgLoaded: false
+    }
+  },
   computed: {
     fileUrl () {
       return this.$store.getMediaUrl(this.settingsimage.fileId)
@@ -46,6 +51,11 @@ export default {
       }
 
       return style
+    }
+  },
+  methods: {
+    imgLoad () {
+      this.imgLoaded = true
     }
   }
 }
