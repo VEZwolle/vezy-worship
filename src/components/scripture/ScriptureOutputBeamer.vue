@@ -1,10 +1,12 @@
 <template>
   <div class="bg-output-beamer" :style="style">
-    <div v-if="!clear" class="full" :style="styleOpacity">
-      <div class="scripture-output">
-        <CaptionBeamer :title="title" :text="lines" format="Bijbeltekst" />
+    <Transition name="q-transition--fade">
+      <div v-show="!clear" class="full" :style="styleOpacity">
+        <div class="scripture-output">
+          <CaptionBeamer :title="title" :text="lines" format="Bijbeltekst" />
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
