@@ -55,7 +55,7 @@ const fsdb = {
       if (!songdatabase) {
         Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship song database bestand' })
         await zipReader.close()
-        return
+        return false
       }
 
       fsdb.fileHandleSongDatabase = fileHandleSongDatabase
@@ -65,9 +65,11 @@ const fsdb = {
       fsdb.localSongDatabase = JSON.parse(songdatabase)
 
       await zipReader.close()
+      return true
     } catch (error) {
       console.log(error)
       Notify.create({ type: 'negative', message: `SongDatabase bestand Error: "${error.name}", "${error.message}"` })
+      return false
     }
   }
 }

@@ -184,7 +184,9 @@ export default {
     async show () {
       this.$refs.dialogDatabase.show()
       this.isLoading = true
-      if (!this.$fsdb.localSongDatabase) await this.$fsdb.openSongDatabase()
+      if (!this.$fsdb.localSongDatabase) {
+        if (!(await this.$fsdb.openSongDatabase())) this.hide()
+      }
       this.collections = [...new Set(this.$fsdb.localSongDatabase.map(d => d.collection))]
       this.collections.sort()
       this.filterSearchResults()
