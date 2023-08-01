@@ -1,6 +1,6 @@
 import * as zip from '@zip.js/zip.js'
 import { Notify } from 'quasar'
-import { get, set } from 'idb-keyval'
+import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
 
 const filePickerOptionsDb = {
   types: [{
@@ -18,7 +18,7 @@ const fsdb = {
 
   async getSongDatabaseSettings () {
     try {
-      const fileHandleSongDatabase = await get('fileSongDatabase') // get from IndexedDB
+      const fileHandleSongDatabase = await get('VezySongDatabase') // get from IndexedDB
       if (fileHandleSongDatabase) return fileHandleSongDatabase.name
       return ''
     } catch (error) {
@@ -31,7 +31,7 @@ const fsdb = {
       let fileHandleSongDatabase = null
 
       if (!newFile) {
-        fileHandleSongDatabase = await get('fileSongDatabase') // get from IndexedDB
+        fileHandleSongDatabase = await get('VezySongDatabase') // get from IndexedDB
         if (fileHandleSongDatabase) {
           // verifyPermission: 'granted', 'denied' or 'prompt'
           const options = {}
@@ -59,7 +59,7 @@ const fsdb = {
       }
 
       fsdb.fileHandleSongDatabase = fileHandleSongDatabase
-      await set('fileSongDatabase', fileHandleSongDatabase) // save to IndexedDB
+      await set('VezySongDatabase', fileHandleSongDatabase) // save to IndexedDB
 
       songdatabase = await songdatabase.getData(new zip.TextWriter())
       fsdb.localSongDatabase = JSON.parse(songdatabase)
