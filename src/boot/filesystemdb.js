@@ -1,5 +1,6 @@
 import * as zip from '@zip.js/zip.js'
 import { Notify } from 'quasar'
+import { get, set } from 'idb-keyval'
 
 const filePickerOptionsDb = {
   types: [{
@@ -15,28 +16,59 @@ const fsdb = {
   fileHandleSongDatabase: null,
   localSongDatabase: null,
 
-  async openSongDatabase (dbFileHandle = '') {
-    const [fileHandleSongDatabase] = dbFileHandle || await window.showOpenFilePicker(filePickerOptionsDb)
-    const file = await fileHandleSongDatabase.getFile()
-
-    // Read file list from zip
-    const zipReader = new zip.ZipReader(new zip.BlobReader(file))
-    const entries = await zipReader.getEntries()
-
-    // Load songdatabase data from `songdatabase.json`
-    let songdatabase = entries.find(e => e.filename === 'songdatabase.json')
-    if (!songdatabase) {
-      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship song database bestand' })
-      await zipReader.close()
-      return
+  async getSongDatabaseSettings () {
+    try {
+      const fileHandleSongDatabase = await get('fileSongDatabase') // get from IndexedDB
+      if (fileHandleSongDatabase) return fileHandleSongDatabase.name
+      return ''
+    } catch (error) {
+      console.log(error)
     }
+  },
 
-    fsdb.fileHandleSongDatabase = fileHandleSongDatabase
+  async openSongDatabase (newFile = false) {
+    try {
+      let fileHandleSongDatabase = null
 
-    songdatabase = await songdatabase.getData(new zip.TextWriter())
-    fsdb.localSongDatabase = JSON.parse(songdatabase)
+      if (!newFile) {
+        fileHandleSongDatabase = await get('fileSongDatabase') // get from IndexedDB
+        if (fileHandleSongDatabase) {
+          // verifyPermission: 'granted', 'denied' or 'prompt'
+          const options = {}
+          options.mode = 'read' // 'readwrite'
+          if (await fileHandleSongDatabase.queryPermission(options) === 'prompt') await fileHandleSongDatabase.requestPermission(options)
+          if (await fileHandleSongDatabase.queryPermission(options) !== 'granted') fileHandleSongDatabase = null
+        }
+      }
+      if (!fileHandleSongDatabase) {
+        [fileHandleSongDatabase] = await window.showOpenFilePicker(filePickerOptionsDb)
+      }
 
-    await zipReader.close()
+      const file = await fileHandleSongDatabase.getFile()
+
+      // Read file list from zip
+      const zipReader = new zip.ZipReader(new zip.BlobReader(file))
+      const entries = await zipReader.getEntries()
+
+      // Load songdatabase data from `songdatabase.json`
+      let songdatabase = entries.find(e => e.filename === 'songdatabase.json')
+      if (!songdatabase) {
+        Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship song database bestand' })
+        await zipReader.close()
+        return
+      }
+
+      fsdb.fileHandleSongDatabase = fileHandleSongDatabase
+      await set('fileSongDatabase', fileHandleSongDatabase) // save to IndexedDB
+
+      songdatabase = await songdatabase.getData(new zip.TextWriter())
+      fsdb.localSongDatabase = JSON.parse(songdatabase)
+
+      await zipReader.close()
+    } catch (error) {
+      console.log(error)
+      Notify.create({ type: 'negative', message: `SongDatabase bestand Error: "${error.name}", "${error.message}"` })
+    }
   }
 }
 

@@ -8,6 +8,7 @@
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
         <q-tab name="background" label="Achtergrond" />
+        <q-tab name="database" label="Database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
@@ -19,6 +20,11 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+        </q-tab-panel>
+        <q-tab-panel name="database">
+          <q-btn label="Liederen Database openen/veranderen" color="secondary" @click="loadSongDatabase" />
+          <br>(wordt direct ingesteld bij geldige database)
+          <br>{{ songDatabase }}
         </q-tab-panel>
         <q-tab-panel name="autoupdate">
           <q-checkbox v-model="autoupdate" label="Automatisch download & update Vezyworship" />
@@ -64,6 +70,7 @@ export default {
         livestream: ''
       },
       autoupdate: true,
+      songDatabase: '',
       tab: 'background'
     }
   },
@@ -105,6 +112,10 @@ export default {
         title: '✅ Wijzigingen opgeslagen',
         message: 'De wijzigingen worden van kracht zodra je de applicatie opnieuw opstart.'
       })
+    },
+    async loadSongDatabase () {
+      await this.$fsdb.openSongDatabase(true)
+      this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
     }
   }
 }
