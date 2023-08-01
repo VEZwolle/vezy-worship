@@ -53,7 +53,10 @@ in terminal:
     ```
   - opmerking: locale database bestanden eerst uit firestore halen; zie onder.
 - in terminal, in rootmap van project uitvoeren: (niet gelijk met webapp; wel api benodigd)
-  - `npm run electron:serve`   --> Start Vezyworship desktop app
+  - `npm run electron:serve` --> Start Vezyworship desktop app
+  - `npm run electron:build` --> Build desktop
+  - `npm run electron:build-debug` --> Build desktop app met debug venster
+  - `npm run electron:release` --> Build en release toe github (draft)
 ### firebase functions:
 - Install
   - `npm i -g firebase-tools`
@@ -116,11 +119,11 @@ in terminal:
 - Vue Language Features (Volar)
 
 ### Git merge branch (in vs-code)
-Laatste versie 'main' branch naar je ontwikkel branch plaatsen:
-- Pull de laatste versie van 'main'
-- Ga naar de nieuwe branch '...' waar je 'main' in wilt mergen
+Laatste versie 'dev' branch naar je ontwikkel branch plaatsen:
+- Pull de laatste versie van 'dev'
+- Ga naar de nieuwe branch '...' waar je 'dev' in wilt mergen
 - ctrl + shift + P en typ: "Git: merge branch"
-- selecteer 'main'
-- Nu zie je in de git toolbar (links) alle merge confilcts. Dit zijn de zaken die conflecteren met de nieuwe code op 'main'
+- selecteer 'dev'
+- Nu zie je in de git toolbar (links) alle merge confilcts. Dit zijn de zaken die conflecteren met de nieuwe code op 'dev'
 - Los de merge conflicts op door op alle confilterende bestanden te klikken en rechts te kiezen welke code "klopt".
 - Commit de "merge commit"

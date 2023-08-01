@@ -231,7 +231,19 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'vezy-worship'
+        appId: 'vezy-worship',
+        artifactName: 'VezyWorship-Setup-${version}.${ext}',
+        win: {
+          target: [
+            {
+              target: 'nsis',
+              arch: ['x64']
+            }
+          ]
+        },
+        publish: {
+          provider: 'github'
+        }
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

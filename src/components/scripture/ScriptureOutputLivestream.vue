@@ -1,7 +1,9 @@
 <template>
-  <div v-if="!clear" class="scripture-output">
-    <CaptionLivestream :title="title" :text="text" format="-full" :alpha="alpha" />
-  </div>
+  <Transition name="q-transition--fade">
+    <div v-show="!clear" class="scripture-output">
+      <CaptionLivestream :title="title" :text="text" format="-full" :alpha="alpha" />
+    </div>
+  </Transition>
 </template>
 
 <script>

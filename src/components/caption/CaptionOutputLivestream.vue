@@ -1,7 +1,9 @@
 <template>
-  <div v-if="!clear && settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" class="caption-output">
-    <CaptionLivestream :title="settings.title" :text="settings.text" :format="style" :alpha="alpha" />
-  </div>
+  <Transition name="q-transition--fade">
+    <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="caption-output">
+      <CaptionLivestream :title="settings.title" :text="settings.text" :format="style" :alpha="alpha" />
+    </div>
+  </Transition>
 </template>
 
 <script>
