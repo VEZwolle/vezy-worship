@@ -1,4 +1,4 @@
-export default [
+const labels = [
   { key: 'intro', color: 'deep-purple' },
   { key: 'introduction', color: 'deep-purple' },
   { key: 'verse', color: 'blue' },
@@ -21,3 +21,15 @@ export default [
   { key: 'other', color: 'blue' },
   { key: 'scripture', color: 'red-10' }
 ]
+
+export default labels
+
+export function isLabel (line) {
+  for (const label of labels) {
+    if (((line.toLowerCase().startsWith(label.key) && /[\d({[]/.test(line.toLowerCase())) || line.toLowerCase() === label.key) === false) {
+      continue
+    }
+    return label
+  }
+  return false
+}

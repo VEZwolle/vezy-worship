@@ -1,6 +1,6 @@
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
-import labels from './labels'
+import labels, { isLabel } from './labels'
 
 export default {
   extends: BaseSettings,
@@ -40,13 +40,8 @@ export default {
       const lines = text.replace(/\r?\n/g, '<br>').split('<br><br>')
       text = ''
       for (let i = 0; i < lines.length; i++) {
-        let hasLabel = false
-        for (const label of labels) {
-          if (((lines[i]?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(lines[i]?.toLowerCase())) || lines[i]?.toLowerCase().startsWith(`${label.key}<br>`))) {
-            hasLabel = true
-            break
-          }
-        }
+        const line = lines[i]?.split('<br>')
+        const hasLabel = isLabel(line[0] || '')
         if (!hasLabel) {
           text += text ? '\r\n\r\n' + label + '\r\n' + lines[i] : label + '\r\n' + lines[i]
         } else {
