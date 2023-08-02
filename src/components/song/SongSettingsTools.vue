@@ -36,6 +36,9 @@ export default {
       }
       return text
     },
+    cpRemovePunctuation (text) {
+      return text.replace(/[.,;]$/gm, '')
+    },
     cpInsertLabelsLines (text, label) {
       const lines = text.replace(/\r?\n/g, '<br>').split('<br><br>')
       text = ''
@@ -67,6 +70,15 @@ export default {
       } else {
         this.backupSettingTranslation = this.settings.translation
         this.settings.translation = this.cpTrimLines(this.settings.translation)
+      }
+    },
+    trimRemovePunctuation (input) {
+      if (input === 'text') {
+        this.backupSettingText = this.settings.text
+        this.settings.text = this.cpRemovePunctuation(this.cpTrimLines(this.settings.text))
+      } else {
+        this.backupSettingTranslation = this.settings.translation
+        this.settings.translation = this.cpRemovePunctuation(this.cpTrimLines(this.settings.translation))
       }
     },
     insertLabelsLines (input, label) {
