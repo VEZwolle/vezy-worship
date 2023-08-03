@@ -31,7 +31,7 @@
       <ul>
         <li>
           Deze moet dan starten met<br>
-          of<i>label</i> en een <i>( { [</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
+          of<i>label</i> en een <i>( { [ : ; / \ |</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
           of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
           bijv. "infro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
           Zie onderaan deze pagina voor een complete lijst van opties.

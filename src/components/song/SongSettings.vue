@@ -31,7 +31,15 @@
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
               <q-space />
-              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='text', label='vers')">
+              <q-btn flat dense label="> ...X <" @click.stop="trimRemovePunctuation(input='text')">
+                <q-tooltip>Verwijder spaties begin/eind &<br>verwijder leesteken ( . , ; ) eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense @click="insertLabelsLines(input='text', label='vers')">
+                <template #label>
+                  label
+                  <q-tooltip>Plaat label bij ALLE onderdelen zonder label</q-tooltip>
+                </template>
                 <q-list dense>
                   <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='text', label=label.key)">
                     <q-item-section>
@@ -39,7 +47,6 @@
                     </q-item-section>
                   </q-item>
                 </q-list>
-                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
               </q-btn-dropdown>
               <q-space />
               <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='text')">
@@ -47,7 +54,7 @@
               </q-btn>
               <q-space />
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
-                <q-tooltip>Songtekst ordenen</q-tooltip>
+                <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
               </q-btn>
             </q-toolbar>
           </div>
@@ -82,7 +89,15 @@
                 <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
               </q-btn>
               <q-space />
-              <q-btn-dropdown split flat dense label="label" @click="insertLabelsLines(input='translation', label='vers')">
+              <q-btn flat dense label="> ...X <" @click.stop="trimRemovePunctuation(input='translation')">
+                <q-tooltip>Verwijder spaties begin/eind &<br>verwijder leesteken ( . , ; ) eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense @click="insertLabelsLines(input='translation', label='vers')">
+                <template #label>
+                  label
+                  <q-tooltip>Plaat label bij ALLE onderdelen zonder label</q-tooltip>
+                </template>
                 <q-list dense>
                   <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='translation', label=label.key)">
                     <q-item-section>
@@ -90,7 +105,6 @@
                     </q-item-section>
                   </q-item>
                 </q-list>
-                <q-tooltip>Plaat label bij alle onderdelen zonder label</q-tooltip>
               </q-btn-dropdown>
               <q-space />
               <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='translation')">
@@ -98,7 +112,7 @@
               </q-btn>
               <q-space />
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
-                <q-tooltip>Songtekst ordenen</q-tooltip>
+                <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
               </q-btn>
             </q-toolbar>
           </div>
