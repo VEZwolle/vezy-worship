@@ -173,7 +173,7 @@ export default {
           .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
           .trim()
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.', position: 'top' })
       } finally {
         this.isLoadingScripture = false
       }

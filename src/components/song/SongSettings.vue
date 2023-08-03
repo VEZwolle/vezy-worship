@@ -167,7 +167,7 @@ export default {
         const result = await this.$api.post('/translate', { text: this.settings.text })
         this.settings.translation = result.translation
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.', position: 'top' })
       } finally {
         this.isTranslating = false
       }

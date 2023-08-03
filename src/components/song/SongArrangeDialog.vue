@@ -491,7 +491,7 @@ export default {
           }
         }
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.', position: 'top' })
       } finally {
         this.isLoading = false
       }
