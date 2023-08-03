@@ -26,7 +26,7 @@ export default labels
 
 export function isLabel (line) {
   for (const label of labels) {
-    if (((line.toLowerCase().startsWith(label.key) && /[\d({[:;/\\|]/.test(line.toLowerCase())) || line.toLowerCase() === label.key) === false) {
+    if (((line?.toLowerCase().startsWith(label.key) && /[\d({[:;/\\|]/.test(line?.toLowerCase())) || line?.toLowerCase() === label.key) === false) {
       continue
     }
     return label
