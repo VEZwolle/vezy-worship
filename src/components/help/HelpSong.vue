@@ -88,6 +88,9 @@
           <i>Dit voorkomt vaak vreemde fouten in de splitsing van liederen of uitlijningsverschillen van dezelfde teksten.</i>
         </li>
         <li>
+          <small>[ > ...X &lt; ]</small> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels en daarna de " . , ; " die aan einde van een regel staan.
+        </li>
+        <li>
           <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen;<br>
           Dit gebeurt niet wanneer de zin reeds met een label begint.
         </li>
