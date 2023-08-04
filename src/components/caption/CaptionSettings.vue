@@ -68,6 +68,7 @@ export default {
         'Standaard',
         'Bijbeltekst',
         'Alleen tekst',
+        'Titel',
         'Thema'
       ]
     }

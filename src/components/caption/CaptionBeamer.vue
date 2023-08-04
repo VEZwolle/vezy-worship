@@ -30,7 +30,7 @@
           <tspan
             v-for="(line, i) in textLines"
             :key="i"
-            :x="line.newLine ? '4vw' : null"
+            :x="line.newLine ? textTspanX : null"
             :dy="line.newLine ? textTspanDy : null"
             :class="line.class"
           >
@@ -93,6 +93,10 @@ export default {
           fontSize = 2.5 // vw
           maxWidth *= 0.90
           break
+        case 'Titel':
+          fontSize = 5 // vw
+          maxWidth *= 0.92
+          break
         default:
           maxWidth *= 0.92
       }
@@ -111,8 +115,13 @@ export default {
           fontSize = 5.8 // vw
           maxWidth *= 0.90
           break
+        case 'Titel':
+          fontSize = 6 // vw
+          maxWidth *= 0.92
+          break
         case 'Bijbeltekst':
           fontBold = '300'
+          maxWidth *= 0.92
           break
         case 'Alleen tekst':
           return []
@@ -128,10 +137,17 @@ export default {
       style.padding = '0 0 0 0'
       style.width = '100vw'
       style.height = '100%'
-      if (this.format === 'Thema') {
-        style.position = 'fixed'
-        style.top = '28.5vw'
-        style.padding = '0 0 0 2vw'
+      switch (this.format) {
+        case 'Thema':
+          style.position = 'fixed'
+          style.top = '28.5vw'
+          style.padding = '0 0 0 2vw'
+          break
+        case 'Titel':
+          style.textAnchor = 'middle'
+          style.dominantBaseline = 'middle'
+          break
+        default:
       }
       return style
     },
@@ -148,6 +164,12 @@ export default {
           style.height = '14.6vw'
           style.padding = '0 0 0 2vw'
           break
+        case 'Titel':
+          style.marginTop = this.titleLines.length !== 1 ? '2.1vw' : '6vw'
+          style.height = `${this.titleLines.length * 6.6 + 2}vw`
+          style.textAnchor = 'middle'
+          style.dominantBaseline = 'middle'
+          break
         case 'Bijbeltekst':
           style.position = 'fixed'
           style.top = '65vh'
@@ -161,10 +183,21 @@ export default {
       return style
     },
     titleTspanX () {
-      return this.format === 'Bijbeltekst' ? '96vw' : '4vw'
+      switch (this.format) {
+        case 'Titel': return '50%'
+        case 'Bijbeltekst': return '96vw'
+        default: return '4vw'
+      }
     },
     titleTspanDy () {
-      return this.format === 'Thema' ? '6.6vw' : '5.0vw'
+      switch (this.format) {
+        case 'Titel': return '6.6vw'
+        case 'Thema': return '6.6vw'
+        default: return '5vw'
+      }
+    },
+    textTspanX () {
+      return this.format === 'Titel' ? '50%' : '4vw'
     },
     textTspanDy () {
       return this.format === 'Thema' ? '3.1vw' : '4.4vw'
@@ -173,6 +206,7 @@ export default {
       switch (this.format) {
         case 'Thema': return 'textTheme'
         case 'Bijbeltekst': return 'textScripture'
+        case 'Titel': return 'textTitle'
         case 'Alleen tekst':
         default: return ''
       }
@@ -245,6 +279,9 @@ export default {
     .textTheme {
       font-size: 5.8vw;
     }
+    .textTitle {
+      font-size: 6vw;
+    }
     .textScripture{
       text-anchor: end;
       font-weight: 300;
@@ -297,6 +334,9 @@ export default {
     }
     .textTheme {
       font-size: 2.5vw;
+    }
+    .textTitle {
+      font-size: 5vw;
     }
     .bold {
       font-weight: bold;
