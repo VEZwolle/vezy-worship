@@ -41,6 +41,28 @@ export function versionUpdate (service) {
       // eslint-disable-next-line
     case version <= 1.0602: // 1.6.2-beta first version white number
     case version <= 1.0603:
+    case version <= 1.0700:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'caption':
+          case 'scripture': {
+            let text = presentation.settings.text
+              .replace(/<\/?span(.*?)>/gi, '').replace(/ style="(.*?);">/gi, '>').replace(/\r*\n/g, '<br>')
+              .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;')
+              .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>')
+              .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>')
+            let textStep = ''
+            while (textStep !== text) {
+              textStep = text
+              text = text.replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '')
+            }
+            presentation.settings.text = text.replace(/(<div>){2,}/g, '<div>').replace(/(<\/div>){2,}/g, '</div>')
+            break
+          }
+          default:
+        }
+      })
+      // eslint-disable-next-line
     default: // no changes
       // console.log(`version file: ${version}`)
       break
