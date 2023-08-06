@@ -253,5 +253,6 @@ const secrets = [
 ]
 
 exports.api = functions
+  .region('europe-west1')
   .runWith({ secrets })
   .https.onRequest(app)

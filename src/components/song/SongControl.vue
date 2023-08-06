@@ -5,7 +5,7 @@
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
-import labels from './labels'
+import { isLabel } from './labels'
 import chunk from 'lodash/chunk'
 
 export default {
@@ -38,14 +38,10 @@ function splitSong (text, linesPerSlide) {
 
       const lines = section.split('<br>')
 
-      for (const label of labels) {
-        if (((lines[0]?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(lines[0]?.toLowerCase())) || lines[0]?.toLowerCase() === label.key) === false) {
-          continue
-        }
-
+      const label = isLabel(lines[0] || '')
+      if (label) {
         result.label = { ...label, value: lines[0] }
         lines.shift()
-        break
       }
 
       result.slides = chunk(lines, linesPerSlide)

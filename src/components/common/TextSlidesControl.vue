@@ -31,7 +31,7 @@
       @dblclick="goLive"
     >
       <q-item-section>
-        <div v-for="(line, i) in slide" :key="i" v-html="line" />
+        <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
       </q-item-section>
     </q-item>
   </q-list>
@@ -140,6 +140,10 @@ export default {
   cursor: default !important;
   min-height: unset;
   padding: 1px 13px;
+
+  .section-line {
+    min-height: 0.7em;
+  }
 }
 
 .section-label {

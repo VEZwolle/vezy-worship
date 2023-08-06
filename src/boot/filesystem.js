@@ -30,7 +30,7 @@ const fs = {
     // Load service data from `service.json`
     let service = entries.find(e => e.filename === 'service.json')
     if (!service) {
-      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand' })
+      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand', position: 'top' })
       await zipReader.close()
       return
     }
@@ -90,9 +90,7 @@ const fs = {
       await zipWriter.add(fileId, reader)
     }
 
-    await zipWriter.close()
-
-    const blob = blobWriter.getData()
+    const blob = await zipWriter.close()
 
     // Write zip file to disk
     try {
@@ -100,9 +98,16 @@ const fs = {
       await writable.write(blob)
       await writable.close()
 
-      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}`, position: 'top' })
+      store.setServiceSaved()
     } catch {
-      Notify.create({ type: 'negative', message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+      Notify.create({
+        type: 'negative',
+        message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?',
+        position: 'top',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
     }
   }
 }

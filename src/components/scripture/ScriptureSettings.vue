@@ -94,13 +94,7 @@
           </div>
         </div>
 
-        <q-editor
-          ref="editor"
-          v-model="settings.text"
-          min-height="50vh"
-          :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]"
-          @paste.prevent.stop="pastePlainText"
-        />
+        <VezyEditor v-model="settings.text" min-height="50vh" />
       </q-tab-panel>
 
       <q-tab-panel name="background">
@@ -115,9 +109,10 @@ import BaseSettings from '../presentation/BaseSettings.vue'
 import bibles from './bibles'
 import books from './books'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditor from '../common/VezyEditor.vue'
 
 export default {
-  components: { BackgroundSetting },
+  components: { BackgroundSetting, VezyEditor },
   extends: BaseSettings,
   data () {
     return {
@@ -178,17 +173,13 @@ export default {
           .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
           .trim()
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.', position: 'top' })
       } finally {
         this.isLoadingScripture = false
       }
       this.titleBook = this.title
       this.titleBible = this.settings.bible
       this.titleUpdate()
-    },
-    pastePlainText (e) {
-      const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
     },
     required (val) {
       return !!val || 'Verplicht'

@@ -1,6 +1,8 @@
 <template>
   <div class="bg-output-beamer" :style="style">
-    <div v-if="!clear" class="full" :style="styleOpacity" />
+    <Transition name="q-transition--fade">
+      <div v-show="!clear" class="full" :style="styleOpacity" />
+    </Transition>
   </div>
 </template>
 
@@ -12,7 +14,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .full {
   position: absolute;
   width: 100%;

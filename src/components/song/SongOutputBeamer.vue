@@ -1,7 +1,7 @@
 <template>
   <div class="bg-output-beamer song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <svg v-if="!clear" :style="styleOpacity">
+      <svg v-show="!clear" :style="styleOpacity">
         <text y="6.6vw">
           <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
           <tspan x="50%" dy="3vw">&nbsp;</tspan>

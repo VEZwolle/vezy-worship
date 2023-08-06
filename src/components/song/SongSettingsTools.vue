@@ -1,6 +1,6 @@
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
-import labels from './labels'
+import labels, { isLabel } from './labels'
 
 export default {
   extends: BaseSettings,
@@ -36,17 +36,15 @@ export default {
       }
       return text
     },
+    cpRemovePunctuation (text) {
+      return text.replace(/[.,;]$/gm, '')
+    },
     cpInsertLabelsLines (text, label) {
       const lines = text.replace(/\r?\n/g, '<br>').split('<br><br>')
       text = ''
       for (let i = 0; i < lines.length; i++) {
-        let hasLabel = false
-        for (const label of labels) {
-          if (((lines[i]?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(lines[i]?.toLowerCase())) || lines[i]?.toLowerCase().startsWith(`${label.key}<br>`))) {
-            hasLabel = true
-            break
-          }
-        }
+        const line = lines[i]?.split('<br>')
+        const hasLabel = isLabel(line[0] || '')
         if (!hasLabel) {
           text += text ? '\r\n\r\n' + label + '\r\n' + lines[i] : label + '\r\n' + lines[i]
         } else {
@@ -72,6 +70,15 @@ export default {
       } else {
         this.backupSettingTranslation = this.settings.translation
         this.settings.translation = this.cpTrimLines(this.settings.translation)
+      }
+    },
+    trimRemovePunctuation (input) {
+      if (input === 'text') {
+        this.backupSettingText = this.settings.text
+        this.settings.text = this.cpRemovePunctuation(this.cpTrimLines(this.settings.text))
+      } else {
+        this.backupSettingTranslation = this.settings.translation
+        this.settings.translation = this.cpRemovePunctuation(this.cpTrimLines(this.settings.translation))
       }
     },
     insertLabelsLines (input, label) {

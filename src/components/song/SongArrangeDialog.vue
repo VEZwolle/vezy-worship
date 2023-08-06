@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import labels from './labels'
+import labels, { isLabel } from './labels'
 
 export default {
   props: {
@@ -392,13 +392,9 @@ export default {
         this.lyricsLines[index].empty = false
       }
       this.lyricsLines[index].label = null
-      for (const label of labels) {
-        if (((this.lyricsLines[index].text.toLowerCase().startsWith(label.key) && /[\d({[]/.test(this.lyricsLines[index].text.toLowerCase())) || this.lyricsLines[index].text.toLowerCase() === label.key) === false) {
-          continue
-        }
+      const label = isLabel(this.lyricsLines[index].text || '')
+      if (label) {
         this.lyricsLines[index].label = { ...label, value: this.lyricsLines[index].text }
-        // this.lyricsLines[index].output = 3
-        break
       }
       if (finisch) {
         this.lineEditText = false
@@ -495,7 +491,7 @@ export default {
           }
         }
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.', position: 'top' })
       } finally {
         this.isLoading = false
       }
@@ -522,13 +518,10 @@ function splitToLines (text, outputNr = 1) {
         result.empty = true
         result.output = 3
       } else {
-        for (const label of labels) {
-          if (((line?.toLowerCase().startsWith(label.key) && /[\d({[]/.test(line?.toLowerCase())) || line?.toLowerCase() === label.key) === false) {
-            continue
-          }
+        const label = isLabel(line || '')
+        if (label) {
           result.label = { ...label, value: lines }
           result.output = 3
-          break
         }
       }
 
@@ -595,7 +588,7 @@ function CombiSplitToLines (text, translation) {
 }
 
 .q-card {
-  min-width: 60vw;
+  min-width: max(60vw, min(1152px, 95vw));
   min-height: 80vh;
 }
 .q-item {

@@ -134,7 +134,7 @@ export default [
     },
     outputs: {
       beamer: require('./countdown/CountdownOutputBeamer.vue').default,
-      livestream: require('./countdown/CountdownOutput.vue').default
+      livestream: require('./countdown/CountdownOutputLivestream.vue').default
     }
   },
   {

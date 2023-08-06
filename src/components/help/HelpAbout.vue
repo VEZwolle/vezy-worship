@@ -14,6 +14,13 @@
       Aan de basis van dit programma staat <a href="https://github.com/jpkleemans" target="_blank">Jan-Paul Kleemans</a> hij heeft de grootste ontwikkelingen gemaakt.
     </p>
     <div class="text-h6 q-mb-md">
+      Update
+    </div>
+    <p>
+      Updates van de desktop versie worden vanaf versie 1.7.0 automatisch gedownload en geinstalleerd na afsluiten.<br>
+      Eventueel kan dit bij de instellingen uitgezet worden. Nieuwe versies zijn ook te vinden op <a href="https://github.com/VEZwolle/vezy-worship/releases" target="_blank">github</a>.
+    </p>
+    <div class="text-h6 q-mb-md">
       Contact
     </div>
     <p>

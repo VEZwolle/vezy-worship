@@ -14,7 +14,7 @@
           <q-input v-model="settings.title" outlined :rules="['required']" />
 
           <label class="label">Tekst</label>
-          <q-editor ref="editor" v-model="settings.text" min-height="80px" :toolbar="[['bold', 'italic', 'underline', 'superscript', 'removeFormat']]" class="q-mb-md" @paste.prevent.stop="pastePlainText" />
+          <VezyEditor v-model="settings.text" min-height="80px" />
 
           <div class="q-pa-md row q-gutter-md">
             <div class="col">
@@ -47,9 +47,10 @@ import OutputPreview from '../output/OutputPreview.vue'
 import CaptionOutputLivestream from './CaptionOutputLivestream.vue'
 import CaptionOutputBeamer from './CaptionOutputBeamer.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditor from '../common/VezyEditor.vue'
 
 export default {
-  components: { OutputPreview, BackgroundSetting },
+  components: { OutputPreview, BackgroundSetting, VezyEditor },
   extends: BaseSettings,
   setup () {
     return { CaptionOutputLivestream, CaptionOutputBeamer }
@@ -67,14 +68,9 @@ export default {
         'Standaard',
         'Bijbeltekst',
         'Alleen tekst',
+        'Titel',
         'Thema'
       ]
-    }
-  },
-  methods: {
-    pastePlainText (e) {
-      const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
     }
   }
 }
