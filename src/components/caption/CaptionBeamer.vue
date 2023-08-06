@@ -144,6 +144,7 @@ export default {
           style.padding = '0 0 0 2vw'
           break
         case 'Titel':
+          style.marginTop = '-1vw'
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
           break
@@ -169,7 +170,7 @@ export default {
           break
         case 'Titel':
           style.marginTop = this.titleLines.length !== 1 ? '2.1vw' : '6vw'
-          style.height = `${this.titleLines.length * 6.6 + 2}vw`
+          style.height = `${this.titleLines.length * 6.6 + 3}vw`
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
           break
