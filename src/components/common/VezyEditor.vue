@@ -49,6 +49,9 @@ export default {
         this.lastEmit = val
         this.content = val
       }
+    },
+    'content' (val) {
+      if (this.lastEmit !== val) this.update()
     }
   },
   mounted () {
