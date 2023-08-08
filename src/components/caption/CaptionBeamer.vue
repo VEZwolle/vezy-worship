@@ -144,8 +144,12 @@ export default {
           style.padding = '0 0 0 2vw'
           break
         case 'Titel':
+          style.marginTop = '-1vw'
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
+          break
+        case 'Standaard':
+          style.marginTop = '-1vw'
           break
         default:
       }
@@ -156,7 +160,7 @@ export default {
       style.padding = '0'
       style.top = '0'
       style.width = '100vw'
-      style.height = `${this.titleLines.length * 5 + 1}vw`
+      style.height = `${this.titleLines.length * 5 + 2}vw`
       switch (this.format) {
         case 'Thema':
           style.position = 'fixed'
@@ -166,7 +170,7 @@ export default {
           break
         case 'Titel':
           style.marginTop = this.titleLines.length !== 1 ? '2.1vw' : '6vw'
-          style.height = `${this.titleLines.length * 6.6 + 2}vw`
+          style.height = `${this.titleLines.length * 6.6 + 3}vw`
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
           break
@@ -200,7 +204,11 @@ export default {
       return this.format === 'Titel' ? '50%' : '4vw'
     },
     textTspanDy () {
-      return this.format === 'Thema' ? '3.1vw' : '4.4vw'
+      switch (this.format) {
+        case 'Titel': return '6vw'
+        case 'Thema': return '3.1vw'
+        default: return '4.4vw'
+      }
     },
     formatTextClass () {
       switch (this.format) {
