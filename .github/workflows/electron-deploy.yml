@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - dev
-      - v[0-9].*
+      - dev[0-9].*
   pull_request:
     branches:
-      - v[0-9].*
+      - dev[0-9].*
 
 jobs:
   build:
