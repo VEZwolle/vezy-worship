@@ -1,5 +1,5 @@
-// https://github.com/tnwinc/htmldiff.js (MIT) --> https://gist.github.com/KPChakravarthy/8a2fcddfa11f29ddb9cc557a87449aaa
-// https://javascript.plainenglish.io/content-diff-view-in-vanilla-javascript-105a00abd7ce
+// base https://github.com/tnwinc/htmldiff.js (MIT) --> https://gist.github.com/KPChakravarthy/8a2fcddfa11f29ddb9cc557a87449aaa
+// explain https://javascript.plainenglish.io/content-diff-view-in-vanilla-javascript-105a00abd7ce
 
 let mark = [] // wijziging opmaak gestart voor tag in lijst
 
@@ -271,10 +271,10 @@ function wrap (addTag, content) {
         if (tagI === 'br') {
           switch (true) {
             case addTag === 'del':
-              rendering += '<mark> </mark>' // space instead of newline
+              rendering += `<${addTag}>↲</${addTag}>` // symbol instead of newline
               break
             default: // 'ins'
-              rendering += `<mark>${tags[i]}</mark>`
+              rendering += `<${addTag}>↲${tags[i]}</${addTag}>`
           }
           continue
         }
