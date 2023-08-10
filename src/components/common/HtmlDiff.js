@@ -1,17 +1,22 @@
 // https://github.com/tnwinc/htmldiff.js (MIT) --> https://gist.github.com/KPChakravarthy/8a2fcddfa11f29ddb9cc557a87449aaa
 // https://javascript.plainenglish.io/content-diff-view-in-vanilla-javascript-105a00abd7ce
 
+let mark = [] // wijziging opmaak gestart voor tag in lijst
+
 class Match {
-  constructor (startInFirst1, startInChanged1, length1) {
-    this.startInFirst = startInFirst1
-    this.startInChanged = startInChanged1
-    this.length = length1
+  constructor (startInFirst, startInChanged, length) {
+    this.startInFirst = startInFirst
+    this.startInChanged = startInChanged
+    this.length = length
     this.endInFirst = this.startInFirst + this.length - 1
     this.endInChanged = this.startInChanged + this.length - 1
   }
 }
 
-// html to array of: <tag> | word | space(s)
+/*
+* Splitsing tekst in zoek/vergelijk onderdelen
+*/
+// html to array of: <tag> | word icm # en @ | losse leestekens e.d. | space(s)
 function htmlToTokens (html) {
   let mode = 'char'
   let currentWord = ''
@@ -39,7 +44,7 @@ function htmlToTokens (html) {
           if (currentWord) { words.push(currentWord) }
           currentWord = char
           mode = 'space'
-        } else if (/[\w#@]+/i.test(char)) { // word, # of @ //was: /[\w\#@]+/i
+        } else if (/[\w#@]+/i.test(char)) { // letters, # of @; voor compineren in 1 object
           currentWord += char
         } else {
           if (currentWord) { words.push(currentWord) }
@@ -64,23 +69,28 @@ function htmlToTokens (html) {
     }
   }
   if (currentWord) { words.push(currentWord) }
+  // console.log(words)
   return words
 }
 
-function findMatch (firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged) {
+/*
+* zoek functies overeenkomsten en verschillen
+*/
+
+// find overeenkomstige stukken --> output "match class" of undefined
+function findMatch (firstTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged) {
   let match
   let bestMatchInFirst = startInFirst
   let bestMatchInChanged = startInChanged
   let bestMatchLength = 0
   let matchLengthAt = {}
-  let indexInFirst, i, ref, ref1
   for (
-    indexInFirst = i = ref = startInFirst, ref1 = endInFirst;
-    ref <= ref1 ? i < ref1 : i > ref1;
-    indexInFirst = ref <= ref1 ? ++i : --i
+    let i = startInFirst;
+    startInFirst <= endInFirst ? i < endInFirst : i > endInFirst;
+    startInFirst <= endInFirst ? ++i : --i
   ) {
     const newMatchLengthAt = {}
-    const lookingfor = firstTokens[indexInFirst]
+    const lookingfor = firstTokens[i]
     const locationsInChanged = indexOfFirstLocationsInChangedTokens[lookingfor]
     for (let j = 0; j < locationsInChanged.length; j++) {
       const indexInChanged = locationsInChanged[j]
@@ -90,7 +100,7 @@ function findMatch (firstTokens, changedTokens, indexOfFirstLocationsInChangedTo
       const newMatchLength = matchLengthAt[indexInChanged - 1] + 1
       newMatchLengthAt[indexInChanged] = newMatchLength
       if (newMatchLength > bestMatchLength) {
-        bestMatchInFirst = indexInFirst - newMatchLength + 1
+        bestMatchInFirst = i - newMatchLength + 1
         bestMatchInChanged = indexInChanged - newMatchLength + 1
         bestMatchLength = newMatchLength
       }
@@ -107,20 +117,22 @@ function findMatch (firstTokens, changedTokens, indexOfFirstLocationsInChangedTo
   return match
 }
 
-function recursivelyfindMatchingBlocks (firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged, matchingBlocks) {
-  const match = findMatch(firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged)
-  if (match != null) {
+// array (class match) van gevonden gelijke blokken
+function repeatingFindMatchingBlocks (firstTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged, matchingBlocks) {
+  const match = findMatch(firstTokens, indexOfFirstLocationsInChangedTokens, startInFirst, endInFirst, startInChanged, endInChanged)
+  if (match) {
     if (startInFirst < match.startInFirst && startInChanged < match.startInChanged) {
-      recursivelyfindMatchingBlocks(firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, startInFirst, match.startInFirst, startInChanged, match.startInChanged, matchingBlocks)
+      repeatingFindMatchingBlocks(firstTokens, indexOfFirstLocationsInChangedTokens, startInFirst, match.startInFirst, startInChanged, match.startInChanged, matchingBlocks)
     }
     matchingBlocks.push(match)
     if (match.endInFirst <= endInFirst && match.endInChanged <= endInChanged) {
-      recursivelyfindMatchingBlocks(firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, match.endInFirst + 1, endInFirst, match.endInChanged + 1, endInChanged, matchingBlocks)
+      repeatingFindMatchingBlocks(firstTokens, indexOfFirstLocationsInChangedTokens, match.endInFirst + 1, endInFirst, match.endInChanged + 1, endInChanged, matchingBlocks)
     }
   }
   return matchingBlocks
 }
 
+// array van verschillende onderdelen met de posites waar deze voorkomen in array "htmlToTokens"
 function createIndex (p) {
   if (p.findThese == null) { throw new Error('params must have findThese key') }
   if (p.inThese == null) { throw new Error('params must have inThese key') }
@@ -138,11 +150,13 @@ function createIndex (p) {
   return index
 }
 
+// array (class match) van gevonden gelijke blokken
 function findMatchingBlocks (firstTokens, changedTokens) {
   const indexOfFirstLocationsInChangedTokens = createIndex({ findThese: firstTokens, inThese: changedTokens })
-  return recursivelyfindMatchingBlocks(firstTokens, changedTokens, indexOfFirstLocationsInChangedTokens, 0, firstTokens.length, 0, changedTokens.length, [])
+  return repeatingFindMatchingBlocks(firstTokens, indexOfFirstLocationsInChangedTokens, 0, firstTokens.length, 0, changedTokens.length, [])
 }
 
+// array met vergelijk uitkomsten equal/insert/delete/replace/none icm posities in array HtmlToToken [undefined voor end welke niet van toepassing bij instert/delete]
 function calculateOperations (firstTokens, changedTokens) {
   if (firstTokens == null) { throw new Error('firstTokens?') }
   if (changedTokens == null) { throw new Error('changedTokens?') }
@@ -157,10 +171,14 @@ function calculateOperations (firstTokens, changedTokens) {
   }
   const matches = findMatchingBlocks(firstTokens, changedTokens)
   matches.push(new Match(firstTokens.length, changedTokens.length, 0))
-  let i, index
-  for (index = i = 0; i < matches.length; index = ++i) {
-    const match = matches[index]
-    const actionUpToMatchPositions = actionMap[[positionInFirst === match.startInFirst, positionInChanged === match.startInChanged].toString()]
+  for (let i = 0; i < matches.length; ++i) {
+    const match = matches[i]
+    const actionUpToMatchPositions = actionMap[
+      [
+        positionInFirst === match.startInFirst,
+        positionInChanged === match.startInChanged
+      ].toString()
+    ]
     if (actionUpToMatchPositions !== 'none') {
       operations.push({
         action: actionUpToMatchPositions,
@@ -204,44 +222,92 @@ function calculateOperations (firstTokens, changedTokens) {
   return postProcessed
 }
 
+/*
+* opmaak functies uitkomst
+*/
+function isTag (token) { return /^\s*<[^>]+>\s*$/.test(token) }
+function isNoTag (token) { return !isTag(token) }
+
+// array van opeenvolgende blokken (binnen/buiten tag)
 function consecutiveWhere (start, content, tag) {
-  console.log(`start: ${start} | content: ${content} | predicate: ${tag}`)
   content = content.slice(start, +content.length + 1 || 9e9)
   let lastMatchingIndex = void 0
-  let i, index
-  for (index = i = 0; i < content.length; index = ++i) {
-    const answer = tag ? isTag(content[index]) : isNoTag(content[index])
-    if (answer === true) { lastMatchingIndex = index }
+  for (let i = 0; i < content.length; ++i) {
+    const answer = tag ? isTag(content[i]) : isNoTag(content[i])
+    if (answer === true) { lastMatchingIndex = i }
     if (answer === false) { break }
   }
   if (lastMatchingIndex != null) { return content.slice(0, +lastMatchingIndex + 1 || 9e9) }
   return []
 }
 
-function isTag (token) { return /^\s*<[^>]+>\s*$/.test(token) }
-function isNoTag (token) { return !isTag(token) }
-
 // return <tag>..content..</tag>
-function wrap (tag, content) {
-  console.log(`tag: ${tag} | content: ${content}`)
+function wrap (addTag, content) {
   let nonTags, tags
   let rendering = ''
   let position = 0
   const length = content.length
-  while (true) {
-    if (position >= length) { break }
+  while (position < length) {
+    // control part that is not a tag?
     nonTags = consecutiveWhere(position, content, false)
+    if (nonTags.length !== 0) {
+      rendering += `<${addTag}>${nonTags.join('')}</${addTag}>`
+    }
     position += nonTags.length
-    if (nonTags.length !== 0) { rendering += `<${tag}>${nonTags.join('')}</${tag}>` }
     if (position >= length) { break }
+    // control part that is a tag?
     tags = consecutiveWhere(position, content, true)
+    if (tags.length !== 0) {
+      let markTag
+      for (let i = 0; i < tags.length; i++) {
+        const endTag = /^\s*<\//.test(tags[i])
+        const [tagI] = tags[i].match(/(?<=^\s*<\/*)\w+(?=.*>\s*$)/) || []
+        // no tag found, merge and through.
+        if (!tagI) {
+          rendering += tags[i]
+          continue
+        }
+        // line break has no 2nd tag, close immediately
+        if (tagI === 'br') {
+          switch (true) {
+            case addTag === 'del':
+              rendering += '<mark> </mark>' // space instead of newline
+              break
+            default: // 'ins'
+              rendering += `<mark>${tags[i]}</mark>`
+          }
+          continue
+        }
+        // another tag
+        const markExistIndex = mark.indexOf(tagI)
+        if (markExistIndex === -1) {
+          markTag = '<mark>'
+          mark.push(tagI)
+        } else {
+          markTag = '</mark>'
+          mark.splice(markExistIndex, 1)
+        }
+        switch (true) {
+          case addTag === 'del':
+            rendering += markTag
+            break
+          case addTag === 'ins' && !endTag:
+            rendering += markTag + tags[i]
+            break
+          case addTag === 'ins' && endTag:
+            rendering += tags[i] + markTag
+            break
+          default:
+            rendering += tags[i]
+        }
+      }
+    }
     position += tags.length
-    rendering += tags.join('')
   }
-  console.log(`rendering: ${rendering}`)
   return rendering
 }
 
+// return output van onderdeel incl. tag <ins>/<del>
 function opMap (action, op, firstTokens, changedTokens) {
   switch (action) {
     case 'equal': return firstTokens.slice(op.startInFirst, +op.endInFirst + 1 || 9e9).join('')
@@ -252,8 +318,10 @@ function opMap (action, op, firstTokens, changedTokens) {
   }
 }
 
+// return totale output incl. tag <ins>/<del>
 function renderOperations (firstTokens, changedTokens, operations) {
   let rendering = ''
+  mark = []
   for (let i = 0; i < operations.length; i++) {
     const op = operations[i]
     rendering += opMap(op.action, op, firstTokens, changedTokens)
@@ -262,20 +330,14 @@ function renderOperations (firstTokens, changedTokens, operations) {
 }
 
 // Invoked like so => let output = HtmlDiff(originalHTML, changedHTML)
+// output whit <ins><del><mark> tags for insert, delete, style change
 export function HtmlDiff (first, changed) {
-  console.log(`first: ${first}`)
-  console.log(`changed: ${changed}`)
   if (first === changed) { return first } // equal
-
   // text to array of <tag> | word | space(s)
   first = htmlToTokens(first)
   changed = htmlToTokens(changed)
-  console.log(first)
-  console.log(changed)
-
   // calculate match, insert, delete positions
   const ops = calculateOperations(first, changed)
-  console.log(ops)
   // add tag <ins><del> to output
   return renderOperations(first, changed, ops)
 }

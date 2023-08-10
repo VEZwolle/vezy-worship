@@ -43,8 +43,8 @@ export default {
   ],
   data () {
     return {
-      newSong: 'test deze song tekst <br>en nog een nieuwe regel',
-      dbSong: 'test deze oude song tekst <br>en nog een regel',
+      newSong: 'De <b>schepping</b> van hemel en aarde 1 1 In het begin schiep God de hemel en de aarde. 2 De aarde was nog woest en doods, en duisternis lag over de oervloed, maar Gods geest zweefde over het water.',
+      dbSong: 'De schepping van hemel en <i>aarde</i> 1 In het begin schiep God de hemel en de aarde.  2   De aarde was woest en doods, duisternis lag over de oervloed, en over het water zweefde Gods geest.',
       newSongComp: '',
       dbSongComp: ''
     }
@@ -58,11 +58,9 @@ export default {
     hide () {
       this.$refs.dialogDatabase.hide()
     },
-    async htmlDiff () {
-      this.newSongComp = await HtmlDiff(this.dbSong, this.newSong)
-      console.log(this.newSongComp)
-      this.dbSongComp = await HtmlDiff(this.newSong, this.dbSong) // or use this.dbSong whitout css clean
-      console.log(this.dbSongComp)
+    htmlDiff () {
+      this.newSongComp = HtmlDiff(this.dbSong, this.newSong)
+      this.dbSongComp = this.dbSong //  HtmlDiff(this.newSong, this.dbSong) // or use this.dbSong whitout css clean
     }
   }
 }
