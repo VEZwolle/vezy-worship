@@ -288,6 +288,18 @@ function wrap (addTag, content) {
           mark.splice(markExistIndex, 1)
         }
         switch (true) {
+          case tagI === 'div' && addTag === 'del' && !endTag:
+            rendering += `<${addTag}>↲</${addTag}>` // symbol instead of <div>
+            break
+          case tagI === 'div' && addTag === 'ins' && !endTag:
+            rendering += `<${addTag}>↲</${addTag}>${tags[i]}`
+            break
+          case tagI === 'div' && addTag === 'del' && endTag:
+            rendering += `<${addTag}> </${addTag}>` // space instead of </div>
+            break
+          case tagI === 'div' && addTag === 'ins' && endTag:
+            rendering += `<${addTag}> </${addTag}>${tags[i]}`
+            break
           case addTag === 'del':
             rendering += markTag
             break
