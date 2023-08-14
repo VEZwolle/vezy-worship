@@ -136,7 +136,7 @@
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
-import SongDatabaseCompareDialog from '../song/SongDatabaseCompareDialog.vue'
+import SongDatabaseCompareDialog from '../song/database/SongDatabaseCompareDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'

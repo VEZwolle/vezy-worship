@@ -13,7 +13,13 @@
           <div class="col">
             <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
           </div>
-          <div class="col2">
+          <div class="col-2">
+            <q-input v-model="settings.collection" outlined label="Collectie" />
+          </div>
+          <div class="col-1">
+            <q-input v-model="settings.number" outlined label="Nr" />
+          </div>
+          <div class="col-auto">
             <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb()">
               <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
             </q-btn>
@@ -126,6 +132,8 @@
   <SongDatabaseDialog
     ref="SongDatabaseDialog"
     v-model:title="settings.title"
+    v-model:collection="settings.collection"
+    v-model:number="settings.number"
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
@@ -134,7 +142,7 @@
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
-import SongDatabaseDialog from './SongDatabaseDialog.vue'
+import SongDatabaseDialog from './database/SongDatabaseDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'

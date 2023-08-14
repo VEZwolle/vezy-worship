@@ -345,6 +345,9 @@ function renderOperations (firstTokens, changedTokens, operations) {
 // output whit <ins><del><mark> tags for insert, delete, style change
 export function HtmlDiff (first, changed) {
   if (first === changed) { return first } // equal
+  if (!first) { return `<ins>${changed || ''}</ins>` }
+  if (!changed) { return `<del>${first}</del>` }
+
   // text to array of <tag> | word | space(s)
   first = htmlToTokens(first)
   changed = htmlToTokens(changed)

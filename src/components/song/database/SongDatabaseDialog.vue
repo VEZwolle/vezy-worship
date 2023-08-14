@@ -130,6 +130,8 @@ export default {
   },
   emits: [
     'update:title',
+    'update:collection',
+    'update:number',
     'update:text',
     'update:translation'
   ],
@@ -244,11 +246,9 @@ export default {
       this.filterSearchResults()
     },
     submitSong () {
-      let collectionNumber = this.selected[0]?.collection ? ` ${this.selected[0]?.collection}` : ''
-      collectionNumber += this.selected[0]?.number ? ` ${this.selected[0]?.number}` : ''
-      collectionNumber = collectionNumber ? ` |${collectionNumber}` : ''
-
-      this.$emit('update:title', `${this.selected[0]?.title}${collectionNumber}`)
+      this.$emit('update:title', this.selected[0]?.title)
+      this.$emit('update:collection', this.selected[0]?.collection ? this.selected[0]?.collection : '')
+      this.$emit('update:number', this.selected[0]?.number ? this.selected[0]?.number : '')
       this.$emit('update:text', this.selected[0]?.lyrics)
       this.$emit('update:translation', this.selected[0]?.lyricstranslate)
       this.hide()
