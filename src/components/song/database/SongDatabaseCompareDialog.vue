@@ -33,6 +33,7 @@
                   @add="songsTodoIndex[index] = -1"
                   @change="change(index)"
                   @remove="songsTodoIndex[index] = -2"
+                  @edit="edit(song)"
                 />
               </div>
               <div class="col">
@@ -99,24 +100,26 @@
         <q-btn color="secondary" label="Opslaan in database" @click.stop="save">
           <q-tooltip>Geselecteerde liederen toevoegen, vervangen & opslaan in database</q-tooltip>
         </q-btn>
-        <q-btn color="secondary" label="Annuleren" @click.stop="hide">
+        <q-btn color="secondary" label="Sluiten" @click.stop="hide">
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <PresentationSettingsDialog ref="presentationSettingsDialog" />
 </template>
 
 <script>
 import SongItem from './SongItem.vue'
 import SongItemDatabase from './SongItemDatabase.vue'
 import SongLyricsView from './SongLyricsView.vue'
+import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
 import dayjs from 'dayjs'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { Notify } from 'quasar'
 
 export default {
-  components: { SongItem, SongLyricsView, SongItemDatabase },
+  components: { SongItem, SongLyricsView, SongItemDatabase, PresentationSettingsDialog },
   data () {
     return {
       songs: [],
@@ -185,16 +188,9 @@ export default {
       return HtmlDiff(this.databaseLyrics, this.newLyrics)
     },
     countDiff () {
-      if (this.selectedIndex < this.songsSearchResults.length &&
-        this.selectedIndex < this.songsSearchCountDiff.length &&
-        this.selectedIndex < this.songsTodoIndex.length &&
-        this.songsTodoIndex[this.selectedIndex] >= 0 &&
-        this.songsSearchCountDiff[this.selectedIndex][this.songsTodoIndex[this.selectedIndex]].text) {
-        const diff = this.songsSearchCountDiff[this.selectedIndex][this.songsTodoIndex[this.selectedIndex]]
-        return `tekst: +${diff.text.ins} -${diff.text.del} | vertaling: +${diff.translation.ins} -${diff.translation.del}`
-      }
-      // leeg
-      return ''
+      const textDiff = CountDiff(this.compareLyrics)
+      const translationDiff = CountDiff(this.compareLyricsTranslation)
+      return `tekst: +${textDiff.ins} -${textDiff.del} (${textDiff.factor100.toFixed(0)}%) | vertaling: +${translationDiff.ins} -${translationDiff.del} (${translationDiff.factor100.toFixed(0)}%)`
     },
     newLyricsTranslation () {
       return this.selected?.settings.translation.replace(/\r?\n/g, '<br>') || ''
@@ -258,14 +254,14 @@ export default {
       this.songsTodoIndex = []
       // search database
       this.songs.forEach(song => {
-        const databaseSong = this.filterSearchSongInDatabase(song.settings) || []
+        const databaseSong = this.filterSearchSongInDatabase(song.settings).slice(0, 9) || [] // max 0 results pro song
         const countDiff = []
         // get diff count
         for (let i = 0; i < databaseSong.length; i++) {
           const textDiff = CountDiff(HtmlDiff(databaseSong[i].lyrics, song.settings.text))
           const translationDiff = CountDiff(HtmlDiff(databaseSong[i].lyricstranslate, song.settings.translation))
-          const count = textDiff.ins + textDiff.del + translationDiff.ins + translationDiff.del
-          countDiff.push({ text: textDiff, translation: translationDiff, count })
+          const factor200 = textDiff.factor100 + translationDiff.factor100
+          countDiff.push({ text: textDiff, translation: translationDiff, factor200 })
         }
         let j = -1 // -1 (add) if no database else index nr 0, 1 db result (replace)
         // search best result
@@ -274,10 +270,11 @@ export default {
             j = i
             continue
           }
-          if (countDiff[i].count < countDiff[j].count) { j = i }
+          if (countDiff[i].factor200 > countDiff[j].factor200) { j = i }
         }
+        if (countDiff[j]?.text.factor100 < 40) { j = -1 } // less than 50% similarity text, probably different song --> add
         // if exactly
-        if (countDiff[j]?.count === 0) {
+        if (countDiff[j]?.factor200 > 190) { // check if te same
           if (databaseSong[j].title === song.settings.title &&
           databaseSong[j].collection === song.settings.collection &&
           databaseSong[j].number === song.settings.number &&
@@ -346,31 +343,23 @@ export default {
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
       // equal title (lowercase) // deel achter titel niet mee nemen wanner tussen... /^[^([{<|\\/>}\])]*/
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle => songTitle.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === settings.title?.trim().match(/^[^([{<|\\/>}\])]*/)[0].toLowerCase())
-      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
-
-      /*
-      // equal title (lowercase)
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle => songTitle.title?.trim().toLowerCase() === settings.title?.trim().toLowerCase())
-      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
-      */
-
-      // equal collection, no.  (lowercase) (wanneer ingevuld)
-      if (settings.collection?.trim() && settings.number?.trim()) {
-        filteredSongDatabase = this.$fsdb.localSongDatabase
-          .filter(songCol => songCol.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase())
-          .filter(songNumber => songNumber.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase())
-        if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
-      }
-
       // title includes (lowercase)
+      // equal collection, no.  (lowercase) (wanneer ingevuld)
       filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle =>
-          songTitle.title?.trim().toLowerCase().includes(settings.title?.trim().toLowerCase()) ||
-          settings.title?.trim().toLowerCase().includes(songTitle.title?.trim().toLowerCase())
-        )
+        .filter(song => {
+          switch (true) {
+            case song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === settings.title?.trim().match(/^[^([{<|\\/>}\])]*/)[0].toLowerCase():
+            case song.title?.trim().toLowerCase().includes(settings.title?.trim().toLowerCase()):
+            case settings.title?.trim().toLowerCase().includes(song.title?.trim().toLowerCase()):
+            case song.collection?.trim().length > 0 &&
+                 song.number?.trim().length > 0 &&
+                 song.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase() &&
+                 song.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase():
+              return true
+            default:
+              return false
+          }
+        })
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
       // no match --> empty
@@ -413,6 +402,10 @@ export default {
           }
         }
       }
+    },
+    edit (song) {
+      this.$refs.presentationSettingsDialog.edit(song)
+      // geen update vergelijking database in lijst; wel in voorbeeld markering.
     }
   }
 }

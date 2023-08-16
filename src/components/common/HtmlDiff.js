@@ -358,7 +358,7 @@ export function HtmlDiff (first, changed) {
 }
 
 export function CountDiff (htmlDiff) {
-  if (!htmlDiff) return { ins: 0, del: 0, mark: 0 }
+  if (!htmlDiff) return { ins: 0, del: 0, mark: 0, same: 0, factor100: 100 }
   const ins = htmlDiff.match(/(?<=<ins>)[\s\S]*?(?=<\/ins>)/g) || []
   let countIns = 0
   for (let i = 0; i < ins.length; i++) { countIns += ins[i].replace(/<.*?>/g, '').length || 0 }
@@ -368,5 +368,17 @@ export function CountDiff (htmlDiff) {
   const mark = htmlDiff.match(/(?<=<mark>)[\s\S]*?(?=<\/mark>)/g) || []
   let countMark = 0
   for (let i = 0; i < mark.length; i++) { countMark += mark[i].replace(/<.*?>/g, '').length || 0 }
-  return { ins: countIns, del: countDel, mark: countMark }
+  const noChange = htmlDiff
+    .replace(/<ins>[\s\S]*?<\/ins>/g, '')
+    .replace(/<del>[\s\S]*?<\/del>/g, '')
+    .replace(/<mark>[\s\S]*?<\/mark>/g, '')
+    .replace(/<.*?>/g, '')
+    .length || 0
+  let factor100 = Math.max(countIns, countDel) + countMark + noChange
+  if (factor100 === 0) {
+    factor100 = 100
+  } else {
+    factor100 = noChange * 100 / factor100
+  }
+  return { ins: countIns, del: countDel, mark: countMark, same: noChange, factor100 }
 }

@@ -5,8 +5,11 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title">
-        <div :class="todoTextClass" v-html="title" />
+      <q-item-label class="title row">
+        <div :class="todoTextClass" class="q-pr-md" v-html="title" />
+        <q-badge v-if="collectionNumber" color="secondary">
+          {{ collectionNumber }}
+        </q-badge>
       </q-item-label>
       <q-item-label v-if="text" caption :lines="1" :class="todoTextClass">
         {{ $strip(text) }}
@@ -47,6 +50,12 @@
             <q-avatar color="primary" text-color="white" size="28px" flat round icon="block" />
           </q-item-section>
         </q-item>
+        <q-item v-close-popup clickable @click.stop="$emit('edit')">
+          <q-item-section>bewerken</q-item-section>
+          <q-item-section avatar>
+            <q-avatar color="primary" text-color="white" size="28px" flat round icon="edit" />
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-menu>
   </q-item>
@@ -61,7 +70,7 @@ export default {
     songTodoIndex: Number,
     active: Boolean
   },
-  emits: ['add', 'change', 'remove'],
+  emits: ['add', 'change', 'remove', 'edit'],
   computed: {
     todoColor () {
       switch (this.songTodoIndex) {
@@ -81,10 +90,16 @@ export default {
       return presentationTypes.find(t => t.id === this.newSong.type)
     },
     title () {
-      return this.presentationType.title(this.newSong.settings)
+      return this.newSong.settings.title
     },
     text () {
       return this.newSong.settings.text
+    },
+    collectionNumber () {
+      if (this.newSong.settings.collection && this.newSong.settings.number) { return `${this.newSong.settings.collection} ${this.newSong.settings.number}` }
+      if (this.newSong.settings.collection) { return this.newSong.settings.collection }
+      if (this.newSong.settings.number) { return this.newSong.settings.number }
+      return ''
     }
   },
   methods: {

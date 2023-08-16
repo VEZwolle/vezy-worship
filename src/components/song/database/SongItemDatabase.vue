@@ -1,14 +1,19 @@
 <template>
   <template v-if="!moreSongsFound">
-    <q-item clickable :active="active" active-class="bg-purple-1" class="maxwidth" style="text-align: left;" @click="$emit('click')">
+    <q-item clickable :active="active" active-class="bg-purple-1" class="width" style="text-align: left;" @click="$emit('click')">
       <q-item-section avatar>
         <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
       </q-item-section>
       <q-item-section>
         <q-item-label class="title row">
-          <div v-html="titleDatabase" />
+          <div class="q-pr-md" v-text="titleDatabase" />
+          <q-badge v-if="collectionNumberDatabase" color="secondary">
+            {{ collectionNumberDatabase }}
+          </q-badge>
           <q-space />
-          <div v-html="diffDatabase" />
+          <q-badge v-if="diffDatabase">
+            {{ diffDatabase }}
+          </q-badge>
         </q-item-label>
         <q-item-label v-if="textDatabase" caption :lines="1">
           {{ $strip(textDatabase) }}
@@ -29,15 +34,20 @@
       @click="$emit('click')"
     >
       <template #label>
-        <q-item :active="active" active-class="bg-purple-1" class="maxwidth" style="text-align: left;">
+        <q-item :active="active" active-class="bg-purple-1" class="width" style="text-align: left;">
           <q-item-section avatar>
             <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="title row">
-              <div v-html="titleDatabase" />
+              <div class="q-pr-md" v-text="titleDatabase" />
+              <q-badge v-if="collectionNumberDatabase" color="secondary">
+                {{ collectionNumberDatabase }}
+              </q-badge>
               <q-space />
-              <div v-html="diffDatabase" />
+              <q-badge v-if="diffDatabase">
+                {{ diffDatabase }}
+              </q-badge>
             </q-item-label>
             <q-item-label v-if="textDatabase" caption :lines="1">
               {{ $strip(textDatabase) }}
@@ -46,14 +56,19 @@
         </q-item>
       </template>
 
-      <q-list class="maxwidth">
+      <q-list class="width">
         <template v-for="(songDatabase, index) in songDatabases" :key="`sdb${index}`">
           <q-item v-close-popup clickable @click.stop="$emit('setIndex', index)">
             <q-item-section>
               <q-item-label class="title row">
-                <div v-html="titleDb(index)" />
+                <div class="q-pr-md" v-text="titleDb(index)" />
+                <q-badge v-if="dbCollectionNumber(index)" color="secondary">
+                  {{ dbCollectionNumber(index) }}
+                </q-badge>
                 <q-space />
-                <div v-html="diffDb(index)" />
+                <q-badge v-if="diffDb(index)">
+                  {{ diffDb(index) }}
+                </q-badge>
               </q-item-label>
               <q-item-label v-if="textDb(index)" caption :lines="1">
                 {{ $strip(textDb(index)) }}
@@ -96,6 +111,9 @@ export default {
       if (this.songDatabases?.length > 1) return true
       return false
     },
+    collectionNumberDatabase () {
+      return this.dbCollectionNumber(this.songTodoIndex)
+    },
     titleDatabase () {
       return this.titleDb(this.songTodoIndex)
     },
@@ -127,8 +145,7 @@ export default {
     },
     titleDb (index) {
       if (this.noDb(index)) return ''
-      const CollectionNumber = this.dbCollectionNumber(index) ? ` | ${this.dbCollectionNumber(index)}` : ''
-      return `${this.songDatabases[index]?.title}${CollectionNumber}`
+      return this.songDatabases[index]?.title || ''
     },
     textDb (index) {
       if (this.noDb(index)) return ''
@@ -136,7 +153,7 @@ export default {
     },
     diffDb (index) {
       if (this.noDb(index)) return ''
-      return `+${this.songDiffs[index]?.text.ins} -${this.songDiffs[index]?.text.del}`
+      return `${this.songDiffs[index]?.text.factor100.toFixed(0)}% | ${this.songDiffs[index]?.translation.factor100.toFixed(0)}%`
     }
   }
 }
@@ -147,7 +164,7 @@ export default {
   user-select: none;
   cursor: default !important;
 }
-.maxwidth {
-  max-width: max(34vw, min(653px, 40vw));
+.width {
+  width: max(34vw, min(653px, 40vw));
 }
 </style>
