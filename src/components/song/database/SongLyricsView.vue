@@ -1,8 +1,12 @@
 <template>
   <q-card bordered>
     <q-card-section>
-      <div :class="`text-h6${classDiff}`" v-html="title" />
-      <div :class="`text-subtitle2${classDiff}`" v-html="collectionNumber" />
+      <q-item-label :class="`text-h6 ${classDiff}`" :lines="1">
+        <div v-html="title" />
+      </q-item-label>
+      <q-item-label :class="`text-subtitle2 overflow-hidden${classDiff}`" :lines="1">
+        <div v-html="collectionNumber" />
+      </q-item-label>
     </q-card-section>
     <q-separator inset />
     <q-card-section horizontal>
@@ -62,7 +66,7 @@ export default {
   }
 
   .lyrics {
-    height: 30vh;
+    height: 25vh;
     overflow-y: auto;
     overflow-x: hidden;
   }

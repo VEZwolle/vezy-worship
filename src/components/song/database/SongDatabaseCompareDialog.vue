@@ -7,31 +7,46 @@
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
+      <q-toolbar class="bg-grey-3 text-dark">
+        <q-toolbar-title class="text-subtitle2 row">
+          Nieuw lied
+          <q-space />
+          <q-inner-loading :showing="isLoading" />
+          versie lied in database
+        </q-toolbar-title>
+      </q-toolbar>
+
+      <div v-if="noNewSongs" class="row q-pa-md q-gutter-md">
+        Geen nieuwe liederen gevonden om aan database toe te voegen
+      </div>
 
       <div class="row q-pa-md q-gutter-md">
         <q-list class="col q-pt-sm songlist">
           <div v-for="(song, index) in songs" :key="song.id" class="row">
-            <div class="col">
-              <SongItem
-                :new-song="song"
-                :song-todo-index="songsTodoIndex[index]"
-                :active="selectedId === song.id"
-                @click="select(song)"
-                @add="songsTodoIndex[index] = -1"
-                @change="change(index)"
-                @remove="songsTodoIndex[index] = -2"
-              />
-            </div>
-            <div class="col">
-              <SongItemDatabase
-                v-if="songsSearchResults[index]"
-                :song-databases="songsSearchResults[index]"
-                :song-todo-index="songsTodoIndex[index]"
-                :active="selectedId === song.id"
-                @click="select(song)"
-                @set-index="(i) => songsTodoIndex[index] = i"
-              />
-            </div>
+            <template v-if="songsTodoIndex[index] > -3">
+              <div class="col">
+                <SongItem
+                  :new-song="song"
+                  :song-todo-index="songsTodoIndex[index]"
+                  :active="selectedId === song.id"
+                  @click="select(song)"
+                  @add="songsTodoIndex[index] = -1"
+                  @change="change(index)"
+                  @remove="songsTodoIndex[index] = -2"
+                />
+              </div>
+              <div class="col">
+                <SongItemDatabase
+                  v-if="songsSearchResults[index]"
+                  :song-databases="songsSearchResults[index]"
+                  :song-diffs="songsSearchCountDiff[index]"
+                  :song-todo-index="songsTodoIndex[index]"
+                  :active="selectedId === song.id"
+                  @click="select(song)"
+                  @set-index="(i) => songsTodoIndex[index] = i"
+                />
+              </div>
+            </template>
           </div>
         </q-list>
       </div>
@@ -40,6 +55,7 @@
 
       <div v-if="selectedId" class="row q-pa-md q-gutter-md">
         <SongLyricsView
+          v-if="view.new"
           :title="newTitle"
           :collection-number="newCollectionNumber"
           :lyrics="newLyrics"
@@ -47,6 +63,7 @@
           class="col"
         />
         <SongLyricsView
+          v-if="view.diff"
           :title="compareTitle"
           :collection-number="compareCollectionNumber"
           :lyrics="compareLyrics"
@@ -55,6 +72,7 @@
           class="col"
         />
         <SongLyricsView
+          v-if="view.db"
           :title="databaseTitle"
           :collection-number="databaseCollectionNumber"
           :lyrics="databaseLyrics"
@@ -66,6 +84,18 @@
       <q-separator />
 
       <q-card-actions align="right">
+        <template v-if="selectedId">
+          Voorbeeld:
+          <q-toggle v-model="view.new" label="nieuw" />
+          <q-toggle v-model="view.diff" label="verschil" />
+          <q-toggle v-model="view.db" label="database" />
+          <q-space />
+          ({{ countDiff }})
+        </template>
+        <template v-else>
+          Selecteer om voorbeeld / verschil te zien
+        </template>
+        <q-space />
         <q-btn color="secondary" label="Opslaan in database" @click.stop="save">
           <q-tooltip>Geselecteerde liederen toevoegen, vervangen & opslaan in database</q-tooltip>
         </q-btn>
@@ -81,21 +111,25 @@
 import SongItem from './SongItem.vue'
 import SongItemDatabase from './SongItemDatabase.vue'
 import SongLyricsView from './SongLyricsView.vue'
-import { HtmlDiff } from '../../common/HtmlDiff.js'
+import dayjs from 'dayjs'
+import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { Notify } from 'quasar'
 
 export default {
   components: { SongItem, SongLyricsView, SongItemDatabase },
-  props: {
-  },
-  emits: [
-  ],
   data () {
     return {
       songs: [],
       songsSearchResults: [],
-      songsTodoIndex: [], // -2 = no add; -1 = add; 0, 1 etc = change
+      songsSearchCountDiff: [],
+      songsTodoIndex: [], // -3 = exist in db, no add; -2 = no add; -1 = add; 0, 1 etc = change
+      noNewSongs: true,
       selected: {},
+      view: {
+        new: true,
+        diff: true,
+        db: false
+      },
       isLoading: false
     }
   },
@@ -108,6 +142,7 @@ export default {
     },
     selectedDatabase () {
       if (this.selectedIndex < this.songsSearchResults.length &&
+        this.selectedIndex < this.songsSearchCountDiff.length &&
         this.selectedIndex < this.songsTodoIndex.length &&
         this.songsTodoIndex[this.selectedIndex] >= 0 &&
         this.songsSearchResults[this.selectedIndex][this.songsTodoIndex[this.selectedIndex]].title) {
@@ -149,6 +184,18 @@ export default {
     compareLyrics () {
       return HtmlDiff(this.databaseLyrics, this.newLyrics)
     },
+    countDiff () {
+      if (this.selectedIndex < this.songsSearchResults.length &&
+        this.selectedIndex < this.songsSearchCountDiff.length &&
+        this.selectedIndex < this.songsTodoIndex.length &&
+        this.songsTodoIndex[this.selectedIndex] >= 0 &&
+        this.songsSearchCountDiff[this.selectedIndex][this.songsTodoIndex[this.selectedIndex]].text) {
+        const diff = this.songsSearchCountDiff[this.selectedIndex][this.songsTodoIndex[this.selectedIndex]]
+        return `tekst: +${diff.text.ins} -${diff.text.del} | vertaling: +${diff.translation.ins} -${diff.translation.del}`
+      }
+      // leeg
+      return ''
+    },
     newLyricsTranslation () {
       return this.selected?.settings.translation.replace(/\r?\n/g, '<br>') || ''
     },
@@ -161,14 +208,15 @@ export default {
   },
   methods: {
     async show () {
+      this.isLoading = true
       // reset
       this.songs = []
       this.songsSearchResults = []
       this.songsTodoIndex = []
+      this.noNewSongs = true
       this.selected = {}
       this.$refs.dialogAddDatabase.show()
 
-      this.isLoading = true
       // get songs setlist
       this.songs = this.$store.service.presentations.filter(t => t.type === 'song')
       if (this.songs.length < 1) {
@@ -193,6 +241,7 @@ export default {
       this.$refs.dialogAddDatabase.hide()
     },
     save () {
+      this.addToDatabase()
       // save database, nog uitwerken
     },
     select (presentation) {
@@ -203,12 +252,49 @@ export default {
       this.songsTodoIndex[index] = this.songsSearchResults[index]?.length ? 0 : -1
     },
     searchSongs () {
+      // reset results
       this.songsSearchResults = []
+      this.songsSearchCountDiff = []
       this.songsTodoIndex = []
+      // search database
       this.songs.forEach(song => {
         const databaseSong = this.filterSearchSongInDatabase(song.settings) || []
+        const countDiff = []
+        // get diff count
+        for (let i = 0; i < databaseSong.length; i++) {
+          const textDiff = CountDiff(HtmlDiff(databaseSong[i].lyrics, song.settings.text))
+          const translationDiff = CountDiff(HtmlDiff(databaseSong[i].lyricstranslate, song.settings.translation))
+          const count = textDiff.ins + textDiff.del + translationDiff.ins + translationDiff.del
+          countDiff.push({ text: textDiff, translation: translationDiff, count })
+        }
+        let j = -1 // -1 (add) if no database else index nr 0, 1 db result (replace)
+        // search best result
+        for (let i = 0; i < countDiff.length; i++) {
+          if (i === 0) {
+            j = i
+            continue
+          }
+          if (countDiff[i].count < countDiff[j].count) { j = i }
+        }
+        // if exactly
+        if (countDiff[j]?.count === 0) {
+          if (databaseSong[j].title === song.settings.title &&
+          databaseSong[j].collection === song.settings.collection &&
+          databaseSong[j].number === song.settings.number &&
+          databaseSong[j].lyrics === song.settings.text &&
+          databaseSong[j].lyricstranslate === song.settings.translation
+          ) {
+            j = -3 // exist in database --> no add
+          } else {
+            this.noNewSongs = false
+          }
+        } else {
+          this.noNewSongs = false
+        }
+        // add result
         this.songsSearchResults.push(databaseSong)
-        this.songsTodoIndex.push(databaseSong.length < 1 ? -1 : 0) // -1 (add) if no database else first result (replace)
+        this.songsSearchCountDiff.push(countDiff)
+        this.songsTodoIndex.push(j)
       })
     },
     filterSearchSongInDatabase (settings) {
@@ -259,10 +345,17 @@ export default {
         .filter(songNumber => songNumber.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase())
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
+      // equal title (lowercase) // deel achter titel niet mee nemen wanner tussen... /^[^([{<|\\/>}\])]*/
+      filteredSongDatabase = this.$fsdb.localSongDatabase
+        .filter(songTitle => songTitle.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === settings.title?.trim().match(/^[^([{<|\\/>}\])]*/)[0].toLowerCase())
+      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
+
+      /*
       // equal title (lowercase)
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(songTitle => songTitle.title?.trim().toLowerCase() === settings.title?.trim().toLowerCase())
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
+      */
 
       // equal collection, no.  (lowercase) (wanneer ingevuld)
       if (settings.collection?.trim() && settings.number?.trim()) {
@@ -272,7 +365,7 @@ export default {
         if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
       }
 
-      // title includes (lowercase) // misschien wijzigen in zoeken vanaf /^[^([{<|\\/>}\])]*/
+      // title includes (lowercase)
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(songTitle =>
           songTitle.title?.trim().toLowerCase().includes(settings.title?.trim().toLowerCase()) ||
@@ -280,16 +373,46 @@ export default {
         )
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
-      // deze of ipv boven; nazien wat nu handig is. of misschien controle op hoeveel tekst er overeen komt
-      // title includes (lowercase) // misschien wijzigen in zoeken vanaf begin? /^[^([{<|\\/>}\])]*/
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle =>
-          songTitle.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === settings.title?.trim().toLowerCase()
-        )
-      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
-
       // no match --> empty
       return filteredSongDatabase
+    },
+    addToDatabase () {
+      const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      const creator = 'Naam'
+
+      for (let i = 0; i < this.songs.length; i++) {
+        const todoIndex = this.songsTodoIndex[i]
+        if (todoIndex > -2) {
+          const addSong = {
+            id: this.songs[i].id, // controle op bestaat toevoegen? nieuwe maken?
+            title: this.songs[i].settings.title,
+            collection: this.songs[i].settings.collection,
+            number: this.songs[i].settings.number,
+            lyrics: this.songs[i].settings.text,
+            lyricstranslate: this.songs[i].settings.translation,
+            creator,
+            created_at: now,
+            updated_at: now
+          }
+          switch (todoIndex) {
+            case undefined: break
+            case -1: // add
+              this.$fsdb.localSongDatabase.push(addSong)
+              break
+            default: {
+              const dbResultId = this.songsSearchResults[i][todoIndex].id
+              const dbIndex = this.$fsdb.localSongDatabase.indexOf(s => s.id === dbResultId)
+              if (dbIndex !== -1) {
+                addSong.id = this.$fsdb.localSongDatabase[dbIndex].id
+                addSong.created_at = this.$fsdb.localSongDatabase[dbIndex].created_at
+                this.$fsdb.localSongDatabase[dbIndex] = addSong
+              } else {
+                this.$fsdb.localSongDatabase.push(addSong)
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -298,17 +421,17 @@ export default {
 
 <style scoped lang="scss">
 .q-card {
-  min-width: max(60vw, min(1152px, 95vw));
-  min-height: 80vh;
+  min-width: max(75vw, min(1440px, 95vw));
+  height: 95vh;
 
   .songlist {
-    max-height: 30vh;
+    max-height: 33vh;
     overflow-y: scroll;
     overflow-x: hidden;
   }
   .q-card {
     min-width: 0;
-    min-height: 15vh;
+    height: 38vh;
   }
 }
 </style>

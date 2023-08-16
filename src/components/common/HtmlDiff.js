@@ -356,3 +356,17 @@ export function HtmlDiff (first, changed) {
   // add tag <ins><del> to output
   return renderOperations(first, changed, ops)
 }
+
+export function CountDiff (htmlDiff) {
+  if (!htmlDiff) return { ins: 0, del: 0, mark: 0 }
+  const ins = htmlDiff.match(/(?<=<ins>)[\s\S]*?(?=<\/ins>)/g) || []
+  let countIns = 0
+  for (let i = 0; i < ins.length; i++) { countIns += ins[i].replace(/<.*?>/g, '').length || 0 }
+  const del = htmlDiff.match(/(?<=<del>)[\s\S]*?(?=<\/del>)/g) || []
+  let countDel = 0
+  for (let i = 0; i < del.length; i++) { countDel += del[i].replace(/<.*?>/g, '').length || 0 }
+  const mark = htmlDiff.match(/(?<=<mark>)[\s\S]*?(?=<\/mark>)/g) || []
+  let countMark = 0
+  for (let i = 0; i < mark.length; i++) { countMark += mark[i].replace(/<.*?>/g, '').length || 0 }
+  return { ins: countIns, del: countDel, mark: countMark }
+}

@@ -5,8 +5,10 @@
         <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
       </q-item-section>
       <q-item-section>
-        <q-item-label class="title">
+        <q-item-label class="title row">
           <div v-html="titleDatabase" />
+          <q-space />
+          <div v-html="diffDatabase" />
         </q-item-label>
         <q-item-label v-if="textDatabase" caption :lines="1">
           {{ $strip(textDatabase) }}
@@ -32,8 +34,10 @@
             <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="title">
+            <q-item-label class="title row">
               <div v-html="titleDatabase" />
+              <q-space />
+              <div v-html="diffDatabase" />
             </q-item-label>
             <q-item-label v-if="textDatabase" caption :lines="1">
               {{ $strip(textDatabase) }}
@@ -46,8 +50,10 @@
         <template v-for="(songDatabase, index) in songDatabases" :key="`sdb${index}`">
           <q-item v-close-popup clickable @click.stop="$emit('setIndex', index)">
             <q-item-section>
-              <q-item-label class="title">
+              <q-item-label class="title row">
                 <div v-html="titleDb(index)" />
+                <q-space />
+                <div v-html="diffDb(index)" />
               </q-item-label>
               <q-item-label v-if="textDb(index)" caption :lines="1">
                 {{ $strip(textDb(index)) }}
@@ -64,6 +70,7 @@
 export default {
   props: {
     songDatabases: Object,
+    songDiffs: Object,
     songTodoIndex: Number,
     active: Boolean
   },
@@ -71,13 +78,15 @@ export default {
   computed: {
     todoIcon () {
       switch (this.songTodoIndex) {
-        case -2: return 'block'
-        case -1: return 'input'
-        default: return 'wifi_protected_setup'
+        case -3: // no add, exist in database
+        case -2: return 'block' // no add
+        case -1: return 'input' // add
+        default: return 'wifi_protected_setup' // change index database
       }
     },
     todoColor () {
       switch (this.songTodoIndex) {
+        case -3:
         case -2: return 'grey-4'
         case -1:
         default: return 'blue'
@@ -92,6 +101,9 @@ export default {
     },
     textDatabase () {
       return this.textDb(this.songTodoIndex)
+    },
+    diffDatabase () {
+      return this.diffDb(this.songTodoIndex)
     }
   },
   methods: {
@@ -121,6 +133,10 @@ export default {
     textDb (index) {
       if (this.noDb(index)) return ''
       return this.songDatabases[index]?.lyrics || ''
+    },
+    diffDb (index) {
+      if (this.noDb(index)) return ''
+      return `+${this.songDiffs[index]?.text.ins} -${this.songDiffs[index]?.text.del}`
     }
   }
 }
@@ -132,6 +148,6 @@ export default {
   cursor: default !important;
 }
 .maxwidth {
-  max-width: max(25vw, min(480px, 40vw));
+  max-width: max(34vw, min(653px, 40vw));
 }
 </style>
