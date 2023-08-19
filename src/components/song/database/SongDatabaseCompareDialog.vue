@@ -16,7 +16,7 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <div v-if="noNewSongs" class="row q-pa-md q-gutter-md">
+      <div v-if="noNewSongs && !isLoading" class="row q-pa-md q-gutter-md">
         Geen nieuwe liederen gevonden om aan database toe te voegen
       </div>
 
@@ -97,9 +97,27 @@
           Selecteer om voorbeeld / verschil te zien
         </template>
         <q-space />
-        <q-btn color="secondary" label="Opslaan in database" @click.stop="save">
-          <q-tooltip>Geselecteerde liederen toevoegen, vervangen & opslaan in database</q-tooltip>
-        </q-btn>
+        <q-btn-dropdown
+          color="secondary"
+          split
+          icon="save"
+          label="Opslaan in database"
+          :disable="!$fsdb.localSongDatabase"
+          :loading="isSaving"
+          @click.stop="save(false)"
+        >
+          <template #label>
+            label
+            <q-tooltip>Geselecteerde liederen toevoegen, vervangen & opslaan in database</q-tooltip>
+          </template>
+          <q-list>
+            <q-item v-close-popup clickable @click.stop="save(true)">
+              <q-item-section>
+                <q-item-label>Opslaan als</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
         <q-btn color="secondary" label="Sluiten" @click.stop="hide">
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
@@ -117,6 +135,7 @@ import PresentationSettingsDialog from '../../presentation/PresentationSettingsD
 import dayjs from 'dayjs'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { Notify } from 'quasar'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   components: { SongItem, SongLyricsView, SongItemDatabase, PresentationSettingsDialog },
@@ -133,7 +152,8 @@ export default {
         diff: true,
         db: false
       },
-      isLoading: false
+      isLoading: false,
+      isSaving: false
     }
   },
   computed: {
@@ -236,9 +256,19 @@ export default {
     hide () {
       this.$refs.dialogAddDatabase.hide()
     },
-    save () {
+    save (newFile = false) {
+      this.isSaving = true
+      // backup this.$fsdb.localSongDatabase
+      const backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       this.addToDatabase()
       // save database, nog uitwerken
+      this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
+        .then((result) => {
+          if (!result) { this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase) }
+        })
+        .finally(() => {
+          this.isSaving = false
+        })
     },
     select (presentation) {
       this.selected = presentation
