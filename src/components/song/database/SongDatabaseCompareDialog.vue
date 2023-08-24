@@ -7,96 +7,159 @@
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
-      <q-toolbar class="bg-grey-3 text-dark">
-        <q-toolbar-title class="text-subtitle2 row">
-          Nieuw lied
-          <q-space />
-          <q-inner-loading :showing="isLoading" />
-          versie lied in database
-        </q-toolbar-title>
-      </q-toolbar>
+      <q-splitter
+        v-model="splitterModel"
+      >
+        <template #before>
+          <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar-title class="text-subtitle2 row">
+              Nieuw lied
+              <q-space />
+              <q-inner-loading :showing="isLoading" />
+              versie lied in database
+            </q-toolbar-title>
+          </q-toolbar>
 
-      <div v-if="noNewSongs && !isLoading" class="row q-pa-md q-gutter-md">
-        Geen nieuwe liederen gevonden om aan database toe te voegen
-      </div>
-
-      <div class="row q-pa-md q-gutter-md">
-        <q-list class="col q-pt-sm songlist">
-          <div v-for="(song, index) in songs" :key="song.id" class="row">
-            <template v-if="songsTodoIndex[index] > -3">
-              <div class="col">
-                <SongItem
-                  :new-song="song"
-                  :song-todo-index="songsTodoIndex[index]"
-                  :active="selectedId === song.id"
-                  @click="select(song)"
-                  @add="songsTodoIndex[index] = -1"
-                  @change="change(index)"
-                  @remove="songsTodoIndex[index] = -2"
-                  @edit="edit(song)"
-                />
-              </div>
-              <div class="col">
-                <SongItemDatabase
-                  v-if="songsSearchResults[index]"
-                  :song-databases="songsSearchResults[index]"
-                  :song-diffs="songsSearchCountDiff[index]"
-                  :song-todo-index="songsTodoIndex[index]"
-                  :active="selectedId === song.id"
-                  @click="select(song)"
-                  @set-index="(i) => songsTodoIndex[index] = i"
-                />
-              </div>
-            </template>
+          <div v-if="noNewSongs && !isLoading" class="row q-pa-md q-gutter-md">
+            Geen nieuwe liederen gevonden om aan database toe te voegen
           </div>
-        </q-list>
-      </div>
+
+          <div ref="listDiff" class="row q-gutter-md">
+            <q-list class="col q-pt-sm songlist">
+              <div v-for="(song, index) in songs" :key="song.id" class="row">
+                <template v-if="songsTodoIndex[index] > -3">
+                  <div class="col">
+                    <SongItem
+                      :new-song="song"
+                      :song-todo-index="songsTodoIndex[index]"
+                      :active="selectedId === song.id"
+                      @click="select(song)"
+                      @add="songsTodoIndex[index] = -1"
+                      @change="change(index)"
+                      @remove="songsTodoIndex[index] = -2"
+                      @edit="edit(song)"
+                    />
+                  </div>
+                  <div class="col">
+                    <SongItemDatabase
+                      v-if="songsSearchResults[index]"
+                      :song-databases="songsSearchResults[index]"
+                      :song-diffs="songsSearchCountDiff[index]"
+                      :song-todo-index="songsTodoIndex[index]"
+                      :active="selectedId === song.id"
+                      :width="SongItemDatabaseWidth"
+                      @click="select(song)"
+                      @set-index="(i) => songsTodoIndex[index] = i"
+                    />
+                  </div>
+                </template>
+              </div>
+            </q-list>
+          </div>
+        </template>
+
+        <template #after>
+          <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar-title class="text-subtitle2 row">
+              <template v-if="selectedId">
+                <div>
+                  text: {{ countDiff }}
+                </div>
+                <q-space />
+                <div>
+                  vertaling: {{ countDiffTrans }}
+                </div>
+              </template>
+              <template v-else>
+                Selecteer om voorbeeld / verschil te zien
+              </template>
+            </q-toolbar-title>
+          </q-toolbar>
+          <div v-if="selectedId">
+            <q-tabs v-model="lyricsTab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+              <q-tab name="new" label="Nieuw" />
+              <q-tab name="newDiff" label="N + V" />
+              <q-tab name="diff" label="Verschil" />
+              <q-tab name="diffDb" label="V + D" />
+              <q-tab name="db" label="Database" />
+            </q-tabs>
+            <q-separator />
+            <q-tab-panels v-model="lyricsTab" animated>
+              <q-tab-panel name="new">
+                <SongLyricsView
+                  :title="newTitle"
+                  :collection-number="newCollectionNumber"
+                  :lyrics="newLyrics"
+                  :lyrics-translation="newLyricsTranslation"
+                  class="col"
+                />
+              </q-tab-panel>
+              <q-tab-panel name="newDiff">
+                <div class="row">
+                  <SongLyricsView
+                    :title="newTitle"
+                    :collection-number="newCollectionNumber"
+                    :lyrics="newLyrics"
+                    :lyrics-translation="newLyricsTranslation"
+                    class="col"
+                  />
+                  <q-separator vertical color="secondary" class="q-mx-md" />
+                  <SongLyricsView
+                    :title="compareTitle"
+                    :collection-number="compareCollectionNumber"
+                    :lyrics="compareLyrics"
+                    :lyrics-translation="compareLyricsTranslation"
+                    show-diff
+                    class="col"
+                  />
+                </div>
+              </q-tab-panel>
+              <q-tab-panel name="diff">
+                <SongLyricsView
+                  :title="compareTitle"
+                  :collection-number="compareCollectionNumber"
+                  :lyrics="compareLyrics"
+                  :lyrics-translation="compareLyricsTranslation"
+                  show-diff
+                  class="col"
+                />
+              </q-tab-panel>
+              <q-tab-panel name="diffDb">
+                <div class="row">
+                  <SongLyricsView
+                    :title="compareTitle"
+                    :collection-number="compareCollectionNumber"
+                    :lyrics="compareLyrics"
+                    :lyrics-translation="compareLyricsTranslation"
+                    show-diff
+                    class="col"
+                  />
+                  <q-separator vertical color="secondary" class="q-mx-md" />
+                  <SongLyricsView
+                    :title="databaseTitle"
+                    :collection-number="databaseCollectionNumber"
+                    :lyrics="databaseLyrics"
+                    :lyrics-translation="databaseLyricsTranslation"
+                    class="col"
+                  />
+                </div>
+              </q-tab-panel>
+              <q-tab-panel name="db">
+                <SongLyricsView
+                  :title="databaseTitle"
+                  :collection-number="databaseCollectionNumber"
+                  :lyrics="databaseLyrics"
+                  :lyrics-translation="databaseLyricsTranslation"
+                  class="col"
+                />
+              </q-tab-panel>
+            </q-tab-panels>
+          </div>
+        </template>
+      </q-splitter>
 
       <q-separator />
-
-      <div v-if="selectedId" class="row q-pa-md q-gutter-md">
-        <SongLyricsView
-          v-if="view.new"
-          :title="newTitle"
-          :collection-number="newCollectionNumber"
-          :lyrics="newLyrics"
-          :lyrics-translation="newLyricsTranslation"
-          class="col"
-        />
-        <SongLyricsView
-          v-if="view.diff"
-          :title="compareTitle"
-          :collection-number="compareCollectionNumber"
-          :lyrics="compareLyrics"
-          :lyrics-translation="compareLyricsTranslation"
-          show-diff
-          class="col"
-        />
-        <SongLyricsView
-          v-if="view.db"
-          :title="databaseTitle"
-          :collection-number="databaseCollectionNumber"
-          :lyrics="databaseLyrics"
-          :lyrics-translation="databaseLyricsTranslation"
-          class="col"
-        />
-      </div>
-
-      <q-separator />
-
       <q-card-actions align="right">
-        <template v-if="selectedId">
-          Voorbeeld:
-          <q-toggle v-model="view.new" label="nieuw" />
-          <q-toggle v-model="view.diff" label="verschil" />
-          <q-toggle v-model="view.db" label="database" />
-          <q-space />
-          ({{ countDiff }})
-        </template>
-        <template v-else>
-          Selecteer om voorbeeld / verschil te zien
-        </template>
-        <q-space />
         <q-btn-dropdown
           color="secondary"
           split
@@ -147,11 +210,9 @@ export default {
       songsTodoIndex: [], // -3 = exist in db, no add; -2 = no add; -1 = add; 0, 1 etc = change
       noNewSongs: true,
       selected: {},
-      view: {
-        new: true,
-        diff: true,
-        db: false
-      },
+      splitterModel: 70,
+      SongItemDatabaseWidth: 500,
+      lyricsTab: 'diff',
       isLoading: false,
       isSaving: false
     }
@@ -187,13 +248,13 @@ export default {
       if (this.selected?.settings.collection && this.selected?.settings.number) { return `${this.selected.settings.collection} ${this.selected.settings.number}` }
       if (this.selected?.settings.collection) { return this.selected.settings.collection }
       if (this.selected?.settings.number) { return this.selected.settings.number }
-      return ''
+      return '&nbsp;'
     },
     databaseCollectionNumber () {
       if (this.selectedDatabase.collection && this.selectedDatabase.number) { return `${this.selectedDatabase.collection} ${this.selectedDatabase.number}` }
       if (this.selectedDatabase.collection) { return this.selectedDatabase.collection }
       if (this.selectedDatabase.number) { return this.selectedDatabase.number }
-      return ''
+      return '&nbsp;'
     },
     compareCollectionNumber () {
       return HtmlDiff(this.databaseCollectionNumber, this.newCollectionNumber)
@@ -208,9 +269,12 @@ export default {
       return HtmlDiff(this.databaseLyrics, this.newLyrics)
     },
     countDiff () {
-      const textDiff = CountDiff(this.compareLyrics)
-      const translationDiff = CountDiff(this.compareLyricsTranslation)
-      return `tekst: +${textDiff.ins} -${textDiff.del} (${textDiff.factor100.toFixed(0)}%) | vertaling: +${translationDiff.ins} -${translationDiff.del} (${translationDiff.factor100.toFixed(0)}%)`
+      const diff = CountDiff(this.compareLyrics)
+      return `+${diff.ins} -${diff.del} (${diff.factor100.toFixed(0)}%)`
+    },
+    countDiffTrans () {
+      const diff = CountDiff(this.compareLyricsTranslation)
+      return `+${diff.ins} -${diff.del} (${diff.factor100.toFixed(0)}%)`
     },
     newLyricsTranslation () {
       return this.selected?.settings.translation.replace(/\r?\n/g, '<br>') || ''
@@ -220,6 +284,11 @@ export default {
     },
     compareLyricsTranslation () {
       return HtmlDiff(this.databaseLyricsTranslation, this.newLyricsTranslation)
+    }
+  },
+  watch: {
+    splitterModel: function () {
+      this.setListDiffWidth()
     }
   },
   methods: {
@@ -239,6 +308,7 @@ export default {
         this.hide()
         return Notify.create({ type: 'negative', message: 'geen liederen in setlist gevonden', position: 'top' })
       }
+      this.$nextTick(() => { this.setListDiffWidth() })
       // open database
       if (!this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
@@ -436,6 +506,9 @@ export default {
     edit (song) {
       this.$refs.presentationSettingsDialog.edit(song)
       // geen update vergelijking database in lijst; wel in voorbeeld markering.
+    },
+    setListDiffWidth () {
+      this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400
     }
   }
 }
@@ -445,16 +518,16 @@ export default {
 <style scoped lang="scss">
 .q-card {
   min-width: max(75vw, min(1440px, 95vw));
-  height: 95vh;
+  height: 90vh;
 
-  .songlist {
-    max-height: 33vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .q-card {
-    min-width: 0;
-    height: 38vh;
+  .q-splitter {
+    height: 79vh;
+
+    .songlist {
+      height: 73vh;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
   }
 }
 </style>

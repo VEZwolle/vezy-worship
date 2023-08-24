@@ -1,24 +1,30 @@
 <template>
-  <q-card bordered>
-    <q-card-section>
+  <div>
+    <div>
       <q-item-label :class="`text-h6 ${classDiff}`" :lines="1">
         <div v-html="title" />
       </q-item-label>
       <q-item-label :class="`text-subtitle2 overflow-hidden${classDiff}`" :lines="1">
         <div v-html="collectionNumber" />
       </q-item-label>
-    </q-card-section>
-    <q-separator inset />
-    <q-card-section horizontal>
-      <q-card-section>
-        <div :class="`col lyrics${classDiff}`" v-html="lyrics" />
-      </q-card-section>
-      <q-separator vertical />
-      <q-card-section>
-        <div :class="`col lyrics${classDiff}`" v-html="lyricsTranslation" />
-      </q-card-section>
-    </q-card-section>
-  </q-card>
+    </div>
+    <q-separator />
+    <div class="row">
+      <div class="col">
+        <div class="text-primary">
+          Tekst:
+        </div>
+        <div :class="`lyrics${classDiff}`" v-html="lyrics" />
+      </div>
+      <q-separator vertical class="q-mx-xs" />
+      <div class="col-auto" style="max-width: 49%;">
+        <div class="text-primary">
+          Vertaling:
+        </div>
+        <div :class="`lyrics${classDiff}`" v-html="lyricsTranslation" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -66,7 +72,7 @@ export default {
   }
 
   .lyrics {
-    height: 25vh;
+    height: 57vh;
     overflow-y: auto;
     overflow-x: hidden;
   }

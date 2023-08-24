@@ -1,6 +1,6 @@
 <template>
   <template v-if="!moreSongsFound">
-    <q-item clickable :active="active" active-class="bg-purple-1" class="width" style="text-align: left;" @click="$emit('click')">
+    <q-item clickable :active="active" active-class="bg-purple-1" :style="styleWidth" style="text-align: left;" @click="$emit('click')">
       <q-item-section avatar>
         <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
       </q-item-section>
@@ -34,7 +34,7 @@
       @click="$emit('click')"
     >
       <template #label>
-        <q-item :active="active" active-class="bg-purple-1" class="width" style="text-align: left;">
+        <q-item :active="active" active-class="bg-purple-1" :style="styleWidth" style="text-align: left;">
           <q-item-section avatar>
             <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
           </q-item-section>
@@ -56,7 +56,7 @@
         </q-item>
       </template>
 
-      <q-list class="width">
+      <q-list :style="styleWidth">
         <template v-for="(songDatabase, index) in songDatabases" :key="`sdb${index}`">
           <q-item v-close-popup clickable @click.stop="$emit('setIndex', index)">
             <q-item-section>
@@ -87,7 +87,8 @@ export default {
     songDatabases: Object,
     songDiffs: Object,
     songTodoIndex: Number,
-    active: Boolean
+    active: Boolean,
+    width: Number
   },
   emits: ['click', 'setIndex'],
   computed: {
@@ -122,6 +123,12 @@ export default {
     },
     diffDatabase () {
       return this.diffDb(this.songTodoIndex)
+    },
+    styleWidth () {
+      const style = {
+        width: `${this.width - 40}px`
+      }
+      return style
     }
   },
   methods: {
@@ -163,8 +170,5 @@ export default {
 .q-item {
   user-select: none;
   cursor: default !important;
-}
-.width {
-  width: max(34vw, min(653px, 40vw));
 }
 </style>
