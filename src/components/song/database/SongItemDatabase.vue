@@ -2,7 +2,7 @@
   <template v-if="!moreSongsFound">
     <q-item clickable :active="active" active-class="bg-purple-1" :style="styleWidth" style="text-align: left;" @click="$emit('click')">
       <q-item-section avatar>
-        <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
+        <q-avatar :color="todoColor" text-color="white" font-size="24px" :icon="todoIcon" />
       </q-item-section>
       <q-item-section>
         <q-item-label class="title row">
@@ -36,7 +36,7 @@
       <template #label>
         <q-item :active="active" active-class="bg-purple-1" :style="styleWidth" style="text-align: left;">
           <q-item-section avatar>
-            <q-avatar :color="todoColor" text-color="white" :icon="todoIcon" />
+            <q-avatar :color="todoColor" text-color="white" font-size="14px" :icon="todoIcon" />
           </q-item-section>
           <q-item-section>
             <q-item-label class="title row">
