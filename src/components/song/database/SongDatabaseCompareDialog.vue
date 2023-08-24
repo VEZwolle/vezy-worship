@@ -165,7 +165,7 @@
           split
           icon="save"
           label="Opslaan in database"
-          :disable="!$fsdb.localSongDatabase"
+          :disable="!changesDatabase"
           :loading="isSaving"
           @click.stop="save(false)"
         >
@@ -218,6 +218,9 @@ export default {
     }
   },
   computed: {
+    changesDatabase () {
+      return this.songsTodoIndex.filter(i => i >= -1).length
+    },
     selectedId () {
       return this.selected?.id || ''
     },
