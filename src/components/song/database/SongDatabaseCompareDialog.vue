@@ -9,6 +9,7 @@
       </q-toolbar>
       <q-splitter
         v-model="splitterModel"
+        @update:model-value="setListDiffWidth"
       >
         <template #before>
           <q-toolbar class="bg-grey-3 text-dark">
@@ -301,11 +302,6 @@ export default {
     },
     compareLyricsTranslation () {
       return HtmlDiff(this.databaseLyricsTranslation, this.newLyricsTranslation)
-    }
-  },
-  watch: {
-    splitterModel: function () {
-      this.setListDiffWidth()
     }
   },
   methods: {
