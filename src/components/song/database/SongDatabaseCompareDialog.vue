@@ -160,6 +160,19 @@
 
       <q-separator />
       <q-card-actions align="right">
+        <div class="q-pr-md">
+          Hele lijst:
+        </div>
+        <q-btn color="secondary" label="Uitzetten" :disable="songsTodoIndex.length === 0" @click.stop="setAction(-2)">
+          <q-tooltip>Alle liederen uitzetten voor importeren</q-tooltip>
+        </q-btn>
+        <q-btn color="secondary" label="Toevoegen" :disable="songsTodoIndex.length === 0" @click.stop="setAction(-1)">
+          <q-tooltip>Alle liederen toevoegen aan database</q-tooltip>
+        </q-btn>
+        <q-btn color="secondary" label="Vervangen" :disable="songsSearchCountDiff.length === 0" @click.stop="setAction(0)">
+          <q-tooltip>Alle liederen vervangen in database met > 40% overeenkomst <br>(of toevoegen bij kleiner)</q-tooltip>
+        </q-btn>
+        <q-space />
         <q-btn-dropdown
           color="secondary"
           split
@@ -194,6 +207,7 @@
 import SongItem from './SongItem.vue'
 import SongItemDatabase from './SongItemDatabase.vue'
 import SongLyricsView from './SongLyricsView.vue'
+import { splitSong } from '../SongControl.vue'
 import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
 import dayjs from 'dayjs'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
@@ -346,9 +360,25 @@ export default {
     select (presentation) {
       this.selected = presentation
     },
-    change (index) {
+    change (index, factor = 0) {
+      // no change if database replace
       if (this.songsTodoIndex[index] >= 0) return
-      this.songsTodoIndex[index] = this.songsSearchResults[index]?.length ? 0 : -1
+      // add if no database found
+      if (!this.songsSearchResults[index]?.length) {
+        this.songsTodoIndex[index] = -1
+        return
+      }
+      // search best result
+      let j = -1 // -1 (add) if no database else index nr 0, 1 db result (replace)
+      for (let i = 0; i < this.songsSearchCountDiff[index].length; i++) {
+        if (i === 0) {
+          j = i
+          continue
+        }
+        if (this.songsSearchCountDiff[index][i].factor200 > this.songsSearchCountDiff[index][j].factor200) { j = i }
+      }
+      if (this.songsSearchCountDiff[index][j]?.text.factor100 < factor) { j = -1 } // less than 40%(factor) similarity text, probably different song --> add
+      this.songsTodoIndex[index] = j
     },
     searchSongs () {
       // reset results
@@ -397,6 +427,23 @@ export default {
         this.songsTodoIndex.push(j)
       })
     },
+    getTextLines (lyrics) {
+      // return 2 lines off te lyrics with more ten 8 char
+      const sections = splitSong(lyrics, 100)
+      const lines = []
+      for (let i = sections.length > 1 ? 1 : 0; i < sections.length; i++) {
+        // sla 1e over, vaak een titel intro tenzij maar 1 section
+        for (let j = 0; j < sections[i].slides[0].length; j++) {
+          const line = sections[i].slides[0][j].trim().replace(/[.,;?!:]$/g, '').trim()
+          if (line.length < 8) continue // zoek een langere regel
+          lines.push(line.toLowerCase())
+          if (lines.length > 1) break // na 2 regels stoppen
+        }
+        if (lines.length > 1) break // na 2 regels stoppen
+      }
+      console.log(lines)
+      return lines
+    },
     filterSearchSongInDatabase (settings) {
       /* JSON
       {
@@ -420,44 +467,52 @@ export default {
         .filter(songTranslation => songTranslation.lyricstranslate === settings.translation)
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
+      const title = settings.title?.trim().toLowerCase()
+      const collection = settings.collection?.trim().toLowerCase()
+      const number = settings.number?.trim().toLowerCase()
+      const text = settings.text?.trim().toLowerCase()
+      const translation = settings.translation?.trim().toLowerCase()
+
+      // equal title, collection, no. (lowercase) [first more detail before return]
+      const filteredSongDatabaseTCN = this.$fsdb.localSongDatabase
+        .filter(songTitle => songTitle.title?.trim().toLowerCase() === title)
+        .filter(songCol => songCol.collection?.trim().toLowerCase() === collection)
+        .filter(songNumber => songNumber.number?.trim().toLowerCase() === number)
+
+      // equal whitout translation (lowercase) [first more detail before return]
+      const filteredSongDatabaseTCNT = filteredSongDatabaseTCN
+        .filter(songText => songText.lyrics?.trim().toLowerCase() === text)
+
       // all equal (lowercase)
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle => songTitle.title?.trim().toLowerCase() === settings.title?.trim().toLowerCase())
-        .filter(songCol => songCol.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase())
-        .filter(songNumber => songNumber.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase())
-        .filter(songText => songText.lyrics?.trim().toLowerCase() === settings.text?.trim().toLowerCase())
-        .filter(songTranslation => songTranslation.lyricstranslate?.trim().toLowerCase() === settings.translation?.trim().toLowerCase())
+      filteredSongDatabase = filteredSongDatabaseTCNT
+        .filter(songTranslation => songTranslation.lyricstranslate?.trim().toLowerCase() === translation)
       if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
 
       // equal whitout translation (lowercase)
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle => songTitle.title?.trim().toLowerCase() === settings.title?.trim().toLowerCase())
-        .filter(songCol => songCol.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase())
-        .filter(songNumber => songNumber.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase())
-        .filter(songText => songText.lyrics?.trim().toLowerCase() === settings.text?.trim().toLowerCase())
-        .filter(songTranslation => songTranslation.lyricstranslate?.trim().toLowerCase() === settings.translation?.trim().toLowerCase())
-      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
+      if (filteredSongDatabaseTCNT.length > 0) { return filteredSongDatabaseTCNT }
 
       // equal title, collection, no. (lowercase)
-      filteredSongDatabase = this.$fsdb.localSongDatabase
-        .filter(songTitle => songTitle.title?.trim().toLowerCase() === settings.title?.trim().toLowerCase())
-        .filter(songCol => songCol.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase())
-        .filter(songNumber => songNumber.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase())
-      if (filteredSongDatabase.length > 0) { return filteredSongDatabase }
+      if (filteredSongDatabaseTCN.length > 0) { return filteredSongDatabaseTCN }
 
       // equal title (lowercase) // deel achter titel niet mee nemen wanner tussen... /^[^([{<|\\/>}\])]*/
       // title includes (lowercase)
+      // een regel komt voor (test op 2 regels, zie getTekstLines())
       // equal collection, no.  (lowercase) (wanneer ingevuld)
+      const textLines = this.getTextLines(settings.text)
+      const titleMatch = title?.match(/^[^([{<|\\/>}\])]*/)[0]
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(song => {
+          const lyrics = song.lyrics?.toLowerCase()
           switch (true) {
-            case song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === settings.title?.trim().match(/^[^([{<|\\/>}\])]*/)[0].toLowerCase():
-            case song.title?.trim().toLowerCase().includes(settings.title?.trim().toLowerCase()):
-            case settings.title?.trim().toLowerCase().includes(song.title?.trim().toLowerCase()):
+            case song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === titleMatch:
+            case song.title?.toLowerCase().includes(title):
+            case title.includes(song.title?.trim().toLowerCase()):
             case song.collection?.trim().length > 0 &&
                  song.number?.trim().length > 0 &&
-                 song.collection?.trim().toLowerCase() === settings.collection?.trim().toLowerCase() &&
-                 song.number?.trim().toLowerCase() === settings.number?.trim().toLowerCase():
+                 song.collection?.trim().toLowerCase() === collection &&
+                 song.number?.trim().toLowerCase() === number:
+            case textLines.length > 0 && lyrics.includes(textLines[0]):
+            case textLines.length > 1 && lyrics.includes(textLines[1]):
               return true
             default:
               return false
@@ -512,6 +567,22 @@ export default {
     },
     setListDiffWidth () {
       this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400
+    },
+    setAction (actionNr) {
+      switch (actionNr) {
+        case -3: // -3 = exist in db
+          break // no change
+        case -2: // -2 = no add
+        case -1: // -1 = add
+          for (let i = 0; i < this.songsTodoIndex.length; i++) {
+            if (this.songsTodoIndex[i] !== -3) { this.songsTodoIndex[i] = actionNr }
+          }
+          break
+        default: // 0, 1 etc = change
+          for (let i = 0; i < this.songsTodoIndex.length; i++) {
+            if (this.songsTodoIndex[i] !== -3) { this.change(i, 40) }
+          }
+      }
     }
   }
 }
