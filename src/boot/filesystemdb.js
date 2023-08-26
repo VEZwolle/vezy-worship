@@ -113,6 +113,14 @@ const fsdb = {
       Notify.create({ type: 'negative', message: 'Database kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
       return false
     }
+  },
+  async getCollections (open = false) {
+    if (!fsdb.localSongDatabase) {
+      if (!open) return []
+      if (!(await fsdb.openSongDatabase())) return []
+    }
+    const collections = [...new Set(fsdb.localSongDatabase.map(d => d.collection))]
+    return collections.sort()
   }
 }
 

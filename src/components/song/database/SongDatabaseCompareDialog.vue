@@ -174,6 +174,18 @@
           <q-tooltip>Alle liederen vervangen in database met > 40% overeenkomst <br>(of toevoegen bij kleiner)</q-tooltip>
         </q-btn>
         <q-space />
+
+        <q-input
+          v-model="userName"
+          outlined
+          dense
+          :label-color="userName ? '' : 'red'"
+          label="Gebruikersnaam"
+        >
+          <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+        </q-input>
+
+        <q-space />
         <q-btn-dropdown
           color="secondary"
           split
@@ -185,7 +197,12 @@
         >
           <template #label>
             label
-            <q-tooltip>Geselecteerde liederen toevoegen, vervangen & opslaan in database</q-tooltip>
+            <q-tooltip v-if="userName">
+              Geselecteerde liederen toevoegen, vervangen & opslaan in database
+            </q-tooltip>
+            <q-tooltip v-else>
+              Let op: Gebruikersnaam invullen voor je kan opslaan!
+            </q-tooltip>
           </template>
           <q-list>
             <q-item v-close-popup clickable @click.stop="save(true)">
@@ -219,6 +236,7 @@ export default {
   components: { SongItem, SongLyricsView, SongItemDatabase, PresentationSettingsDialog },
   data () {
     return {
+      userName: '',
       songs: [],
       songsSearchResults: [],
       songsSearchCountDiff: [],
@@ -234,7 +252,7 @@ export default {
   },
   computed: {
     changesDatabase () {
-      return this.songsTodoIndex.filter(i => i >= -1).length
+      return this.songsTodoIndex.filter(i => i >= -1).length && this.userName.length
     },
     selectedId () {
       return this.selected?.id || ''
@@ -307,6 +325,7 @@ export default {
   methods: {
     async show () {
       this.isLoading = true
+      this.userName = localStorage.getItem('database.userName') || ''
       // reset
       this.songs = []
       this.songsSearchResults = []
@@ -341,16 +360,18 @@ export default {
     },
     save (newFile = false) {
       this.isSaving = true
+      localStorage.setItem('database.userName', this.userName || '')
       // backup this.$fsdb.localSongDatabase
       const backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       this.addToDatabase()
-      // save database, nog uitwerken
+      // save database
       this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
         .then((result) => {
           if (!result) { this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase) }
         })
         .finally(() => {
           this.isSaving = false
+          this.hide()
         })
     },
     select (presentation) {
@@ -437,7 +458,6 @@ export default {
         }
         if (lines.length > 1) break // na 2 regels stoppen
       }
-      console.log(lines)
       return lines
     },
     filterSearchSongInDatabase (settings) {
@@ -521,7 +541,6 @@ export default {
     },
     addToDatabase () {
       const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
-      const creator = 'Naam'
 
       for (let i = 0; i < this.songs.length; i++) {
         const todoIndex = this.songsTodoIndex[i]
@@ -533,7 +552,7 @@ export default {
             number: this.songs[i].settings.number,
             lyrics: this.songs[i].settings.text,
             lyricstranslate: this.songs[i].settings.translation,
-            creator,
+            creator: this.userName,
             created_at: now,
             updated_at: now
           }
@@ -591,10 +610,10 @@ export default {
   height: 90vh;
 
   .q-splitter {
-    height: 79vh;
+    height: 78vh;
 
     .songlist {
-      height: 73vh;
+      height: 72vh;
       overflow-y: scroll;
       overflow-x: hidden;
     }

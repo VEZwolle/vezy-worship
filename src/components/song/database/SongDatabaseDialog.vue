@@ -28,19 +28,17 @@
         </div>
         <div class="col-4 q-pl-md">
           <q-select
-            v-model="collection"
+            v-model="dbCollection"
             label="Collectie"
-            emit-value
-            map-options
             outlined
             options-dense
-            :options="collections"
+            :options="dbCollections"
             @update:model-value="filterSearchResults"
           >
             <template #prepend>
               <q-icon name="book" />
             </template>
-            <template v-if="collection" #append>
+            <template v-if="dbCollection" #append>
               <q-icon name="cancel" class="cursor-pointer" @click="resetCollection" />
             </template>
           </q-select>
@@ -127,6 +125,11 @@
 <script>
 export default {
   props: {
+    title: String,
+    collection: String,
+    number: String,
+    text: String,
+    translation: String
   },
   emits: [
     'update:title',
@@ -137,11 +140,11 @@ export default {
   ],
   data () {
     return {
-      search: '',
+      search: this.title,
       searchLyrics: false,
       searchTranslation: false,
-      collection: 'Opwekking',
-      collections: [],
+      dbCollection: this.collection,
+      dbCollections: [],
       selected: [],
       filteredSongDatabase: [],
       columns: [
@@ -184,13 +187,15 @@ export default {
   },
   methods: {
     async show () {
+      this.search = this.title
+      this.dbCollection = this.collection
+      if (!this.dbCollection) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
       this.isLoading = true
       if (!this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) this.hide()
       }
-      this.collections = [...new Set(this.$fsdb.localSongDatabase.map(d => d.collection))]
-      this.collections.sort()
+      this.dbCollections = await this.$fsdb.getCollections()
       this.filterSearchResults()
       this.isLoading = false
     },
@@ -210,25 +215,26 @@ export default {
     filterSearchResults () {
       this.isLoading = true
       this.selected = []
-      if (!this.collection) {
+      const search = this.search.toLowerCase()
+      if (!this.dbCollection) {
         this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(this.search.toLowerCase()):
-            case song.number?.toLowerCase().includes(this.search.toLowerCase()):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(this.search.toLowerCase())):
+            case song.title?.toLowerCase().includes(search):
+            case song.number?.toLowerCase().includes(search):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
               return true
             default:
               return false
           }
         })
       } else {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.collection).filter(song => {
+        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.dbCollection).filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(this.search.toLowerCase()):
-            case song.number?.toLowerCase().includes(this.search.toLowerCase()):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(this.search.toLowerCase())):
+            case song.title?.toLowerCase().includes(search):
+            case song.number?.toLowerCase().includes(search):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
               return true
             default:
               return false
@@ -242,7 +248,7 @@ export default {
       this.filterSearchResults()
     },
     resetCollection () {
-      this.collection = ''
+      this.dbCollection = ''
       this.filterSearchResults()
     },
     submitSong () {
