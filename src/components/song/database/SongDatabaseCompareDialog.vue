@@ -227,7 +227,6 @@ import SongItemDatabase from './SongItemDatabase.vue'
 import SongLyricsView from './SongLyricsView.vue'
 import { splitSong } from '../SongControl.vue'
 import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
-import dayjs from 'dayjs'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { Notify } from 'quasar'
 import cloneDeep from 'lodash/cloneDeep'
@@ -325,7 +324,6 @@ export default {
   methods: {
     async show () {
       this.isLoading = true
-      this.userName = localStorage.getItem('database.userName') || ''
       // reset
       this.songs = []
       this.songsSearchResults = []
@@ -333,6 +331,7 @@ export default {
       this.noNewSongs = true
       this.selected = {}
       this.$refs.dialogAddDatabase.show()
+      this.userName = localStorage.getItem('database.userName') || ''
 
       // get songs setlist
       this.songs = this.$store.service.presentations.filter(t => t.type === 'song')
@@ -348,6 +347,7 @@ export default {
           // vragen om nieuwe te maken?
           // nog uitzoeken, ga voor nu uit dat er een database is.
           this.hide()
+          return Notify.create({ type: 'negative', message: 'geen database gevonden', position: 'top' })
         }
       }
       // database is open of lege gemaakt
@@ -364,10 +364,16 @@ export default {
       // backup this.$fsdb.localSongDatabase
       const backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       this.addToDatabase()
-      // save database
-      this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
-        .then((result) => {
-          if (!result) { this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase) }
+        .then((addResult) => {
+          if (addResult) {
+            // save database
+            this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
+              .then((saveResult) => {
+                if (!saveResult) { this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase) }
+              })
+          } else {
+            this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
+          }
         })
         .finally(() => {
           this.isSaving = false
@@ -404,7 +410,7 @@ export default {
       this.songsTodoIndex = []
       // search database
       this.songs.forEach(song => {
-        const databaseSong = this.filterSearchSongInDatabase(song.settings).slice(0, 9) || [] // max 0 results pro song
+        const databaseSong = this.filterSearchSongInDatabase(song.settings).slice(0, 19) || [] // max 20 results pro song
         const countDiff = []
         // get diff count
         for (let i = 0; i < databaseSong.length; i++) {
@@ -540,41 +546,22 @@ export default {
       return filteredSongDatabase
     },
     addToDatabase () {
-      const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
-
+      let result = true
       for (let i = 0; i < this.songs.length; i++) {
         const todoIndex = this.songsTodoIndex[i]
         if (todoIndex > -2) {
-          const addSong = {
-            id: this.songs[i].id, // controle op bestaat toevoegen? nieuwe maken?
-            title: this.songs[i].settings.title,
-            collection: this.songs[i].settings.collection,
-            number: this.songs[i].settings.number,
-            lyrics: this.songs[i].settings.text,
-            lyricstranslate: this.songs[i].settings.translation,
-            creator: this.userName,
-            created_at: now,
-            updated_at: now
-          }
           switch (todoIndex) {
             case undefined: break
             case -1: // add
-              this.$fsdb.localSongDatabase.push(addSong)
+              if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName)) result = false
               break
             default: {
-              const dbResultId = this.songsSearchResults[i][todoIndex].id
-              const dbIndex = this.$fsdb.localSongDatabase.indexOf(s => s.id === dbResultId)
-              if (dbIndex !== -1) {
-                addSong.id = this.$fsdb.localSongDatabase[dbIndex].id
-                addSong.created_at = this.$fsdb.localSongDatabase[dbIndex].created_at
-                this.$fsdb.localSongDatabase[dbIndex] = addSong
-              } else {
-                this.$fsdb.localSongDatabase.push(addSong)
-              }
+              if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].id)) result = false
             }
           }
         }
       }
+      return result
     },
     edit (song) {
       this.$refs.presentationSettingsDialog.edit(song)

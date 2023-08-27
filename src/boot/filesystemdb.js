@@ -1,6 +1,8 @@
 import * as zip from '@zip.js/zip.js'
 import { Notify } from 'quasar'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid'
 
 const filePickerOptionsDb = {
   types: [{
@@ -121,6 +123,51 @@ const fsdb = {
     }
     const collections = [...new Set(fsdb.localSongDatabase.map(d => d.collection))]
     return collections.sort()
+  },
+  async addToDatabase (settings, creator, id = null) {
+    if (!fsdb.localSongDatabase) {
+      if (!(await fsdb.openSongDatabase())) {
+        Notify.create({ type: 'negative', message: 'Database kon niet worden geopend...' })
+        return false
+      }
+    }
+    const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+    const addSong = {
+      id: null, // controle op bestaat toevoegen? nieuwe maken?
+      title: settings.title,
+      collection: settings.collection,
+      number: settings.number,
+      lyrics: settings.text,
+      lyricstranslate: settings.translation,
+      creator,
+      created_at: now,
+      updated_at: now
+    }
+
+    if (id) {
+      const dbIndex = fsdb.localSongDatabase.indexOf(s => s.id === id)
+      if (dbIndex !== -1) {
+        addSong.id = fsdb.localSongDatabase[dbIndex].id
+        addSong.created_at = fsdb.localSongDatabase[dbIndex].created_at
+        fsdb.localSongDatabase[dbIndex] = addSong
+        return true
+      }
+    }
+    addSong.id = nanoid() // creare uniek id
+    fsdb.localSongDatabase.push(addSong)
+    return true
+  },
+  async removeFromDatabase (id) {
+    if (!id) return false
+    if (!fsdb.localSongDatabase) {
+      if (!(await fsdb.openSongDatabase())) {
+        Notify.create({ type: 'negative', message: 'Database kon niet worden geopend...' })
+        return false
+      }
+    }
+    fsdb.localSongDatabase = fsdb.localSongDatabase.filter(song => song.id !== id)
+    return true
   }
 }
 

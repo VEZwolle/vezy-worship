@@ -58,7 +58,7 @@
             color="secondary"
             row-key="id"
             selection="single"
-            :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at']"
+            :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at', 'actions']"
             class="virtscroll-table"
             virtual-scroll
             :rows-per-page-options="[0]"
@@ -68,7 +68,19 @@
             :columns="columns"
             @selection="changeSelected"
             @row-click="rowClickSelect"
-          />
+          >
+            <template #body-cell-actions="props">
+              <q-td :props="props">
+                <q-item-section class="table-actions">
+                  <q-btn class="text-red-8 gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeSong(props.row.id)">
+                    <q-tooltip anchor="top middle" self="center middle">
+                      verwijderen uit database
+                    </q-tooltip>
+                  </q-btn>
+                </q-item-section>
+              </q-td>
+            </template>
+          </q-table>
         </div>
         <div class="col-4 q-pl-md">
           <q-tabs v-model="lyricsTab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
@@ -111,6 +123,13 @@
           <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in text.</q-tooltip>
         </q-toggle>
         <q-space />
+        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" @click.stop="removeSong">
+          <q-tooltip>Verwijder {{ selectedTitle }} van database</q-tooltip>
+        </q-btn>
+        <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" @click.stop="undoRemoveSong">
+          <q-tooltip>Ongedaan maken verwijderen song</q-tooltip>
+        </q-btn>
+        <q-space />
         <q-btn :disable="selectedFalse" color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas het geselecteerde lied toe in de basis tab.</q-tooltip>
         </q-btn>
@@ -123,6 +142,8 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep'
+
 export default {
   props: {
     title: String,
@@ -154,10 +175,12 @@ export default {
         { name: 'number', label: 'Nummer', field: 'number', sortable: true, style: 'width: 1vw;' },
         { name: 'creator', label: 'opgeslagen', field: 'creator', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'created_at', label: 'gemaakt', field: 'created_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
-        { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' }
+        { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
+        { name: 'actions', label: '', style: 'width: 1vw;' }
       ],
       isLoading: false,
-      lyricsTab: 'text'
+      lyricsTab: 'text',
+      backupSongDatabase: null
 
       /* JSON
       {
@@ -183,15 +206,21 @@ export default {
     },
     selectedFalse () {
       return !this.selected[0]
+    },
+    selectedTitle () {
+      return this.selected[0]?.title || ''
+    },
+    backupSongDatabaseExist () {
+      return !this.backupSongDatabase
     }
   },
   methods: {
     async show () {
+      this.isLoading = true
       this.search = this.title
       this.dbCollection = this.collection
-      if (!this.dbCollection) this.dbCollection = localStorage.getItem('database.collection') || ''
+      if (!this.dbCollection && !this.title) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
-      this.isLoading = true
       if (!this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) this.hide()
       }
@@ -258,6 +287,33 @@ export default {
       this.$emit('update:text', this.selected[0]?.lyrics)
       this.$emit('update:translation', this.selected[0]?.lyricstranslate)
       this.hide()
+    },
+    removeSong (id = false) {
+      if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+      this.$fsdb.removeFromDatabase(id || this.selected[0]?.id)
+        .then((result) => {
+          if (result) {
+            // save database
+            this.$fsdb.saveSongDatabase()
+              .then((saveResult) => {
+                if (!saveResult) { this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase) }
+              })
+            this.filterSearchResults()
+          }
+        })
+    },
+    undoRemoveSong () {
+      if (this.backupSongDatabase) {
+        const reduSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+        this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase)
+        this.$fsdb.saveSongDatabase()
+          .then((saveResult) => {
+            if (!saveResult) {
+              this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
+            }
+          })
+        this.filterSearchResults()
+      }
     }
   }
 }
@@ -299,5 +355,12 @@ export default {
   tbody {
     scroll-margin-top: 48px;
   }
+}
+.table-actions {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+tr:hover .table-actions {
+  opacity: 1;
 }
 </style>

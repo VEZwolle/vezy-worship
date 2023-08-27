@@ -72,7 +72,7 @@ export default {
   }
 
   .lyrics {
-    height: 57vh;
+    height: 56vh;
     overflow-y: auto;
     overflow-x: hidden;
   }
