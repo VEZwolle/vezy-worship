@@ -35,6 +35,9 @@
     </p>
     <p>
       Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden, of alle opmaak van de tekst verwijderd worden.<br>
+      Met de knop "nummers" kan je alle getallen in 1 keer verkleinen en aan de bovenzijde plaatsen.<br>
+      <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je de o.a. nummers tool, 1x ongedaan maken.<br>
+      <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i><br>
       <img src="../../assets/help/scripturefontsetting.png">
     </p>
     <p>
