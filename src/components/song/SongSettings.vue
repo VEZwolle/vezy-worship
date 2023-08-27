@@ -13,10 +13,33 @@
           <div class="col">
             <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
           </div>
-          <div class="col2">
-            <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb()">
-              <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
-            </q-btn>
+          <div class="col">
+            <div class="row q-gutter-md">
+              <div class="col">
+                <q-input v-model="settings.collection" outlined label="Collectie">
+                  <template #append>
+                    <q-select
+                      v-model="settings.collection"
+                      borderless
+                      hide-selected
+                      menu-anchor="bottom right"
+                      menu-self="top right"
+                      options-dense
+                      :options="dbCollections"
+                      @filter="loadCollectionDatabase"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-2">
+                <q-input v-model="settings.number" outlined label="Nr" />
+              </div>
+              <div class="col-auto">
+                <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb">
+                  <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                </q-btn>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row q-gutter-md">
@@ -126,6 +149,8 @@
   <SongDatabaseDialog
     ref="SongDatabaseDialog"
     v-model:title="settings.title"
+    v-model:collection="settings.collection"
+    v-model:number="settings.number"
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
@@ -134,7 +159,7 @@
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
-import SongDatabaseDialog from './SongDatabaseDialog.vue'
+import SongDatabaseDialog from './database/SongDatabaseDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
@@ -145,6 +170,7 @@ export default {
   data () {
     return {
       tab: 'text',
+      dbCollections: [],
       isTranslating: false,
       ignoreInput: null
     }
@@ -195,6 +221,15 @@ export default {
     },
     resize (input) {
       return () => this.syncInputs(input, 'style.height')
+    },
+    loadCollectionDatabase (val, update, abort) {
+      if (this.dbCollections.length > 0) { // already loaded
+        update()
+        return
+      }
+      update(async () => {
+        this.dbCollections = await this.$fsdb.getCollections(true)
+      })
     }
   }
 }
@@ -218,5 +253,23 @@ export default {
 
 .q-field--focused .translation-button {
   display: none;
+}
+</style>
+
+<style lang="scss">
+.q-input {
+  .q-select {
+    margin-right: -12px;
+
+    .q-field__control,
+    .q-field__control::before {
+      background-color: transparent;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .q-field__append {
+      padding-left: 0;
+    }
+  }
 }
 </style>

@@ -21,15 +21,40 @@
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
         </q-tab-panel>
+
         <q-tab-panel name="database">
           <q-btn label="Liederen Database openen/veranderen" color="secondary" @click="loadSongDatabase" />
           <br>(wordt direct ingesteld bij geldige database)
-          <br>{{ songDatabase }}
+          <q-badge v-if="songDatabase" class="q-mb-sm">
+            {{ songDatabase }}
+          </q-badge>
+          <q-select
+            v-model="dbCollection"
+            label="Standaard collectie"
+            emit-value
+            outlined
+            options-dense
+            :options="dbCollections"
+            class="q-my-sm"
+            @filter="loadCollectionDatabase"
+          >
+            <template #prepend>
+              <q-icon name="book" />
+            </template>
+            <template v-if="dbCollection" #append>
+              <q-icon name="cancel" class="cursor-pointer" @click="dbCollection = ''" />
+            </template>
+          </q-select>
+          <q-input v-model="userName" outlined label="Gebruikersnaam">
+            <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+          </q-input>
         </q-tab-panel>
+
         <q-tab-panel name="autoupdate">
           <q-checkbox v-model="autoupdate" label="Automatisch download & update Vezyworship" />
           <div>Wanneer er een update beschikbaar is wordt deze gedownload en na afsluiten van Vezyworship geinstalleerd.</div>
         </q-tab-panel>
+
         <q-tab-panel name="background">
           <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
             <template #append>
@@ -71,6 +96,9 @@ export default {
       },
       autoupdate: true,
       songDatabase: '',
+      dbCollection: '',
+      dbCollections: [],
+      userName: '',
       tab: 'background'
     }
   },
@@ -99,6 +127,8 @@ export default {
       }
       this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
+      this.dbCollection = localStorage.getItem('database.collection') || ''
+      this.userName = localStorage.getItem('database.userName') || ''
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -107,6 +137,8 @@ export default {
       }
       localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
+      localStorage.setItem('database.collection', this.dbCollection || '')
+      localStorage.setItem('database.userName', this.userName || '')
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
@@ -115,7 +147,18 @@ export default {
     },
     async loadSongDatabase () {
       await this.$fsdb.openSongDatabase(true)
+      this.dbCollections = await this.$fsdb.getCollections(false)
       this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
+    },
+    loadCollectionDatabase (val, update, abort) {
+      if (this.dbCollections.length > 0) { // already loaded
+        update()
+        return
+      }
+      update(async () => {
+        this.dbCollections = await this.$fsdb.getCollections(true)
+        this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
+      })
     }
   }
 }

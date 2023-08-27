@@ -28,19 +28,17 @@
         </div>
         <div class="col-4 q-pl-md">
           <q-select
-            v-model="collection"
+            v-model="dbCollection"
             label="Collectie"
-            emit-value
-            map-options
             outlined
             options-dense
-            :options="collections"
+            :options="dbCollections"
             @update:model-value="filterSearchResults"
           >
             <template #prepend>
               <q-icon name="book" />
             </template>
-            <template v-if="collection" #append>
+            <template v-if="dbCollection" #append>
               <q-icon name="cancel" class="cursor-pointer" @click="resetCollection" />
             </template>
           </q-select>
@@ -60,7 +58,7 @@
             color="secondary"
             row-key="id"
             selection="single"
-            :visible-columns="['title', 'collection', 'number']"
+            :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at']"
             class="virtscroll-table"
             virtual-scroll
             :rows-per-page-options="[0]"
@@ -127,19 +125,26 @@
 <script>
 export default {
   props: {
+    title: String,
+    collection: String,
+    number: String,
+    text: String,
+    translation: String
   },
   emits: [
     'update:title',
+    'update:collection',
+    'update:number',
     'update:text',
     'update:translation'
   ],
   data () {
     return {
-      search: '',
+      search: this.title,
       searchLyrics: false,
       searchTranslation: false,
-      collection: 'Opwekking',
-      collections: [],
+      dbCollection: this.collection,
+      dbCollections: [],
       selected: [],
       filteredSongDatabase: [],
       columns: [
@@ -147,9 +152,9 @@ export default {
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
         { name: 'collection', label: 'Collectie', field: 'collection', align: 'left', sortable: true },
         { name: 'number', label: 'Nummer', field: 'number', sortable: true },
-        { name: 'creator', label: 'opgeslagen door', field: 'creator', align: 'left', sortable: true },
-        { name: 'created_at', label: 'gemaakt op', field: 'created_at', sortable: true },
-        { name: 'updated_at', label: 'upgedate op', field: 'updated_at', sortable: true }
+        { name: 'creator', label: 'opgeslagen', field: 'creator', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
+        { name: 'created_at', label: 'gemaakt', field: 'created_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
+        { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' }
       ],
       isLoading: false,
       lyricsTab: 'text'
@@ -182,13 +187,15 @@ export default {
   },
   methods: {
     async show () {
+      this.search = this.title
+      this.dbCollection = this.collection
+      if (!this.dbCollection) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
       this.isLoading = true
       if (!this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) this.hide()
       }
-      this.collections = [...new Set(this.$fsdb.localSongDatabase.map(d => d.collection))]
-      this.collections.sort()
+      this.dbCollections = await this.$fsdb.getCollections()
       this.filterSearchResults()
       this.isLoading = false
     },
@@ -208,25 +215,26 @@ export default {
     filterSearchResults () {
       this.isLoading = true
       this.selected = []
-      if (!this.collection) {
+      const search = this.search.toLowerCase()
+      if (!this.dbCollection) {
         this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(this.search.toLowerCase()):
-            case song.number?.toLowerCase().includes(this.search.toLowerCase()):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(this.search.toLowerCase())):
+            case song.title?.toLowerCase().includes(search):
+            case song.number?.toLowerCase().includes(search):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
               return true
             default:
               return false
           }
         })
       } else {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.collection).filter(song => {
+        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.dbCollection).filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(this.search.toLowerCase()):
-            case song.number?.toLowerCase().includes(this.search.toLowerCase()):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(this.search.toLowerCase())):
+            case song.title?.toLowerCase().includes(search):
+            case song.number?.toLowerCase().includes(search):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
               return true
             default:
               return false
@@ -240,15 +248,13 @@ export default {
       this.filterSearchResults()
     },
     resetCollection () {
-      this.collection = ''
+      this.dbCollection = ''
       this.filterSearchResults()
     },
     submitSong () {
-      let collectionNumber = this.selected[0]?.collection ? ` ${this.selected[0]?.collection}` : ''
-      collectionNumber += this.selected[0]?.number ? ` ${this.selected[0]?.number}` : ''
-      collectionNumber = collectionNumber ? ` |${collectionNumber}` : ''
-
-      this.$emit('update:title', `${this.selected[0]?.title}${collectionNumber}`)
+      this.$emit('update:title', this.selected[0]?.title)
+      this.$emit('update:collection', this.selected[0]?.collection ? this.selected[0]?.collection : '')
+      this.$emit('update:number', this.selected[0]?.number ? this.selected[0]?.number : '')
       this.$emit('update:text', this.selected[0]?.lyrics)
       this.$emit('update:translation', this.selected[0]?.lyricstranslate)
       this.hide()

@@ -71,6 +71,56 @@ const fsdb = {
       Notify.create({ type: 'negative', message: `SongDatabase bestand Error: "${error.name}", "${error.message}"` })
       return false
     }
+  },
+
+  async saveSongDatabase (showPicker = false) {
+    if (!fsdb.localSongDatabase) {
+      Notify.create({ type: 'negative', message: 'Geen database gevonden voor opslaan.' })
+      return false
+    }
+
+    if (!showPicker && fsdb.fileHandleSongDatabase) {
+      // verifyPermission: 'granted', 'denied' or 'prompt'
+      const options = {}
+      options.mode = 'readwrite' // 'read'
+      if (await fsdb.fileHandleSongDatabase.queryPermission(options) === 'prompt') await fsdb.fileHandleSongDatabase.requestPermission(options)
+      if (await fsdb.fileHandleSongDatabase.queryPermission(options) !== 'granted') fsdb.fileHandleSongDatabase = null
+    }
+    // Show SaveFilePicker on first save
+    if (showPicker || !fsdb.fileHandleSongDatabase) {
+      fsdb.fileHandleSongDatabase = await window.showSaveFilePicker(filePickerOptionsDb)
+    }
+
+    const blobWriter = new zip.BlobWriter('application/zip')
+    const zipWriter = new zip.ZipWriter(blobWriter)
+
+    // Add database data to zip
+    const songDatabase = JSON.stringify(fsdb.localSongDatabase)
+    await zipWriter.add('songdatabase.json', new zip.TextReader(songDatabase))
+
+    const blob = await zipWriter.close()
+
+    // Write zip file to disk
+    try {
+      const writable = await fsdb.fileHandleSongDatabase.createWritable()
+      await writable.write(blob)
+      await writable.close()
+
+      Notify.create({ type: 'positive', message: `Database opgeslagen als ${fsdb.fileHandleSongDatabase.name}` })
+      await set('VezySongDatabase', fsdb.fileHandleSongDatabase) // save to IndexedDB
+      return true
+    } catch {
+      Notify.create({ type: 'negative', message: 'Database kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+      return false
+    }
+  },
+  async getCollections (open = false) {
+    if (!fsdb.localSongDatabase) {
+      if (!open) return []
+      if (!(await fsdb.openSongDatabase())) return []
+    }
+    const collections = [...new Set(fsdb.localSongDatabase.map(d => d.collection))]
+    return collections.sort()
   }
 }
 

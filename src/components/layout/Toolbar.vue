@@ -47,6 +47,16 @@
             <q-item-label>Opslaan als</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item v-close-popup clickable @click="compareSongData">
+          <q-item-section>
+            <q-item-label>
+              Toevoegen database
+              <q-tooltip>
+                Liederen uit de setlist vergelijken en toevoegen aan de database
+              </q-tooltip>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-btn-dropdown>
 
@@ -120,18 +130,20 @@
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
+  <SongDatabaseCompareDialog ref="SongDatabaseCompareDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
+import SongDatabaseCompareDialog from '../song/database/SongDatabaseCompareDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { Notify } from 'quasar'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
+  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SongDatabaseCompareDialog },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -219,6 +231,9 @@ export default {
         .finally(() => {
           this.isSaving = false
         })
+    },
+    compareSongData () {
+      this.$refs.SongDatabaseCompareDialog.show()
     },
     openOutput (id) {
       window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
