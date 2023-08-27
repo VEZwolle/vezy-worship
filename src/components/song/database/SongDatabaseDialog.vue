@@ -58,7 +58,7 @@
             color="secondary"
             row-key="id"
             selection="single"
-            :visible-columns="['title', 'collection', 'number']"
+            :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at']"
             class="virtscroll-table"
             virtual-scroll
             :rows-per-page-options="[0]"
@@ -152,9 +152,9 @@ export default {
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
         { name: 'collection', label: 'Collectie', field: 'collection', align: 'left', sortable: true },
         { name: 'number', label: 'Nummer', field: 'number', sortable: true },
-        { name: 'creator', label: 'opgeslagen door', field: 'creator', align: 'left', sortable: true },
-        { name: 'created_at', label: 'gemaakt op', field: 'created_at', sortable: true },
-        { name: 'updated_at', label: 'upgedate op', field: 'updated_at', sortable: true }
+        { name: 'creator', label: 'opgeslagen', field: 'creator', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
+        { name: 'created_at', label: 'gemaakt', field: 'created_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
+        { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' }
       ],
       isLoading: false,
       lyricsTab: 'text'
