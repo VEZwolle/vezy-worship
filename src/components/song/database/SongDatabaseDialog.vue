@@ -150,8 +150,8 @@ export default {
       columns: [
         { name: 'id', label: '#', field: 'id', sortable: true },
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
-        { name: 'collection', label: 'Collectie', field: 'collection', align: 'left', sortable: true },
-        { name: 'number', label: 'Nummer', field: 'number', sortable: true },
+        { name: 'collection', label: 'Collectie', field: 'collection', sortable: true, style: 'width: 1vw;' },
+        { name: 'number', label: 'Nummer', field: 'number', sortable: true, style: 'width: 1vw;' },
         { name: 'creator', label: 'opgeslagen', field: 'creator', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'created_at', label: 'gemaakt', field: 'created_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' }
@@ -266,7 +266,7 @@ export default {
 
 <style scoped lang="scss">
 .q-card {
-  min-width: 60vw;
+  min-width: max(75vw, min(1440px, 95vw));
   min-height: 80vh;
 }
 
