@@ -17,6 +17,19 @@ const filePickerOptionsDb = {
 const fsdb = {
   fileHandleSongDatabase: null,
   localSongDatabase: null,
+  /* JSON
+  {
+    "id":"2",
+    "title":"Namen van God",
+    "collection":null,
+    "number":null,
+    "lyrics":"chorus\nWonderbare raadsman\n\nGoddelijke held\n\nEeuwige vader\n\nVredevorst\n\nJezus",
+    "lyricstranslate":"",
+    "creator":"ew-import",
+    "created_at":"2022-06-15 15:30:28",
+    "updated_at":null
+  }
+  */
 
   async getSongDatabaseSettings () {
     try {
@@ -146,7 +159,7 @@ const fsdb = {
     }
 
     if (id) {
-      const dbIndex = fsdb.localSongDatabase.indexOf(s => s.id === id)
+      const dbIndex = fsdb.localSongDatabase.findIndex(s => s.id === id)
       if (dbIndex !== -1) {
         addSong.id = fsdb.localSongDatabase[dbIndex].id
         addSong.created_at = fsdb.localSongDatabase[dbIndex].created_at

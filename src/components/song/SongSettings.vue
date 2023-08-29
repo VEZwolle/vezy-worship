@@ -2,7 +2,7 @@
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
-      <q-tab name="background" label="Achtergrond" />
+      <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
 
     <q-separator />
@@ -34,7 +34,7 @@
               <div class="col-2">
                 <q-input v-model="settings.number" outlined label="Nr" />
               </div>
-              <div class="col-auto">
+              <div v-if="!editEmit" class="col-auto">
                 <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb">
                   <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
                 </q-btn>
@@ -187,6 +187,11 @@ export default {
       dbCollections: [],
       isTranslating: false,
       ignoreInput: null
+    }
+  },
+  computed: {
+    editEmit () {
+      return this.presentation?.from === 'database'
     }
   },
   mounted () {

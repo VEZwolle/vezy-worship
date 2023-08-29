@@ -72,11 +72,18 @@
             <template #body-cell-actions="props">
               <q-td :props="props">
                 <q-item-section class="table-actions">
-                  <q-btn class="text-red-8 gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeSong(props.row.id)">
-                    <q-tooltip anchor="top middle" self="center middle">
-                      verwijderen uit database
-                    </q-tooltip>
-                  </q-btn>
+                  <div class="text-grey-8 q-gutter-xs">
+                    <q-btn class="gt-xs" size="10px" flat dense round icon="edit" @click.stop="startEditSong(props.row)">
+                      <q-tooltip anchor="top middle" self="center middle">
+                        Bewerk lied in database
+                      </q-tooltip>
+                    </q-btn>
+                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeSong(props.row.id)">
+                      <q-tooltip anchor="top middle" self="center middle">
+                        verwijderen uit database
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
                 </q-item-section>
               </q-td>
             </template>
@@ -123,28 +130,46 @@
           <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in text.</q-tooltip>
         </q-toggle>
         <q-space />
-        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" @click.stop="removeSong">
-          <q-tooltip>Verwijder {{ selectedTitle }} van database</q-tooltip>
+        <q-input
+          v-model="userName"
+          outlined
+          dense
+          :label-color="userName ? '' : 'red'"
+          label="Gebruikersnaam"
+          class="q-pr-md"
+        >
+          <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+        </q-input>
+        <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong">
+          <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
         </q-btn>
-        <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" @click.stop="undoRemoveSong">
-          <q-tooltip>Ongedaan maken verwijderen song</q-tooltip>
+        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeSong">
+          <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
+        </q-btn>
+        <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoRemoveSong">
+          <q-tooltip>Ongedaan maken bewerken database</q-tooltip>
         </q-btn>
         <q-space />
-        <q-btn :disable="selectedFalse" color="secondary" label="Toepassen" @click.stop="submitSong">
+        <q-btn v-if="!onlyEditor" :disable="selectedFalse" color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas het geselecteerde lied toe in de basis tab.</q-tooltip>
         </q-btn>
-        <q-btn color="secondary" label="Annuleren" @click.stop="hide">
+        <q-btn color="secondary" :label="onlyEditor ? 'Sluiten' : 'Annuleren'" @click.stop="hide">
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <PresentationSettingsDialog ref="presentationSettingsDialog" @save="saveEditSong" />
 </template>
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import presentationTypes from '../../presentation-types'
+import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
+import { Notify } from 'quasar'
 
 export default {
+  components: { PresentationSettingsDialog },
   props: {
     title: String,
     collection: String,
@@ -161,10 +186,11 @@ export default {
   ],
   data () {
     return {
-      search: this.title,
+      onlyEditor: false,
+      search: this.title || '',
       searchLyrics: false,
       searchTranslation: false,
-      dbCollection: this.collection,
+      dbCollection: this.collection || '',
       dbCollections: [],
       selected: [],
       filteredSongDatabase: [],
@@ -180,21 +206,9 @@ export default {
       ],
       isLoading: false,
       lyricsTab: 'text',
+      editPresentation: null,
+      userName: '',
       backupSongDatabase: null
-
-      /* JSON
-      {
-        "id":"2",
-        "title":"Namen van God",
-        "collection":null,
-        "number":null,
-        "lyrics":"chorus\nWonderbare raadsman\n\nGoddelijke held\n\nEeuwige vader\n\nVredevorst\n\nJezus",
-        "lyricstranslate":"",
-        "creator":"ew-import",
-        "created_at":"2022-06-15 15:30:28",
-        "updated_at":null
-      }
-      */
     }
   },
   computed: {
@@ -215,10 +229,11 @@ export default {
     }
   },
   methods: {
-    async show () {
+    async show (onlyEditor = false) {
+      this.onlyEditor = onlyEditor
       this.isLoading = true
-      this.search = this.title
-      this.dbCollection = this.collection
+      this.search = this.title || ''
+      this.dbCollection = this.collection || ''
       if (!this.dbCollection && !this.title) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
       if (!this.$fsdb.localSongDatabase) {
@@ -226,6 +241,7 @@ export default {
       }
       this.dbCollections = await this.$fsdb.getCollections()
       this.filterSearchResults()
+      this.userName = localStorage.getItem('database.userName') || ''
       this.isLoading = false
     },
     hide () {
@@ -286,6 +302,7 @@ export default {
       this.$emit('update:number', this.selected[0]?.number ? this.selected[0]?.number : '')
       this.$emit('update:text', this.selected[0]?.lyrics)
       this.$emit('update:translation', this.selected[0]?.lyricstranslate)
+      if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
     removeSong (id = false) {
@@ -314,6 +331,49 @@ export default {
           })
         this.filterSearchResults()
       }
+    },
+    startEditSong (props = false) {
+      if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+      if (!this.userName) {
+        return Notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!', position: 'top' })
+      }
+      localStorage.setItem('database.userName', this.userName || '')
+      const song = props || this.selected[0]
+      if (song) {
+        // convert db --> presentation
+        if (!this.editPresentation) {
+          const type = presentationTypes.find(t => t.id === 'song')
+          this.editPresentation = {
+            type: 'song',
+            from: 'database',
+            settings: cloneDeep(type.settings)
+          }
+        }
+        this.editPresentation.id = props.id || ''
+        this.editPresentation.settings.title = props.title || ''
+        this.editPresentation.settings.collection = props.collection || ''
+        this.editPresentation.settings.number = props.number || ''
+        this.editPresentation.settings.text = props.lyrics || ''
+        this.editPresentation.settings.translation = props.lyricstranslate || ''
+        // edit presentation
+        this.$refs.presentationSettingsDialog.edit(this.editPresentation)
+        // Return with emit save --> saveEditSong
+      }
+    },
+    saveEditSong () {
+      this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
+        .then((addResult) => {
+          if (addResult) {
+            // save database
+            this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
+              .then((saveResult) => {
+                if (!saveResult) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
+              })
+          } else {
+            return Notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!', position: 'top' })
+          }
+        })
+      this.filterSearchResults()
     }
   }
 }
