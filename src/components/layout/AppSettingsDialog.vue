@@ -23,8 +23,12 @@
         </q-tab-panel>
 
         <q-tab-panel name="database">
-          <q-btn label="Liederen Database openen/veranderen" color="secondary" @click="loadSongDatabase" />
-          <br>(wordt direct ingesteld bij geldige database)
+          Liederen Database:
+          <div class="row">
+            <q-btn label="bestand instellen/openen" color="primary" class="col" @click="loadSongDatabase" />
+            <q-btn label="Lege aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
+          </div>
+          (wordt direct ingesteld bij geldige database)
           <q-badge v-if="songDatabase" class="q-mb-sm">
             {{ songDatabase }}
           </q-badge>
@@ -159,6 +163,12 @@ export default {
         this.dbCollections = await this.$fsdb.getCollections(true)
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
       })
+    },
+    async newSongDatabase () {
+      await this.$fsdb.newEmptyDatabase()
+      await this.$fsdb.saveSongDatabase(true)
+      this.dbCollections = []
+      this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
     }
   }
 }

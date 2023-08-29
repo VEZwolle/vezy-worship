@@ -237,7 +237,13 @@ export default {
       if (!this.dbCollection && !this.title) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
       if (!this.$fsdb.localSongDatabase) {
-        if (!(await this.$fsdb.openSongDatabase())) this.hide()
+        if (!(await this.$fsdb.openSongDatabase())) {
+          // error open saved location, open new
+          if (!(await this.$fsdb.openSongDatabase(true))) {
+            this.hide()
+            return
+          }
+        }
       }
       this.dbCollections = await this.$fsdb.getCollections()
       this.filterSearchResults()
@@ -305,30 +311,26 @@ export default {
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
-    removeSong (id = false) {
+    async removeSong (id = false) {
       if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-      this.$fsdb.removeFromDatabase(id || this.selected[0]?.id)
-        .then((result) => {
-          if (result) {
-            // save database
-            this.$fsdb.saveSongDatabase()
-              .then((saveResult) => {
-                if (!saveResult) { this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase) }
-              })
-            this.filterSearchResults()
-          }
-        })
+      let result = await this.$fsdb.removeFromDatabase(id || this.selected[0]?.id)
+      if (!result) { return }
+      // save database
+      result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
+      if (!result) {
+        this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase)
+        return
+      }
+      this.filterSearchResults()
     },
-    undoRemoveSong () {
+    async undoRemoveSong () {
       if (this.backupSongDatabase) {
         const reduSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
         this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase)
-        this.$fsdb.saveSongDatabase()
-          .then((saveResult) => {
-            if (!saveResult) {
-              this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
-            }
-          })
+        const result = await this.$fsdb.saveSongDatabase()
+        if (!result) {
+          this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
+        }
         this.filterSearchResults()
       }
     },
@@ -360,19 +362,12 @@ export default {
         // Return with emit save --> saveEditSong
       }
     },
-    saveEditSong () {
-      this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
-        .then((addResult) => {
-          if (addResult) {
-            // save database
-            this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
-              .then((saveResult) => {
-                if (!saveResult) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
-              })
-          } else {
-            return Notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!', position: 'top' })
-          }
-        })
+    async saveEditSong () {
+      let result = await this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
+      if (!result) return Notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!', position: 'top' })
+      // save database
+      result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
+      if (!result) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
       this.filterSearchResults()
     }
   }

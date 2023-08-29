@@ -343,11 +343,11 @@ export default {
       // open database
       if (!this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
-          // geen database geselecteerd
-          // vragen om nieuwe te maken?
-          // nog uitzoeken, ga voor nu uit dat er een database is.
-          this.hide()
-          return Notify.create({ type: 'negative', message: 'geen database gevonden', position: 'top' })
+          // geen database geselecteerd of error bij opgeslagen versie
+          // nieuwe maken
+          await this.$fsdb.newEmptyDatabase()
+          // return
+          Notify.create({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
         }
       }
       // database is open of lege gemaakt
@@ -358,27 +358,28 @@ export default {
     hide () {
       this.$refs.dialogAddDatabase.hide()
     },
-    save (newFile = false) {
+    async save (newFile = false) {
       this.isSaving = true
       localStorage.setItem('database.userName', this.userName || '')
       // backup this.$fsdb.localSongDatabase
       const backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-      this.addToDatabase()
-        .then((addResult) => {
-          if (addResult) {
-            // save database
-            this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
-              .then((saveResult) => {
-                if (!saveResult) { this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase) }
-              })
-          } else {
-            this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
-          }
-        })
-        .finally(() => {
-          this.isSaving = false
-          this.hide()
-        })
+      let result = this.addToDatabase()
+      if (!result) {
+        this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
+        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database', position: 'top' })
+        this.isSaving = false
+        return
+      }
+      // save database
+      result = await this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
+      if (!result) {
+        this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
+        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database', position: 'top' })
+        this.isSaving = false
+        return
+      }
+      this.isSaving = false
+      this.hide()
     },
     select (presentation) {
       this.selected = presentation
@@ -588,7 +589,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped lang="scss">

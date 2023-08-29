@@ -58,7 +58,7 @@ const fsdb = {
       if (!fileHandleSongDatabase) {
         [fileHandleSongDatabase] = await window.showOpenFilePicker(filePickerOptionsDb)
       }
-
+      // when file no longer exists an error is generated, caught with catch.
       const file = await fileHandleSongDatabase.getFile()
 
       // Read file list from zip
@@ -129,6 +129,12 @@ const fsdb = {
       return false
     }
   },
+
+  newEmptyDatabase () {
+    fsdb.fileHandleSongDatabase = null
+    fsdb.localSongDatabase = []
+  },
+
   async getCollections (open = false) {
     if (!fsdb.localSongDatabase) {
       if (!open) return []
@@ -145,7 +151,6 @@ const fsdb = {
       }
     }
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
-
     const addSong = {
       id: null, // controle op bestaat toevoegen? nieuwe maken?
       title: settings.title,
@@ -157,7 +162,6 @@ const fsdb = {
       created_at: now,
       updated_at: now
     }
-
     if (id) {
       const dbIndex = fsdb.localSongDatabase.findIndex(s => s.id === id)
       if (dbIndex !== -1) {
