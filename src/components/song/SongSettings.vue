@@ -174,13 +174,12 @@
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
-import SongDatabaseDialog from './database/SongDatabaseDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseDialog },
+  components: { BackgroundSetting, SongArrangeDialog },
   extends: SongSettingsTools,
   data () {
     return {

@@ -1,7 +1,7 @@
 <template>
   <div class="bg-grey-3 quick-search-container">
     <template v-if="noDatabase">
-      <q-btn flat dense size="md" no-caps label="Snel zoeken database" @click.stop="openDatabase">
+      <q-btn flat dense size="md" text-color="primary" label="Snel zoeken database openen" @click.stop="openDatabase">
         <q-tooltip anchor="top middle" self="center middle">
           Open database voor snel zoeken
         </q-tooltip>

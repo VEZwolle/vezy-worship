@@ -130,10 +130,10 @@
           <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
         </q-toggle>
         <q-space />
-        <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong">
+        <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong(selected[0])">
           <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
         </q-btn>
-        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeSong">
+        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeSong(selected[0]?.id)">
           <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
         </q-btn>
         <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoRemoveSong">
@@ -166,11 +166,9 @@
 import BaseSongDatabase from './BaseSongDatabase.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import presentationTypes from '../../presentation-types'
-import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
 import { Notify } from 'quasar'
 
 export default {
-  components: { PresentationSettingsDialog },
   extends: BaseSongDatabase,
   props: {
     title: String,
@@ -261,9 +259,9 @@ export default {
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
-    async removeSong (id = false) {
+    async removeSong (id) {
       if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-      let result = await this.$fsdb.removeFromDatabase(id || this.selected[0]?.id)
+      let result = await this.$fsdb.removeFromDatabase(id)
       if (!result) { return }
       // save database
       result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
@@ -284,14 +282,13 @@ export default {
         this.filterSearchResults()
       }
     },
-    startEditSong (props = false) {
+    startEditSong (props) {
       if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       if (!this.userName) {
         return Notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!', position: 'top' })
       }
       localStorage.setItem('database.userName', this.userName || '')
-      const song = props || this.selected[0]
-      if (song) {
+      if (props?.id) {
         // convert db --> presentation
         if (!this.editPresentation) {
           const type = presentationTypes.find(t => t.id === 'song')

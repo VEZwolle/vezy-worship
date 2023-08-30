@@ -37,8 +37,10 @@
             label="Standaard collectie"
             emit-value
             outlined
+            dense
             options-dense
             :options="dbCollections"
+            popup-content-style="height: 30vh;"
             class="q-my-sm"
             @filter="loadCollectionDatabase"
           >
@@ -49,9 +51,10 @@
               <q-icon name="cancel" class="cursor-pointer" @click="dbCollection = ''" />
             </template>
           </q-select>
-          <q-input v-model="userName" outlined label="Gebruikersnaam">
+          <q-input v-model="userName" dense outlined label="Gebruikersnaam">
             <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
           </q-input>
+          <q-btn label="Database bewerken" color="primary" class="q-mt-sm" @click="editSongDatabase" />
         </q-tab-panel>
 
         <q-tab-panel name="autoupdate">
@@ -86,6 +89,7 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <SongDatabaseDialog ref="SongDatabaseDialog" />
 </template>
 
 <script>
@@ -169,6 +173,9 @@ export default {
       await this.$fsdb.saveSongDatabase(true)
       this.dbCollections = []
       this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
+    },
+    editSongDatabase () {
+      this.$refs.SongDatabaseDialog.show(true)
     }
   }
 }

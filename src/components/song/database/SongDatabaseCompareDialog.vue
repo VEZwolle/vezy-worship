@@ -162,13 +162,12 @@ import SongItem from './SongItem.vue'
 import SongItemDatabase from './SongItemDatabase.vue'
 import SongLyricsViews from './SongLyricsViews.vue'
 import { splitSong } from '../SongControl.vue'
-import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { Notify } from 'quasar'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
-  components: { SongItem, SongLyricsViews, SongItemDatabase, PresentationSettingsDialog },
+  components: { SongItem, SongLyricsViews, SongItemDatabase },
   data () {
     return {
       userName: '',
