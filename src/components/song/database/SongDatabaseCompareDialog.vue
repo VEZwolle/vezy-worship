@@ -77,84 +77,20 @@
             </q-toolbar-title>
           </q-toolbar>
           <div v-if="selectedId">
-            <q-tabs v-model="lyricsTab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
-              <q-tab name="new" label="Nieuw" />
-              <q-tab name="newDiff" label="N + V" />
-              <q-tab name="diff" label="Verschil" />
-              <q-tab name="diffDb" label="V + D" />
-              <q-tab name="db" label="Database" />
-            </q-tabs>
-            <q-separator />
-            <q-tab-panels v-model="lyricsTab" animated>
-              <q-tab-panel name="new">
-                <SongLyricsView
-                  :title="newTitle"
-                  :collection-number="newCollectionNumber"
-                  :lyrics="newLyrics"
-                  :lyrics-translation="newLyricsTranslation"
-                  class="col"
-                />
-              </q-tab-panel>
-              <q-tab-panel name="newDiff">
-                <div class="row">
-                  <SongLyricsView
-                    :title="newTitle"
-                    :collection-number="newCollectionNumber"
-                    :lyrics="newLyrics"
-                    :lyrics-translation="newLyricsTranslation"
-                    class="col"
-                  />
-                  <q-separator vertical color="secondary" class="q-mx-md" />
-                  <SongLyricsView
-                    :title="compareTitle"
-                    :collection-number="compareCollectionNumber"
-                    :lyrics="compareLyrics"
-                    :lyrics-translation="compareLyricsTranslation"
-                    show-diff
-                    class="col"
-                  />
-                </div>
-              </q-tab-panel>
-              <q-tab-panel name="diff">
-                <SongLyricsView
-                  :title="compareTitle"
-                  :collection-number="compareCollectionNumber"
-                  :lyrics="compareLyrics"
-                  :lyrics-translation="compareLyricsTranslation"
-                  show-diff
-                  class="col"
-                />
-              </q-tab-panel>
-              <q-tab-panel name="diffDb">
-                <div class="row">
-                  <SongLyricsView
-                    :title="compareTitle"
-                    :collection-number="compareCollectionNumber"
-                    :lyrics="compareLyrics"
-                    :lyrics-translation="compareLyricsTranslation"
-                    show-diff
-                    class="col"
-                  />
-                  <q-separator vertical color="secondary" class="q-mx-md" />
-                  <SongLyricsView
-                    :title="databaseTitle"
-                    :collection-number="databaseCollectionNumber"
-                    :lyrics="databaseLyrics"
-                    :lyrics-translation="databaseLyricsTranslation"
-                    class="col"
-                  />
-                </div>
-              </q-tab-panel>
-              <q-tab-panel name="db">
-                <SongLyricsView
-                  :title="databaseTitle"
-                  :collection-number="databaseCollectionNumber"
-                  :lyrics="databaseLyrics"
-                  :lyrics-translation="databaseLyricsTranslation"
-                  class="col"
-                />
-              </q-tab-panel>
-            </q-tab-panels>
+            <SongLyricsViews
+              :new-title="newTitle"
+              :new-collection-number="newCollectionNumber"
+              :new-lyrics="newLyrics"
+              :new-lyrics-translation="newLyricsTranslation"
+              :compare-title="compareTitle"
+              :compare-collection-number="compareCollectionNumber"
+              :compare-lyrics="compareLyrics"
+              :compare-lyrics-translation="compareLyricsTranslation"
+              :database-title="databaseTitle"
+              :database-collection-number="databaseCollectionNumber"
+              :database-lyrics="databaseLyrics"
+              :database-lyrics-translation="databaseLyricsTranslation"
+            />
           </div>
         </template>
       </q-splitter>
@@ -224,7 +160,7 @@
 <script>
 import SongItem from './SongItem.vue'
 import SongItemDatabase from './SongItemDatabase.vue'
-import SongLyricsView from './SongLyricsView.vue'
+import SongLyricsViews from './SongLyricsViews.vue'
 import { splitSong } from '../SongControl.vue'
 import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
@@ -232,7 +168,7 @@ import { Notify } from 'quasar'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
-  components: { SongItem, SongLyricsView, SongItemDatabase, PresentationSettingsDialog },
+  components: { SongItem, SongLyricsViews, SongItemDatabase, PresentationSettingsDialog },
   data () {
     return {
       userName: '',
@@ -244,7 +180,6 @@ export default {
       selected: {},
       splitterModel: 70,
       SongItemDatabaseWidth: 500,
-      lyricsTab: 'diff',
       isLoading: false,
       isSaving: false
     }
