@@ -24,6 +24,7 @@
                       hide-selected
                       menu-anchor="bottom right"
                       menu-self="top right"
+                      popup-content-style="height: 30vh;"
                       options-dense
                       :options="dbCollections"
                       @filter="loadCollectionDatabase"

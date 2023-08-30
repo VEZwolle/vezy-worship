@@ -43,22 +43,23 @@
             </template>
           </Draggable>
         </q-list>
+        <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
+          <q-fab-action
+            v-for="presentationType in presentationTypes"
+            :key="presentationType.id"
+            :color="presentationType.color"
+            :icon="presentationType.icon"
+            external-label
+            label-position="left"
+            :label="`${presentationType.name} toevoegen`"
+            @click="add(presentationType.id)"
+          />
+        </q-fab>
       </q-page>
     </q-page-container>
 
     <q-footer>
-      <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
-        <q-fab-action
-          v-for="presentationType in presentationTypes"
-          :key="presentationType.id"
-          :color="presentationType.color"
-          :icon="presentationType.icon"
-          external-label
-          label-position="left"
-          :label="`${presentationType.name} toevoegen`"
-          @click="add(presentationType.id)"
-        />
-      </q-fab>
+      <QuickSearchDatabase />
     </q-footer>
   </q-layout>
 
@@ -72,9 +73,10 @@ import presentationTypes from '../presentation-types'
 import PresentationSettingsDialog from '../presentation/PresentationSettingsDialog.vue'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
+import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'
 
 export default {
-  components: { SetlistItem, PresentationSettingsDialog, ServiceSettingsDialog, Draggable },
+  components: { SetlistItem, PresentationSettingsDialog, ServiceSettingsDialog, Draggable, QuickSearchDatabase },
   setup () {
     return {
       presentationTypes: presentationTypes.reverse()

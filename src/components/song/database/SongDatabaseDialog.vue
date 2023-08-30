@@ -12,7 +12,7 @@
           <q-input
             v-model="search"
             outlined
-            label="Zoeken"
+            label="Lied zoeken in database"
             :rules="['required']"
             debounce="500"
             @update:model-value="filterSearchResults"
@@ -29,8 +29,9 @@
         <div class="col-4 q-pl-md">
           <q-select
             v-model="dbCollection"
-            label="Collectie"
+            label="in collectie"
             outlined
+            popup-content-style="height: 30vh;"
             options-dense
             :options="dbCollections"
             @update:model-value="filterSearchResults"
@@ -54,10 +55,10 @@
             flat
             bordered
             dense
+            hide-selected-banner
             binary-state-sort
             color="secondary"
             row-key="id"
-            selection="single"
             :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at', 'actions']"
             class="virtscroll-table"
             virtual-scroll
@@ -66,7 +67,6 @@
             :loading="isLoading"
             :rows="filteredSongDatabase"
             :columns="columns"
-            @selection="changeSelected"
             @row-click="rowClickSelect"
           >
             <template #body-cell-actions="props">
@@ -113,11 +113,11 @@
           v-model="searchLyrics"
           checked-icon="check"
           color="secondary"
-          label="Zoek in liedtext"
+          label="Zoek in liedtekst"
           unchecked-icon="clear"
           @update:model-value="filterSearchResults"
         >
-          <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in text.</q-tooltip>
+          <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in tekst.</q-tooltip>
         </q-toggle>
         <q-toggle
           v-model="searchTranslation"
@@ -127,19 +127,9 @@
           unchecked-icon="clear"
           @update:model-value="filterSearchResults"
         >
-          <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in text.</q-tooltip>
+          <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
         </q-toggle>
         <q-space />
-        <q-input
-          v-model="userName"
-          outlined
-          dense
-          :label-color="userName ? '' : 'red'"
-          label="Gebruikersnaam"
-          class="q-pr-md"
-        >
-          <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
-        </q-input>
         <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong">
           <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
         </q-btn>
@@ -149,6 +139,16 @@
         <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoRemoveSong">
           <q-tooltip>Ongedaan maken bewerken database</q-tooltip>
         </q-btn>
+        <q-input
+          v-model="userName"
+          outlined
+          dense
+          :label-color="userName ? '' : 'red'"
+          label="Gebruikersnaam"
+          class="q-pl-md"
+        >
+          <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+        </q-input>
         <q-space />
         <q-btn v-if="!onlyEditor" :disable="selectedFalse" color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas het geselecteerde lied toe in de basis tab.</q-tooltip>
@@ -163,6 +163,7 @@
 </template>
 
 <script>
+import BaseSongDatabase from './BaseSongDatabase.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import presentationTypes from '../../presentation-types'
 import PresentationSettingsDialog from '../../presentation/PresentationSettingsDialog.vue'
@@ -170,6 +171,7 @@ import { Notify } from 'quasar'
 
 export default {
   components: { PresentationSettingsDialog },
+  extends: BaseSongDatabase,
   props: {
     title: String,
     collection: String,
@@ -186,25 +188,17 @@ export default {
   ],
   data () {
     return {
-      onlyEditor: false,
-      search: this.title || '',
-      searchLyrics: false,
-      searchTranslation: false,
-      dbCollection: this.collection || '',
-      dbCollections: [],
-      selected: [],
-      filteredSongDatabase: [],
       columns: [
         { name: 'id', label: '#', field: 'id', sortable: true },
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
-        { name: 'collection', label: 'Collectie', field: 'collection', sortable: true, style: 'width: 1vw;' },
-        { name: 'number', label: 'Nummer', field: 'number', sortable: true, style: 'width: 1vw;' },
+        { name: 'collection', label: 'Collectie', field: 'collection', sortable: true, style: 'width: 1vw; color: gray;' },
+        { name: 'number', label: 'Nummer', field: 'number', sortable: true, style: 'width: 1vw; color: gray;' },
         { name: 'creator', label: 'opgeslagen', field: 'creator', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'created_at', label: 'gemaakt', field: 'created_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'updated_at', label: 'upgedate', field: 'updated_at', sortable: true, style: 'width: 1vw; color: gray;', headerStyle: 'color: gray;' },
         { name: 'actions', label: '', style: 'width: 1vw;' }
       ],
-      isLoading: false,
+      onlyEditor: false,
       lyricsTab: 'text',
       editPresentation: null,
       userName: '',
@@ -217,9 +211,6 @@ export default {
     },
     selectedLyricsTranslation () {
       return this.selected[0]?.lyricstranslate.replaceAll('\n', '<br>')
-    },
-    selectedFalse () {
-      return !this.selected[0]
     },
     selectedTitle () {
       return this.selected[0]?.title || ''
@@ -255,52 +246,11 @@ export default {
     },
     rowClickSelect (e, row) {
       this.selected = [row]
-    },
-    changeSelected () {
       if (this.lyricsTab === 'text') {
         this.$refs.lyricsViewer.scrollTop = 0
       } else {
         this.$refs.lyricsViewerTranslation.scrollTop = 0
       }
-    },
-    filterSearchResults () {
-      this.isLoading = true
-      this.selected = []
-      const search = this.search.toLowerCase()
-      if (!this.dbCollection) {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(song => {
-          if (this.searchTranslation && !song.lyricstranslate) return false
-          switch (true) {
-            case song.title?.toLowerCase().includes(search):
-            case song.number?.toLowerCase().includes(search):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
-              return true
-            default:
-              return false
-          }
-        })
-      } else {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.dbCollection).filter(song => {
-          if (this.searchTranslation && !song.lyricstranslate) return false
-          switch (true) {
-            case song.title?.toLowerCase().includes(search):
-            case song.number?.toLowerCase().includes(search):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
-              return true
-            default:
-              return false
-          }
-        })
-      }
-      this.isLoading = false
-    },
-    resetSearch () {
-      this.search = ''
-      this.filterSearchResults()
-    },
-    resetCollection () {
-      this.dbCollection = ''
-      this.filterSearchResults()
     },
     submitSong () {
       this.$emit('update:title', this.selected[0]?.title)
