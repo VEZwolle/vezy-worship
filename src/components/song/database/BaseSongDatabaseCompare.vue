@@ -119,14 +119,20 @@ export default {
       this.songsTodoIndex = []
       // search database
       this.songs.forEach(song => {
-        const databaseSong = this.filterSearchSongInDatabase(song.settings).slice(0, 19) || [] // max 20 results pro song
+        const databaseSongFilter = this.filterSearchSongInDatabase(song.settings).slice(0, 99) || [] // max 99 results pro song
         const countDiff = []
+        const databaseSong = []
+
         // get diff count
-        for (let i = 0; i < databaseSong.length; i++) {
-          const textDiff = CountDiff(HtmlDiff(databaseSong[i].lyrics, song.settings.text))
-          const translationDiff = CountDiff(HtmlDiff(databaseSong[i].lyricstranslate, song.settings.translation))
-          const factor200 = textDiff.factor100 + translationDiff.factor100
-          countDiff.push({ text: textDiff, translation: translationDiff, factor200 })
+        for (let i = 0; i < databaseSongFilter.length || countDiff.length > 20; i++) { // maximaal 20 resultaten
+          const textDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyrics, song.settings.text))
+          // gebruik alleen resultaten met meer dan 10% overeenkomst in de resultaten
+          if (textDiff.factor100 > 10) {
+            const translationDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyricstranslate, song.settings.translation))
+            const factor200 = textDiff.factor100 + translationDiff.factor100
+            databaseSong.push(databaseSongFilter[i])
+            countDiff.push({ text: textDiff, translation: translationDiff, factor200 })
+          }
         }
         let j = -1 // -1 (add) if no database else index nr 0, 1 db result (replace)
         // search best result
@@ -137,7 +143,7 @@ export default {
           }
           if (countDiff[i].factor200 > countDiff[j].factor200) { j = i }
         }
-        if (countDiff[j]?.text.factor100 < 40) { j = -1 } // less than 50% similarity text, probably different song --> add
+        if (countDiff[j]?.text.factor100 < 40) { j = -1 } // less than 40% similarity text, probably different song --> add
         // if exactly
         if (countDiff[j]?.factor200 > 190) { // check if te same
           if (databaseSong[j].title === song.settings.title &&
