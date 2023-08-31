@@ -36,9 +36,31 @@
                 <q-input v-model="settings.number" outlined label="Nr" />
               </div>
               <div v-if="!editEmit" class="col-auto">
-                <q-btn color="primary" label="Uit database" icon="lyrics" class="q-mt-sm" @click.stop="importSongDb">
-                  <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
-                </q-btn>
+                <q-btn-dropdown
+                  split
+                  color="primary"
+                  label="Uit database"
+                  icon="lyrics"
+                  class="q-mt-sm"
+                  @click.stop="importSongDb"
+                >
+                  <template #label>
+                    label
+                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                  </template>
+                  <q-list>
+                    <q-item v-close-popup clickable @click="CompareWithDb">
+                      <q-item-section>
+                        <q-item-label>
+                          Vergelijk met database versie
+                          <q-tooltip>
+                            Lied vergelijken met versie uit de database
+                          </q-tooltip>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
               </div>
             </div>
           </div>
@@ -169,17 +191,19 @@
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
+  <SongDatabaseCompareDialog ref="SongDatabaseCompareDialog" />
 </template>
 
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
+import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog },
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
   extends: SongSettingsTools,
   data () {
     return {
@@ -249,6 +273,9 @@ export default {
       update(async () => {
         this.dbCollections = await this.$fsdb.getCollections(true)
       })
+    },
+    CompareWithDb () {
+      this.$refs.SongDatabaseCompareDialog.show(this.presentation)
     }
   }
 }

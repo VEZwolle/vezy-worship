@@ -88,11 +88,13 @@ export default {
     songDiffs: Object,
     songTodoIndex: Number,
     active: Boolean,
-    width: Number
+    width: Number,
+    icon: String
   },
   emits: ['click', 'setIndex'],
   computed: {
     todoIcon () {
+      if (this.icon) return this.icon
       switch (this.songTodoIndex) {
         case -3: // no add, exist in database
         case -2: return 'block' // no add
@@ -110,6 +112,9 @@ export default {
     },
     moreSongsFound () {
       if (this.songDatabases?.length > 1) return true
+      // place pulldown if not change but found.
+      if (this.songDatabases?.length === 1 && this.noDb(this.songTodoIndex)) return true
+      // change one found or non found
       return false
     },
     collectionNumberDatabase () {

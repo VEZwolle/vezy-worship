@@ -14,14 +14,14 @@
         <div class="text-primary">
           Tekst:
         </div>
-        <div :class="`lyrics${classDiff}`" v-html="lyrics" />
+        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="lyrics" />
       </div>
       <q-separator vertical class="q-mx-xs" />
       <div class="col-auto" style="max-width: 49%;">
         <div class="text-primary">
           Vertaling:
         </div>
-        <div :class="`lyrics${classDiff}`" v-html="lyricsTranslation" />
+        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="lyricsTranslation" />
       </div>
     </div>
   </div>
@@ -34,7 +34,8 @@ export default {
     collectionNumber: String,
     lyrics: String,
     lyricsTranslation: String,
-    showDiff: Boolean
+    showDiff: Boolean,
+    lyricsHeight: String // vh
   },
   computed: {
     classDiff () {
@@ -72,7 +73,6 @@ export default {
   }
 
   .lyrics {
-    height: 56vh;
     overflow-y: auto;
     overflow-x: hidden;
   }

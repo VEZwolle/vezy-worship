@@ -130,20 +130,20 @@
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
-  <SongDatabaseCompareDialog ref="SongDatabaseCompareDialog" />
+  <SetlistDatabaseCompareDialog ref="SetlistDatabaseCompareDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
-import SongDatabaseCompareDialog from '../song/database/SongDatabaseCompareDialog.vue'
+import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompareDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { Notify } from 'quasar'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SongDatabaseCompareDialog },
+  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -233,7 +233,7 @@ export default {
         })
     },
     compareSongData () {
-      this.$refs.SongDatabaseCompareDialog.show()
+      this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {
       window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')

@@ -1,10 +1,6 @@
 <template>
   <q-tabs v-model="lyricsTab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
-    <q-tab name="new" label="Nieuw" />
-    <q-tab name="newDiff" label="N + V" />
-    <q-tab name="diff" label="Verschil" />
-    <q-tab name="diffDb" label="V + D" />
-    <q-tab name="db" label="Database" />
+    <q-tab v-for="(t, i) in tabs" :key="i" :name="t.name" :label="t.label" />
   </q-tabs>
   <q-separator />
   <q-tab-panels v-model="lyricsTab" animated>
@@ -14,6 +10,7 @@
         :collection-number="newCollectionNumber"
         :lyrics="newLyrics"
         :lyrics-translation="newLyricsTranslation"
+        :lyrics-height="lyricsHeight"
         class="col"
       />
     </q-tab-panel>
@@ -24,6 +21,7 @@
           :collection-number="newCollectionNumber"
           :lyrics="newLyrics"
           :lyrics-translation="newLyricsTranslation"
+          :lyrics-height="lyricsHeight"
           class="col"
         />
         <q-separator vertical color="secondary" class="q-mx-md" />
@@ -32,6 +30,7 @@
           :collection-number="compareCollectionNumber"
           :lyrics="compareLyrics"
           :lyrics-translation="compareLyricsTranslation"
+          :lyrics-height="lyricsHeight"
           show-diff
           class="col"
         />
@@ -43,6 +42,7 @@
         :collection-number="compareCollectionNumber"
         :lyrics="compareLyrics"
         :lyrics-translation="compareLyricsTranslation"
+        :lyrics-height="lyricsHeight"
         show-diff
         class="col"
       />
@@ -54,6 +54,7 @@
           :collection-number="compareCollectionNumber"
           :lyrics="compareLyrics"
           :lyrics-translation="compareLyricsTranslation"
+          :lyrics-height="lyricsHeight"
           show-diff
           class="col"
         />
@@ -63,6 +64,7 @@
           :collection-number="databaseCollectionNumber"
           :lyrics="databaseLyrics"
           :lyrics-translation="databaseLyricsTranslation"
+          :lyrics-height="lyricsHeight"
           class="col"
         />
       </div>
@@ -73,6 +75,7 @@
         :collection-number="databaseCollectionNumber"
         :lyrics="databaseLyrics"
         :lyrics-translation="databaseLyricsTranslation"
+        :lyrics-height="lyricsHeight"
         class="col"
       />
     </q-tab-panel>
@@ -97,6 +100,8 @@ export default {
     databaseCollectionNumber: String,
     databaseLyrics: String,
     databaseLyricsTranslation: String,
+    lyricsHeight: String, // vh
+    tabs: Object,
     tab: String
   },
   data () {

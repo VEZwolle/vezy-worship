@@ -7,7 +7,7 @@
     <q-item-section>
       <q-item-label class="title row">
         <div :class="todoTextClass" class="q-pr-md" v-html="title" />
-        <q-badge v-if="collectionNumber" color="secondary">
+        <q-badge v-if="collectionNumber" :color="todoLabelColor">
           {{ collectionNumber }}
         </q-badge>
       </q-item-label>
@@ -16,7 +16,7 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side>
+    <q-item-section v-if="actions" side>
       <div class="text-grey-8 q-gutter-xs">
         <q-btn class="gt-xs" size="12px" flat dense round icon="input" @click.stop="$emit('add')">
           <q-tooltip>{{ presentationType.name }} toevoegen aan database</q-tooltip>
@@ -30,7 +30,7 @@
       </div>
     </q-item-section>
 
-    <q-menu context-menu no-focus>
+    <q-menu v-if="actions" context-menu no-focus>
       <q-list dense style="min-width: 100px">
         <q-item v-close-popup clickable @click.stop="$emit('add')">
           <q-item-section>toevoegen aan</q-item-section>
@@ -68,7 +68,8 @@ export default {
   props: {
     newSong: { type: Object, required: true },
     songTodoIndex: Number,
-    active: Boolean
+    active: Boolean,
+    actions: Boolean
   },
   emits: ['add', 'change', 'remove', 'edit'],
   computed: {
@@ -77,6 +78,13 @@ export default {
         case -2: return 'grey-4'
         case -1:
         default: return 'blue'
+      }
+    },
+    todoLabelColor () {
+      switch (this.songTodoIndex) {
+        case -2: return 'grey-4'
+        case -1:
+        default: return 'secondary'
       }
     },
     todoTextClass () {
