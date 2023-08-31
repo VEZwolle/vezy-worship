@@ -21,11 +21,11 @@
             </q-toolbar-title>
           </q-toolbar>
 
-          <div v-if="noNewSongs && !isLoading" class="row q-pa-md q-gutter-md">
+          <div v-if="noNewSongs && !isLoading" class="row q-pa-md text-h6">
             Geen nieuwe liederen gevonden om aan database toe te voegen
           </div>
 
-          <div ref="listDiff" class="row q-gutter-md">
+          <div v-show="!noNewSongs" ref="listDiff" class="row q-gutter-md">
             <q-list class="col q-pt-sm songlist">
               <div v-for="(song, index) in songs" :key="song.id" class="row">
                 <template v-if="songsTodoIndex[index] > -3">
