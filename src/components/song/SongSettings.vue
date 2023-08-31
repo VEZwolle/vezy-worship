@@ -45,7 +45,6 @@
                   @click.stop="importSongDb"
                 >
                   <template #label>
-                    label
                     <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
                   </template>
                   <q-list>

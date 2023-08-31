@@ -136,7 +136,6 @@
           @click.stop="save(false)"
         >
           <template #label>
-            label
             <q-tooltip v-if="userName">
               Geselecteerde liederen toevoegen, vervangen & opslaan in database
             </q-tooltip>
