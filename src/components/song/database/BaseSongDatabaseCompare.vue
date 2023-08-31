@@ -226,13 +226,14 @@ export default {
       // equal collection, no.  (lowercase) (wanneer ingevuld)
       const textLines = this.getTextLines(settings.text)
       const titleMatch = title?.match(/^[^([{<|\\/>}\])]*/)[0]
+      const titleCheck = titleMatch.length > 3 // minimaal 2 tekens voor check
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(song => {
           const lyrics = song.lyrics?.toLowerCase()
           switch (true) {
-            case song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === titleMatch:
-            case song.title?.toLowerCase().includes(title):
-            case title.includes(song.title?.trim().toLowerCase()):
+            case titleCheck && song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === titleMatch:
+            case titleCheck && song.title?.toLowerCase().includes(title):
+            case titleCheck && title.includes(song.title?.trim().toLowerCase()):
             case song.collection?.trim().length > 0 &&
                  song.number?.trim().length > 0 &&
                  song.collection?.trim().toLowerCase() === collection &&
