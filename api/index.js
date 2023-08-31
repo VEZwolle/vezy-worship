@@ -246,11 +246,35 @@ app.post('/api/pco', async (req, res) => {
   }
 })
 
+/**
+ * Algolia - Search
+ */
+app.post('/api/search', async (req, res) => {
+  const query = req.body.search
+
+  const algoliasearch = require('algoliasearch')
+  // Start the API client
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+  // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Search the index for...
+  // https://www.algolia.com/doc/api-reference/api-methods/search/
+  try {
+    const result = await algoliaIndex.search(query)
+    res.json(result) // data onder 'hits'
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
 const secrets = [
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL'
+  'API_URL',
+  'ALGOLIA_APP_ID',
+  'ALGOLIA_API_KEY',
+  'ALGOLIA_INDEX_NAME'
 ]
 
 exports.api = functions

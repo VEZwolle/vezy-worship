@@ -6,6 +6,7 @@
           Open database voor snel zoeken
         </q-tooltip>
       </q-btn>
+      <q-btn flat dense size="md" text-color="primary" label="Zoeken via Algolia" @click.stop="algoliasearch" />
     </template>
     <template v-else>
       <div v-show="search.length > 0" class="row">
@@ -203,6 +204,21 @@ export default {
       presentation.settings.text = props.lyrics || ''
       presentation.settings.translation = props.lyricstranslate || ''
       return presentation
+    },
+    async algoliasearch () {
+      try {
+        const result = await this.$api.post('/search', {
+          search: 'Einde'
+        })
+        console.log(result)
+        if (result.hits) {
+          console.log(result.hits)
+        }
+      } catch {
+        // error
+      } finally {
+        // gereed, stop loading
+      }
     }
   }
 }
