@@ -53,6 +53,12 @@
               <q-icon name="cancel" class="cursor-pointer" @click="dbCollection = ''" />
             </template>
           </q-select>
+          <q-separator color="secondary" class="q-my-md" />
+          <div class="text-h6">
+            Cloud Algolia database:
+          </div>
+          <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="getAlgoliaDatabase" />
+          <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale Database:
           </div>
@@ -121,6 +127,7 @@ export default {
       dbCollections: [''],
       userName: '',
       searchBaseIsLocal: true,
+      isLoading: false,
       tab: 'background'
     }
   },
@@ -183,7 +190,6 @@ export default {
         const result = await this.$api.post('/database/search', {
           getCollections: true
         })
-        console.log(result)
         if (result.facetHits) {
           const collections = []
           result.facetHits.forEach(facetHit => {
@@ -208,6 +214,19 @@ export default {
     },
     editSongDatabase () {
       this.$refs.SongDatabaseDialog.show(true)
+    },
+    async getAlgoliaDatabase () {
+      this.isLoading = true
+      const result = await this.$api.post('/database/backup', { })
+      if (result[0]?.id &&
+        result[0]?.title &&
+        result[0]?.lyrics
+      ) { // ga uit dat database klopt
+        const saved = await this.$fsdb.saveSongDatabase(true, result)
+        if (!saved) console.log('error save database')
+        // zet origineel weer terug
+        this.isLoading = false
+      }
     }
   }
 }

@@ -111,9 +111,7 @@ export default {
           textSearch: this.searchLyrics,
           collection: this.dbCollection
         })
-        console.log(result)
         if (result.hits) {
-          // console.log(result.hits)
           this.resultSongDatabase = result.hits
         } else {
           this.resultSongDatabase = []
@@ -130,9 +128,7 @@ export default {
         const result = await this.$api.post('/database/search', {
           getCollections: true
         })
-        console.log(result)
         if (result.facetHits) {
-          console.log(result.facetHits)
           const collections = []
           result.facetHits.forEach(facetHit => {
             collections.push(facetHit.value)

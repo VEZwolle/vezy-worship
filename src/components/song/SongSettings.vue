@@ -274,7 +274,6 @@ export default {
         const result = await this.$api.post('/database/search', {
           getCollections: true
         })
-        console.log(result)
         if (result.facetHits) {
           const collections = []
           result.facetHits.forEach(facetHit => {

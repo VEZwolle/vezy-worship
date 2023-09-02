@@ -258,13 +258,9 @@ app.post('/api/database/search', async (req, res) => {
   // https://support.algolia.com/hc/en-us/articles/15072471836561-Can-I-filter-by-an-attribute-value-which-is-null-or-an-empty-string-
   // const isTranslation = req.body.isTranslation || false
 
-  console.log(query)
-  console.log(textSearch)
-  console.log(collection)
-
   const algoliasearch = require('algoliasearch')
   // Start the API client
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH)
   // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Search the index for...
@@ -307,10 +303,28 @@ app.post('/api/database/search', async (req, res) => {
           hitsPerPage: 100
         })
     }
-    res.json(result) // data onder 'hits'
+
+    res.json(result) // data onder 'hits' or 'facetHit'
   } catch {
     res.status(500).json({ error: 'algolia_error' })
   }
+})
+
+app.post('/api/database/backup', async (req, res) => {
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Download all records for the index...
+  // https://www.algolia.com/doc/api-reference/api-methods/browse/
+
+  let result = []
+  algoliaIndex.browseObjects({
+    batch: batch => {
+      result = result.concat(batch)
+    }
+  }).then(() => {
+    res.json(result) // all data records
+  }).catch(() => res.status(500).json({ error: 'algolia_error' }))
 })
 
 const secrets = [
@@ -319,6 +333,7 @@ const secrets = [
   'DEEPL_API_KEY',
   'API_URL',
   'ALGOLIA_APP_ID',
+  'ALGOLIA_API_KEY_SEARCH',
   'ALGOLIA_API_KEY',
   'ALGOLIA_INDEX_NAME'
 ]

@@ -88,8 +88,8 @@ const fsdb = {
     }
   },
 
-  async saveSongDatabase (showPicker = false) {
-    if (!fsdb.localSongDatabase) {
+  async saveSongDatabase (showPicker = false, db = []) {
+    if (!fsdb.localSongDatabase && db.length === 0) {
       Notify.create({ type: 'negative', message: 'Geen database gevonden voor opslaan.' })
       return false
     }
@@ -110,7 +110,7 @@ const fsdb = {
     const zipWriter = new zip.ZipWriter(blobWriter)
 
     // Add database data to zip
-    const songDatabase = JSON.stringify(fsdb.localSongDatabase)
+    const songDatabase = db.length > 0 ? JSON.stringify(db) : JSON.stringify(fsdb.localSongDatabase)
     await zipWriter.add('songdatabase.json', new zip.TextReader(songDatabase))
 
     const blob = await zipWriter.close()
