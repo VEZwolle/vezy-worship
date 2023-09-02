@@ -3,13 +3,13 @@
 export default {
   data () {
     return {
-      search: this.title || '',
+      searchInput: this.title || '',
       searchLyrics: false,
       searchTranslation: false,
       dbCollection: this.collection || '',
-      dbCollections: [],
       selected: [],
-      filteredSongDatabase: [],
+      resultSongDatabase: [],
+      noLocalDatabase: true,
       isLoading: false
     }
   },
@@ -19,29 +19,76 @@ export default {
     }
   },
   methods: {
-    filterSearchResults () {
+    async toggleDatabase () {
+      // reset
+      this.$store.dbCollections = ['']
+      this.resultSongDatabase = []
+      this.noLocalDatabase = true
+      // open database
+      if (this.$store.searchBaseIsLocal) {
+        await this.openLocalDatabase()
+      } else {
+        // algolia --> no load needed.
+      }
+      // search input
+      this.searchResults()
+    },
+    searchResults () {
+      if (this.$store.searchBaseIsLocal) return this.localSearchResults()
+      this.algoliaSearch()
+    },
+    loadCollections () {
+      if (this.$store.dbCollections.length > 1) return
+      if (this.$store.searchBaseIsLocal) return this.getLocalCollections()
+      this.algoliaCollections()
+    },
+    resetSearch () {
+      this.searchInput = ''
+      this.searchResults()
+    },
+    resetCollection () {
+      this.dbCollection = ''
+      this.searchResults()
+    },
+    async openLocalDatabase () {
+      this.isLoading = true
+      if (!this.$fsdb.localSongDatabase) {
+        if (!(await this.$fsdb.openSongDatabase())) {
+          // error open saved location, open new
+          if (!(await this.$fsdb.openSongDatabase(true))) {
+            this.noLocalDatabase = true
+            return
+          }
+        }
+      }
+      this.noLocalDatabase = false
+      this.searchResults()
+      this.isLoading = false
+    },
+    localSearchResults () {
+      if (this.noLocalDatabase) return this.openLocalDatabase()
       this.isLoading = true
       this.selected = []
-      const search = this.search.toLowerCase()
+      const searchInput = this.searchInput.toLowerCase()
       if (!this.dbCollection) {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(song => {
+        this.resultSongDatabase = this.$fsdb.localSongDatabase.filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(search):
-            case song.number?.toLowerCase().includes(search):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
+            case song.title?.toLowerCase().includes(searchInput):
+            case song.number?.toLowerCase().includes(searchInput):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(searchInput)):
               return true
             default:
               return false
           }
         })
       } else {
-        this.filteredSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.dbCollection).filter(song => {
+        this.resultSongDatabase = this.$fsdb.localSongDatabase.filter(songcol => songcol.collection === this.dbCollection).filter(song => {
           if (this.searchTranslation && !song.lyricstranslate) return false
           switch (true) {
-            case song.title?.toLowerCase().includes(search):
-            case song.number?.toLowerCase().includes(search):
-            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(search)):
+            case song.title?.toLowerCase().includes(searchInput):
+            case song.number?.toLowerCase().includes(searchInput):
+            case (this.searchLyrics && song.lyrics?.toLowerCase().includes(searchInput)):
               return true
             default:
               return false
@@ -50,13 +97,56 @@ export default {
       }
       this.isLoading = false
     },
-    resetSearch () {
-      this.search = ''
-      this.filterSearchResults()
+    async getLocalCollections () {
+      if (this.noLocalDatabase) return this.openLocalDatabase()
+      this.$store.dbCollections = await this.$fsdb.getCollections()
     },
-    resetCollection () {
-      this.dbCollection = ''
-      this.filterSearchResults()
+    async algoliaSearch () {
+      if (!this.searchInput) return
+      this.isLoading = true
+      this.selected = []
+      try {
+        const result = await this.$api.post('/database/search', {
+          search: this.searchInput,
+          textSearch: this.searchLyrics,
+          collection: this.dbCollection
+        })
+        console.log(result)
+        if (result.hits) {
+          // console.log(result.hits)
+          this.resultSongDatabase = result.hits
+        } else {
+          this.resultSongDatabase = []
+        }
+      } catch {
+        // error
+      } finally {
+        // gereed, stop loading
+      }
+      this.isLoading = false
+    },
+    async algoliaCollections () {
+      try {
+        const result = await this.$api.post('/database/search', {
+          getCollections: true
+        })
+        console.log(result)
+        if (result.facetHits) {
+          console.log(result.facetHits)
+          const collections = []
+          result.facetHits.forEach(facetHit => {
+            collections.push(facetHit.value)
+          })
+          collections.push('')
+          this.$store.dbCollections = collections
+        } else {
+          this.$store.dbCollections = ['']
+        }
+      } catch {
+        // error
+      } finally {
+        // gereed, stop loading
+      }
     }
   }
 }

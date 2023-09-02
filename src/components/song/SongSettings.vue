@@ -26,8 +26,9 @@
                       menu-self="top right"
                       popup-content-style="height: 30vh;"
                       options-dense
-                      :options="dbCollections"
-                      @filter="loadCollectionDatabase"
+                      :options="$store.dbCollections"
+                      @click="loadCollectionDatabase"
+                      @popup-show="loadCollectionDatabase"
                     />
                   </template>
                 </q-input>
@@ -207,7 +208,6 @@ export default {
   data () {
     return {
       tab: 'text',
-      dbCollections: [],
       isTranslating: false,
       ignoreInput: null
     }
@@ -264,14 +264,32 @@ export default {
     resize (input) {
       return () => this.syncInputs(input, 'style.height')
     },
-    loadCollectionDatabase (val, update, abort) {
-      if (this.dbCollections.length > 0) { // already loaded
-        update()
+    async loadCollectionDatabase () {
+      if (this.$store.searchBaseIsLocal) {
+        this.$store.dbCollections = await this.$fsdb.getCollections(true)
+        this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      update(async () => {
-        this.dbCollections = await this.$fsdb.getCollections(true)
-      })
+      try {
+        const result = await this.$api.post('/database/search', {
+          getCollections: true
+        })
+        console.log(result)
+        if (result.facetHits) {
+          const collections = []
+          result.facetHits.forEach(facetHit => {
+            collections.push(facetHit.value)
+          })
+          collections.push('')
+          this.$store.dbCollections = collections
+        } else {
+          this.$store.dbCollections = ['']
+        }
+      } catch {
+        // error
+      } finally {
+        // gereed, stop loading
+      }
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)

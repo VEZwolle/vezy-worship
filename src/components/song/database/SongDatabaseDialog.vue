@@ -8,20 +8,32 @@
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
       <div class="row q-px-md q-pt-md">
+        <div class="col-auto q-pt-sm">
+          <q-toggle
+            v-model="$store.searchBaseIsLocal"
+            checked-icon="lyrics"
+            unchecked-icon="cloud"
+            color="primary"
+            size="80px"
+            dense
+            @update:model-value="toggleDatabase"
+          >
+            <q-tooltip>cloud of locale database</q-tooltip>
+          </q-toggle>
+        </div>
         <div class="col">
           <q-input
-            v-model="search"
+            v-model="searchInput"
             outlined
             label="Lied zoeken in database"
             :rules="['required']"
             debounce="500"
-            @update:model-value="filterSearchResults"
-            @change="filterSearchResults"
+            @update:model-value="searchResults"
           >
             <template #prepend>
               <q-icon name="lyrics" />
             </template>
-            <template v-if="search" #append>
+            <template v-if="searchInput" #append>
               <q-icon name="cancel" class="cursor-pointer" @click="resetSearch" />
             </template>
           </q-input>
@@ -33,8 +45,10 @@
             outlined
             popup-content-style="height: 30vh;"
             options-dense
-            :options="dbCollections"
-            @update:model-value="filterSearchResults"
+            :options="$store.dbCollections"
+            @click="loadCollections"
+            @popup-show="loadCollections"
+            @update:model-value="searchResults"
           >
             <template #prepend>
               <q-icon name="book" />
@@ -50,8 +64,8 @@
           <q-table
             v-model:selected="selected"
             title="Zoek resultaten"
-            no-data-label="Geen resultaten gevonden"
-            no-results-label="Geen resultaten gevonden"
+            :no-data-label="tableLabel"
+            :no-results-label="tableLabel"
             flat
             bordered
             dense
@@ -59,13 +73,13 @@
             binary-state-sort
             color="secondary"
             row-key="id"
-            :visible-columns="['title', 'collection', 'number', 'creator', 'updated_at', 'actions']"
+            :visible-columns="visibleColumns"
             class="virtscroll-table"
             virtual-scroll
             :rows-per-page-options="[0]"
             :virtual-scroll-sticky-size-start="48"
             :loading="isLoading"
-            :rows="filteredSongDatabase"
+            :rows="resultSongDatabase"
             :columns="columns"
             @row-click="rowClickSelect"
           >
@@ -78,7 +92,7 @@
                         Bewerk lied in database
                       </q-tooltip>
                     </q-btn>
-                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeSong(props.row.id)">
+                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeLocalSong(props.row.id)">
                       <q-tooltip anchor="top middle" self="center middle">
                         verwijderen uit database
                       </q-tooltip>
@@ -115,40 +129,42 @@
           color="secondary"
           label="Zoek in liedtekst"
           unchecked-icon="clear"
-          @update:model-value="filterSearchResults"
+          @update:model-value="searchResults"
         >
           <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in tekst.</q-tooltip>
         </q-toggle>
-        <q-toggle
-          v-model="searchTranslation"
-          checked-icon="check"
-          color="secondary"
-          label="Zoek alleen liederen met vertaling"
-          unchecked-icon="clear"
-          @update:model-value="filterSearchResults"
-        >
-          <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
-        </q-toggle>
-        <q-space />
-        <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong(selected[0])">
-          <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
-        </q-btn>
-        <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeSong(selected[0]?.id)">
-          <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
-        </q-btn>
-        <q-btn :disable="backupSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoRemoveSong">
-          <q-tooltip>Ongedaan maken bewerken database</q-tooltip>
-        </q-btn>
-        <q-input
-          v-model="userName"
-          outlined
-          dense
-          :label-color="userName ? '' : 'red'"
-          label="Gebruikersnaam"
-          class="q-pl-md"
-        >
-          <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
-        </q-input>
+        <template v-if="$store.searchBaseIsLocal">
+          <q-toggle
+            v-model="searchTranslation"
+            checked-icon="check"
+            color="secondary"
+            label="Zoek alleen liederen met vertaling"
+            unchecked-icon="clear"
+            @update:model-value="searchResults"
+          >
+            <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
+          </q-toggle>
+          <q-space />
+          <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong(selected[0])">
+            <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
+          </q-btn>
+          <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeLocalSong(selected[0]?.id)">
+            <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
+          </q-btn>
+          <q-btn :disable="backupLocalSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoremoveLocalSong">
+            <q-tooltip>Ongedaan maken bewerken database</q-tooltip>
+          </q-btn>
+          <q-input
+            v-model="userName"
+            outlined
+            dense
+            :label-color="userName ? '' : 'red'"
+            label="Gebruikersnaam"
+            class="q-pl-md"
+          >
+            <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+          </q-input>
+        </template>
         <q-space />
         <q-btn v-if="!onlyEditor" :disable="selectedFalse" color="secondary" label="Toepassen" @click.stop="submitSong">
           <q-tooltip>Pas het geselecteerde lied toe in de basis tab.</q-tooltip>
@@ -200,7 +216,7 @@ export default {
       lyricsTab: 'text',
       editPresentation: null,
       userName: '',
-      backupSongDatabase: null
+      backupLocalSongDatabase: null
     }
   },
   computed: {
@@ -213,31 +229,30 @@ export default {
     selectedTitle () {
       return this.selected[0]?.title || ''
     },
-    backupSongDatabaseExist () {
-      return !this.backupSongDatabase
+    backupLocalSongDatabaseExist () {
+      return !this.backupLocalSongDatabase
+    },
+    tableLabel () {
+      if (this.$store.searchBaseIsLocal ||
+        (!this.$store.searchBaseIsLocal && this.searchInput.length > 0)
+      ) return 'Geen resultaten gevonden'
+      return 'Geef eerst een zoekopdracht voor resultaten'
+    },
+    visibleColumns () {
+      if (this.$store.searchBaseIsLocal) return ['title', 'collection', 'number', 'creator', 'updated_at', 'actions']
+      return ['title', 'collection', 'number', 'creator', 'updated_at']
     }
   },
   methods: {
     async show (onlyEditor = false) {
       this.onlyEditor = onlyEditor
-      this.isLoading = true
-      this.search = this.title || ''
+      this.searchInput = this.title || ''
       this.dbCollection = this.collection || ''
       if (!this.dbCollection && !this.title) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
-      if (!this.$fsdb.localSongDatabase) {
-        if (!(await this.$fsdb.openSongDatabase())) {
-          // error open saved location, open new
-          if (!(await this.$fsdb.openSongDatabase(true))) {
-            this.hide()
-            return
-          }
-        }
-      }
-      this.dbCollections = await this.$fsdb.getCollections()
-      this.filterSearchResults()
+      await this.openLocalDatabase()
+      if (this.noLocalDatabase) return this.hide()
       this.userName = localStorage.getItem('database.userName') || ''
-      this.isLoading = false
     },
     hide () {
       this.$refs.dialogDatabase.hide()
@@ -259,31 +274,31 @@ export default {
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
-    async removeSong (id) {
-      if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+    async removeLocalSong (id) {
+      if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       let result = await this.$fsdb.removeFromDatabase(id)
       if (!result) { return }
       // save database
       result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
       if (!result) {
-        this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase)
+        this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
         return
       }
-      this.filterSearchResults()
+      this.searchResults()
     },
-    async undoRemoveSong () {
-      if (this.backupSongDatabase) {
+    async undoremoveLocalSong () {
+      if (this.backupLocalSongDatabase) {
         const reduSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-        this.$fsdb.localSongDatabase = cloneDeep(this.backupSongDatabase)
+        this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
         const result = await this.$fsdb.saveSongDatabase()
         if (!result) {
           this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
         }
-        this.filterSearchResults()
+        this.searchResults()
       }
     },
     startEditSong (props) {
-      if (!this.backupSongDatabase) this.backupSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+      if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       if (!this.userName) {
         return Notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!', position: 'top' })
       }
@@ -315,7 +330,7 @@ export default {
       // save database
       result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
       if (!result) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
-      this.filterSearchResults()
+      this.searchResults()
     }
   }
 }

@@ -249,8 +249,18 @@ app.post('/api/pco', async (req, res) => {
 /**
  * Algolia - Search
  */
-app.post('/api/search', async (req, res) => {
+app.post('/api/database/search', async (req, res) => {
+  const getCollections = req.body.getCollections || false
   const query = req.body.search
+  const textSearch = req.body.textSearch || false
+  const collection = req.body.collection || ''
+  // Niet (goed) mogelijk om op "" te filteren [controle op met/zonder vertaling weg laten] --> moet extra atribuut of tag in database zetten; nu weg laten
+  // https://support.algolia.com/hc/en-us/articles/15072471836561-Can-I-filter-by-an-attribute-value-which-is-null-or-an-empty-string-
+  // const isTranslation = req.body.isTranslation || false
+
+  console.log(query)
+  console.log(textSearch)
+  console.log(collection)
 
   const algoliasearch = require('algoliasearch')
   // Start the API client
@@ -260,7 +270,43 @@ app.post('/api/search', async (req, res) => {
   // Search the index for...
   // https://www.algolia.com/doc/api-reference/api-methods/search/
   try {
-    const result = await algoliaIndex.search(query)
+    let result = null
+    switch (true) {
+      case getCollections:
+        result = await algoliaIndex.searchForFacetValues('collection')
+        break
+      case !textSearch && collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ],
+          filters: `collection:${collection}`
+        })
+        break
+      case !textSearch:
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ]
+        })
+        break
+      case collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          filters: `collection:${collection}`
+        })
+        break
+      default: // search in 'title', 'collection', 'number', 'lyrics'
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100
+        })
+    }
     res.json(result) // data onder 'hits'
   } catch {
     res.status(500).json({ error: 'algolia_error' })
