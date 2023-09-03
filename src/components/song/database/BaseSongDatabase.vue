@@ -1,5 +1,5 @@
 <script>
-import { Notify } from 'quasar'
+import { getAlgoliaSearch, getAlgoliaCollections } from './algolia.js'
 
 export default {
   data () {
@@ -106,48 +106,11 @@ export default {
       if (!this.searchInput) return
       this.isLoading = true
       this.selected = []
-      try {
-        const result = await this.$api.post('/database/search', {
-          search: this.searchInput,
-          textSearch: this.searchLyrics,
-          collection: this.dbCollection
-        })
-        if (result.hits) {
-          this.resultSongDatabase = result.hits
-        } else {
-          this.resultSongDatabase = []
-          console.log(result)
-          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-        }
-      } catch {
-        // error
-      } finally {
-        // gereed, stop loading
-      }
+      this.resultSongDatabase = await getAlgoliaSearch(this.$api, this.searchInput, this.searchLyrics, this.dbCollection)
       this.isLoading = false
     },
     async algoliaCollections () {
-      try {
-        const result = await this.$api.post('/database/search', {
-          getCollections: true
-        })
-        if (result.facetHits) {
-          const collections = []
-          result.facetHits.forEach(facetHit => {
-            collections.push(facetHit.value)
-          })
-          collections.push('')
-          this.$store.dbCollections = collections
-        } else {
-          this.$store.dbCollections = ['']
-          console.log(result)
-          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-        }
-      } catch {
-        // error
-      } finally {
-        // gereed, stop loading
-      }
+      this.$store.dbCollections = await getAlgoliaCollections(this.$api)
     }
   }
 }

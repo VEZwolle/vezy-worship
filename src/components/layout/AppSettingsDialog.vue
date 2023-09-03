@@ -57,7 +57,7 @@
           <div class="text-h6">
             Cloud Algolia database:
           </div>
-          <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="getAlgoliaDatabase" />
+          <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale Database:
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { Notify } from 'quasar'
+import { getAlgoliaDatabase, getAlgoliaCollections } from '../song/database/algolia.js'
 
 export default {
   data () {
@@ -188,27 +188,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      try {
-        const result = await this.$api.post('/database/search', {
-          getCollections: true
-        })
-        if (result.facetHits) {
-          const collections = []
-          result.facetHits.forEach(facetHit => {
-            collections.push(facetHit.value)
-          })
-          collections.push('')
-          this.dbCollections = collections
-        } else {
-          this.dbCollections = ['']
-          console.log(result)
-          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-        }
-      } catch {
-        // error
-      } finally {
-        // gereed, stop loading
-      }
+      this.dbCollections = await getAlgoliaCollections(this.$api)
     },
     async newSongDatabase () {
       await this.$fsdb.newEmptyDatabase()
@@ -220,21 +200,10 @@ export default {
       this.$store.searchBaseIsLocal = true
       this.$refs.SongDatabaseDialog.show(true)
     },
-    async getAlgoliaDatabase () {
+    async saveAlgoliaDatabase () {
       this.isLoading = true
-      const result = await this.$api.post('/database/backup', { })
-      if (result[0]?.id &&
-        result[0]?.title &&
-        result[0]?.lyrics
-      ) { // ga uit dat database klopt
-        const saved = await this.$fsdb.saveSongDatabase(true, result)
-        if (!saved) console.log('error save database')
-        // zet origineel weer terug
-        this.isLoading = false
-      } else {
-        console.log(result)
-        if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-      }
+      await getAlgoliaDatabase(this.$api, this.$fsdb)
+      this.isLoading = false
     }
   }
 }

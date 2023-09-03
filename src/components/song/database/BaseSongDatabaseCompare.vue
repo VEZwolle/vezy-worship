@@ -1,7 +1,7 @@
 <script>
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
-import { Notify } from 'quasar'
+import { getAlgoliaSearch } from './algolia.js'
 
 export default {
   data () {
@@ -281,22 +281,9 @@ export default {
 
       let resultSongDatabase = []
       for (let i = 0; i < searchInputs.length; i++) {
-        try {
-          const result = await this.$api.post('/database/search', {
-            search: searchInputs[i],
-            textSearch: i >= noTextSeach,
-            collection: ''
-          })
-          if (result.hits) {
-            resultSongDatabase.push(result.hits)
-          } else {
-            console.log(result)
-            if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-          }
-        } catch {
-          // error
-        } finally {
-          // gereed, stop loading
+        const result = await getAlgoliaSearch(this.$api, searchInputs[i], i >= noTextSeach, '')
+        if (result.hits) {
+          resultSongDatabase.push(result.hits)
         }
       }
       [resultSongDatabase] = [...new Map(resultSongDatabase.map((m) => [m.id, m])).values()] // unique

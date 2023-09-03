@@ -209,9 +209,9 @@ import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
-import { Notify } from 'quasar'
 
 export default {
   components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
@@ -281,27 +281,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      try {
-        const result = await this.$api.post('/database/search', {
-          getCollections: true
-        })
-        if (result.facetHits) {
-          const collections = []
-          result.facetHits.forEach(facetHit => {
-            collections.push(facetHit.value)
-          })
-          collections.push('')
-          this.$store.dbCollections = collections
-        } else {
-          this.$store.dbCollections = ['']
-          console.log(result)
-          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
-        }
-      } catch {
-        // error
-      } finally {
-        // gereed, stop loading
-      }
+      this.$store.dbCollections = await getAlgoliaCollections(this.$api)
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
