@@ -3,7 +3,8 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>
-          <span>Liedtekst vergelijken met lokale database</span>
+          <span>Liedtekst vergelijken met {{ $store.searchBaseIsLocal ? 'lokale' : 'cloud' }} database</span>
+          <q-inner-loading :showing="isLoading" />
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
@@ -58,7 +59,7 @@
       <q-separator />
       <q-card-actions align="right">
         <div v-if="selectedId" class="text-grey-5">
-          Overeenkomst: text: {{ countDiff }} | vertaling: {{ countDiffTrans }}
+          Overeenkomst: text: {{ countDifftext }} | vertaling: {{ countDiffTrans }}
         </div>
 
         <q-space />
@@ -106,7 +107,7 @@ export default {
       }
       this.$nextTick(() => { this.setListDiffWidth() })
       // open database
-      if (!this.$fsdb.localSongDatabase) {
+      if (this.$store.searchBaseIsLocal && !this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
           // geen database geselecteerd of error bij opgeslagen versie
           Notify.create({ type: 'negative', message: 'geen database gevonden', position: 'top' })
@@ -114,9 +115,9 @@ export default {
           return
         }
       }
-      // database is open
+      // database is open or cloud
       // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
-      this.searchSongs()
+      await this.searchSongs()
       this.select(this.presentation)
       if (this.noNewSongs) {
         Notify.create({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })

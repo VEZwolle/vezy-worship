@@ -3,7 +3,7 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>
-          <span>Liedtekst vergelijken/toevoegen met lokale database</span>
+          <span>Liedtekst vergelijken/toevoegen met {{ $store.searchBaseIsLocal ? 'lokale' : 'cloud' }} database</span>
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
@@ -65,7 +65,7 @@
             <q-toolbar-title class="text-subtitle2 row">
               <template v-if="selectedId">
                 <div>
-                  text: {{ countDiff }}
+                  text: {{ countDifftext }}
                 </div>
                 <q-space />
                 <div>
@@ -127,6 +127,7 @@
 
         <q-space />
         <q-btn-dropdown
+          v-if="$store.searchBaseIsLocal"
           color="secondary"
           split
           icon="save"
@@ -202,7 +203,7 @@ export default {
       }
       this.$nextTick(() => { this.setListDiffWidth() })
       // open database
-      if (!this.$fsdb.localSongDatabase) {
+      if (this.$store.searchBaseIsLocal && !this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
           // geen database geselecteerd of error bij opgeslagen versie
           // nieuwe maken
@@ -213,7 +214,7 @@ export default {
       }
       // database is open of lege gemaakt
       // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
-      this.searchSongs()
+      await this.searchSongs()
       this.isLoading = false
     },
     hide () {

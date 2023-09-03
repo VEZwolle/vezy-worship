@@ -260,7 +260,7 @@ app.post('/api/database/search', async (req, res) => {
 
   const algoliasearch = require('algoliasearch')
   // Start the API client
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
   // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Search the index for...
@@ -305,6 +305,11 @@ app.post('/api/database/search', async (req, res) => {
     }
 
     res.json(result) // data onder 'hits' or 'facetHit'
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
   } catch {
     res.status(500).json({ error: 'algolia_error' })
   }
@@ -333,8 +338,8 @@ const secrets = [
   'DEEPL_API_KEY',
   'API_URL',
   'ALGOLIA_APP_ID',
-  'ALGOLIA_API_KEY_SEARCH',
   'ALGOLIA_API_KEY',
+  'ALGOLIA_API_KEY_EDIT',
   'ALGOLIA_INDEX_NAME'
 ]
 

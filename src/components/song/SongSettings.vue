@@ -37,6 +37,16 @@
                 <q-input v-model="settings.number" outlined label="Nr" />
               </div>
               <div v-if="!editEmit" class="col-auto">
+                <q-toggle
+                  v-model="$store.searchBaseIsLocal"
+                  checked-icon="lyrics"
+                  unchecked-icon="cloud"
+                  color="primary"
+                  dense
+                  @update:model-value="$store.dbCollections = ['']"
+                >
+                  <q-tooltip>cloud of locale database</q-tooltip>
+                </q-toggle>
                 <q-btn-dropdown
                   split
                   color="primary"
@@ -201,6 +211,7 @@ import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import get from 'lodash/get'
 import set from 'lodash/set'
+import { Notify } from 'quasar'
 
 export default {
   components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
@@ -283,6 +294,8 @@ export default {
           this.$store.dbCollections = collections
         } else {
           this.$store.dbCollections = ['']
+          console.log(result)
+          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
         }
       } catch {
         // error

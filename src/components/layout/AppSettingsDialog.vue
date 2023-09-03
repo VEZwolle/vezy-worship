@@ -73,7 +73,7 @@
           <q-input v-model="userName" dense outlined label="Gebruikersnaam">
             <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
           </q-input>
-          <q-btn label="Database bewerken" color="primary" class="q-mt-sm" @click="editSongDatabase" />
+          <q-btn label="Lokale database bewerken" color="primary" class="q-mt-sm" @click="editSongLocalDatabase" />
         </q-tab-panel>
 
         <q-tab-panel name="autoupdate">
@@ -112,6 +112,8 @@
 </template>
 
 <script>
+import { Notify } from 'quasar'
+
 export default {
   data () {
     return {
@@ -199,6 +201,8 @@ export default {
           this.dbCollections = collections
         } else {
           this.dbCollections = ['']
+          console.log(result)
+          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
         }
       } catch {
         // error
@@ -212,7 +216,8 @@ export default {
       this.dbCollections = ['']
       this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
     },
-    editSongDatabase () {
+    editSongLocalDatabase () {
+      this.$store.searchBaseIsLocal = true
       this.$refs.SongDatabaseDialog.show(true)
     },
     async getAlgoliaDatabase () {
@@ -226,6 +231,9 @@ export default {
         if (!saved) console.log('error save database')
         // zet origineel weer terug
         this.isLoading = false
+      } else {
+        console.log(result)
+        if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       }
     }
   }

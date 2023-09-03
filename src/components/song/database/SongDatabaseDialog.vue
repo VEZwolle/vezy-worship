@@ -3,7 +3,7 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>
-          <span>Liedtekst uit lokale database inladen</span>
+          <span>Liedtekst uit {{ $store.searchBaseIsLocal ? 'lokale' : 'cloud' }} database inladen</span>
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
@@ -250,8 +250,10 @@ export default {
       this.dbCollection = this.collection || ''
       if (!this.dbCollection && !this.title) this.dbCollection = localStorage.getItem('database.collection') || ''
       this.$refs.dialogDatabase.show()
-      await this.openLocalDatabase()
-      if (this.noLocalDatabase) return this.hide()
+      if (this.$store.searchBaseIsLocal) {
+        await this.openLocalDatabase()
+        if (this.noLocalDatabase) return this.hide()
+      }
       this.userName = localStorage.getItem('database.userName') || ''
     },
     hide () {

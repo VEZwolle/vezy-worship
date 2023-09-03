@@ -1,4 +1,5 @@
 <script>
+import { Notify } from 'quasar'
 
 export default {
   data () {
@@ -115,6 +116,8 @@ export default {
           this.resultSongDatabase = result.hits
         } else {
           this.resultSongDatabase = []
+          console.log(result)
+          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
         }
       } catch {
         // error
@@ -137,6 +140,8 @@ export default {
           this.$store.dbCollections = collections
         } else {
           this.$store.dbCollections = ['']
+          console.log(result)
+          if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
         }
       } catch {
         // error

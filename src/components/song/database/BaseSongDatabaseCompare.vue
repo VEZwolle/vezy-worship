@@ -1,6 +1,7 @@
 <script>
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
+import { Notify } from 'quasar'
 
 export default {
   data () {
@@ -70,7 +71,7 @@ export default {
     compareLyrics () {
       return HtmlDiff(this.databaseLyrics, this.newLyrics)
     },
-    countDiff () {
+    countDifftext () {
       const diff = CountDiff(this.compareLyrics)
       return `+${diff.ins} -${diff.del} (${diff.factor100.toFixed(0)}%)`
     },
@@ -112,45 +113,51 @@ export default {
       if (this.songsSearchCountDiff[index][j]?.text.factor100 < factor) { j = -1 } // less than 40%(factor) similarity text, probably different song --> add
       this.songsTodoIndex[index] = j
     },
-    searchSongs () {
+    async searchSongs () {
       // reset results
       this.songsSearchResults = []
       this.songsSearchCountDiff = []
       this.songsTodoIndex = []
       // search database
-      this.songs.forEach(song => {
-        const databaseSongFilter = this.filterSearchSongInDatabase(song.settings).slice(0, 99) || [] // max 99 results pro song
-        const countDiff = []
+      for (let k = 0; k < this.songs.length; k++) {
+        let databaseSongFilter = []
+        if (this.$store.searchBaseIsLocal) {
+          databaseSongFilter = this.filterSearchSongInLocalDatabase(this.songs[k].settings).slice(0, 99) || [] // max 99 results pro song
+        } else {
+          databaseSongFilter = await this.SearchSongInAlgoliaDatabase(this.songs[k].settings)
+          databaseSongFilter = databaseSongFilter.slice(0, 99) || []
+        }
+        const countDiffs = []
         const databaseSong = []
 
         // get diff count
-        for (let i = 0; i < databaseSongFilter.length || countDiff.length > 20; i++) { // maximaal 20 resultaten
-          const textDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyrics, song.settings.text))
+        for (let i = 0; i < databaseSongFilter.length || countDiffs.length > 20; i++) { // maximaal 20 resultaten
+          const textDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyrics, this.songs[k].settings.text))
           // gebruik alleen resultaten met meer dan 10% overeenkomst in de resultaten
           if (textDiff.factor100 > 10) {
-            const translationDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyricstranslate, song.settings.translation))
+            const translationDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyricstranslate, this.songs[k].settings.translation))
             const factor200 = textDiff.factor100 + translationDiff.factor100
             databaseSong.push(databaseSongFilter[i])
-            countDiff.push({ text: textDiff, translation: translationDiff, factor200 })
+            countDiffs.push({ text: textDiff, translation: translationDiff, factor200 })
           }
         }
         let j = -1 // -1 (add) if no database else index nr 0, 1 db result (replace)
         // search best result
-        for (let i = 0; i < countDiff.length; i++) {
+        for (let i = 0; i < countDiffs.length; i++) {
           if (i === 0) {
             j = i
             continue
           }
-          if (countDiff[i].factor200 > countDiff[j].factor200) { j = i }
+          if (countDiffs[i].factor200 > countDiffs[j].factor200) { j = i }
         }
-        if (countDiff[j]?.text.factor100 < 40) { j = -1 } // less than 40% similarity text, probably different song --> add
+        if (countDiffs[j]?.text.factor100 < 40) { j = -1 } // less than 40% similarity text, probably different song --> add
         // if exactly
-        if (countDiff[j]?.factor200 > 190) { // check if te same
-          if (databaseSong[j].title === song.settings.title &&
-          databaseSong[j].collection === song.settings.collection &&
-          databaseSong[j].number === song.settings.number &&
-          databaseSong[j].lyrics === song.settings.text &&
-          databaseSong[j].lyricstranslate === song.settings.translation
+        if (countDiffs[j]?.factor200 > 190) { // check if te same
+          if (databaseSong[j].title === this.songs[k].settings.title &&
+          databaseSong[j].collection === this.songs[k].settings.collection &&
+          databaseSong[j].number === this.songs[k].settings.number &&
+          databaseSong[j].lyrics === this.songs[k].settings.text &&
+          databaseSong[j].lyricstranslate === this.songs[k].settings.translation
           ) {
             j = -3 // exist in database --> no add
           } else {
@@ -161,9 +168,9 @@ export default {
         }
         // add result
         this.songsSearchResults.push(databaseSong)
-        this.songsSearchCountDiff.push(countDiff)
+        this.songsSearchCountDiff.push(countDiffs)
         this.songsTodoIndex.push(j)
-      })
+      }
     },
     getTextLines (lyrics) {
       // return 2 lines off te lyrics with more ten 8 char
@@ -181,7 +188,7 @@ export default {
       }
       return lines
     },
-    filterSearchSongInDatabase (settings) {
+    filterSearchSongInLocalDatabase (settings) {
       // exactly the same
       let filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(songTitle => songTitle.title === settings.title)
@@ -232,7 +239,7 @@ export default {
       // equal collection, no.  (lowercase) (wanneer ingevuld)
       const textLines = this.getTextLines(settings.text)
       const titleMatch = title?.match(/^[^([{<|\\/>}\])]*/)[0]
-      const titleCheck = titleMatch.length > 3 // minimaal 2 tekens voor check
+      const titleCheck = titleMatch.length > 3 && titleMatch !== title // minimaal 2 tekens voor check
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(song => {
           const lyrics = song.lyrics?.toLowerCase()
@@ -240,10 +247,6 @@ export default {
             case titleCheck && song.title?.match(/^[^([{<|\\/>}\])]*/)[0].trim().toLowerCase() === titleMatch:
             case titleCheck && song.title?.toLowerCase().includes(title):
             case titleCheck && title.includes(song.title?.trim().toLowerCase()):
-            case song.collection?.trim().length > 0 &&
-                 song.number?.trim().length > 0 &&
-                 song.collection?.trim().toLowerCase() === collection &&
-                 song.number?.trim().toLowerCase() === number:
             case textLines.length > 0 && lyrics.includes(textLines[0]):
             case textLines.length > 1 && lyrics.includes(textLines[1]):
               return true
@@ -255,6 +258,49 @@ export default {
 
       // no match --> empty
       return filteredSongDatabase
+    },
+    async SearchSongInAlgoliaDatabase (settings) {
+      const searchInputs = []
+
+      const title = settings.title?.trim()
+      if (title.length > 3) searchInputs.push(title)
+      const titleMatch = title?.match(/^[^([{<|\\/>}\])]*/)[0]
+      if (titleMatch.length > 3 && titleMatch !== title) searchInputs.push(titleMatch)
+
+      const collection = settings.collection?.trim()
+      const number = settings.number?.trim()
+      if (/^[0-9]+$/.test(number) && collection.length > 0) searchInputs.push(`${collection} ${number}`)
+
+      const noTextSeach = searchInputs.length
+
+      const textLines = this.getTextLines(settings.text)
+      if (textLines.length > 0) searchInputs.push(textLines[0])
+      if (textLines.length > 1) searchInputs.push(textLines[1])
+
+      if (searchInputs.length === 0) return
+
+      let resultSongDatabase = []
+      for (let i = 0; i < searchInputs.length; i++) {
+        try {
+          const result = await this.$api.post('/database/search', {
+            search: searchInputs[i],
+            textSearch: i >= noTextSeach,
+            collection: ''
+          })
+          if (result.hits) {
+            resultSongDatabase.push(result.hits)
+          } else {
+            console.log(result)
+            if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
+          }
+        } catch {
+          // error
+        } finally {
+          // gereed, stop loading
+        }
+      }
+      [resultSongDatabase] = [...new Map(resultSongDatabase.map((m) => [m.id, m])).values()] // unique
+      return resultSongDatabase
     },
     addToDatabase () {
       let result = true
