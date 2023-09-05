@@ -179,13 +179,13 @@
 </template>
 
 <script>
-import BaseSongDatabase from './BaseSongDatabase.vue'
+import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import presentationTypes from '../../presentation-types'
 import { Notify } from 'quasar'
 
 export default {
-  extends: BaseSongDatabase,
+  extends: BaseSongDatabaseSearch,
   props: {
     title: String,
     collection: String,

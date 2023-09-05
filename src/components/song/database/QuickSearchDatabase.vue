@@ -147,13 +147,13 @@
 </template>
 
 <script>
-import BaseSongDatabase from './BaseSongDatabase.vue'
+import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import presentationTypes from '../../presentation-types'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   components: { },
-  extends: BaseSongDatabase,
+  extends: BaseSongDatabaseSearch,
   data () {
     return {
       columns: [
