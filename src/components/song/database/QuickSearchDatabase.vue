@@ -18,7 +18,7 @@
         color="secondary"
         table-class="bg-grey-3"
         table-header-class="bg-primary text-white"
-        row-key="id"
+        row-key="objectID"
         :visible-columns="['title', 'collection', 'number', 'actions']"
         class="virtscroll-table"
         virtual-scroll
@@ -157,7 +157,7 @@ export default {
   data () {
     return {
       columns: [
-        { name: 'id', label: '#', field: 'id', sortable: true },
+        { name: 'objectID', label: '#', field: 'objectID', sortable: true },
         { name: 'actions', label: '', style: 'width: 1vw;' },
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
         { name: 'collection', label: 'Collectie', field: 'collection', sortable: true, style: 'width: 1vw; color: gray;' },

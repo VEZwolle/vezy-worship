@@ -50,7 +50,7 @@ export async function getAlgoliaCollections (api) {
 
 export async function getAlgoliaDatabase (api, fsdb) {
   const result = await api.post('/database/backup', { })
-  if (result[0]?.id &&
+  if (result[0]?.objectID &&
     result[0]?.title &&
     result[0]?.lyrics
   ) { // ga uit dat database klopt

@@ -63,17 +63,19 @@
             Lokale Database:
           </div>
           <div class="row">
-            <q-btn label="bestand instellen/openen" color="primary" class="col" @click="loadSongDatabase" />
-            <q-btn label="Lege aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
+            <q-btn label="Database instellen/openen" color="primary" @click="loadSongDatabase" />
+            <q-btn label="Lege database aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
           </div>
           (wordt direct ingesteld bij geldige database)
           <q-badge v-if="songDatabase" class="q-mb-sm">
             {{ songDatabase }}
           </q-badge>
-          <q-input v-model="userName" dense outlined label="Gebruikersnaam">
-            <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
-          </q-input>
-          <q-btn label="Lokale database bewerken" color="primary" class="q-mt-sm" @click="editSongLocalDatabase" />
+          <div class="row q-mt-sm">
+            <q-btn label="Lokale database bewerken" color="primary" @click="editSongLocalDatabase" />
+            <q-input v-model="userName" dense outlined class="q-ml-md" label="Gebruikersnaam">
+              <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+            </q-input>
+          </div>
         </q-tab-panel>
 
         <q-tab-panel name="autoupdate">

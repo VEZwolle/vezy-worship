@@ -19,7 +19,7 @@ const fsdb = {
   localSongDatabase: null,
   /* JSON
   {
-    "id":"2",
+    "objectID":"2",
     "title":"Namen van God",
     "collection":null,
     "number":null,
@@ -143,7 +143,7 @@ const fsdb = {
     const collections = [...new Set(fsdb.localSongDatabase.map(d => d.collection))]
     return collections.sort()
   },
-  async addToDatabase (settings, creator, id = null) {
+  async addToDatabase (settings, creator, objectID = null) {
     if (!fsdb.localSongDatabase) {
       if (!(await fsdb.openSongDatabase())) {
         Notify.create({ type: 'negative', message: 'Database kon niet worden geopend...' })
@@ -152,7 +152,7 @@ const fsdb = {
     }
     const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
     const addSong = {
-      id: null, // controle op bestaat toevoegen? nieuwe maken?
+      objectID: null, // controle op bestaat toevoegen? nieuwe maken?
       title: settings.title,
       collection: settings.collection,
       number: settings.number,
@@ -162,28 +162,28 @@ const fsdb = {
       created_at: now,
       updated_at: now
     }
-    if (id) {
-      const dbIndex = fsdb.localSongDatabase.findIndex(s => s.id === id)
+    if (objectID) {
+      const dbIndex = fsdb.localSongDatabase.findIndex(s => s.objectID === objectID)
       if (dbIndex !== -1) {
-        addSong.id = fsdb.localSongDatabase[dbIndex].id
+        addSong.objectID = fsdb.localSongDatabase[dbIndex].objectID
         addSong.created_at = fsdb.localSongDatabase[dbIndex].created_at
         fsdb.localSongDatabase[dbIndex] = addSong
         return true
       }
     }
-    addSong.id = nanoid() // creare uniek id
+    addSong.objectID = nanoid() // creare uniek objectID
     fsdb.localSongDatabase.push(addSong)
     return true
   },
-  async removeFromDatabase (id) {
-    if (!id) return false
+  async removeFromDatabase (objectID) {
+    if (!objectID) return false
     if (!fsdb.localSongDatabase) {
       if (!(await fsdb.openSongDatabase())) {
         Notify.create({ type: 'negative', message: 'Database kon niet worden geopend...' })
         return false
       }
     }
-    fsdb.localSongDatabase = fsdb.localSongDatabase.filter(song => song.id !== id)
+    fsdb.localSongDatabase = fsdb.localSongDatabase.filter(song => song.objectID !== objectID)
     return true
   }
 }

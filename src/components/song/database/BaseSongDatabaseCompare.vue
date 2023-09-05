@@ -286,7 +286,7 @@ export default {
           resultSongDatabase.push(result.hits)
         }
       }
-      [resultSongDatabase] = [...new Map(resultSongDatabase.map((m) => [m.id, m])).values()] // unique
+      [resultSongDatabase] = [...new Map(resultSongDatabase.map((m) => [m.objectID, m])).values()] // unique
       return resultSongDatabase
     },
     addToDatabase () {
@@ -300,7 +300,7 @@ export default {
               if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName)) result = false
               break
             default: {
-              if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].id)) result = false
+              if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].objectID)) result = false
             }
           }
         }

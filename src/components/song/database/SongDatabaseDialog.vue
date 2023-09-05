@@ -72,7 +72,7 @@
             hide-selected-banner
             binary-state-sort
             color="secondary"
-            row-key="id"
+            row-key="objectID"
             :visible-columns="visibleColumns"
             class="virtscroll-table"
             virtual-scroll
@@ -92,7 +92,7 @@
                         Bewerk lied in database
                       </q-tooltip>
                     </q-btn>
-                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeLocalSong(props.row.id)">
+                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeLocalSong(props.row.objectID)">
                       <q-tooltip anchor="top middle" self="center middle">
                         verwijderen uit database
                       </q-tooltip>
@@ -148,7 +148,7 @@
           <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong(selected[0])">
             <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
           </q-btn>
-          <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeLocalSong(selected[0]?.id)">
+          <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeLocalSong(selected[0]?.objectID)">
             <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
           </q-btn>
           <q-btn :disable="backupLocalSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoremoveLocalSong">
@@ -203,7 +203,7 @@ export default {
   data () {
     return {
       columns: [
-        { name: 'id', label: '#', field: 'id', sortable: true },
+        { name: 'objectID', label: '#', field: 'objectID', sortable: true },
         { name: 'title', label: 'Titel', field: 'title', align: 'left', required: true, sortable: true },
         { name: 'collection', label: 'Collectie', field: 'collection', sortable: true, style: 'width: 1vw; color: gray;' },
         { name: 'number', label: 'Nummer', field: 'number', sortable: true, style: 'width: 1vw; color: gray;' },
@@ -276,9 +276,9 @@ export default {
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
-    async removeLocalSong (id) {
+    async removeLocalSong (objectID) {
       if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-      let result = await this.$fsdb.removeFromDatabase(id)
+      let result = await this.$fsdb.removeFromDatabase(objectID)
       if (!result) { return }
       // save database
       result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
@@ -305,7 +305,7 @@ export default {
         return Notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!', position: 'top' })
       }
       localStorage.setItem('database.userName', this.userName || '')
-      if (props?.id) {
+      if (props?.objectID) {
         // convert db --> presentation
         if (!this.editPresentation) {
           const type = presentationTypes.find(t => t.id === 'song')
@@ -315,7 +315,7 @@ export default {
             settings: cloneDeep(type.settings)
           }
         }
-        this.editPresentation.id = props.id || ''
+        this.editPresentation.id = props.objectID || ''
         this.editPresentation.settings.title = props.title || ''
         this.editPresentation.settings.collection = props.collection || ''
         this.editPresentation.settings.number = props.number || ''
