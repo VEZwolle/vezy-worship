@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialog" square>
+  <q-dialog ref="dialog" persistent square>
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>Instellingen</q-toolbar-title>
@@ -24,14 +24,17 @@
 
         <q-tab-panel name="database">
           <div class="text-h6">
-            Standaard liederen Database:
+            Standaard liederen bestand:
           </div>
-          <div class="col-auto q-pt-sm">
-            Cloud (Algolia)
+          <div class="row q-pt-sm">
+            <div class="col-auto q-pt-xs" v-text="'Cloud'" />
+            <div class="col-auto q-pt-sm q-px-xs">
+              <img src="../../assets/algolia-logo.svg" height="16">
+            </div>
             <q-toggle v-model="searchBaseIsLocal" checked-icon="lyrics" unchecked-icon="cloud" color="primary" dense>
               <q-tooltip>cloud of locale database</q-tooltip>
             </q-toggle>
-            Lokaal bestand
+            <div class="col-auto q-pt-xs" v-text="'Lokaal bestand'" />
           </div>
           <q-select
             v-model="dbCollection"
@@ -55,12 +58,12 @@
           </q-select>
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
-            Cloud Algolia database:
+            Cloud algolia:
           </div>
           <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
-            Lokale Database:
+            Lokale database:
           </div>
           <div class="row">
             <q-btn label="Database instellen/openen" color="primary" @click="loadSongDatabase" />
