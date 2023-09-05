@@ -193,8 +193,8 @@
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
-  <SongDatabaseDialog
-    ref="SongDatabaseDialog"
+  <SearchDatabaseDialog
+    ref="SearchDatabaseDialog"
     v-model:title="settings.title"
     v-model:collection="settings.collection"
     v-model:number="settings.number"
@@ -241,7 +241,7 @@ export default {
   },
   methods: {
     importSongDb () {
-      this.$refs.SongDatabaseDialog.show()
+      this.$refs.SearchDatabaseDialog.show()
     },
     async translate () {
       this.isTranslating = true

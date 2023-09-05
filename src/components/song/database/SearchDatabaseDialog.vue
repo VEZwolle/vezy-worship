@@ -31,7 +31,7 @@
             @update:model-value="searchResults"
           >
             <template #prepend>
-              <q-icon name="lyrics" />
+              <q-icon :name="$store.searchBaseIsLocal ? 'lyrics' : 'img:images/algolia-mark.svg'" />
             </template>
             <template v-if="searchInput" #append>
               <q-icon name="cancel" class="cursor-pointer" @click="resetSearch" />

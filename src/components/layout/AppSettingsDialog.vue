@@ -110,7 +110,7 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <SongDatabaseDialog ref="SongDatabaseDialog" />
+  <SearchDatabaseDialog ref="SearchDatabaseDialog" />
 </template>
 
 <script>
@@ -200,7 +200,7 @@ export default {
     },
     editSongLocalDatabase () {
       this.$store.searchBaseIsLocal = true
-      this.$refs.SongDatabaseDialog.show(true)
+      this.$refs.SearchDatabaseDialog.show(true)
     },
     async saveAlgoliaDatabase () {
       this.isLoading = true
