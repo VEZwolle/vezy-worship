@@ -1,4 +1,6 @@
 import { Notify } from 'quasar'
+import dayjs from 'dayjs'
+import { nanoid } from 'nanoid'
 
 export async function getAlgoliaSearch (api, search, textSearch, collection) {
   if (!search) return []
@@ -65,5 +67,95 @@ export async function getAlgoliaDatabase (api, fsdb) {
     console.log(result)
     if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
     return false
+  }
+}
+
+export function ApiKeyEdit (key = false) {
+  if (key) return localStorage.getItem('database.apiKeyEdit')
+  return !!localStorage.getItem('database.apiKeyEdit')
+}
+
+export async function ConvertToAlgoliaRecord (settings, creator, objectID = null) {
+  const apiKeyEdit = ApiKeyEdit(true)
+  if (!apiKeyEdit) return false
+
+  const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+  if (objectID) {
+    return {
+      objectID, // = nanoid() // creare uniek objectID
+      title: settings.title,
+      collection: settings.collection,
+      number: settings.number,
+      lyrics: settings.text,
+      lyricstranslate: settings.translation,
+      creator,
+      // created_at: now,
+      updated_at: now
+    }
+  }
+  return {
+    objectID: nanoid(), // creare uniek objectID
+    title: settings.title,
+    collection: settings.collection,
+    number: settings.number,
+    lyrics: settings.text,
+    lyricstranslate: settings.translation,
+    creator,
+    created_at: now,
+    updated_at: now
+  }
+}
+
+export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
+  if (records?.length === 0) return false
+  const apiKeyEdit = ApiKeyEdit(true)
+  if (!apiKeyEdit) return false
+
+  try {
+    const result = await api.post('/database/edit', {
+      apiKeyEdit,
+      records,
+      partUpdate
+    })
+    if (result.objectIDs || result.objectID) {
+      Notify.create({ type: 'positive', message: 'Algolia gegevens aangepast: Het duurt vaak even voor dit zichtbaar is.' })
+      return result.objectIDs || result.objectID
+    } else {
+      console.log(result)
+      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
+      return []
+    }
+  } catch {
+    // error
+    return []
+  } finally {
+    // gereed
+  }
+}
+
+export async function RemoveFromAlgoliaDatabase (api, objectIDs) {
+  if (objectIDs?.length === 0) return false
+  const apiKeyEdit = ApiKeyEdit(true)
+  if (!apiKeyEdit) return false
+
+  try {
+    const result = await api.post('/database/delete', {
+      apiKeyEdit,
+      objectIDs
+    })
+    if (result.objectIDs || result.objectID) {
+      Notify.create({ type: 'positive', message: 'Algolia gegevens verwijderd: Het duurt vaak even voor dit zichtbaar is.' })
+      return result.objectIDs || result.objectID
+    } else {
+      console.log(result)
+      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
+      return []
+    }
+  } catch {
+    // error
+    return []
+  } finally {
+    // gereed
   }
 }

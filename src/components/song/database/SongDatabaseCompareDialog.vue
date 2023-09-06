@@ -128,6 +128,7 @@ export default {
     },
     hide () {
       this.$refs.dialogAddDatabase.hide()
+      if (this.presentation.id === 'tempSongCompare') this.presentation.id = ''
     },
     useDatabase () {
       if (this.presentation.settings) {

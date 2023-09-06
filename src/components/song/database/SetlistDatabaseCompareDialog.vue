@@ -134,7 +134,7 @@
           label="Opslaan in database"
           :disable="!changesDatabase"
           :loading="isSaving"
-          @click.stop="save(false)"
+          @click.stop="saveLocal(false)"
         >
           <template #label>
             <q-tooltip v-if="userName">
@@ -145,13 +145,29 @@
             </q-tooltip>
           </template>
           <q-list>
-            <q-item v-close-popup clickable @click.stop="save(true)">
+            <q-item v-close-popup clickable @click.stop="saveLocal(true)">
               <q-item-section>
                 <q-item-label>Opslaan als</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
+        <q-btn
+          v-else-if="apiKeyEditExist"
+          color="secondary"
+          icon="save"
+          label="Opslaan in cloud database"
+          :disable="!changesDatabase"
+          :loading="isSaving"
+          @click.stop="saveAlgolia()"
+        >
+          <q-tooltip v-if="userName">
+            Geselecteerde liederen toevoegen, vervangen & opslaan in database
+          </q-tooltip>
+          <q-tooltip v-else>
+            Let op: Gebruikersnaam invullen voor je kan opslaan!
+          </q-tooltip>
+        </q-btn>
         <q-btn color="secondary" label="Sluiten" @click.stop="hide">
           <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
         </q-btn>
@@ -220,7 +236,7 @@ export default {
     hide () {
       this.$refs.dialogAddDatabase.hide()
     },
-    async save (newFile = false) {
+    async saveLocal (newFile = false) {
       this.isSaving = true
       localStorage.setItem('database.userName', this.userName || '')
       // backup this.$fsdb.localSongDatabase
@@ -237,6 +253,18 @@ export default {
       if (!result) {
         this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
         Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database', position: 'top' })
+        this.isSaving = false
+        return
+      }
+      this.isSaving = false
+      this.hide()
+    },
+    async saveAlgolia () {
+      this.isSaving = true
+      localStorage.setItem('database.userName', this.userName || '')
+      const result = this.addToDatabase()
+      if (!result) {
+        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan cloud database', position: 'top' })
         this.isSaving = false
         return
       }

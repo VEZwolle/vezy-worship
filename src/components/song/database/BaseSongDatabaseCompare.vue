@@ -1,7 +1,7 @@
 <script>
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
-import { getAlgoliaSearch } from './algolia.js'
+import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase } from './algolia.js'
 
 export default {
   data () {
@@ -18,6 +18,9 @@ export default {
     }
   },
   computed: {
+    apiKeyEditExist () {
+      return ApiKeyEdit()
+    },
     changesDatabase () {
       return this.songsTodoIndex.filter(i => i >= -1).length && this.userName.length
     },
@@ -125,7 +128,7 @@ export default {
           databaseSongFilter = this.filterSearchSongInLocalDatabase(this.songs[k].settings).slice(0, 99) || [] // max 99 results pro song
         } else {
           databaseSongFilter = await this.SearchSongInAlgoliaDatabase(this.songs[k].settings)
-          databaseSongFilter = databaseSongFilter.slice(0, 99) || []
+          databaseSongFilter = databaseSongFilter?.slice(0, 99) || []
         }
         const countDiffs = []
         const databaseSong = []
@@ -282,14 +285,17 @@ export default {
       let resultSongDatabase = []
       for (let i = 0; i < searchInputs.length; i++) {
         const result = await getAlgoliaSearch(this.$api, searchInputs[i], i >= noTextSeach, '')
-        if (result.hits) {
-          resultSongDatabase.push(result.hits)
-        }
+        resultSongDatabase.push(result)
       }
+
       [resultSongDatabase] = [...new Map(resultSongDatabase.map((m) => [m.objectID, m])).values()] // unique
       return resultSongDatabase
     },
-    addToDatabase () {
+    async addToDatabase () {
+      if (this.$store.searchBaseIsLocal) return this.addToLocalDatabase()
+      return await this.addToAlgoliaDatabase()
+    },
+    addToLocalDatabase () {
       let result = true
       for (let i = 0; i < this.songs.length; i++) {
         const todoIndex = this.songsTodoIndex[i]
@@ -303,6 +309,43 @@ export default {
               if (!this.$fsdb.addToDatabase(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].objectID)) result = false
             }
           }
+        }
+      }
+      return result
+    },
+    async addToAlgoliaDatabase () {
+      let result = true
+      let record = null
+      const addRecords = []
+      const editRecords = []
+      for (let i = 0; i < this.songs.length; i++) {
+        const todoIndex = this.songsTodoIndex[i]
+        if (todoIndex > -2) {
+          switch (todoIndex) {
+            case undefined: break
+            case -1: // add
+              record = await ConvertToAlgoliaRecord(this.songs[i].settings, this.userName)
+              if (record) addRecords.push(record)
+              break
+            default: {
+              record = await ConvertToAlgoliaRecord(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].objectID)
+              if (record) editRecords.push(record)
+            }
+          }
+        }
+      }
+      if (addRecords.length) {
+        const apiResult = await AddToAlgoliaDatabase(this.$api, addRecords, false)
+        if (!apiResult) {
+          result = false
+          return
+        }
+      }
+      if (editRecords.length) {
+        const apiResult = await AddToAlgoliaDatabase(this.$api, editRecords, true)
+        if (!apiResult) {
+          result = false
+          return
         }
       }
       return result

@@ -61,6 +61,18 @@
             Cloud algolia:
           </div>
           <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
+          <q-input v-model="apiKeyEdit" dense outlined class="q-pt-md" label="Api key: bewerken online gegevens">
+            <q-tooltip>Api key voor bewerken database</q-tooltip>
+            <template #append>
+              <q-icon v-if="apiKeyEdit" name="cancel" class="cursor-pointer" @click="apiKeyEdit = ''" />
+            </template>
+          </q-input>
+          <div class="row q-mt-sm">
+            <q-btn :disable="apiKeyEdit !== 'opgeslagen'" label="Cloud algolia bewerken" color="primary" @click="editSongAlgoliaDatabase" />
+            <q-input v-model="userName" dense outlined class="q-ml-md" label="Gebruikersnaam">
+              <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+            </q-input>
+          </div>
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale database:
@@ -134,6 +146,7 @@ export default {
       dbCollections: [''],
       userName: '',
       searchBaseIsLocal: true,
+      apiKeyEdit: '',
       isLoading: false,
       tab: 'background'
     }
@@ -165,6 +178,7 @@ export default {
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
       this.dbCollection = localStorage.getItem('database.collection') || ''
       this.userName = localStorage.getItem('database.userName') || ''
+      this.apiKeyEdit = localStorage.getItem('database.apiKeyEdit') ? 'opgeslagen' : ''
       this.searchBaseIsLocal = !(localStorage.getItem('database.searchBase') === 'cloud' || false)
     },
     async save () {
@@ -176,6 +190,7 @@ export default {
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
       localStorage.setItem('database.collection', this.dbCollection || '')
       localStorage.setItem('database.userName', this.userName || '')
+      if (this.apiKeyEdit !== 'opgeslagen') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
 
       this.$q.dialog({
@@ -203,6 +218,10 @@ export default {
     },
     editSongLocalDatabase () {
       this.$store.searchBaseIsLocal = true
+      this.$refs.SearchDatabaseDialog.show(true)
+    },
+    editSongAlgoliaDatabase () {
+      this.$store.searchBaseIsLocal = false
       this.$refs.SearchDatabaseDialog.show(true)
     },
     async saveAlgoliaDatabase () {

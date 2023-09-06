@@ -332,6 +332,87 @@ app.post('/api/database/backup', async (req, res) => {
   }).catch(() => res.status(500).json({ error: 'algolia_error' }))
 })
 
+app.post('/api/database/edit', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const records = req.body.records || [] // array of full reccords
+  const partUpdate = req.body.partUpdate || false // array of full reccords
+  if (records?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit (if exist) by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
+  try {
+    let result
+    switch (true) {
+      case partUpdate && records.length === 1:
+        result = await algoliaIndex.partialUpdateObject(records[0], {
+          createIfNotExists: true
+        })
+        break
+      case partUpdate:
+        result = await algoliaIndex.partialUpdateObjects(records, {
+          createIfNotExists: true
+        })
+        break
+      case records.length === 1:
+        result = await algoliaIndex.saveObject(records[0], {
+          autoGenerateObjectIDIfNotExist: true
+        })
+        break
+      default: // add or full replace
+        result = await algoliaIndex.saveObjects(records, {
+          autoGenerateObjectIDIfNotExist: true
+        })
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
+app.post('/api/database/delete', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const objectIDs = req.body.objectIDs // array of objectID
+  if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit  by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
+  try {
+    let result
+    switch (true) {
+      case objectIDs.length === 1:
+        result = await algoliaIndex.deleteObject(objectIDs[0])
+        break
+      default: // add or full replace
+        result = await algoliaIndex.deleteObjects(objectIDs)
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
 const secrets = [
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
@@ -340,7 +421,8 @@ const secrets = [
   'ALGOLIA_APP_ID',
   'ALGOLIA_API_KEY',
   'ALGOLIA_API_KEY_EDIT',
-  'ALGOLIA_INDEX_NAME'
+  'ALGOLIA_INDEX_NAME',
+  'API_KEY_EDIT' // omzetten naar key's in database per persoon of andere auth?
 ]
 
 exports.api = functions

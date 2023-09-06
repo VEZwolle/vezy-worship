@@ -92,7 +92,7 @@
                         Bewerk lied in database
                       </q-tooltip>
                     </q-btn>
-                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeLocalSong(props.row.objectID)">
+                    <q-btn class="gt-xs" size="10px" flat dense round icon="clear" @click.stop="removeSong(props.row)">
                       <q-tooltip anchor="top middle" self="center middle">
                         verwijderen uit database
                       </q-tooltip>
@@ -133,26 +133,27 @@
         >
           <q-tooltip>Schakel tussen zoeken in titel en nummer of ook in tekst.</q-tooltip>
         </q-toggle>
-        <template v-if="$store.searchBaseIsLocal">
-          <q-toggle
-            v-model="searchTranslation"
-            checked-icon="check"
-            color="secondary"
-            label="Zoek alleen liederen met vertaling"
-            unchecked-icon="clear"
-            @update:model-value="searchResults"
-          >
-            <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
-          </q-toggle>
-          <q-space />
+        <q-toggle
+          v-if="$store.searchBaseIsLocal"
+          v-model="searchTranslation"
+          checked-icon="check"
+          color="secondary"
+          label="Zoek alleen liederen met vertaling"
+          unchecked-icon="clear"
+          @update:model-value="searchResults"
+        >
+          <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
+        </q-toggle>
+        <q-space />
+        <template v-if="$store.searchBaseIsLocal || apiKeyEditExist">
           <q-btn :disable="selectedFalse" color="primary" label="Bewerk in database" dense @click.stop="startEditSong(selected[0])">
             <q-tooltip>Bewerk "<i>{{ selectedTitle }}</i>" in database</q-tooltip>
           </q-btn>
-          <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeLocalSong(selected[0]?.objectID)">
+          <q-btn :disable="selectedFalse" color="primary" label="Verwijder uit database" dense @click.stop="removeSong(selected[0])">
             <q-tooltip>Verwijder "<i>{{ selectedTitle }}</i>" van database</q-tooltip>
           </q-btn>
-          <q-btn :disable="backupLocalSongDatabaseExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoremoveLocalSong">
-            <q-tooltip>Ongedaan maken bewerken database</q-tooltip>
+          <q-btn :disable="backupSongDatabaseNotExist" color="primary" icon="settings_backup_restore" dense @click.stop="undoremoveSong">
+            <q-tooltip>Ongedaan maken (alle) bewerkingen database tijdens sessie</q-tooltip>
           </q-btn>
           <q-input
             v-model="userName"
@@ -183,6 +184,7 @@ import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import presentationTypes from '../../presentation-types'
 import { Notify } from 'quasar'
+import { ConvertToAlgoliaRecord, AddToAlgoliaDatabase, RemoveFromAlgoliaDatabase } from './algolia.js'
 
 export default {
   extends: BaseSongDatabaseSearch,
@@ -216,7 +218,8 @@ export default {
       lyricsTab: 'text',
       editPresentation: null,
       userName: '',
-      backupLocalSongDatabase: null
+      backupLocalSongDatabase: null,
+      backupAlgoliaSongDatabase: []
     }
   },
   computed: {
@@ -229,8 +232,9 @@ export default {
     selectedTitle () {
       return this.selected[0]?.title || ''
     },
-    backupLocalSongDatabaseExist () {
-      return !this.backupLocalSongDatabase
+    backupSongDatabaseNotExist () {
+      if (this.$store.searchBaseIsLocal) return !this.backupLocalSongDatabase
+      return this.backupAlgoliaSongDatabase.length === 0
     },
     tableLabel () {
       if (this.$store.searchBaseIsLocal ||
@@ -239,7 +243,7 @@ export default {
       return 'Geef eerst een zoekopdracht voor resultaten'
     },
     visibleColumns () {
-      if (this.$store.searchBaseIsLocal) return ['title', 'collection', 'number', 'creator', 'updated_at', 'actions']
+      if (this.$store.searchBaseIsLocal || this.apiKeyEditExist) return ['title', 'collection', 'number', 'creator', 'updated_at', 'actions']
       return ['title', 'collection', 'number', 'creator', 'updated_at']
     }
   },
@@ -276,36 +280,69 @@ export default {
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
-    async removeLocalSong (objectID) {
-      if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-      let result = await this.$fsdb.removeFromDatabase(objectID)
-      if (!result) { return }
-      // save database
-      result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
-      if (!result) {
-        this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
-        return
+    async removeSong (props) {
+      if (props?.objectID) {
+        if (this.$store.searchBaseIsLocal) {
+          if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+          let result = await this.$fsdb.removeFromDatabase(props.objectID)
+          if (!result) { return }
+          // save database
+          result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
+          if (!result) {
+            this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
+            return
+          }
+        } else {
+          this.backupAlgoliaSongDatabase.push({ action: 'remove', record: props })
+          const result = await RemoveFromAlgoliaDatabase(this.$api, [props.objectID])
+          if (!result) { // error bij remove
+            this.backupAlgoliaSongDatabase.pop()
+            return
+          }
+        }
+
+        this.searchResults()
       }
-      this.searchResults()
     },
-    async undoremoveLocalSong () {
-      if (this.backupLocalSongDatabase) {
-        const reduSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
-        this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
-        const result = await this.$fsdb.saveSongDatabase()
+    async undoremoveSong () {
+      if (this.$store.searchBaseIsLocal) {
+        if (this.backupLocalSongDatabase) {
+          const reduSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+          this.$fsdb.localSongDatabase = cloneDeep(this.backupLocalSongDatabase)
+          const result = await this.$fsdb.saveSongDatabase()
+          if (!result) {
+            this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
+          }
+          this.searchResults()
+        }
+      } else {
+        const records = []
+        for (let i = 0; i < this.backupAlgoliaSongDatabase.length; i++) {
+          // only first change of record
+          if (!records.find(t => t.objectID === this.backupAlgoliaSongDatabase[i]?.record?.objectID)) {
+            records.push(this.backupAlgoliaSongDatabase[i]?.record)
+          }
+        }
+        if (records.length === 0) return
+        const result = await AddToAlgoliaDatabase(this.$api, records, false)
         if (!result) {
-          this.$fsdb.localSongDatabase = cloneDeep(reduSongDatabase)
+          Notify.create({ type: 'negative', message: 'Terugzetten wijzingen cloud mislukt!', position: 'top' })
+          return
+        } else {
+          console.log(result)
+          this.backupAlgoliaSongDatabase = []
         }
         this.searchResults()
       }
     },
     startEditSong (props) {
-      if (!this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
+      if (this.$store.searchBaseIsLocal && !this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       if (!this.userName) {
         return Notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!', position: 'top' })
       }
       localStorage.setItem('database.userName', this.userName || '')
       if (props?.objectID) {
+        if (!this.$store.searchBaseIsLocal) this.backupAlgoliaSongDatabase.push({ action: 'edit', record: props })
         // convert db --> presentation
         if (!this.editPresentation) {
           const type = presentationTypes.find(t => t.id === 'song')
@@ -327,11 +364,24 @@ export default {
       }
     },
     async saveEditSong () {
-      let result = await this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
-      if (!result) return Notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!', position: 'top' })
-      // save database
-      result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
-      if (!result) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
+      if (this.$store.searchBaseIsLocal) { // local database
+        let result = await this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
+        if (!result) return Notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!', position: 'top' })
+        // save database
+        result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
+        if (!result) return Notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!', position: 'top' })
+      } else { // cloud
+        const record = await ConvertToAlgoliaRecord(this.editPresentation.settings, this.userName, this.editPresentation.id)
+        if (record) {
+          const result = await AddToAlgoliaDatabase(this.$api, [record], !!this.editPresentation.id)
+          if (!result) {
+            this.backupAlgoliaSongDatabase.pop()
+            Notify.create({ type: 'negative', message: 'Opslaan wijzingen cloud mislukt!', position: 'top' })
+            return
+          }
+        }
+      }
+
       this.searchResults()
     }
   }

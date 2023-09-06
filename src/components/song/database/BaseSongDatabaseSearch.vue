@@ -1,5 +1,5 @@
 <script>
-import { getAlgoliaSearch, getAlgoliaCollections } from './algolia.js'
+import { getAlgoliaSearch, getAlgoliaCollections, ApiKeyEdit } from './algolia.js'
 
 export default {
   data () {
@@ -15,6 +15,9 @@ export default {
     }
   },
   computed: {
+    apiKeyEditExist () {
+      return ApiKeyEdit()
+    },
     selectedFalse () {
       return !this.selected[0]
     }
