@@ -117,7 +117,7 @@ export default {
       }
       // database is open or cloud
       // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
-      await this.searchSongs()
+      if (!(await this.searchSongs())) return this.hide()
       this.select(this.presentation)
       if (this.noNewSongs) {
         Notify.create({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })

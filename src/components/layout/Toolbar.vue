@@ -47,12 +47,22 @@
             <q-item-label>Opslaan als</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item v-close-popup clickable @click="compareSongData">
+        <q-item v-close-popup clickable @click="compareSongData(true)">
           <q-item-section>
             <q-item-label>
-              Toevoegen database
+              Toevoegen aan lokale database
               <q-tooltip>
-                Liederen uit de setlist vergelijken en toevoegen aan de database
+                Liederen uit de setlist vergelijken en toevoegen aan de lokale database
+              </q-tooltip>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="apiKeyEditExist" v-close-popup clickable @click="compareSongData(false)">
+          <q-item-section>
+            <q-item-label>
+              Toevoegen aan cloud database
+              <q-tooltip>
+                Liederen uit de setlist vergelijken en toevoegen aan de cloud (algolia) gegevens
               </q-tooltip>
             </q-item-label>
           </q-item-section>
@@ -141,6 +151,7 @@ import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { Notify } from 'quasar'
+import { ApiKeyEdit } from '../song/database/algolia.js'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
@@ -161,6 +172,9 @@ export default {
   computed: {
     saved () {
       return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
+    },
+    apiKeyEditExist () {
+      return ApiKeyEdit()
     }
   },
   created () {
@@ -232,7 +246,8 @@ export default {
           this.isSaving = false
         })
     },
-    compareSongData () {
+    compareSongData (local = true) {
+      this.$store.searchBaseIsLocal = local
       this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {

@@ -128,6 +128,7 @@ export default {
           databaseSongFilter = this.filterSearchSongInLocalDatabase(this.songs[k].settings).slice(0, 99) || [] // max 99 results pro song
         } else {
           databaseSongFilter = await this.SearchSongInAlgoliaDatabase(this.songs[k].settings)
+          if (databaseSongFilter === false) return false
           databaseSongFilter = databaseSongFilter?.slice(0, 99) || []
         }
         const countDiffs = []
@@ -174,6 +175,7 @@ export default {
         this.songsSearchCountDiff.push(countDiffs)
         this.songsTodoIndex.push(j)
       }
+      return true
     },
     getTextLines (lyrics) {
       // return 2 lines off te lyrics with more ten 8 char
@@ -285,6 +287,7 @@ export default {
       let resultSongDatabase = []
       for (let i = 0; i < searchInputs.length; i++) {
         const result = await getAlgoliaSearch(this.$api, searchInputs[i], i >= noTextSeach, '')
+        if (result === false) return false
         resultSongDatabase.push(result)
       }
 

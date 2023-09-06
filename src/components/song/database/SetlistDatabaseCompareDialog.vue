@@ -230,7 +230,7 @@ export default {
       }
       // database is open of lege gemaakt
       // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
-      await this.searchSongs()
+      if (!(await this.searchSongs())) return this.hide()
       this.isLoading = false
     },
     hide () {

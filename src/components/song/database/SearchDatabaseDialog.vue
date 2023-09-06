@@ -258,6 +258,7 @@ export default {
         await this.openLocalDatabase()
         if (this.noLocalDatabase) return this.hide()
       }
+      this.searchResults()
       this.userName = localStorage.getItem('database.userName') || ''
     },
     hide () {
