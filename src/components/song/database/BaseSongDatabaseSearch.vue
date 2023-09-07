@@ -42,7 +42,7 @@ export default {
       this.algoliaSearch()
     },
     loadCollections () {
-      if (this.$store.dbCollections.length > 1) return
+      if (this.$store.dbCollections.length > 1) return // default minimum empty string ['']
       if (this.$store.searchBaseIsLocal) return this.getLocalCollections()
       this.algoliaCollections()
     },

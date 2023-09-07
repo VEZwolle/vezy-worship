@@ -137,9 +137,6 @@ export default {
     }
   },
   methods: {
-    log (text = '') {
-      console.log(text)
-    },
     noDb (index) {
       if (this.songDatabases) {
         if (index < 0) return true

@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { nanoid } from 'nanoid'
 
 export async function getAlgoliaSearch (api, search, textSearch, collection) {
+  // return [hits] || false by error
   if (!search) return []
   try {
     const result = await api.post('/database/search', {
@@ -13,7 +14,6 @@ export async function getAlgoliaSearch (api, search, textSearch, collection) {
     if (result.hits) {
       return result.hits
     } else {
-      console.log(result)
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
       return false
     }
@@ -26,6 +26,7 @@ export async function getAlgoliaSearch (api, search, textSearch, collection) {
 }
 
 export async function getAlgoliaCollections (api) {
+  // return [facehits + ''] || [''] by error
   try {
     const result = await api.post('/database/search', {
       getCollections: true
@@ -38,7 +39,6 @@ export async function getAlgoliaCollections (api) {
       collections.push('')
       return collections
     } else { // error
-      console.log(result)
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       return ['']
     }
@@ -51,6 +51,7 @@ export async function getAlgoliaCollections (api) {
 }
 
 export async function getAlgoliaDatabase (api, fsdb) {
+  // return true || false by error
   try {
     const result = await api.post('/database/backup', { })
     if (result[0]?.objectID &&
@@ -59,13 +60,11 @@ export async function getAlgoliaDatabase (api, fsdb) {
     ) { // ga uit dat database klopt
       const saved = await fsdb.saveSongDatabase(true, result)
       if (!saved) {
-        console.log('error save database')
         Notify.create({ type: 'negative', message: 'Opslaan algolia database bestand mislukt', position: 'top' })
         return false
       }
       return true
     } else { // error
-      console.log(result)
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
       return false
     }
@@ -76,11 +75,13 @@ export async function getAlgoliaDatabase (api, fsdb) {
 }
 
 export function ApiKeyEdit (key = false) {
+  // return key or true || false by no key
   if (key) return localStorage.getItem('database.apiKeyEdit')
   return !!localStorage.getItem('database.apiKeyEdit')
 }
 
 export async function ConvertToAlgoliaRecord (settings, creator, objectID = null) {
+  // return {db.record partical of full by no ID} || false by error or no editKey
   const apiKeyEdit = ApiKeyEdit(true)
   if (!apiKeyEdit) return false
 
@@ -113,6 +114,7 @@ export async function ConvertToAlgoliaRecord (settings, creator, objectID = null
 }
 
 export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
+  // return {objectIDs} || false by error
   if (records?.length === 0) return false
   const apiKeyEdit = ApiKeyEdit(true)
   if (!apiKeyEdit) return false
@@ -127,7 +129,6 @@ export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens aangepast: Het duurt vaak even voor dit zichtbaar is.' })
       return result.objectIDs || result.objectID
     } else {
-      console.log(result)
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
       return false
     }
@@ -140,6 +141,7 @@ export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
 }
 
 export async function RemoveFromAlgoliaDatabase (api, objectIDs) {
+  // return {objectIDs} || false by error
   if (objectIDs?.length === 0) return false
   const apiKeyEdit = ApiKeyEdit(true)
   if (!apiKeyEdit) return false
@@ -153,7 +155,6 @@ export async function RemoveFromAlgoliaDatabase (api, objectIDs) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens verwijderd: Het duurt vaak even voor dit zichtbaar is.' })
       return result.objectIDs || result.objectID
     } else {
-      console.log(result)
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       return false
     }

@@ -221,15 +221,15 @@ export default {
       // open database
       if (this.$store.searchBaseIsLocal && !this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
-          // geen database geselecteerd of error bij opgeslagen versie
-          // nieuwe maken
+          // no database selected or error on saved version
+          // make new
           await this.$fsdb.newEmptyDatabase()
           // return
           Notify.create({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
         }
       }
-      // database is open of lege gemaakt
-      // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
+      // database is made open or empty
+      // search songs in database most similar to setlist songs or not found
       if (!(await this.searchSongs())) return this.hide()
       this.isLoading = false
     },
@@ -273,7 +273,7 @@ export default {
     },
     edit (song) {
       this.$refs.presentationSettingsDialog.edit(song)
-      // geen update vergelijking database in lijst; wel in voorbeeld markering.
+      // no update comparison database in list; does in example highlighting.
     },
     setListDiffWidth () {
       this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400

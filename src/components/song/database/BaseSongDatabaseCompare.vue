@@ -135,9 +135,9 @@ export default {
         const databaseSong = []
 
         // get diff count
-        for (let i = 0; i < databaseSongFilter.length || countDiffs.length > 20; i++) { // maximaal 20 resultaten
+        for (let i = 0; i < databaseSongFilter.length || countDiffs.length > 20; i++) { // maximum of 20 results
           const textDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyrics, this.songs[k].settings.text))
-          // gebruik alleen resultaten met meer dan 10% overeenkomst in de resultaten
+          // Use only results with more than 10% similarity in the results
           if (textDiff.factor100 > 10) {
             const translationDiff = CountDiff(HtmlDiff(databaseSongFilter[i].lyricstranslate, this.songs[k].settings.translation))
             const factor200 = textDiff.factor100 + translationDiff.factor100
@@ -182,14 +182,14 @@ export default {
       const sections = splitSong(lyrics, 100)
       const lines = []
       for (let i = sections.length > 1 ? 1 : 0; i < sections.length; i++) {
-        // sla 1e over, vaak een titel intro tenzij maar 1 section
+        // skip 1st, often a title intro unless only 1 section
         for (let j = 0; j < sections[i].slides[0].length; j++) {
           const line = sections[i].slides[0][j].trim().replace(/[.,;?!:]$/g, '').trim()
-          if (line.length < 8) continue // zoek een langere regel
+          if (line.length < 8) continue // find a longer line
           lines.push(line.toLowerCase())
-          if (lines.length > 1) break // na 2 regels stoppen
+          if (lines.length > 1) break // stop after 2 lines
         }
-        if (lines.length > 1) break // na 2 regels stoppen
+        if (lines.length > 1) break // stop after 2 lines
       }
       return lines
     },
@@ -240,11 +240,11 @@ export default {
 
       // equal title (lowercase) // deel achter titel niet mee nemen wanner tussen... /^[^([{<|\\/>}\])]*/
       // title includes (lowercase)
-      // een regel komt voor (test op 2 regels, zie getTekstLines())
-      // equal collection, no.  (lowercase) (wanneer ingevuld)
+      // a line occurs (test on 2 lines, see getTekstLines()) minimum 8 characters
+      // equal collection, no.  (lowercase) (when entered)
       const textLines = this.getTextLines(settings.text)
       const titleMatch = title?.match(/^[^([{<|\\/>}\])]*/)[0]
-      const titleCheck = titleMatch.length > 3 && titleMatch !== title // minimaal 2 tekens voor check
+      const titleCheck = titleMatch.length > 3 && titleMatch !== title // minimum 3 characters for check
       filteredSongDatabase = this.$fsdb.localSongDatabase
         .filter(song => {
           const lyrics = song.lyrics?.toLowerCase()

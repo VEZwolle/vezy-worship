@@ -116,7 +116,7 @@ export default {
         }
       }
       // database is open or cloud
-      // zoek liederen in database die meest op setlist liederen lijken of niet gevonden
+      // search songs in database most similar to setlist songs or not found
       if (!(await this.searchSongs())) return this.hide()
       this.select(this.presentation)
       if (this.noNewSongs) {

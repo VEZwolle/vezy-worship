@@ -109,8 +109,6 @@ export default {
       if (this.newSong.settings.number) { return this.newSong.settings.number }
       return ''
     }
-  },
-  methods: {
   }
 }
 </script>

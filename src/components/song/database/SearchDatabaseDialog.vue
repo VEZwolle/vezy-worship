@@ -301,7 +301,6 @@ export default {
             return
           }
         }
-
         this.searchResults()
       }
     },
@@ -330,7 +329,6 @@ export default {
           Notify.create({ type: 'negative', message: 'Terugzetten wijzingen cloud mislukt!', position: 'top' })
           return
         } else {
-          console.log(result)
           this.backupAlgoliaSongDatabase = []
         }
         this.searchResults()
@@ -382,7 +380,6 @@ export default {
           }
         }
       }
-
       this.searchResults()
     }
   }
