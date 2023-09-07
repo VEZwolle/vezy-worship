@@ -50,7 +50,7 @@ export async function getAlgoliaCollections (api) {
   }
 }
 
-export async function getAlgoliaDatabase (api, fsdb) {
+export async function GetAlgoliaDatabase (api, fsdb) {
   // return true || false by error
   try {
     const result = await api.post('/database/backup', { })

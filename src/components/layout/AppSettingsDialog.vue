@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import { getAlgoliaDatabase, getAlgoliaCollections } from '../song/database/algolia.js'
+import { GetAlgoliaDatabase, getAlgoliaCollections } from '../song/database/algolia.js'
 
 export default {
   data () {
@@ -226,7 +226,7 @@ export default {
     },
     async saveAlgoliaDatabase () {
       this.isLoading = true
-      await getAlgoliaDatabase(this.$api, this.$fsdb)
+      await GetAlgoliaDatabase(this.$api, this.$fsdb)
       this.isLoading = false
     }
   }

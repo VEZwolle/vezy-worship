@@ -152,25 +152,37 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
-        <q-btn
-          v-else-if="apiKeyEditExist"
-          color="secondary"
-          icon="save"
-          label="Opslaan in cloud database"
-          :disable="!changesDatabase"
-          :loading="isSaving"
-          @click.stop="saveAlgolia()"
-        >
-          <q-tooltip v-if="userName">
-            Geselecteerde liederen toevoegen, vervangen & opslaan in database
-          </q-tooltip>
-          <q-tooltip v-else>
-            Let op: Gebruikersnaam invullen voor je kan opslaan!
-          </q-tooltip>
-        </q-btn>
-        <q-btn color="secondary" label="Sluiten" @click.stop="hide">
-          <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
-        </q-btn>
+        <template v-else-if="apiKeyEditExist">
+          <q-btn
+            color="secondary"
+            icon="download"
+            label="Download cloud database"
+            :loading="isSavingDatabase"
+            @click.stop="getAlgoliaDatabase()"
+          >
+            <q-tooltip>
+              Download de cloud database en opslaan aan bestand
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            color="secondary"
+            icon="save"
+            label="Opslaan in cloud database"
+            :disable="!changesDatabase"
+            :loading="isSaving"
+            @click.stop="saveAlgolia()"
+          >
+            <q-tooltip v-if="userName">
+              Geselecteerde liederen toevoegen, vervangen & opslaan in database
+            </q-tooltip>
+            <q-tooltip v-else>
+              Let op: Gebruikersnaam invullen voor je kan opslaan!
+            </q-tooltip>
+          </q-btn>
+          <q-btn color="secondary" label="Sluiten" @click.stop="hide">
+            <q-tooltip>Wijzigingen niet toepassen</q-tooltip>
+          </q-btn>
+        </template>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -181,6 +193,7 @@
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
 import { Notify } from 'quasar'
 import cloneDeep from 'lodash/cloneDeep'
+import { GetAlgoliaDatabase } from './algolia.js'
 
 export default {
   extends: BaseSongDatabaseCompare,
@@ -194,7 +207,8 @@ export default {
         { name: 'db', label: 'Database' }
       ],
       splitterModel: 70,
-      SongItemDatabaseWidth: 500
+      SongItemDatabaseWidth: 500,
+      isSavingDatabase: false
     }
   },
   computed: {
@@ -277,6 +291,11 @@ export default {
     },
     setListDiffWidth () {
       this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400
+    },
+    async getAlgoliaDatabase () {
+      this.isSavingDatabase = true
+      await GetAlgoliaDatabase(this.$api, this.$fsdb)
+      this.isSavingDatabase = false
     }
   }
 }
