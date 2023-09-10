@@ -12,6 +12,7 @@ export default [
       number: '',
       text: '',
       translation: '',
+      splitLines: 4,
       bgOpacity: 0,
       bgFileId: null
     },
