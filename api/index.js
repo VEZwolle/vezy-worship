@@ -260,7 +260,11 @@ app.post('/api/database/search', async (req, res) => {
 
   const algoliasearch = require('algoliasearch')
   // Start the API client
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
   // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Search the index for...
@@ -317,7 +321,11 @@ app.post('/api/database/search', async (req, res) => {
 
 app.post('/api/database/backup', async (req, res) => {
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Download all records for the index...
   // https://www.algolia.com/doc/api-reference/api-methods/browse/
@@ -341,7 +349,11 @@ app.post('/api/database/edit', async (req, res) => {
   if (records?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
 
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Add or Edit (if exist) by objectID
   // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
@@ -388,7 +400,11 @@ app.post('/api/database/delete', async (req, res) => {
   if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
 
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT)
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
   const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
   // Add or Edit  by objectID
   // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
@@ -422,7 +438,8 @@ const secrets = [
   'ALGOLIA_API_KEY',
   'ALGOLIA_API_KEY_EDIT',
   'ALGOLIA_INDEX_NAME',
-  'API_KEY_EDIT' // omzetten naar key's in database per persoon of andere auth?
+  'API_KEY_EDIT', // omzetten naar key's in database per persoon of andere auth?
+  'ALGOLIA_USER'
 ]
 
 exports.api = functions
