@@ -191,7 +191,6 @@
 
 <script>
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
-import { Notify } from 'quasar'
 import cloneDeep from 'lodash/cloneDeep'
 import { GetAlgoliaDatabase } from './algolia.js'
 
@@ -229,7 +228,7 @@ export default {
       this.songs = this.$store.service.presentations.filter(t => t.type === 'song')
       if (this.songs.length < 1) {
         this.hide()
-        return Notify.create({ type: 'negative', message: 'geen liederen in setlist gevonden', position: 'top' })
+        return this.$q.notify.create({ type: 'negative', message: 'geen liederen in setlist gevonden' })
       }
       this.$nextTick(() => { this.setListDiffWidth() })
       // open database
@@ -239,7 +238,7 @@ export default {
           // make new
           await this.$fsdb.newEmptyDatabase()
           // return
-          Notify.create({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
+          this.$q.notify.create({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
         }
       }
       // database is made open or empty
@@ -258,7 +257,7 @@ export default {
       let result = this.addToDatabase()
       if (!result) {
         this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
-        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database', position: 'top' })
+        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
         this.isSaving = false
         return
       }
@@ -266,7 +265,7 @@ export default {
       result = await this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
       if (!result) {
         this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
-        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database', position: 'top' })
+        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
         this.isSaving = false
         return
       }
@@ -278,7 +277,7 @@ export default {
       localStorage.setItem('database.userName', this.userName || '')
       const result = this.addToDatabase()
       if (!result) {
-        Notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan cloud database', position: 'top' })
+        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan cloud database' })
         this.isSaving = false
         return
       }

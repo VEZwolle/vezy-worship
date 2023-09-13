@@ -75,7 +75,6 @@
 
 <script>
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
-import { Notify } from 'quasar'
 
 export default {
   extends: BaseSongDatabaseCompare,
@@ -110,7 +109,7 @@ export default {
       if (this.$store.searchBaseIsLocal && !this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
           // geen database geselecteerd of error bij opgeslagen versie
-          Notify.create({ type: 'negative', message: 'geen database gevonden', position: 'top' })
+          this.$q.notify.create({ type: 'negative', message: 'geen database gevonden' })
           this.hide()
           return
         }
@@ -120,7 +119,7 @@ export default {
       if (!(await this.searchSongs())) return this.hide()
       this.select(this.presentation)
       if (this.noNewSongs) {
-        Notify.create({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })
+        this.$q.notify.create({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })
         this.hide()
         return
       }

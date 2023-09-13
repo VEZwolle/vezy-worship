@@ -14,11 +14,11 @@ export async function getAlgoliaSearch (api, search, textSearch, collection) {
     if (result.hits) {
       return result.hits
     } else {
-      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
+      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
     }
   } catch {
-    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database', position: 'top' })
+    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   } finally {
     // gereed
@@ -60,16 +60,16 @@ export async function GetAlgoliaDatabase (api, fsdb) {
     ) { // ga uit dat database klopt
       const saved = await fsdb.saveSongDatabase(true, result)
       if (!saved) {
-        Notify.create({ type: 'negative', message: 'Opslaan algolia database bestand mislukt', position: 'top' })
+        Notify.create({ type: 'negative', message: 'Opslaan algolia database bestand mislukt' })
         return false
       }
       return true
     } else { // error
-      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
+      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
     }
   } catch (error) {
-    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database', position: 'top' })
+    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   }
 }
@@ -129,11 +129,11 @@ export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens aangepast: Het duurt vaak even voor dit zichtbaar is.' })
       return result.objectIDs || result.objectID
     } else {
-      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}`, position: 'top' })
+      if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
     }
   } catch (error) {
-    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database', position: 'top' })
+    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   } finally {
     // gereed
@@ -159,7 +159,7 @@ export async function RemoveFromAlgoliaDatabase (api, objectIDs) {
       return false
     }
   } catch {
-    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database', position: 'top' })
+    Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   } finally {
     // gereed

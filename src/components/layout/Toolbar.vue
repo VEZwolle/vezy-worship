@@ -150,7 +150,6 @@ import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompar
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
-import { Notify } from 'quasar'
 import { ApiKeyEdit } from '../song/database/algolia.js'
 
 export default {
@@ -199,7 +198,7 @@ export default {
               this.autoupdate.indeterminateProgress = true
               this.autoupdate.percent = percent
               this.autoupdate.message = message
-              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
               break
             case 3:
               this.autoupdate.indeterminateProgress = false
@@ -209,7 +208,7 @@ export default {
               this.autoupdate.indeterminateProgress = false
               this.autoupdate.message = message
               this.autoupdate.percent = percent
-              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
               break
             default:
           }
