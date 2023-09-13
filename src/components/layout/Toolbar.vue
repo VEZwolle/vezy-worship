@@ -74,6 +74,20 @@
         @click="openOutput('livestream')"
       />
 
+      <span class="q-px-md" />
+    </div>
+
+    <div>
+      <q-btn
+        flat
+        icon="list"
+        dense
+        @click="openPcoLive"
+      >
+        <q-tooltip>
+          Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
+        </q-tooltip>
+      </q-btn>
       <span class="q-px-md">|</span>
     </div>
 
@@ -129,6 +143,7 @@ import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { Notify } from 'quasar'
+import { PcoLiveUrl } from '../service/pco.js'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
@@ -228,6 +243,24 @@ export default {
     },
     openHelp () {
       window.open('/#/help', 'vezyWorshipHelp', 'popup,width=1000,height=800')
+    },
+    openPcoLive () {
+      if (this.$store.service?.pcoId) {
+        return window.open(PcoLiveUrl(this.$store.service.pcoId, true), 'pcoLive', 'popup,width=1000,height=800')
+      }
+      this.$q.dialog({
+        title: 'Geef PCO dienst id:',
+        message: 'zie einde url pco service: \nbijv. https://services.planningcenteronline.com/plans/55984013',
+        prompt: {
+          model: '55984013',
+          isValid: val => val.length > 5,
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        window.open(PcoLiveUrl(data, false), 'pcoLive', 'popup,width=1000,height=800')
+      })
     }
   }
 }
