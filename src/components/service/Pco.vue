@@ -581,13 +581,24 @@ export default {
       }
     },
     askPcoPlanId () {
-      const PcoPlanId = prompt('Geef PCO dienst id (zie einde url): \nbijv. https://services.planningcenteronline.com/plans/55984013', '55984013')
-      this.planId = Number(PcoPlanId)
-      this.itemCount = ''
-      this.itemId = ''
-      if (this.planId) {
-        this.pco()
-      }
+      this.$q.dialog({
+        title: 'Geef PCO dienst id:',
+        message: 'zie einde url pco service: \nbijv. https://services.planningcenteronline.com/plans/55984013',
+        prompt: {
+          model: '55984013',
+          isValid: val => val.length > 5,
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        this.planId = Number(data)
+        this.itemCount = ''
+        this.itemId = ''
+        if (this.planId) {
+          this.pco()
+        }
+      })
     },
     async pcoLogout () {
       this.isPcoLoading = true
