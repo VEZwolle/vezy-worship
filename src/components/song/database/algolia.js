@@ -1,8 +1,10 @@
 import { Notify } from 'quasar'
 import dayjs from 'dayjs'
 import { nanoid } from 'nanoid'
+import { api } from '../../../boot/api'
+import { fsdb } from '../../../boot/filesystemdb'
 
-export async function getAlgoliaSearch (api, search, textSearch, collection) {
+export async function getAlgoliaSearch (search, textSearch, collection) {
   // return [hits] || false by error
   if (!search) return []
   try {
@@ -25,7 +27,7 @@ export async function getAlgoliaSearch (api, search, textSearch, collection) {
   }
 }
 
-export async function getAlgoliaCollections (api) {
+export async function getAlgoliaCollections () {
   // return [facehits + ''] || [''] by error
   try {
     const result = await api.post('/database/search', {
@@ -50,7 +52,7 @@ export async function getAlgoliaCollections (api) {
   }
 }
 
-export async function GetAlgoliaDatabase (api, fsdb) {
+export async function GetAlgoliaDatabase () {
   // return true || false by error
   try {
     const result = await api.post('/database/backup', { })
@@ -113,7 +115,7 @@ export async function ConvertToAlgoliaRecord (settings, creator, objectID = null
   }
 }
 
-export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
+export async function AddToAlgoliaDatabase (records, partUpdate = false) {
   // return {objectIDs} || false by error
   if (records?.length === 0) return false
   const apiKeyEdit = ApiKeyEdit(true)
@@ -140,7 +142,7 @@ export async function AddToAlgoliaDatabase (api, records, partUpdate = false) {
   }
 }
 
-export async function RemoveFromAlgoliaDatabase (api, objectIDs) {
+export async function RemoveFromAlgoliaDatabase (objectIDs) {
   // return {objectIDs} || false by error
   if (objectIDs?.length === 0) return false
   const apiKeyEdit = ApiKeyEdit(true)

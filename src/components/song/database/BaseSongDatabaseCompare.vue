@@ -286,7 +286,7 @@ export default {
 
       let resultSongDatabase = []
       for (let i = 0; i < searchInputs.length; i++) {
-        const result = await getAlgoliaSearch(this.$api, searchInputs[i], i >= noTextSeach, '')
+        const result = await getAlgoliaSearch(searchInputs[i], i >= noTextSeach, '')
         if (result === false) return false
         resultSongDatabase.push(result)
       }
@@ -338,14 +338,14 @@ export default {
         }
       }
       if (addRecords.length) {
-        const apiResult = await AddToAlgoliaDatabase(this.$api, addRecords, false)
+        const apiResult = await AddToAlgoliaDatabase(addRecords, false)
         if (!apiResult) {
           result = false
           return
         }
       }
       if (editRecords.length) {
-        const apiResult = await AddToAlgoliaDatabase(this.$api, editRecords, true)
+        const apiResult = await AddToAlgoliaDatabase(editRecords, true)
         if (!apiResult) {
           result = false
           return

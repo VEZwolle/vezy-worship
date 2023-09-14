@@ -293,7 +293,7 @@ export default {
     },
     async getAlgoliaDatabase () {
       this.isSavingDatabase = true
-      await GetAlgoliaDatabase(this.$api, this.$fsdb)
+      await GetAlgoliaDatabase()
       this.isSavingDatabase = false
     }
   }

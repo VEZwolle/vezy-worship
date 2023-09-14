@@ -294,7 +294,7 @@ export default {
           }
         } else {
           this.backupAlgoliaSongDatabase.push({ action: 'remove', record: props })
-          const result = await RemoveFromAlgoliaDatabase(this.$api, [props.objectID])
+          const result = await RemoveFromAlgoliaDatabase([props.objectID])
           if (!result) { // error bij remove
             this.backupAlgoliaSongDatabase.pop()
             return
@@ -323,7 +323,7 @@ export default {
           }
         }
         if (records.length === 0) return
-        const result = await AddToAlgoliaDatabase(this.$api, records, false)
+        const result = await AddToAlgoliaDatabase(records, false)
         if (!result) {
           this.$q.notify.create({ type: 'negative', message: 'Terugzetten wijzingen cloud mislukt!' })
           return
@@ -371,7 +371,7 @@ export default {
       } else { // cloud
         const record = await ConvertToAlgoliaRecord(this.editPresentation.settings, this.userName, this.editPresentation.id)
         if (record) {
-          const result = await AddToAlgoliaDatabase(this.$api, [record], !!this.editPresentation.id)
+          const result = await AddToAlgoliaDatabase([record], !!this.editPresentation.id)
           if (!result) {
             this.backupAlgoliaSongDatabase.pop()
             this.$q.notify.create({ type: 'negative', message: 'Opslaan wijzingen cloud mislukt!' })

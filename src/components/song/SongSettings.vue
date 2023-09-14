@@ -281,7 +281,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.$store.dbCollections = await getAlgoliaCollections(this.$api)
+      this.$store.dbCollections = await getAlgoliaCollections()
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)

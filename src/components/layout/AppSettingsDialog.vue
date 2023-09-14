@@ -208,7 +208,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.dbCollections = await getAlgoliaCollections(this.$api)
+      this.dbCollections = await getAlgoliaCollections()
     },
     async newSongDatabase () {
       await this.$fsdb.newEmptyDatabase()
@@ -226,7 +226,7 @@ export default {
     },
     async saveAlgoliaDatabase () {
       this.isLoading = true
-      await GetAlgoliaDatabase(this.$api, this.$fsdb)
+      await GetAlgoliaDatabase()
       this.isLoading = false
     }
   }
