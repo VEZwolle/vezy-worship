@@ -290,7 +290,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input-songtext::v-deep(textarea) {
   height: 50vh;
 }
@@ -309,10 +309,8 @@ export default {
 .q-field--focused .translation-button {
   display: none;
 }
-</style>
 
-<style lang="scss">
-.q-input {
+.q-input::v-deep {
   .q-select {
     margin-right: -12px;
 
