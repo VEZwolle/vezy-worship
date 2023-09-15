@@ -46,8 +46,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .lyricsview::v-deep {
-    .diff {
+  .lyricsview {
+    :deep(.diff) {
       ins {
         background: lightgreen;
         text-decoration: none;
@@ -57,7 +57,7 @@ export default {
       }
     }
 
-    .diffhide {
+    :deep(.diffhide) {
       del {
         visibility: hidden;
       }
@@ -69,7 +69,7 @@ export default {
       }
     }
 
-    .lyrics {
+    :deep(.lyrics) {
       overflow-y: auto;
       overflow-x: hidden;
     }

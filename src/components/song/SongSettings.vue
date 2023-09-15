@@ -291,11 +291,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.input-songtext::v-deep(textarea) {
+.input-songtext :deep(textarea) {
   height: 50vh;
 }
 
-.input-songtext::v-deep(textarea:read-only) {
+.input-songtext :deep(textarea:read-only) {
   color: #ccc;
 }
 
@@ -310,8 +310,8 @@ export default {
   display: none;
 }
 
-.q-input::v-deep {
-  .q-select {
+.q-input {
+  :deep(.q-select) {
     margin-right: -12px;
 
     .q-field__control,
