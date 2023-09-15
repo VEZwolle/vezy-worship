@@ -13,6 +13,16 @@ const app = express()
 app.use(cors())
 
 /**
+ * Check authorization
+ */
+app.use((req, res, next) => {
+  if (req.headers.authorization !== process.env.VEZY_API_TOKEN) {
+    return res.status(401).json({ api: 'VezyWorshipApi' })
+  }
+  next()
+})
+
+/**
  * Load verse(s) from selected Bible.
  */
 app.post('/api/scripture', async (req, res) => {
@@ -430,6 +440,7 @@ app.post('/api/database/delete', async (req, res) => {
 })
 
 const secrets = [
+  'VEZY_API_TOKEN',
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
