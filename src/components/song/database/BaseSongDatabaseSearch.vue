@@ -109,7 +109,7 @@ export default {
       if (!this.searchInput) return
       this.isLoading = true
       this.selected = []
-      const result = await getAlgoliaSearch(this.$api, this.searchInput, this.searchLyrics, this.dbCollection)
+      const result = await getAlgoliaSearch(this.searchInput, this.searchLyrics, this.dbCollection)
       if (result === false) {
         this.resultSongDatabase = []
       } else {
@@ -118,7 +118,7 @@ export default {
       this.isLoading = false
     },
     async algoliaCollections () {
-      this.$store.dbCollections = await getAlgoliaCollections(this.$api)
+      this.$store.dbCollections = await getAlgoliaCollections()
     }
   }
 }

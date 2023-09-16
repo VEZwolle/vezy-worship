@@ -30,7 +30,7 @@ const fs = {
     // Load service data from `service.json`
     let service = entries.find(e => e.filename === 'service.json')
     if (!service) {
-      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand', position: 'top' })
+      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand' })
       await zipReader.close()
       return
     }
@@ -104,7 +104,6 @@ const fs = {
       Notify.create({
         type: 'negative',
         message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?',
-        position: 'top',
         timeout: 0,
         actions: [{ icon: 'close', color: 'white' }]
       })

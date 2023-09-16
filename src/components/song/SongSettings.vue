@@ -264,7 +264,7 @@ export default {
         const result = await this.$api.post('/translate', { text: this.settings.text })
         this.settings.translation = result.translation
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.', position: 'top' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
         this.isTranslating = false
       }
@@ -295,7 +295,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.$store.dbCollections = await getAlgoliaCollections(this.$api)
+      this.$store.dbCollections = await getAlgoliaCollections()
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
@@ -304,12 +304,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.input-songtext::v-deep(textarea) {
+<style scoped lang="scss">
+.input-songtext :deep(textarea) {
   height: 50vh;
 }
 
-.input-songtext::v-deep(textarea:read-only) {
+.input-songtext :deep(textarea:read-only) {
   color: #ccc;
 }
 
@@ -323,11 +323,9 @@ export default {
 .q-field--focused .translation-button {
   display: none;
 }
-</style>
 
-<style lang="scss">
 .q-input {
-  .q-select {
+  :deep(.q-select) {
     margin-right: -12px;
 
     .q-field__control,

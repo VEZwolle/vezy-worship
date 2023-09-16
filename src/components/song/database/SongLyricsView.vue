@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="lyricsview">
     <div>
       <q-item-label :class="`text-h6 ${classDiff}`" :lines="1">
         <div v-html="title" />
@@ -46,35 +46,32 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-</style>
-
-<style lang="scss">
-  .diff {
-    ins {
-      background: lightgreen;
-      text-decoration: none;
+  .lyricsview {
+    :deep(.diff) {
+      ins {
+        background: lightgreen;
+        text-decoration: none;
+      }
+      del {
+        background: pink;
+      }
     }
-    del {
-      background: pink;
+
+    :deep(.diffhide) {
+      del {
+        visibility: hidden;
+      }
+      ins, mark {
+        text-decoration: none;
+      }
+      ins ~ del {
+        display: none;
+      }
+    }
+
+    :deep(.lyrics) {
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
-
-  .diffhide {
-    del {
-      visibility: hidden;
-    }
-    ins, mark {
-      text-decoration: none;
-    }
-    ins ~ del {
-      display: none;
-    }
-  }
-
-  .lyrics {
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
 </style>

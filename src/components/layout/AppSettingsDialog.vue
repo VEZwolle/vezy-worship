@@ -8,7 +8,8 @@
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
         <q-tab name="background" label="Achtergrond" />
-        <q-tab name="database" label="Database" />
+        <q-tab name="api" label="api-key" />
+        <q-tab name="database" label="Zoeken/database" />
         <q-tab name="settings" label="Opmaak" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
@@ -21,6 +22,26 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+        </q-tab-panel>
+
+        <q-tab-panel name="api">
+          <div class="text">
+            Voor het gebruik van onderstaande functies is een api - key nodig.
+            <q-list dense>
+              <q-item v-for="(apiFunction, index) in apiFunctions" :key="`api${index}`">
+                <q-item-section avatar>
+                  <q-icon color="primary" :name="apiFunction.icon" />
+                </q-item-section>
+                <q-item-section>{{ apiFunction.name }}</q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+          <q-input v-model="vezyWorshipApiToken" dense outlined class="q-pt-md" label="Api key: gebruik online functies">
+            <q-tooltip>Api key voor gebruik online functies</q-tooltip>
+            <template #append>
+              <q-icon v-if="vezyWorshipApiToken" name="cancel" class="cursor-pointer" @click="vezyWorshipApiToken = ''" />
+            </template>
+          </q-input>
         </q-tab-panel>
 
         <q-tab-panel name="database">
@@ -61,36 +82,36 @@
           <div class="text-h6">
             Cloud algolia:
           </div>
-          <q-btn label="Opslaan als database bestand" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
-          <q-input v-model="apiKeyEdit" dense outlined class="q-pt-md" label="Api key: bewerken online gegevens">
+          <q-input v-model="apiKeyEdit" dense outlined label="Api key: bewerken online gegevens">
             <q-tooltip>Api key voor bewerken database</q-tooltip>
             <template #append>
               <q-icon v-if="apiKeyEdit" name="cancel" class="cursor-pointer" @click="apiKeyEdit = ''" />
             </template>
           </q-input>
           <div class="row q-mt-sm">
-            <q-btn :disable="apiKeyEdit !== 'opgeslagen'" label="Cloud algolia bewerken" color="primary" @click="editSongAlgoliaDatabase" />
-            <q-input v-model="userName" dense outlined class="q-ml-md" label="Gebruikersnaam">
+            <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
               <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
             </q-input>
+            <q-btn :disable="apiKeyEdit !== 'is ingesteld'" label="bewerken" color="primary" @click="editSongAlgoliaDatabase" />
           </div>
+          <q-btn label="Downloaden voor offline gebruik" class="q-mt-md" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale database:
           </div>
           <div class="row">
-            <q-btn label="Database instellen/openen" color="primary" @click="loadSongDatabase" />
-            <q-btn label="Lege database aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
+            <q-btn label="Instellen" color="primary" @click="loadSongDatabase" />
+            <q-btn label="Aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
           </div>
           (wordt direct ingesteld bij geldige database)
           <q-badge v-if="songDatabase" class="q-mb-sm">
             {{ songDatabase }}
           </q-badge>
           <div class="row q-mt-sm">
-            <q-btn label="Lokale database bewerken" color="primary" @click="editSongLocalDatabase" />
-            <q-input v-model="userName" dense outlined class="q-ml-md" label="Gebruikersnaam">
+            <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
               <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
             </q-input>
+            <q-btn label="bewerken" color="primary" @click="editSongLocalDatabase" />
           </div>
         </q-tab-panel>
 
@@ -165,8 +186,27 @@ export default {
       userName: '',
       searchBaseIsLocal: true,
       apiKeyEdit: '',
+      vezyWorshipApiToken: '',
       isLoading: false,
-      tab: 'background'
+      tab: 'background',
+      apiFunctions: [
+        {
+          name: 'Inladen versen uit de bijbel vertalingen',
+          icon: 'menu_book'
+        },
+        {
+          name: 'Inladen planning / liederen uit planning center online (PCO)',
+          icon: 'list'
+        },
+        {
+          name: 'Vertaling & taal splitsen via DeepL',
+          icon: 'translate'
+        },
+        {
+          name: 'Zoeken & downloaden liederen via cloud (Algolia)',
+          icon: 'img:images/algolia-mark.svg'
+        }
+      ]
     }
   },
   computed: {
@@ -196,8 +236,9 @@ export default {
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
       this.dbCollection = localStorage.getItem('database.collection') || ''
       this.userName = localStorage.getItem('database.userName') || ''
-      this.apiKeyEdit = localStorage.getItem('database.apiKeyEdit') ? 'opgeslagen' : ''
+      this.apiKeyEdit = localStorage.getItem('database.apiKeyEdit') ? 'is ingesteld' : ''
       this.searchBaseIsLocal = !(localStorage.getItem('database.searchBase') === 'cloud' || false)
+      this.vezyWorshipApiToken = localStorage.getItem('VezyWorshipApiToken') ? 'is ingesteld' : ''
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
     },
     async save () {
@@ -209,8 +250,9 @@ export default {
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
       localStorage.setItem('database.collection', this.dbCollection || '')
       localStorage.setItem('database.userName', this.userName || '')
-      if (this.apiKeyEdit !== 'opgeslagen') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
+      if (this.apiKeyEdit !== 'is ingesteld') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
+      if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.VezyWorshipApiToken || '')
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
 
       this.$q.dialog({
@@ -228,7 +270,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.dbCollections = await getAlgoliaCollections(this.$api)
+      this.dbCollections = await getAlgoliaCollections()
     },
     async newSongDatabase () {
       await this.$fsdb.newEmptyDatabase()
@@ -246,7 +288,7 @@ export default {
     },
     async saveAlgoliaDatabase () {
       this.isLoading = true
-      await GetAlgoliaDatabase(this.$api, this.$fsdb)
+      await GetAlgoliaDatabase()
       this.isLoading = false
     },
     min0 (val) {
