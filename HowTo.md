@@ -44,12 +44,19 @@ in terminal:
   - `npm run api:update-data` --> export data firesore to google cloud to local emulator
   - `npm run api:serve-data`   --> Start Vezyworship-API + locale database: `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
   - opmerking: api-key's & secrets los instellen ( niet algemeen toegankelijk, voor testen zelf aanmaken )
-   - `.env` bestand in api map: (deze ook in firebase secrets voor api zijde deploy)
+   - `.env` `.env.local` `.secret.local` bestand in api map: (deze ook in firebase secrets/.env voor api zijde deploy)
     ```
       PCOCLIENTID=...
       PCOCLIENTSECRET=...
       DEEPL_API_KEY=...
       API_URL=http://localhost:5000/api of .../api
+      VEZY_API_TOKEN=...
+      API_KEY_EDIT=...
+      ALGOLIA_APP_ID=...
+      ALGOLIA_INDEX_NAME=...
+      ALGOLIA_API_KEY=...
+      ALGOLIA_API_KEY_EDIT=...
+      ALGOLIA_USER=...
     ```
   - opmerking: locale database bestanden eerst uit firestore halen; zie onder.
 - in terminal, in rootmap van project uitvoeren: (niet gelijk met webapp; wel api benodigd)
@@ -112,6 +119,14 @@ in terminal:
     - `npm run electron:build`
     - -> installatie bestand: `...\dist\electron\Packaged\...exe`
     - -> gebuikt de firebase api voor connectie met DeepL, PCO, Bible import
+
+### Aanmaken Algolia zoek index:
+- via algolia.com
+  - index aanmaken
+  - json van database lokaal importeren (.vezdb uitpakken = zip)
+  - Searchable attributes: title(o) > collection(o) > number (o) > lyrics(u)
+  - facets (display): collection, maxFacetHits = 50 (of anders afhankelijk aantal collections)
+  - get api-key's
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html
