@@ -69,6 +69,10 @@ export default {
       return presentationTypes.find(t => t.id === this.presentation.type)
     },
     title () {
+      if (this.presentation.type === 'song') {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
       if (this.presentation.settings.title) {
         return this.presentation.settings.title
       }

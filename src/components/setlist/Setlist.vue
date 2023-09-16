@@ -47,7 +47,8 @@
     </q-page-container>
 
     <q-footer>
-      <q-fab color="primary" icon="add" direction="up" class="absolute" style="bottom: 20px; right: 20px;">
+      <QuickSearchDatabase />
+      <q-fab color="primary" icon="add" direction="up" class="absolute" style="top: -70px; right: 20px;">
         <q-fab-action
           v-for="presentationType in presentationTypes"
           :key="presentationType.id"
@@ -69,12 +70,12 @@
 <script>
 import SetlistItem from './SetlistItem.vue'
 import presentationTypes from '../presentation-types'
-import PresentationSettingsDialog from '../presentation/PresentationSettingsDialog.vue'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
+import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'
 
 export default {
-  components: { SetlistItem, PresentationSettingsDialog, ServiceSettingsDialog, Draggable },
+  components: { SetlistItem, ServiceSettingsDialog, Draggable, QuickSearchDatabase },
   setup () {
     return {
       presentationTypes: presentationTypes.reverse()

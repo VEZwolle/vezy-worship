@@ -15,6 +15,8 @@ export default defineStore('service', {
     livePresentation: null,
     isClear: true,
     noLivestream: false,
+    searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
+    dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: ''
   }),
   actions: {

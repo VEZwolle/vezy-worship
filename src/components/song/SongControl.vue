@@ -24,7 +24,7 @@ export default {
   }
 }
 
-function splitSong (text, linesPerSlide) {
+export function splitSong (text, linesPerSlide) {
   if (!text) return []
 
   return text

@@ -13,6 +13,16 @@ const app = express()
 app.use(cors())
 
 /**
+ * Check authorization
+ */
+app.use((req, res, next) => {
+  if (req.headers.authorization !== process.env.VEZY_API_TOKEN) {
+    return res.status(401).json({ api: 'VezyWorshipApi' })
+  }
+  next()
+})
+
+/**
  * Load verse(s) from selected Bible.
  */
 app.post('/api/scripture', async (req, res) => {
@@ -246,11 +256,201 @@ app.post('/api/pco', async (req, res) => {
   }
 })
 
+/**
+ * Algolia - Search
+ */
+app.post('/api/database/search', async (req, res) => {
+  const getCollections = req.body.getCollections || false
+  const query = req.body.search
+  const textSearch = req.body.textSearch || false
+  const collection = req.body.collection || ''
+  // Niet (goed) mogelijk om op "" te filteren [controle op met/zonder vertaling weg laten] --> moet extra atribuut of tag in database zetten; nu weg laten
+  // https://support.algolia.com/hc/en-us/articles/15072471836561-Can-I-filter-by-an-attribute-value-which-is-null-or-an-empty-string-
+  // const isTranslation = req.body.isTranslation || false
+
+  const algoliasearch = require('algoliasearch')
+  // Start the API client
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Search the index for...
+  // https://www.algolia.com/doc/api-reference/api-methods/search/
+  try {
+    let result = null
+    switch (true) {
+      case getCollections:
+        result = await algoliaIndex.searchForFacetValues('collection')
+        break
+      case !textSearch && collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ],
+          filters: `collection:${collection}`
+        })
+        break
+      case !textSearch:
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ]
+        })
+        break
+      case collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          filters: `collection:${collection}`
+        })
+        break
+      default: // search in 'title', 'collection', 'number', 'lyrics'
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100
+        })
+    }
+
+    res.json(result) // data onder 'hits' or 'facetHit'
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
+app.post('/api/database/backup', async (req, res) => {
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Download all records for the index...
+  // https://www.algolia.com/doc/api-reference/api-methods/browse/
+
+  let result = []
+  algoliaIndex.browseObjects({
+    batch: batch => {
+      result = result.concat(batch)
+    }
+  }).then(() => {
+    res.json(result) // all data records
+  }).catch(() => res.status(500).json({ error: 'algolia_error' }))
+})
+
+app.post('/api/database/edit', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const records = req.body.records || [] // array of full reccords
+  const partUpdate = req.body.partUpdate || false // array of full reccords
+  if (records?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit (if exist) by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
+  try {
+    let result
+    switch (true) {
+      case partUpdate && records.length === 1:
+        result = await algoliaIndex.partialUpdateObject(records[0], {
+          createIfNotExists: true
+        })
+        break
+      case partUpdate:
+        result = await algoliaIndex.partialUpdateObjects(records, {
+          createIfNotExists: true
+        })
+        break
+      case records.length === 1:
+        result = await algoliaIndex.saveObject(records[0], {
+          autoGenerateObjectIDIfNotExist: true
+        })
+        break
+      default: // add or full replace
+        result = await algoliaIndex.saveObjects(records, {
+          autoGenerateObjectIDIfNotExist: true
+        })
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
+app.post('/api/database/delete', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const objectIDs = req.body.objectIDs // array of objectID
+  if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit  by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
+  try {
+    let result
+    switch (true) {
+      case objectIDs.length === 1:
+        result = await algoliaIndex.deleteObject(objectIDs[0])
+        break
+      default: // add or full replace
+        result = await algoliaIndex.deleteObjects(objectIDs)
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
 const secrets = [
+  'VEZY_API_TOKEN',
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL'
+  'API_URL',
+  'ALGOLIA_APP_ID',
+  'ALGOLIA_API_KEY',
+  'ALGOLIA_API_KEY_EDIT',
+  'ALGOLIA_INDEX_NAME',
+  'API_KEY_EDIT', // omzetten naar key's in database per persoon of andere auth?
+  'ALGOLIA_USER'
 ]
 
 exports.api = functions

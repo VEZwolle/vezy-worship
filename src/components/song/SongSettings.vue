@@ -2,15 +2,79 @@
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
-      <q-tab name="background" label="Achtergrond" />
+      <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
 
     <q-separator />
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
-        <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
-
+        <div class="row q-gutter-md">
+          <div class="col">
+            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+          </div>
+          <div class="col">
+            <div class="row q-gutter-md">
+              <div class="col">
+                <q-input v-model="settings.collection" outlined label="Collectie">
+                  <template #append>
+                    <q-select
+                      v-model="settings.collection"
+                      borderless
+                      hide-selected
+                      menu-anchor="bottom right"
+                      menu-self="top right"
+                      popup-content-style="height: 30vh;"
+                      options-dense
+                      :options="$store.dbCollections"
+                      @click="loadCollectionDatabase"
+                      @popup-show="loadCollectionDatabase"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-2">
+                <q-input v-model="settings.number" outlined label="Nr" />
+              </div>
+              <div v-if="!editEmit" class="col-auto">
+                <q-toggle
+                  v-model="$store.searchBaseIsLocal"
+                  checked-icon="lyrics"
+                  unchecked-icon="cloud"
+                  color="primary"
+                  dense
+                  @update:model-value="$store.dbCollections = ['']"
+                >
+                  <q-tooltip>cloud of locale database</q-tooltip>
+                </q-toggle>
+                <q-btn-dropdown
+                  split
+                  color="primary"
+                  label="Uit database"
+                  icon="lyrics"
+                  class="q-mt-sm"
+                  @click.stop="importSongDb"
+                >
+                  <template #label>
+                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                  </template>
+                  <q-list>
+                    <q-item v-close-popup clickable @click="CompareWithDb">
+                      <q-item-section>
+                        <q-item-label>
+                          Vergelijk met database versie
+                          <q-tooltip>
+                            Lied vergelijken met versie uit de database
+                          </q-tooltip>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row q-gutter-md">
           <div class="col">
             <q-input
@@ -129,23 +193,39 @@
     v-model:text="settings.text"
     v-model:translation="settings.translation"
   />
+  <SearchDatabaseDialog
+    ref="SearchDatabaseDialog"
+    v-model:title="settings.title"
+    v-model:collection="settings.collection"
+    v-model:number="settings.number"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
+  <SongDatabaseCompareDialog ref="SongDatabaseCompareDialog" />
 </template>
 
 <script>
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
+import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog },
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
   extends: SongSettingsTools,
   data () {
     return {
       tab: 'text',
       isTranslating: false,
       ignoreInput: null
+    }
+  },
+  computed: {
+    editEmit () {
+      return this.presentation?.from === 'database'
     }
   },
   mounted () {
@@ -160,6 +240,9 @@ export default {
     this.translateObserver.disconnect()
   },
   methods: {
+    importSongDb () {
+      this.$refs.SearchDatabaseDialog.show()
+    },
     async translate () {
       this.isTranslating = true
 
@@ -167,12 +250,13 @@ export default {
         const result = await this.$api.post('/translate', { text: this.settings.text })
         this.settings.translation = result.translation
       } catch {
-        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.', position: 'top' })
+        this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
         this.isTranslating = false
       }
     },
     syncInputs (input, prop) {
+      if (!this.settings.translation) return
       if (this.ignoreInput === input) {
         this.ignoreInput = null
         return
@@ -190,17 +274,28 @@ export default {
     },
     resize (input) {
       return () => this.syncInputs(input, 'style.height')
+    },
+    async loadCollectionDatabase () {
+      if (this.$store.searchBaseIsLocal) {
+        this.$store.dbCollections = await this.$fsdb.getCollections(true)
+        this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
+        return
+      }
+      this.$store.dbCollections = await getAlgoliaCollections()
+    },
+    CompareWithDb () {
+      this.$refs.SongDatabaseCompareDialog.show(this.presentation)
     }
   }
 }
 </script>
 
-<style scoped>
-.input-songtext::v-deep(textarea) {
+<style scoped lang="scss">
+.input-songtext :deep(textarea) {
   height: 50vh;
 }
 
-.input-songtext::v-deep(textarea:read-only) {
+.input-songtext :deep(textarea:read-only) {
   color: #ccc;
 }
 
@@ -213,5 +308,21 @@ export default {
 
 .q-field--focused .translation-button {
   display: none;
+}
+
+.q-input {
+  :deep(.q-select) {
+    margin-right: -12px;
+
+    .q-field__control,
+    .q-field__control::before {
+      background-color: transparent;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .q-field__append {
+      padding-left: 0;
+    }
+  }
 }
 </style>
