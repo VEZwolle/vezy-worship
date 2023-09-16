@@ -2,6 +2,7 @@
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
+      <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
 
@@ -180,6 +181,19 @@
               </q-btn>
             </q-toolbar>
           </div>
+        </div>
+      </q-tab-panel>
+      <q-tab-panel name="settings">
+        <div class="row q-gutter-xs">
+          <div class="text">
+            Automatisch opsplitsen regels uitzetten
+          </div>
+          <q-toggle
+            v-model="settings.noSplitLines"
+            color="primary"
+            keep-color
+            dense
+          />
         </div>
       </q-tab-panel>
       <q-tab-panel name="background">

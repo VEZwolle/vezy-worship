@@ -628,6 +628,7 @@ export default {
                   number: '',
                   text: `${this.planItems[id].html_details}`,
                   translation: '',
+                  noSplitLines: false,
                   bgOpacity: 0,
                   bgFileId: null
                 }

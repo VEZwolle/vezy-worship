@@ -10,6 +10,7 @@
         <q-tab name="background" label="Achtergrond" />
         <q-tab name="api" label="api-key" />
         <q-tab name="database" label="Zoeken/database" />
+        <q-tab name="settings" label="Opmaak" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
@@ -112,6 +113,23 @@
             </q-input>
             <q-btn label="bewerken" color="primary" @click="editSongLocalDatabase" />
           </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="settings">
+          <q-input
+            v-model.number="$store.splitSongLines"
+            type="number"
+            outlined
+            stack-label
+            min="0"
+            label="Splitsen aantal regels lied op beamer"
+            :rules="[min0]"
+          >
+            <q-tooltip>
+              Aantal regels zichtbaar op beamer<br>
+              0 = niet opslplitsen.
+            </q-tooltip>
+          </q-input>
         </q-tab-panel>
 
         <q-tab-panel name="autoupdate">
@@ -221,6 +239,7 @@ export default {
       this.apiKeyEdit = localStorage.getItem('database.apiKeyEdit') ? 'is ingesteld' : ''
       this.searchBaseIsLocal = !(localStorage.getItem('database.searchBase') === 'cloud' || false)
       this.vezyWorshipApiToken = localStorage.getItem('VezyWorshipApiToken') ? 'is ingesteld' : ''
+      this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -234,6 +253,7 @@ export default {
       if (this.apiKeyEdit !== 'is ingesteld') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
       if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.VezyWorshipApiToken || '')
+      localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
@@ -270,6 +290,12 @@ export default {
       this.isLoading = true
       await GetAlgoliaDatabase()
       this.isLoading = false
+    },
+    min0 (val) {
+      if (typeof val !== 'number') {
+        return
+      }
+      return val >= 0 || 'Minimaal 0'
     }
   }
 }

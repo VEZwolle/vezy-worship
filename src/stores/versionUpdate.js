@@ -61,6 +61,7 @@ export function versionUpdate (service) {
           case 'song': {
             presentation.settings.collection = presentation.settings.collection || ''
             presentation.settings.number = presentation.settings.number || ''
+            if (presentation.settings.noSplitLines === undefined) presentation.settings.noSplitLines = false
             break
           }
           default:

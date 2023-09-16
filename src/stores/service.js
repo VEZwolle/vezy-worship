@@ -16,6 +16,7 @@ export default defineStore('service', {
     isClear: true,
     noLivestream: false,
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
+    splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: ''
   }),
