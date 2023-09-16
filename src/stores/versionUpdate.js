@@ -63,6 +63,19 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
+    case version <= 1.0800:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'song': {
+            presentation.settings.collection = presentation.settings.collection || ''
+            presentation.settings.number = presentation.settings.number || ''
+            if (presentation.settings.noSplitLines === undefined) presentation.settings.noSplitLines = false
+            break
+          }
+          default:
+        }
+      })
+      // eslint-disable-next-line
     default: // no changes
       // console.log(`version file: ${version}`)
       break
