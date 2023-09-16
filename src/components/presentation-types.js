@@ -12,7 +12,7 @@ export default [
       number: '',
       text: '',
       translation: '',
-      splitLines: 4,
+      noSplitLines: false,
       bgOpacity: 0,
       bgFileId: null
     },

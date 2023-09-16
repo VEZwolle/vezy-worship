@@ -2,6 +2,7 @@
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
+      <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
 
@@ -10,81 +11,69 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
         <div class="row q-gutter-md">
-          <div class="col-4">
+          <div class="col">
             <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
           </div>
-          <div class="col-3">
-            <q-input v-model="settings.collection" outlined label="Collectie">
-              <template #append>
-                <q-select
-                  v-model="settings.collection"
-                  borderless
-                  hide-selected
-                  menu-anchor="bottom right"
-                  menu-self="top right"
-                  popup-content-style="height: 30vh;"
-                  options-dense
-                  :options="$store.dbCollections"
-                  @click="loadCollectionDatabase"
-                  @popup-show="loadCollectionDatabase"
-                />
-              </template>
-            </q-input>
-          </div>
-          <div class="col-1">
-            <q-input v-model="settings.number" outlined label="Nr" />
-          </div>
-          <div v-if="!editEmit" class="col-auto">
-            <q-toggle
-              v-model="$store.searchBaseIsLocal"
-              checked-icon="lyrics"
-              unchecked-icon="cloud"
-              color="primary"
-              dense
-              @update:model-value="$store.dbCollections = ['']"
-            >
-              <q-tooltip>cloud of locale database</q-tooltip>
-            </q-toggle>
-            <q-btn-dropdown
-              split
-              color="primary"
-              label="Uit database"
-              icon="lyrics"
-              class="q-mt-sm"
-              @click.stop="importSongDb"
-            >
-              <template #label>
-                <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
-              </template>
-              <q-list>
-                <q-item v-close-popup clickable @click="CompareWithDb">
-                  <q-item-section>
-                    <q-item-label>
-                      Vergelijk met database versie
-                      <q-tooltip>
-                        Lied vergelijken met versie uit de database
-                      </q-tooltip>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </div>
           <div class="col">
-            <q-input
-              v-model.number="settings.splitLines"
-              type="number"
-              outlined
-              stack-label
-              min="1"
-              label="regels"
-              :rules="[min0]"
-            >
-              <q-tooltip>
-                Aantal regels zichtbaar op beamer<br>
-                0 = niet opslplitsen.
-              </q-tooltip>
-            </q-input>
+            <div class="row q-gutter-md">
+              <div class="col">
+                <q-input v-model="settings.collection" outlined label="Collectie">
+                  <template #append>
+                    <q-select
+                      v-model="settings.collection"
+                      borderless
+                      hide-selected
+                      menu-anchor="bottom right"
+                      menu-self="top right"
+                      popup-content-style="height: 30vh;"
+                      options-dense
+                      :options="$store.dbCollections"
+                      @click="loadCollectionDatabase"
+                      @popup-show="loadCollectionDatabase"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-2">
+                <q-input v-model="settings.number" outlined label="Nr" />
+              </div>
+              <div v-if="!editEmit" class="col-auto">
+                <q-toggle
+                  v-model="$store.searchBaseIsLocal"
+                  checked-icon="lyrics"
+                  unchecked-icon="cloud"
+                  color="primary"
+                  dense
+                  @update:model-value="$store.dbCollections = ['']"
+                >
+                  <q-tooltip>cloud of locale database</q-tooltip>
+                </q-toggle>
+                <q-btn-dropdown
+                  split
+                  color="primary"
+                  label="Uit database"
+                  icon="lyrics"
+                  class="q-mt-sm"
+                  @click.stop="importSongDb"
+                >
+                  <template #label>
+                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                  </template>
+                  <q-list>
+                    <q-item v-close-popup clickable @click="CompareWithDb">
+                      <q-item-section>
+                        <q-item-label>
+                          Vergelijk met database versie
+                          <q-tooltip>
+                            Lied vergelijken met versie uit de database
+                          </q-tooltip>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row q-gutter-md">
@@ -194,6 +183,19 @@
           </div>
         </div>
       </q-tab-panel>
+      <q-tab-panel name="settings">
+        <div class="row q-gutter-xs">
+          <div class="text">
+            Automatisch opsplitsen regels uitzetten
+          </div>
+          <q-toggle
+            v-model="settings.noSplitLines"
+            color="primary"
+            keep-color
+            dense
+          />
+        </div>
+      </q-tab-panel>
       <q-tab-panel name="background">
         <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
@@ -297,12 +299,6 @@ export default {
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
-    },
-    min0 (val) {
-      if (typeof val !== 'number') {
-        return
-      }
-      return val >= 0 || 'Minimaal 0'
     }
   }
 }
