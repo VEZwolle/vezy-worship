@@ -270,7 +270,7 @@ app.post('/api/database/search', async (req, res) => {
 
   const algoliasearch = require('algoliasearch')
   // Start the API client
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
@@ -331,7 +331,7 @@ app.post('/api/database/search', async (req, res) => {
 
 app.post('/api/database/backup', async (req, res) => {
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY, {
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
@@ -352,7 +352,7 @@ app.post('/api/database/backup', async (req, res) => {
 
 app.post('/api/database/edit', async (req, res) => {
   const apiKeyEdit = req.body.apiKeyEdit || false
-  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
 
   const records = req.body.records || [] // array of full reccords
   const partUpdate = req.body.partUpdate || false // array of full reccords
@@ -404,7 +404,7 @@ app.post('/api/database/edit', async (req, res) => {
 
 app.post('/api/database/delete', async (req, res) => {
   const apiKeyEdit = req.body.apiKeyEdit || false
-  if (apiKeyEdit !== process.env.API_KEY_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
 
   const objectIDs = req.body.objectIDs // array of objectID
   if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
@@ -440,17 +440,10 @@ app.post('/api/database/delete', async (req, res) => {
 })
 
 const secrets = [
-  'VEZY_API_TOKEN',
-  'PCOCLIENTID',
-  'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL',
-  'ALGOLIA_APP_ID',
-  'ALGOLIA_API_KEY',
+  'PCOCLIENTSECRET',
   'ALGOLIA_API_KEY_EDIT',
-  'ALGOLIA_INDEX_NAME',
-  'API_KEY_EDIT', // omzetten naar key's in database per persoon of andere auth?
-  'ALGOLIA_USER'
+  'VEZY_API_TOKEN_EDIT'
 ]
 
 exports.api = functions
