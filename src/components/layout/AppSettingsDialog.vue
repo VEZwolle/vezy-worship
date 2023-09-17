@@ -252,7 +252,7 @@ export default {
       localStorage.setItem('database.userName', this.userName || '')
       if (this.apiKeyEdit !== 'is ingesteld') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
-      if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.VezyWorshipApiToken || '')
+      if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.vezyWorshipApiToken || '')
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
 
       this.$q.dialog({
