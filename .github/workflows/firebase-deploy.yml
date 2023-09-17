@@ -20,6 +20,7 @@ jobs:
         run: cd api && npm install
       - name: Create Functions env file
         run: |
+          cd api
           echo "TESTENV=testenEnv" > .env
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
