@@ -18,6 +18,10 @@ jobs:
         run: npm run build
       - name: Install Functions Dependencies
         run: cd api && npm install
+      - name: Create Functions env file
+        run: |
+          cd api
+          echo "${{ secrets.FIREBASE_FUNCTIONS_ENV_FILE }}" > .env
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
