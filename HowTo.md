@@ -55,7 +55,7 @@ in terminal:
     ALGOLIA_API_KEY_SEARCH=...
     ALGOLIA_USER=...
   ```
-  `.secret.local` (deze ook in firebase secrets manager plaatsen)
+  `.secret.local` (deze ook in firebase secrets manager plaatsen | https://console.cloud.google.com/security/secret-manager)
   ```
     DEEPL_API_KEY=...
     PCOCLIENTSECRET=...
@@ -92,6 +92,8 @@ in terminal:
   - `firebase deploy --only functions`
 - Deploy web-app
   - github actions: zie `.github\workflows\firebase-deploy.yml`
+- Deploy electron-app install
+  - github actions: zie `.github\workflows\electron-deploy.yml`
 ### google cloud functions:
 - Install Google cloud SDK: 
   - https://cloud.google.com/sdk/docs/install-sdk --> windows installatie + standaard instellingen
