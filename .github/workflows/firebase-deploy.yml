@@ -21,9 +21,7 @@ jobs:
       - name: Create Functions env file
         run: |
           cd api
-          echo "TESTENV=testenEnv\n" > .env
-          ls -l -a
-          cat .env
+          echo "${{ secrets.FIREBASE_FUNCTIONS_ENV_FILE }}" > .env
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:

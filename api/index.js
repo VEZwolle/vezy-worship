@@ -1,12 +1,8 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-const { defineString } = require('firebase-functions/params')
 const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
-
-// add env
-const envTESTENV = defineString('TESTENV', { default: 'NotSetFromEnv' })
 
 // Initialization
 admin.initializeApp()
@@ -20,7 +16,7 @@ app.use(cors())
  * Test .env
  */
 app.post('/api/env', async (req, res) => {
-  res.json({ testEnvEnv: process.env.TESTENV, testEnvDefine: envTESTENV.value() })
+  res.json({ testEnv: process.env.TESTENV, test_Env: process.env.TEST_ENV })
 })
 
 /**
