@@ -13,13 +13,6 @@ const app = express()
 app.use(cors())
 
 /**
- * Test .env
- */
-app.post('/api/env', async (req, res) => {
-  res.json({ testEnv: process.env.TESTENV })
-})
-
-/**
  * Load verse(s) from selected Bible.
  */
 app.post('/api/scripture', async (req, res) => {
@@ -256,8 +249,7 @@ const secrets = [
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL',
-  'TESTENV'
+  'API_URL'
 ]
 
 exports.api = functions
