@@ -256,7 +256,8 @@ const secrets = [
   'PCOCLIENTID',
   'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL'
+  'API_URL',
+  'TESTENV'
 ]
 
 exports.api = functions
