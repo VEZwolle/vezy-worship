@@ -1,26 +1,43 @@
 import axios from 'axios'
-import { Notify } from 'quasar'
+import { Notify, Dialog } from 'quasar'
 
 const api = axios.create({
   baseURL: process.env.API_URL
 })
 
-api.interceptors.request.use(
-  (request) => {
+api.interceptors.request.use((request) =>
+  new Promise((resolve) => {
     let token = localStorage.getItem('VezyWorshipApiToken')
-    if (!token) {
-      Notify.create({ type: 'negative', message: 'Cloud functies: gebruikers sleutel niet ingesteld!' })
-      // ask VezyWorshipApiToken (not working in electron)
-      token = prompt('Vezy worship - Cloud functies: \nWat is uw gebruikers sleutel?', '')
-      // check functie voor opslag nog toevoegen?
-      localStorage.setItem('VezyWorshipApiToken', token)
-    }
     if (token) {
       request.headers.Authorization = token
+      resolve(request)
+    } else {
+      Notify.create({ type: 'negative', message: 'Cloud functies: gebruikers sleutel niet ingesteld!' })
+      Dialog.create({
+        title: 'Vezy worship - Cloud functies',
+        message: 'Wat is uw gebruikers sleutel?',
+        prompt: {
+          model: '',
+          isValid: val => val.length > 5,
+          type: 'text'
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        token = data
+      }).onCancel(() => {
+        token = ''
+      }).onDismiss(() => {
+        localStorage.setItem('VezyWorshipApiToken', token)
+        if (token) {
+          request.headers.Authorization = token
+        }
+        resolve(request)
+      })
     }
-    return request
   },
   (error) => Promise.reject(error)
+  )
 )
 
 api.interceptors.response.use(
