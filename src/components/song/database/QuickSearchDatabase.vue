@@ -173,7 +173,7 @@ export default {
   mounted () {
     this.searchInput = ''
     this.dbCollection = localStorage.getItem('database.collection') || ''
-    if (this.$fsdb.localSongDatabase) this.openLocalDatabase() // open only when already loaded
+    if (this.$fsdb.localSongDatabase || (this.$q.platform.is.electron && this.$fsdb.getSongDatabaseSettings())) this.openLocalDatabase() // open only when already loaded
   },
   methods: {
     rowClickSelect (e, row) {

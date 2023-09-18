@@ -38,6 +38,7 @@ const fsdb = {
       return ''
     } catch (error) {
       console.log(error)
+      return ''
     }
   },
 
