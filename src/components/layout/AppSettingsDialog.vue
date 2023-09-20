@@ -7,10 +7,9 @@
       </q-toolbar>
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
-        <q-tab name="background" label="Achtergrond" />
-        <q-tab name="api" label="api-key" />
-        <q-tab name="database" label="Zoeken/database" />
         <q-tab name="settings" label="Opmaak" />
+        <q-tab name="api" label="api-key's" />
+        <q-tab name="database" label="Zoeken/database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
@@ -22,6 +21,50 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+        </q-tab-panel>
+
+        <q-tab-panel name="settings">
+          <div class="text-h6">
+            Lied opdelen
+          </div>
+          <q-input
+            v-model.number="$store.splitSongLines"
+            type="number"
+            outlined
+            stack-label
+            min="0"
+            label="Splitsen aantal regels lied op beamer"
+            :rules="[min0]"
+          >
+            <q-tooltip>
+              Aantal regels zichtbaar op beamer<br>
+              0 = niet opslplitsen.
+            </q-tooltip>
+          </q-input>
+
+          <q-separator color="secondary" class="q-my-md" />
+
+          <div class="text-h6">
+            Achtergrond
+          </div>
+          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
+            <template #append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-color v-model="backgroundColor.beamer" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+          <q-input v-model="backgroundColor.livestream" clearable :rules="['anyColor']" label="Livestream achtergrond kleur (leeg voor zwart)" class="q-mb-sm">
+            <template #append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-color v-model="backgroundColor.livestream" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </q-tab-panel>
 
         <q-tab-panel name="api">
@@ -40,6 +83,17 @@
             <q-tooltip>Api key voor gebruik online functies</q-tooltip>
             <template #append>
               <q-icon v-if="vezyWorshipApiToken" name="cancel" class="cursor-pointer" @click="vezyWorshipApiToken = ''" />
+            </template>
+          </q-input>
+          <q-separator color="secondary" class="q-my-md" />
+          <div class="text">
+            Voor het bewerken van de cloud liederen database is extra api - key nodig:
+          </div>
+          <img src="../../assets/algolia-logo.svg" height="16">
+          <q-input v-model="apiKeyEdit" dense outlined label="Api key: bewerken online gegevens algolia">
+            <q-tooltip>Api key voor bewerken database algolia</q-tooltip>
+            <template #append>
+              <q-icon v-if="apiKeyEdit" name="cancel" class="cursor-pointer" @click="apiKeyEdit = ''" />
             </template>
           </q-input>
         </q-tab-panel>
@@ -82,19 +136,16 @@
           <div class="text-h6">
             Cloud algolia:
           </div>
-          <q-input v-model="apiKeyEdit" dense outlined label="Api key: bewerken online gegevens">
-            <q-tooltip>Api key voor bewerken database</q-tooltip>
-            <template #append>
-              <q-icon v-if="apiKeyEdit" name="cancel" class="cursor-pointer" @click="apiKeyEdit = ''" />
-            </template>
-          </q-input>
           <div class="row q-mt-sm">
-            <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
-              <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
-            </q-input>
-            <q-btn :disable="apiKeyEdit !== 'is ingesteld'" label="bewerken" color="primary" @click="editSongAlgoliaDatabase" />
+            <q-btn label="Downloaden voor offline gebruik" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
+            <template v-if="apiKeyEdit === 'is ingesteld'">
+              <q-space />
+              <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
+                <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+              </q-input>
+              <q-btn :disable="apiKeyEdit !== 'is ingesteld'" label="bewerken" color="primary" @click="editSongAlgoliaDatabase" />
+            </template>
           </div>
-          <q-btn label="Downloaden voor offline gebruik" class="q-mt-md" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale database:
@@ -102,60 +153,21 @@
           <div class="row">
             <q-btn label="Instellen" color="primary" @click="loadSongDatabase" />
             <q-btn label="Aanmaken" color="primary" class="col-auto q-ml-md" @click="newSongDatabase" />
-          </div>
-          (wordt direct ingesteld bij geldige database)
-          <q-badge v-if="songDatabase" class="q-mb-sm">
-            {{ songDatabase }}
-          </q-badge>
-          <div class="row q-mt-sm">
+            <q-space />
             <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
               <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
             </q-input>
             <q-btn label="bewerken" color="primary" @click="editSongLocalDatabase" />
           </div>
-        </q-tab-panel>
-
-        <q-tab-panel name="settings">
-          <q-input
-            v-model.number="$store.splitSongLines"
-            type="number"
-            outlined
-            stack-label
-            min="0"
-            label="Splitsen aantal regels lied op beamer"
-            :rules="[min0]"
-          >
-            <q-tooltip>
-              Aantal regels zichtbaar op beamer<br>
-              0 = niet opslplitsen.
-            </q-tooltip>
-          </q-input>
+          (wordt direct ingesteld bij geldige database)
+          <q-badge v-if="songDatabase" class="q-mb-sm">
+            {{ songDatabase }}
+          </q-badge>
         </q-tab-panel>
 
         <q-tab-panel name="autoupdate">
           <q-checkbox v-model="autoupdate" label="Automatisch download & update Vezyworship" />
           <div>Wanneer er een update beschikbaar is wordt deze gedownload en na afsluiten van Vezyworship geinstalleerd.</div>
-        </q-tab-panel>
-
-        <q-tab-panel name="background">
-          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
-            <template #append>
-              <q-icon name="colorize" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                  <q-color v-model="backgroundColor.beamer" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-          <q-input v-model="backgroundColor.livestream" clearable :rules="['anyColor']" label="Livestream achtergrond kleur (leeg voor zwart)" class="q-mb-sm">
-            <template #append>
-              <q-icon name="colorize" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                  <q-color v-model="backgroundColor.livestream" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
         </q-tab-panel>
       </q-tab-panels>
 
@@ -188,7 +200,7 @@ export default {
       apiKeyEdit: '',
       vezyWorshipApiToken: '',
       isLoading: false,
-      tab: 'background',
+      tab: 'settings',
       apiFunctions: [
         {
           name: 'Inladen versen uit de bijbel vertalingen',
@@ -303,6 +315,6 @@ export default {
 
 <style scoped>
 .q-card {
-  min-width: 500px;
+  min-width: 700px;
 }
 </style>
