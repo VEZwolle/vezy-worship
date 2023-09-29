@@ -88,7 +88,7 @@
           <i>Dit voorkomt vaak vreemde fouten in de splitsing van liederen of uitlijningsverschillen van dezelfde teksten.</i>
         </li>
         <li>
-          <small>[ > ...X &lt; ]</small> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels en daarna de " . , ; " die aan einde van een regel staan.
+          <img src="../../assets/help/addsongdialogspaceinterpunctieremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels en daarna de " . , ; " die aan einde van een regel staan.
         </li>
         <li>
           <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen;<br>
@@ -139,6 +139,39 @@
       Alleen na gebruik van de knop "toepassen" wordt de bewerking opgeslagen naar je liedtekst in de setlist; "annuleren" sluit het venster zonder opslaan.
     </p>
     <div class="text-h6 q-mb-md">
+      Invoegen lied vanuit (online) database
+    </div>
+    <p>
+      <img src="../../assets/help/addsongdialogadddatabase.png"><br>
+      Er kunnen via de databaseknop ook liederen uit de locale of online (Angolia) database toegevoegd worden.<br>
+      Met de switch voor de databaseknop kan je wisselen tussen de locale en de online database.<br>
+      opm. de Algolia database ondersteund ook zoeken met kleine typefouten, de locale database niet.
+    </p>
+    <p>
+      <img src="../../assets/help/addsongdatabasedialog.png"><br>
+      - Links boven kan je wisselen tussen de locale en online database.<br>
+      - Vul in het zoekvak je zoektekst in.<br>
+      - Kies eventueel een collectie om je resultaten te beperken.<br>
+      - Standaard wordt alleen in de titel, collectie en nummer gezocht. Onderin kan je aangeven of je ook in de liedtekst wilt zoeken.<br>
+      - Voor de locale database kan je ook aanvinken dat je alleen liederen wilt vinden die een vertaling hebben.<br>
+      - met de knop toepassen wordt het lied uit de database gekopiereerd naar het actieve liedvenster.<br>
+      - In dit venster kan je ook liederen in de database bewerken of verwijderen; online alleen wanneer je hier de rechten voor hebt. (met de ongedaan maak knop kan je bepaalde wijzigingen weer ongedaan maken zolang je in dit venster zit.)<br>
+      - Rechts kan je een voorbeeld zien van het geselecteerde lied in de database.
+    </p>
+    <p>
+      Met de knop <img src="../../assets/help/filesaveas.png"> naast de database knop kan je ook de huidige liedtekst vergelijken met de liedtekst in database.<br>
+      Je krijgt dan 0 of meerdere liederen in een lijst te zien met de hoeveelheid overeenkomst. In het voorbeeld er onder kan je dan de verschillen zien.<br>
+      Mocht je de database versie willen gebruiken kan je dit via de knop "gebruik database versie" doen.<br>
+      <img src="../../assets/help/addsongdatabasecomparedialog.png">
+    </p>
+    <p>
+      Liederen importeren uit de setlist naar de database kan via het uitklapvenster naast dienst opslaan.<br>
+      De liederen worden dan vergelekem met de database en je kan dan kiezen tussen, vervangen, toevoegen of niets doen..<br>
+      Ook hier zoekt hij naar liederen die het meest op de liederen uit de setlist in de database lijken.<br>
+      <img src="../../assets/help/addsetlistsongtodatabase.png"><br>
+      <img src="../../assets/help/addsetlistsongtodatabasedialog.png">
+    </p>
+    <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
     </div>
     <p>
@@ -148,6 +181,14 @@
       Je moet per (livestream) pagina doorklikken/doorlopen in de lijst.<br>
       Onder in het scherm zie je een voorbeeld.<br>
       <img src="../../assets/help/songcontrol.png">
+    </p>
+    <div class="text-h6 q-mb-md">
+      Automatische splitsing aantal regels beamer
+    </div>
+    <p>
+      Onder het tabblad "instellingen" kan je eventueel de automatische splitsing naar 4 regels op de beamer uit zetten.<br>
+      (Onder de programma instellingen zijn deze 4 regels ingesteld of algemeen aanpasbaar.)<br>
+      <img src="../../assets/help/addsongsettings.png">
     </p>
     <div class="text-h6 q-mb-md">
       Afwijkende achtergrond
