@@ -35,7 +35,13 @@
       </a>
       <br>
       VezyWorship valt onder een <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl" target="_blank">CC BY-NC 4.0 licentie</a>.<br>
-      Voor gebruik van de (bijbel)database dient er zelf een geldige gebruikslicentie<br>voor de betreffende boeken geregeld te zijn bij de betreffende instanties.
+      Voor gebruik van de (bijbel/liederen)database dient er zelf een geldige gebruikslicentie<br>voor de betreffende boeken geregeld te zijn bij de betreffende instanties.
+    </p>
+    <p>
+      Voor gebruik van de cloud functies is een api-key nodig;<br>
+      voor VEZ gebruikers te kijgen bij de makers van VezyWorship of teamleider projectie.<br>
+      Dit ivm de kosten voor gebruik functies en de benodigde licentie voor gebruik van de database gegevens.<br>
+      Voor een eigen hosting van de functies en database kan eerder genoemde licentie aangehouden worden.
     </p>
   </div>
 </template>
