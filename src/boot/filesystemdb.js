@@ -57,7 +57,12 @@ const fsdb = {
         }
       }
       if (!fileHandleSongDatabase) {
-        [fileHandleSongDatabase] = await window.showOpenFilePicker(filePickerOptionsDb)
+        if ('showOpenFilePicker' in window) {
+          [fileHandleSongDatabase] = await window.showOpenFilePicker(filePickerOptionsDb)
+        } else {
+          Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+          return false
+        }
       }
       // when file no longer exists an error is generated, caught with catch.
       const file = await fileHandleSongDatabase.getFile()
@@ -104,7 +109,14 @@ const fsdb = {
     }
     // Show SaveFilePicker on first save
     if (showPicker || !fsdb.fileHandleSongDatabase) {
-      fsdb.fileHandleSongDatabase = await window.showSaveFilePicker(filePickerOptionsDb)
+      if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
+        try {
+          fsdb.fileHandleSongDatabase = await window.showSaveFilePicker(filePickerOptionsDb)
+        } catch (error) {
+          if (error.name === 'AbortError') return Notify.create({ type: 'negative', message: 'Opslaan is geannuleerd' }) // user abort or files too sensitive or dangerous
+          console.error(error) // unknown error --> download file via catch by emty filehandle
+        }
+      }
     }
 
     const blobWriter = new zip.BlobWriter('application/zip')
@@ -126,7 +138,13 @@ const fsdb = {
       await set('VezySongDatabase', fsdb.fileHandleSongDatabase) // save to IndexedDB
       return true
     } catch {
-      Notify.create({ type: 'negative', message: 'Database kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+      Notify.create({ type: 'negative', message: 'Database kon niet worden opgeslagen. --> Downloaden...  gelukt?' })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'vezydatabase.vezdb'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
       return false
     }
   },
