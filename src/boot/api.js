@@ -6,13 +6,13 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((request) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     let token = localStorage.getItem('VezyWorshipApiToken')
     if (token) {
       request.headers.Authorization = token
       resolve(request)
     } else {
-      Notify.create({ type: 'negative', message: 'Cloud functies: gebruikers sleutel niet ingesteld!' })
+      Notify.create({ type: 'info', message: 'Cloud functies: gebruikers sleutel niet ingesteld!', position: 'top' })
       Dialog.create({
         title: 'Vezy worship - Cloud functies',
         message: 'Wat is uw gebruikers sleutel?',
@@ -25,14 +25,15 @@ api.interceptors.request.use((request) =>
         persistent: true
       }).onOk(data => {
         token = data
-      }).onCancel(() => {
-        token = ''
-      }).onDismiss(() => {
         localStorage.setItem('VezyWorshipApiToken', token)
         if (token) {
           request.headers.Authorization = token
+          resolve(request)
+        } else {
+          reject()
         }
-        resolve(request)
+      }).onCancel(() => {
+        reject()
       })
     }
   },
