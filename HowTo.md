@@ -136,6 +136,7 @@ in terminal:
   - Searchable attributes: title(o) > collection(o) > number (o) > lyrics(u)
   - facets (display): collection, maxFacetHits = 50 (of anders afhankelijk aantal collections)
   - get api-key's
+  - ps. onder de /dev/export-algolia-settings.json is een instelling bestand te vinden.
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html

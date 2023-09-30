@@ -10,3 +10,9 @@ Notify.registerType('negative', {
   icon: $q => $q.iconSet.type.negative,
   color: 'negative'
 })
+
+Notify.registerType('info', {
+  position: 'top',
+  icon: $q => $q.iconSet.type.info,
+  color: 'info'
+})

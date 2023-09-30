@@ -23,3 +23,10 @@ Presentatiesoftware voor beamer én livestream
 
 ## ontwikkelaars
 [Zie HowTo](./HowTo.md)
+
+## Opmerkingen
+- De webapp is getest onder Chome & Edge, o.a. openen bestanden werkt niet in alle browsers.
+- Desktop app is getest op Windows
+- De cloud functies zijn, ivm de gebruikerslicenties op de aanwezige data & kosten, niet vrij toegankelijk gemaakt.
+  (wel kan een eigen hosting van deze functies en databases worden opgezet onder bovengenoemde licentie)
+  
