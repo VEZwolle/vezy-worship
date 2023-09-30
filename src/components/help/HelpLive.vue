@@ -42,7 +42,8 @@
         <li>
           <u><b>Actief/Live:</b> Rechter kolom</u><br>
           Alles wat in deze kolom staat wordt live getoont op de beamer en livestream.<br>
-          Het tijdelijk verbergen en weer aanzetten hiervan kan door de "Clear" knop aan te klikken.
+          Het tijdelijk verbergen en weer aanzetten hiervan, op beamer & livestream, kan door de "Clear" knop aan te klikken.<br>
+          De livestream kan met de naaststaande schuifknop al eerder verborgen worden.
         </li>
       </ul>
     </p>
@@ -72,7 +73,8 @@
     </div>
     <p>
       Alles wat je hier selecteerd is direct te zien op de livestream en op de beamer.<br>
-      Om dit tijdelijk uit te zetten (lege pagina weergegeven) kan je op de "Clear" knop <img src="../../assets/help/clear.png"> recht boven klikken (of cntr+C). Dit nogmaals doen zet het weer aan. Onder in het scherm zie je bij de voorbeeld uitvoer ook een leeg beeld ontstaan, gelijk aan de beamer & livestream.<br>
+      Om dit tijdelijk uit te zetten (lege pagina weergegeven) kan je op de "Clear" knop <img src="../../assets/help/clear.png"> recht boven klikken (of cntr+C of F6). Dit nogmaals doen zet het weer aan. Onder in het scherm zie je bij de voorbeeld uitvoer ook een leeg beeld ontstaan, gelijk aan de beamer & livestream.<br>
+      Op de livestream kan je al eerder de weergave tijdelijk uit zetten door op de schuiknop te klikken naast de "Clear" knop <img src="../../assets/help/clearlivestream.png">, bij een nieuw live item (golive) wordt dit weer ongedaan gemaakt, wat ook handmatig kan.<br><br>
       Let op dat voor een aantal tekst onderdelen het aantal pagina's op de livestream groter is dan op de beamer. In basis klik je livestream items door en gaat de beamer vanzelf mee wanneer je onderaan die pagina gekomen bent. Nadat je 1x wat geselecteerd het kan je daarna ook met de pijltjes toetsen van pagina wisselen.
     </p>
     <div class="text-h6 q-mb-md">
