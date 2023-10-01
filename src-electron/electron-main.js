@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme, screen, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, screen, ipcMain, shell } from 'electron'
 import Store from 'electron-store'
 import { autoUpdater } from 'electron-updater'
 import path from 'path'
@@ -7,12 +7,6 @@ import os from 'os'
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
 let autoUpdaterDownloaded = false
-
-try {
-  if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
-    require('fs').unlinkSync(path.join(app.getPath('userData'), 'DevTools Extensions'))
-  }
-} catch (_) { }
 
 let mainWindow
 
