@@ -20,35 +20,35 @@
     "api:update-data": "powershell ./dev/emulator-update-data.ps1"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.5",
-    "@zip.js/zip.js": "^2.7.20",
-    "axios": "^1.4.0",
-    "core-js": "^3.31.1",
-    "dayjs": "^1.11.9",
+    "@quasar/extras": "^1.16.7",
+    "@zip.js/zip.js": "^2.7.29",
+    "axios": "^1.5.1",
+    "core-js": "^3.33.0",
+    "dayjs": "^1.11.10",
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.1",
+    "electron-updater": "^6.1.4",
     "idb-keyval": "^6.2.1",
     "lodash": "^4.17.21",
-    "nanoid": "^4.0.2",
-    "pinia": "^2.1.4",
+    "nanoid": "^5.0.1",
+    "pinia": "^2.1.6",
     "pinia-shared-state": "^0.4.5",
-    "quasar": "^2.12.3",
+    "quasar": "^2.12.7",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4",
+    "vue-router": "^4.2.5",
     "vue-three-shortkey": "^4.0.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.22.9",
-    "@quasar/app-webpack": "^3.9.2",
-    "electron": "^25.3.0",
-    "electron-builder": "^24.4.0",
-    "eslint": "^8.45.0",
+    "@babel/eslint-parser": "^7.22.15",
+    "@quasar/app-webpack": "3.11.1",
+    "electron": "^26.2.4",
+    "electron-builder": "^24.6.4",
+    "eslint": "^8.50.0",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.15.1",
+    "eslint-plugin-vue": "^9.17.0",
     "eslint-webpack-plugin": "^4.0.1"
   },
   "browserslist": [
@@ -63,7 +63,7 @@
     "last 5 Opera versions"
   ],
   "engines": {
-    "node": ">= 12.22.1",
+    "node": ">= 18.16.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }
