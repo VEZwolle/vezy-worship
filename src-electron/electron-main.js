@@ -1,8 +1,8 @@
 import { app, BrowserWindow, screen, ipcMain, shell } from 'electron'
 import Store from 'electron-store'
 import { autoUpdater } from 'electron-updater'
-import path from 'path'
-import os from 'os'
+import path from 'node:path'
+import os from 'node:os'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
