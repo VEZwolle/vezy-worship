@@ -47,6 +47,26 @@
             <q-item-label>Opslaan als</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item v-close-popup clickable @click="compareSongData(true)">
+          <q-item-section>
+            <q-item-label>
+              Toevoegen aan lokale database
+              <q-tooltip>
+                Liederen uit de setlist vergelijken en toevoegen aan de lokale database
+              </q-tooltip>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="apiKeyEditExist" v-close-popup clickable @click="compareSongData(false)">
+          <q-item-section>
+            <q-item-label>
+              Toevoegen aan cloud database
+              <q-tooltip>
+                Liederen uit de setlist vergelijken en toevoegen aan de cloud (algolia) gegevens
+              </q-tooltip>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-btn-dropdown>
 
@@ -134,19 +154,21 @@
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
+  <SetlistDatabaseCompareDialog ref="SetlistDatabaseCompareDialog" />
 </template>
 
 <script>
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
 import AppSettingsDialog from './AppSettingsDialog'
+import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompareDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
-import { Notify } from 'quasar'
+import { ApiKeyEdit } from '../song/database/algolia.js'
 import { PcoLiveUrl } from '../service/pco.js'
 
 export default {
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl },
+  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
   setup () {
     return { icon, version: PACKAGE.version }
   },
@@ -164,6 +186,9 @@ export default {
   computed: {
     saved () {
       return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
+    },
+    apiKeyEditExist () {
+      return ApiKeyEdit()
     }
   },
   created () {
@@ -188,7 +213,7 @@ export default {
               this.autoupdate.indeterminateProgress = true
               this.autoupdate.percent = percent
               this.autoupdate.message = message
-              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
               break
             case 3:
               this.autoupdate.indeterminateProgress = false
@@ -198,7 +223,7 @@ export default {
               this.autoupdate.indeterminateProgress = false
               this.autoupdate.message = message
               this.autoupdate.percent = percent
-              Notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
               break
             default:
           }
@@ -234,6 +259,10 @@ export default {
         .finally(() => {
           this.isSaving = false
         })
+    },
+    compareSongData (local = true) {
+      this.$store.searchBaseIsLocal = local
+      this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {
       window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')

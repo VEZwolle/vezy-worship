@@ -12,6 +12,7 @@ Presentatiesoftware voor beamer én livestream
 - Dienst thuis voor te bereiden via de web app.
 - Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
 - Automatisch importen setlist vanuit [PCO](https://planningcenteronline.com/)
+- Zoeken naar liederen in lokale of online database [Algolia](https://algolia.com/)
 - Bijbelteksten inladen vanuit meerdere Bijbelvertalingen.
 - Mededelingen tonen die aandacht van de gemeente vereisen.
 - Countdown tot begin van de dienst.
@@ -22,3 +23,10 @@ Presentatiesoftware voor beamer én livestream
 
 ## ontwikkelaars
 [Zie HowTo](./HowTo.md)
+
+## Opmerkingen
+- De webapp is getest onder Chome & Edge, o.a. openen bestanden werkt niet in alle browsers.
+- Desktop app is getest op Windows
+- De cloud functies zijn, ivm de gebruikerslicenties op de aanwezige data & kosten, niet vrij toegankelijk gemaakt.
+  (wel kan een eigen hosting van deze functies en databases worden opgezet onder bovengenoemde licentie)
+  

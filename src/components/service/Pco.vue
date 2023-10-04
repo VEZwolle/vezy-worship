@@ -635,8 +635,11 @@ export default {
                 type: 'song',
                 settings: {
                   title: this.planItems[id].title,
+                  collection: '',
+                  number: '',
                   text: `${this.planItems[id].html_details}`,
                   translation: '',
+                  noSplitLines: false,
                   bgOpacity: 0,
                   bgFileId: null
                 }
@@ -661,12 +664,13 @@ export default {
                 id: '', // `pcoScri${this.planItems[id].id}`,
                 type: 'scripture',
                 settings: {
+                  title: this.planItems[id].title,
                   bible: 'nbv21',
                   book: 'GEN',
                   chapter: null,
                   verseFrom: null,
                   verseTo: null,
-                  text: `${this.planItems[id].title}<br>${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`,
                   bgOpacity: 0,
                   bgFileId: null
                 }

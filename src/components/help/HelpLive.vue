@@ -30,7 +30,8 @@
           Hier kan je de verschillende onderdelen van de dienst terug vinden, gesorteerd op de volgorde van de dienst.<br>
           1x aanklikken zorgt er voor dat het onderdeel in de preview kolom zichtbaar wordt.<br>
           Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.<br>
-          Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opspitsing van teksten te krijgen.
+          Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opspitsing van teksten te krijgen.<br>
+          Onderin is een snel zoeken vak aanwezig voor liederen uit de lokale of cloud datatabase.
         </li>
         <li>
           <u><b>Voorbeeld/preview:</b> Midden kolom</u><br>
@@ -41,7 +42,8 @@
         <li>
           <u><b>Actief/Live:</b> Rechter kolom</u><br>
           Alles wat in deze kolom staat wordt live getoont op de beamer en livestream.<br>
-          Het tijdelijk verbergen en weer aanzetten hiervan kan door de "Clear" knop aan te klikken.
+          Het tijdelijk verbergen en weer aanzetten hiervan, op beamer & livestream, kan door de "Clear" knop aan te klikken.<br>
+          De livestream kan met de naaststaande schuifknop al eerder verborgen worden.
         </li>
       </ul>
     </p>
@@ -53,7 +55,9 @@
       Dubbelklikken op een onderdeel zet dat onderdeel direct in de live kolom en de volgende in de previewkolom.<br>
       Onder in de setlist staat een <img src="../../assets/help/setlistadd.png"> waarmee je onderdelen aan de setlist kan toevoegen.<br>
       Door met de rechtermuis knop op een onderdeel te klikken verschijnt er een menu <img src="../../assets/help/setlistmenu.png"> waarmee je het onderdeel in de preview of direct live kan zetten. Tevens kan je hiermee het onderdeel bewerken of verwijderen.<br>
-      Door bovenin <img src="../../assets/help/onlybeamer.png"> aan te vinken wordt er voor nieuw geselecteerde onderdelen in de Preview of GoLive geen onderverdeling meer gemaakt met minder regels op de livestream. Hierdoor kan je met minder klikken door de dienstvoor alleen de beamer gaan.
+      Door bovenin <img src="../../assets/help/onlybeamer.png"> aan te vinken wordt er voor nieuw geselecteerde onderdelen in de Preview of GoLive geen onderverdeling meer gemaakt met minder regels op de livestream. Hierdoor kan je met minder klikken door de dienstvoor alleen de beamer gaan.<br>
+      <img src="../../assets/help/quicksearch.png"><br>
+      Helemaal onderaan staat een snel zoek balk voor liederen uit de database(s) die je direct aan de setlist of preview kan toevoegen voor gebruik.
     </p>
     <div class="text-h6 q-mb-md">
       Midden kolom: preview
@@ -69,7 +73,8 @@
     </div>
     <p>
       Alles wat je hier selecteerd is direct te zien op de livestream en op de beamer.<br>
-      Om dit tijdelijk uit te zetten (lege pagina weergegeven) kan je op de "Clear" knop <img src="../../assets/help/clear.png"> recht boven klikken (of cntr+C). Dit nogmaals doen zet het weer aan. Onder in het scherm zie je bij de voorbeeld uitvoer ook een leeg beeld ontstaan, gelijk aan de beamer & livestream.<br>
+      Om dit tijdelijk uit te zetten (lege pagina weergegeven) kan je op de "Clear" knop <img src="../../assets/help/clear.png"> recht boven klikken (of cntr+C of F6). Dit nogmaals doen zet het weer aan. Onder in het scherm zie je bij de voorbeeld uitvoer ook een leeg beeld ontstaan, gelijk aan de beamer & livestream.<br>
+      Op de livestream kan je al eerder de weergave tijdelijk uit zetten door op de schuiknop te klikken naast de "Clear" knop <img src="../../assets/help/clearlivestream.png">, bij een nieuw live item (golive) wordt dit weer ongedaan gemaakt, wat ook handmatig kan.<br><br>
       Let op dat voor een aantal tekst onderdelen het aantal pagina's op de livestream groter is dan op de beamer. In basis klik je livestream items door en gaat de beamer vanzelf mee wanneer je onderaan die pagina gekomen bent. Nadat je 1x wat geselecteerd het kan je daarna ook met de pijltjes toetsen van pagina wisselen.
     </p>
     <div class="text-h6 q-mb-md">

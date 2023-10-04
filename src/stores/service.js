@@ -14,7 +14,11 @@ export default defineStore('service', {
     previewPresentation: null,
     livePresentation: null,
     isClear: true,
+    isOnlyLivestreamClear: false,
     noLivestream: false,
+    searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
+    splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
+    dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: ''
   }),
   actions: {
@@ -161,6 +165,7 @@ export default defineStore('service', {
       }
 
       this.livePresentation = cloneDeep(presentation)
+      this.isOnlyLivestreamClear = false
     },
 
     // Clear

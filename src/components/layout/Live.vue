@@ -17,9 +17,23 @@
           @shortkey="$store.toggleClear"
         >
           <q-tooltip>
-            Vink aan om het scherm leeg te maken<br>(Ctrl + C of F6)
+            Vink aan om scherm leeg te maken<br>
+            Bij beamer & livestream<br>
+            (Ctrl + C of F6)
           </q-tooltip>
         </q-checkbox>
+        <q-toggle
+          v-model="$store.isOnlyLivestreamClear"
+          checked-icon="tv_off"
+          unchecked-icon="tv"
+          color="red"
+          dense
+        >
+          <q-tooltip>
+            <b>Aan maakt livestream alvast leeg.</b><br>
+            wordt uitgezet bij nieuw item.
+          </q-tooltip>
+        </q-toggle>
       </q-toolbar>
     </q-header>
 

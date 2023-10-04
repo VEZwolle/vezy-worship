@@ -15,7 +15,8 @@
       <q-separator />
 
       <q-card-actions align="right">
-        <q-btn color="secondary" :label="btnLabel" :icon="btnIcon" @click="save" />
+        <q-btn v-if="editEmit" color="secondary" label="Opslaan" icon="save" @click="saveEmit" />
+        <q-btn v-else color="secondary" :label="btnLabel" :icon="btnIcon" @click="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -26,12 +27,16 @@ import presentationTypes from '../presentation-types'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {
+  emits: ['save'],
   data () {
     return {
       presentation: null
     }
   },
   computed: {
+    editEmit () {
+      return this.presentation?.from === 'database'
+    },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
     },
@@ -78,6 +83,10 @@ export default {
       }
 
       this.$store.preview(this.presentation)
+      this.hide()
+    },
+    saveEmit () {
+      this.$emit('save')
       this.hide()
     }
   }

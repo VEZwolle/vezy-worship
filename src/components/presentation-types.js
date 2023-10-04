@@ -8,10 +8,19 @@ export default [
     color: 'blue',
     settings: {
       title: '',
+      collection: '',
+      number: '',
       text: '',
       translation: '',
+      noSplitLines: false,
       bgOpacity: 0,
       bgFileId: null
+    },
+    title (settings) {
+      let collectionNumber = settings.collection ? ` ${settings.collection}` : ''
+      collectionNumber += settings.number ? ` ${settings.number}` : ''
+      collectionNumber = collectionNumber ? ` |${collectionNumber}` : ''
+      return `${settings.title}${collectionNumber}`
     },
     description (settings) {
       return settings.text
