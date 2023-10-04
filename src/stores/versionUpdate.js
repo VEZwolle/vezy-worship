@@ -55,7 +55,7 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
-    case version <= 1.0800:
+    case version < 1.0800:
       service.presentations.forEach(presentation => {
         switch (presentation.type) {
           case 'song': {
