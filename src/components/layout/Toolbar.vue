@@ -102,6 +102,7 @@
         flat
         icon="list"
         dense
+        :disable="!$store.service"
         @click="openPcoLive"
       >
         <q-tooltip>
@@ -165,7 +166,6 @@ import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { ApiKeyEdit } from '../song/database/algolia.js'
-import { PcoLiveUrl } from '../service/pco.js'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
@@ -265,7 +265,7 @@ export default {
       this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {
-      window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
+      window.open(`/#/output/${id}`, `output${id}`, 'popup,width=960,height=540')
     },
     openAppSettings () {
       this.$refs.appSettingsDialog.show()
@@ -275,7 +275,7 @@ export default {
     },
     openPcoLive () {
       if (this.$store.service?.pcoId) {
-        return window.open(PcoLiveUrl(this.$store.service.pcoId, true), 'pcoLive', 'popup,width=1000,height=800')
+        return this.openPcoLiveWindow()
       }
       this.$q.dialog({
         title: 'Geef PCO dienst id:',
@@ -288,8 +288,42 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(data => {
-        window.open(PcoLiveUrl(data, false), 'pcoLive', 'popup,width=1000,height=800')
+        this.$store.service.pcoId = `0-${data}` // add check/remove error input??
+        this.openPcoLiveWindow()
       })
+    },
+    openPcoLiveWindow () {
+      const url = this.pcoLiveUrl()
+      window.open(url, 'pcoLive', 'popup,width=960,height=540')
+    },
+    pcoLiveUrl () {
+      if (this.$store.service?.pcoId) {
+        const service = this.splitPcoId(this.$store.service?.pcoId)
+        // live of plan
+        if (service.planId) return `https://services.planningcenteronline.com/live/${service.planId}`
+        // next comming plan of serviceType
+        if (service.serviceTypeId) return `https://services.planningcenteronline.com/service_types/${service.serviceTypeId}/plans/after/today/live`
+      }
+      return ''
+    },
+    // pcoId = serviceTypeId-planId
+    splitPcoId (pcoId) {
+      let serviceTypeId = ''
+      let planId = ''
+      if (pcoId) {
+        const i = pcoId.search('-')
+        console.log(i)
+        if (i >= 1 && pcoId.length > i) {
+          serviceTypeId = pcoId.substring(0, i)
+          if (pcoId.length > i) {
+            planId = pcoId.substring(i + 1)
+          }
+        } else {
+          serviceTypeId = ''
+          planId = pcoId
+        }
+      }
+      return { serviceTypeId, planId }
     }
   }
 }
