@@ -1,7 +1,11 @@
 <template>
   <q-card-section>
     <q-icon name="list" color="primary" size="3vh" />
-    Planning center online:<br>
+    <div class="row">
+      Planning center online:
+      <q-space />
+      (id dienst: {{ planId }} )<br>
+    </div>
     <q-btn
       v-if="!serviceTypes && !plans"
       stack
@@ -261,7 +265,7 @@ export default {
   created () {
     if (this.pcoId) {
       const i = this.pcoId.search('-')
-      if (i > 1 && this.pcoId.length > i) {
+      if (i >= 1 && this.pcoId.length > i) {
         this.serviceTypeId = this.pcoId.substring(0, i)
         if (this.pcoId.length > i) {
           this.planId = this.pcoId.substring(i + 1)
