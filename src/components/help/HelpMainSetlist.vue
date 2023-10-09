@@ -9,7 +9,7 @@
     </div>
     <p>
       De diensten worden opgeslagen met de *.vez extentie.<br>Afbeeldingen, teksten, video's worden alle in dit bestand mee opgeslagen.<br>
-      Openen van een opgeslagen dienst kan door op de knop <img src="../../assets/help/fileopen.png"> te klikken.<br>
+      Openen van een opgeslagen dienst kan door op de knop <img src="../../assets/help/fileopen.png"> te klikken, of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor toevoegen aan huidige setlist.<br>
       Opslaan naar een bestand gebeurd met de knop <img src="../../assets/help/filesave.png"> of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor opslaan als een nieuw bestand.
     </p>
     <p>
@@ -59,7 +59,9 @@
     <p>
       Via de <img src="../../assets/help/setlistadd.png">In het linker vak, onderin kan je onderdelen toevoegen.<br>
       Kies uit de lijst wat voor onderdeel je wilt toevoegen. (zie voor verdere info het betreffende onderdeel). Het onderdeel wordt dan onder in de lijst toegevoegd.<br>
-      <img src="../../assets/help/setlistaddchoice.png">
+      <img src="../../assets/help/setlistaddchoice.png"><br>
+      Ook via de de resultaten in het zoekvenster kunnen liederen door dubbelklik of de setlist knop toegevoegd worden.<br>
+      <img src="../../assets/help/quicksearch2.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdelen bewerken

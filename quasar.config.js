@@ -27,11 +27,13 @@ module.exports = configure(function (ctx) {
       'store',
       'api',
       'filesystem',
+      'filesystemdb',
       'electron',
       'date',
       'strip',
       'shortkey',
-      'notify'
+      'notify',
+      'global-components'
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css

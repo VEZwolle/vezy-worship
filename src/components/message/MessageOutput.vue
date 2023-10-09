@@ -1,7 +1,7 @@
 <template>
   <Transition :duration="{ enter: 5500, leave: 5500 }" name="message">
     <div v-if="message.length > 1" class="message-box">
-      <div class="message-text" v-html="message" />
+      <div class="message-text" v-text="message" />
     </div>
   </Transition>
 </template>

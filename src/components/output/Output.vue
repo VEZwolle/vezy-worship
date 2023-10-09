@@ -48,7 +48,7 @@ export default {
     isClear () {
       return this.preview
         ? false
-        : this.$store.isClear
+        : this.$store.isClear || (this.id === 'livestream' ? this.$store.isOnlyLivestreamClear : false)
     },
     style () {
       const style = {}

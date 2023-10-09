@@ -11,25 +11,28 @@ import chunk from 'lodash/chunk'
 export default {
   components: { TextSlidesControl },
   extends: BaseControl,
+  computed: {
+    splitLines () {
+      return this.presentation.settings.noSplitLines ? 0 : this.$store.splitSongLines
+    }
+  },
   created () {
     const split = this.$store.noLivestream ? 100 : 1
     if (this.presentation.settings.translation) {
       // Use 1 line per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 1 * split)
-      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1 * split)
+      this.presentation.sections = splitSong(this.presentation.settings.text, 1 * split, Math.floor(this.splitLines / 2))
+      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1 * split, Math.floor(this.splitLines / 2))
     } else {
       // Use 2 lines per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 2 * split)
+      this.presentation.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
     }
   }
 }
 
-function splitSong (text, linesPerSlide) {
+export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0) {
   if (!text) return []
 
-  return text
-    .replace(/\r?\n/g, '<br>')
-    .split('<br><br>')
+  return splitSongMaxLines(text.replace(/\r?\n/g, '<br>'), linesPerSlideBeamer)
     .map((section) => {
       const result = {
         label: null,
@@ -44,10 +47,35 @@ function splitSong (text, linesPerSlide) {
         lines.shift()
       }
 
-      result.slides = chunk(lines, linesPerSlide)
+      result.slides = chunk(lines, linesPerSlideLivestream)
       if (!result.slides.length) { result.slides = [['']] }
 
       return result
     })
+}
+
+function splitSongMaxLines (text, maxlines = 0) {
+  if (maxlines === 0) return text.split('<br><br>')
+  const result = []
+  const sections = text.split('<br><br>')
+  for (let i = 0; i < sections.length; i++) {
+    const lines = sections[i].split('<br>')
+    const addLabelLine = isLabel(lines[0] || '') ? 1 : 0
+    if (lines.length <= maxlines + addLabelLine) {
+      result.push(sections[i])
+      continue
+    }
+    let section = ''
+    if (addLabelLine) section += `${lines[0]}`
+    for (let j = addLabelLine; j < lines.length; j++) {
+      section += section ? `<br>${lines[j]}` : lines[j]
+      if ((j + 1 - addLabelLine) % maxlines === 0) {
+        result.push(section)
+        section = ''
+      }
+    }
+    if (section) result.push(section)
+  }
+  return result
 }
 </script>

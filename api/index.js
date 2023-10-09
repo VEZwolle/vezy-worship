@@ -13,10 +13,13 @@ const app = express()
 app.use(cors())
 
 /**
- * Test .env
+ * Check authorization
  */
-app.post('/api/env', async (req, res) => {
-  res.json({ testEnv: process.env.TESTENV, test_Env: process.env.TEST_ENV })
+app.use((req, res, next) => {
+  if (req.headers.authorization !== process.env.VEZY_API_TOKEN) {
+    return res.status(401).json({ api: 'VezyWorshipApi' })
+  }
+  next()
 })
 
 /**
@@ -41,30 +44,29 @@ app.post('/api/scripture', async (req, res) => {
 /**
  * Get language from array lines.
  */
- app.post('/api/language', async (req, res) => {
+app.post('/api/language', async (req, res) => {
   const textLines = req.body.textLines
   const resultLanguage = []
-  for (let k=0; k<textLines.length; k += 50) { // max 50/sessie
+  for (let k = 0; k < textLines.length; k += 50) { // max 50/sessie
     const data = new URLSearchParams({
       target_lang: 'NL'
-    })  
-    for (let i=k; i < Math.min(textLines.length, k+50); i++) {
-      data.append('text', textLines[i])  
+    })
+    for (let i = k; i < Math.min(textLines.length, k + 50); i++) {
+      data.append('text', textLines[i])
     }
     try {
       const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
       const translations = result.data.translations
-      for (let translation of translations) {
+      for (const translation of translations) {
         resultLanguage.push(translation.detected_source_language)
       }
     } catch {
       res.status(500).json({ error: 'deepl_error' })
       return
-    }  
+    }
   }
-  res.json({ resultLanguage })  
+  res.json({ resultLanguage })
 })
-
 
 /**
  * Translate text into Dutch.
@@ -91,14 +93,14 @@ app.post('/api/translate', async (req, res) => {
 const oAuthConfig = {
   urlBase: 'https://api.planningcenteronline.com',
   redirectUri: `${process.env.API_URL}/pco/auth/complete`
-};
+}
 /** PCO, Oauth
  * Goto: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=people services`
  */
 // PCO, redirectUri
 app.get('/api/pco/auth/complete', async (req, res) => {
   const oAuthCode = req.query.code
-	const params = new URLSearchParams()
+  const params = new URLSearchParams()
   params.append('grant_type', 'authorization_code')
   params.append('code', oAuthCode)
   params.append('client_id', process.env.PCOCLIENTID)
@@ -109,7 +111,7 @@ app.get('/api/pco/auth/complete', async (req, res) => {
     refreshToken: '',
     tokenExpiry: 0,
     token: ''
-  };
+  }
 
   try {
     const response = await axios.post(`${oAuthConfig.urlBase}/oauth/token`, params)
@@ -117,7 +119,8 @@ app.get('/api/pco/auth/complete', async (req, res) => {
     // Token lifetime is given in seconds, so multiply by 1000, also subtract 60 seconds from lifetime on our end so we know to refresh the token early
     pcoTokens.tokenExpiry = (response.data.created_at * 1000) + ((response.data.expires_in - 60) * 1000)
     pcoTokens.refreshToken = response.data.refresh_token
-    if (pcoTokens.refreshToken) return res.send(`
+    if (pcoTokens.refreshToken) {
+      return res.send(`
       <!DOCTYPE html>
       <html>
         <head><title>VezyWorship inlog Planning center online</title></head>
@@ -136,6 +139,7 @@ app.get('/api/pco/auth/complete', async (req, res) => {
         </body>
       </html>
     `)
+    }
     res.send('Could not log in to Planning Center API using oAuth')
   } catch {
     res.status(500).json({ error: 'Could not log in to Planning Center API using oAuth' })
@@ -144,21 +148,21 @@ app.get('/api/pco/auth/complete', async (req, res) => {
 
 app.post('/api/pco/auth/logout', async (req, res) => {
   const token = req.body.token || ''
-	const params = new URLSearchParams()
+  const params = new URLSearchParams()
   params.append('token', token)
   params.append('client_id', process.env.PCOCLIENTID)
   params.append('client_secret', process.env.PCOCLIENTSECRET)
-  
+
   try {
     const response = await axios.post(`${oAuthConfig.urlBase}/oauth/revoke`, params)
     const status = response.status
-    res.json({ status: status})
+    res.json({ status })
   } catch {
     res.status(500).json({ error: 'Could not logout to Planning Center API' })
   }
 })
 
-async function oauthRefresh(refreshToken = null) {
+async function oauthRefresh (refreshToken = null) {
   const params = {
     grant_type: 'refresh_token',
     client_id: process.env.PCOCLIENTID,
@@ -169,7 +173,7 @@ async function oauthRefresh(refreshToken = null) {
     refreshToken: '',
     tokenExpiry: 0,
     token: ''
-  };
+  }
 
   try {
     const response = await axios({ method: 'POST', url: `${oAuthConfig.urlBase}/oauth/token`, headers: { 'content-type': 'application/json' }, data: params })
@@ -187,7 +191,7 @@ async function oauthRefresh(refreshToken = null) {
 
 app.post('/api/pco', async (req, res) => {
   /*
-  console.log(req.body.serviceType)  
+  console.log(req.body.serviceType)
   console.log(req.body.plan)
   console.log(req.body.itemCount)
   console.log(req.body.item)
@@ -199,11 +203,11 @@ app.post('/api/pco', async (req, res) => {
     refreshToken: req.body.refreshToken || '',
     tokenExpiry: req.body.tokenExpiry || 0,
     token: req.body.token || ''
-  };
+  }
 
   // check if loginauth
   if (!pcoTokens.refreshToken) { // first login
-    return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
+    return res.json({ url: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
   }
   if (Date.now() > pcoTokens.tokenExpiry) { // tokenHasExpired --> Refresh token
     const responsePcoTokens = await oauthRefresh(pcoTokens.refreshToken)
@@ -211,7 +215,7 @@ app.post('/api/pco', async (req, res) => {
     pcoTokens.tokenExpiry = responsePcoTokens.tokenExpiry
     pcoTokens.token = responsePcoTokens.token
     if (!pcoTokens.refreshToken) { // refresh error --> first login
-      return res.json({ url : `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
+      return res.json({ url: `${oAuthConfig.urlBase}/oauth/authorize?client_id=${process.env.PCOCLIENTID}&redirect_uri=${oAuthConfig.redirectUri}&response_type=code&scope=services` }) // Inlog link
     }
   }
   // set get data url
@@ -235,15 +239,15 @@ app.post('/api/pco', async (req, res) => {
   try {
     const response = await axios.get(`${oAuthConfig.urlBase}/${urlAdd}`, {
       headers: {
-        'Authorization': `Bearer ${pcoTokens.token}`
+        Authorization: `Bearer ${pcoTokens.token}`
       }
-    });
+    })
     const data = response.data
-    res.json({ data: data, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
+    res.json({ data, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
   } catch (error) {
     if (error.response) { //       The request was made and the server responded with a status code that falls out of the range of 2xx
       const status = error.response.data.errors[0].status
-      res.json({ errorStatus : `${status}`, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
+      res.json({ errorStatus: `${status}`, pcoTokens: { refreshToken: pcoTokens.refreshToken, tokenExpiry: pcoTokens.tokenExpiry, token: pcoTokens.token } })
     } else if (error.request) { // The request was made but no response was received
       res.status(500).json({ error: 'pco_error geen response .../api/pco' })
     } else { //                    Something happened in setting up the request that triggered an Error
@@ -252,11 +256,194 @@ app.post('/api/pco', async (req, res) => {
   }
 })
 
+/**
+ * Algolia - Search
+ */
+app.post('/api/database/search', async (req, res) => {
+  const getCollections = req.body.getCollections || false
+  const query = req.body.search
+  const textSearch = req.body.textSearch || false
+  const collection = req.body.collection || ''
+  // Niet (goed) mogelijk om op "" te filteren [controle op met/zonder vertaling weg laten] --> moet extra atribuut of tag in database zetten; nu weg laten
+  // https://support.algolia.com/hc/en-us/articles/15072471836561-Can-I-filter-by-an-attribute-value-which-is-null-or-an-empty-string-
+  // const isTranslation = req.body.isTranslation || false
+
+  const algoliasearch = require('algoliasearch')
+  // Start the API client
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Search the index for...
+  // https://www.algolia.com/doc/api-reference/api-methods/search/
+  try {
+    let result = null
+    switch (true) {
+      case getCollections:
+        result = await algoliaIndex.searchForFacetValues('collection')
+        break
+      case !textSearch && collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ],
+          filters: `collection:${collection}`
+        })
+        break
+      case !textSearch:
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          restrictSearchableAttributes: [
+            'title',
+            'collection',
+            'number'
+          ]
+        })
+        break
+      case collection !== '':
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100,
+          filters: `collection:${collection}`
+        })
+        break
+      default: // search in 'title', 'collection', 'number', 'lyrics'
+        result = await algoliaIndex.search(query, {
+          hitsPerPage: 100
+        })
+    }
+
+    res.json(result) // data onder 'hits' or 'facetHit'
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
+app.post('/api/database/backup', async (req, res) => {
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Download all records for the index...
+  // https://www.algolia.com/doc/api-reference/api-methods/browse/
+
+  let result = []
+  algoliaIndex.browseObjects({
+    batch: batch => {
+      result = result.concat(batch)
+    }
+  }).then(() => {
+    res.json(result) // all data records
+  }).catch(() => res.status(500).json({ error: 'algolia_error' }))
+})
+
+app.post('/api/database/edit', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const records = req.body.records || [] // array of full reccords
+  const partUpdate = req.body.partUpdate || false // array of full reccords
+  if (records?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit (if exist) by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
+  try {
+    let result
+    switch (true) {
+      case partUpdate && records.length === 1:
+        result = await algoliaIndex.partialUpdateObject(records[0], {
+          createIfNotExists: true
+        })
+        break
+      case partUpdate:
+        result = await algoliaIndex.partialUpdateObjects(records, {
+          createIfNotExists: true
+        })
+        break
+      case records.length === 1:
+        result = await algoliaIndex.saveObject(records[0], {
+          autoGenerateObjectIDIfNotExist: true
+        })
+        break
+      default: // add or full replace
+        result = await algoliaIndex.saveObjects(records, {
+          autoGenerateObjectIDIfNotExist: true
+        })
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
+app.post('/api/database/delete', async (req, res) => {
+  const apiKeyEdit = req.body.apiKeyEdit || false
+  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+
+  const objectIDs = req.body.objectIDs // array of objectID
+  if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
+
+  const algoliasearch = require('algoliasearch')
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+    headers: {
+      'X-Algolia-UserToken': process.env.ALGOLIA_USER
+    }
+  })
+  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  // Add or Edit  by objectID
+  // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
+  try {
+    let result
+    switch (true) {
+      case objectIDs.length === 1:
+        result = await algoliaIndex.deleteObject(objectIDs[0])
+        break
+      default: // add or full replace
+        result = await algoliaIndex.deleteObjects(objectIDs)
+    }
+
+    res.json(result) // data onder 'objectIDs' --> array of saved objectID
+    /* errors JSON:
+    {
+      "message":"Invalid Application ID",
+      "status":404
+    } */
+  } catch {
+    res.status(500).json({ error: 'algolia_error' })
+  }
+})
+
 const secrets = [
-  'PCOCLIENTID',
-  'PCOCLIENTSECRET',
   'DEEPL_API_KEY',
-  'API_URL'
+  'PCOCLIENTSECRET',
+  'ALGOLIA_API_KEY_EDIT',
+  'VEZY_API_TOKEN_EDIT'
 ]
 
 exports.api = functions

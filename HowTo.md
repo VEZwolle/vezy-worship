@@ -43,15 +43,29 @@ in terminal:
   - `npm run api:get-data`  --> get firestore export data uit google cloud to local emulator
   - `npm run api:update-data` --> export data firesore to google cloud to local emulator
   - `npm run api:serve-data`   --> Start Vezyworship-API + locale database: `https://127.0.0.1:5002` `https://127.0.0.1:4000/functions`
-  - opmerking: api-key's & secrets los instellen ( niet algemeen toegankelijk, voor testen zelf aanmaken )
-   - `.env` bestand in api map: (deze ook in firebase secrets voor api zijde deploy)
-    ```
-      PCOCLIENTID=...
-      PCOCLIENTSECRET=...
-      DEEPL_API_KEY=...
-      API_URL=http://localhost:5000/api of .../api
-    ```
   - opmerking: locale database bestanden eerst uit firestore halen; zie onder.
+- api-key's & secrets los instellen in /api/.. ( niet algemeen toegankelijk, voor testen zelf aanmaken )
+  - `.env` bestand in api map: --> ook als secret `FIREBASE_FUNCTIONS_ENV_FILE` in Github secrets plaatsen (Bij deploy wordt dan een .env aangemaakt.)
+  ```
+    API_URL=.../api
+    VEZY_API_TOKEN=...
+    PCOCLIENTID=...
+    ALGOLIA_APP_ID=...
+    ALGOLIA_INDEX_NAME=...
+    ALGOLIA_API_KEY_SEARCH=...
+    ALGOLIA_USER=...
+  ```
+  `.secret.local` (deze ook in firebase secrets manager plaatsen | https://console.cloud.google.com/security/secret-manager)
+  ```
+    DEEPL_API_KEY=...
+    PCOCLIENTSECRET=...
+    ALGOLIA_API_KEY_EDIT=...
+    VEZY_API_TOKEN_EDIT=...
+  ```  
+  `.env.local` (overruled .env voor local dev.)
+  ```
+    API_URL=http://localhost:5000/api
+  ```
 - in terminal, in rootmap van project uitvoeren: (niet gelijk met webapp; wel api benodigd)
   - `npm run electron:serve` --> Start Vezyworship desktop app
   - `npm run electron:build` --> Build desktop
@@ -78,6 +92,8 @@ in terminal:
   - `firebase deploy --only functions`
 - Deploy web-app
   - github actions: zie `.github\workflows\firebase-deploy.yml`
+- Deploy electron-app install
+  - github actions: zie `.github\workflows\electron-deploy.yml`
 ### google cloud functions:
 - Install Google cloud SDK: 
   - https://cloud.google.com/sdk/docs/install-sdk --> windows installatie + standaard instellingen
@@ -112,6 +128,15 @@ in terminal:
     - `npm run electron:build`
     - -> installatie bestand: `...\dist\electron\Packaged\...exe`
     - -> gebuikt de firebase api voor connectie met DeepL, PCO, Bible import
+
+### Aanmaken Algolia zoek index:
+- via algolia.com
+  - index aanmaken
+  - json van database lokaal importeren (.vezdb uitpakken = zip)
+  - Searchable attributes: title(o) > collection(o) > number (o) > lyrics(u)
+  - facets (display): collection, maxFacetHits = 50 (of anders afhankelijk aantal collections)
+  - get api-key's
+  - ps. onder de /dev/export-algolia-settings.json is een instelling bestand te vinden.
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html

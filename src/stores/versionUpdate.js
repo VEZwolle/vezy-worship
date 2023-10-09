@@ -1,3 +1,5 @@
+import { CleanText } from '../components/common/CleanText.js'
+
 export function versionUpdate (service) {
   let version = 0
   if (service.version !== undefined) {
@@ -46,17 +48,20 @@ export function versionUpdate (service) {
         switch (presentation.type) {
           case 'caption':
           case 'scripture': {
-            let text = presentation.settings.text
-              .replace(/<\/?span(.*?)>/gi, '').replace(/ style="(.*?);">/gi, '>').replace(/\r*\n/g, '<br>')
-              .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;')
-              .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>')
-              .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>')
-            let textStep = ''
-            while (textStep !== text) {
-              textStep = text
-              text = text.replace(/<([biuspmal]*?)><\/\1>/g, '').replace(/<\/([biuspmal]*?)><\1>/g, '')
-            }
-            presentation.settings.text = text.replace(/(<div>){2,}/g, '<div>').replace(/(<\/div>){2,}/g, '</div>')
+            presentation.settings.text = CleanText(presentation.settings.text)
+            break
+          }
+          default:
+        }
+      })
+      // eslint-disable-next-line
+    case version < 1.0800:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'song': {
+            presentation.settings.collection = presentation.settings.collection || ''
+            presentation.settings.number = presentation.settings.number || ''
+            if (presentation.settings.noSplitLines === undefined) presentation.settings.noSplitLines = false
             break
           }
           default:
