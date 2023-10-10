@@ -170,10 +170,11 @@ export default {
       return this.resultSongDatabase.length > 0
     }
   },
-  mounted () {
+  async mounted () {
     this.searchInput = ''
     this.dbCollection = localStorage.getItem('database.collection') || ''
-    if (this.$fsdb.localSongDatabase || (this.$q.platform.is.electron && this.$fsdb.getSongDatabaseSettings())) this.openLocalDatabase() // open only when already loaded
+    const localSongDatabaseName = await this.$fsdb.getSongDatabaseSettings()
+    if (this.$fsdb.localSongDatabase || (this.$q.platform.is.electron && localSongDatabaseName)) this.openLocalDatabase() // open only when already loaded
   },
   methods: {
     rowClickSelect (e, row) {
