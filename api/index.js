@@ -16,8 +16,15 @@ app.use(cors())
  * Check authorization
  */
 app.use((req, res, next) => {
-  if (req.headers.authorization !== process.env.VEZY_API_TOKEN) {
-    return res.status(401).json({ api: 'VezyWorshipApi' })
+  switch (true) {
+    case req.originalUrl.startsWith('/api/pco/auth/complete'):
+    case req.originalUrl.startsWith('/api/pco/auth/logout'):
+      break
+    default: {
+      if (req.headers.authorization !== process.env.VEZY_API_TOKEN) {
+        return res.status(401).json({ api: 'VezyWorshipApi' })
+      }
+    }
   }
   next()
 })
