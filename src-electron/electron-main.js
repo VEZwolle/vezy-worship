@@ -87,6 +87,7 @@ app.whenReady().then(() => {
       // pco live
       case (details.url.toLowerCase().startsWith('https://services.planningcenteronline.com/live')): // live
       case (details.url.toLowerCase().startsWith('https://services.planningcenteronline.com/service_types') && details.url.toLowerCase().endsWith('live')): // live
+      case (details.frameName === 'pcoLive' && details.url === 'about:blank'):
         pcoLiveWindow.webContents.loadURL(details.url)
         pcoLiveWindow.show()
         return { action: 'deny' }

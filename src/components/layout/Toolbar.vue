@@ -93,8 +93,6 @@
         dense
         @click="openOutput('livestream')"
       />
-
-      <span class="q-px-md" />
     </div>
 
     <div>
@@ -108,6 +106,16 @@
         <q-tooltip>
           Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
         </q-tooltip>
+        <q-menu context-menu no-focus>
+          <q-list dense style="min-width: 100px">
+            <q-item v-close-popup clickable @click.stop="openPcoLiveWindow(true)">
+              <q-item-section>leeg pco live scherm</q-item-section>
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
       </q-btn>
       <span class="q-px-md">|</span>
     </div>
@@ -292,7 +300,8 @@ export default {
         this.openPcoLiveWindow()
       })
     },
-    openPcoLiveWindow () {
+    openPcoLiveWindow (blank = false) {
+      if (blank) return window.open('about:blank', 'pcoLive', 'popup,width=960,height=540')
       const url = this.pcoLiveUrl()
       window.open(url, 'pcoLive', 'popup,width=960,height=540')
     },
