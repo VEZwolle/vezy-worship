@@ -21,6 +21,7 @@
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" />
+          <q-select v-model="displays.stage" :options="availableDisplayOptions" emit-value map-options clearable label="Stage monitor" />
         </q-tab-panel>
 
         <q-tab-panel name="settings">
