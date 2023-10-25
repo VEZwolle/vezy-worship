@@ -1,13 +1,13 @@
 <template>
   <div class="outputbox">
-    <div class="output title row" v-html="titleLive" />
-    <div class="output row">
-      <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation.id" :presentation="$store.livePresentation" :preview="false" />
+    <div v-if="outputComponentLive" class="output title row q-px-md q-mt-md" v-html="titleLive" />
+    <div class="output row q-px-md">
+      <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation" :presentation="$store.livePresentation" :preview="false" />
     </div>
-    <q-separator inset />
-    <div class="output title row" v-html="titlePreview" />
-    <div class="output row">
-      <component :is="outputComponentPreview" v-if="outputComponentPreview" :key="$store.previewPresentation.id" :presentation="$store.previewPresentation" :preview="true" />
+    <q-separator size="1vh" color="primary" class="q-mt-md" />
+    <div v-if="outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
+    <div class="output row q-px-md">
+      <component :is="outputComponentPreview" v-if="outputComponentPreview" :key="$store.previewPresentation" :presentation="$store.previewPresentation" :preview="true" />
     </div>
   </div>
 </template>
@@ -21,13 +21,14 @@ export default {
       return this.presentationType(this.$store.livePresentation)?.outputs?.stage
     },
     outputComponentPreview () {
+      if (this.$store.livePresentation?.id === this.$store.previewPresentation?.id) return false
       return this.presentationType(this.$store.previewPresentation)?.outputs?.stage
     },
     titleLive () {
-      return this.$store.livePresentation?.settings ? this.$store.livePresentation.settings.title : ''
+      return this.$store.livePresentation?.settings ? this.$store.livePresentation.settings.title || this.presentationType(this.$store.livePresentation)?.name || '' : ''
     },
     titlePreview () {
-      return this.$store.previewPresentation?.settings ? `... ${this.$store.previewPresentation.settings.title}` : ''
+      return this.$store.previewPresentation?.settings ? `... ${this.$store.previewPresentation.settings.title || this.presentationType(this.$store.previewPresentation)?.name || ''}` : ''
     }
   },
   methods: {

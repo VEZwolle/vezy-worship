@@ -2,13 +2,13 @@
   <q-list
     v-for="(section, sectionIndex) in presentation.sections"
     :key="sectionIndex"
-    class="q-py-sm"
+    class="q-py-xs"
   >
     <q-item
       v-if="section.label"
       :class="`section-label text-${section.label.color}`"
       :active="isSelectedLabel(sectionIndex)"
-      active-class="text-bold"
+      active-class=""
     >
       <q-item-section>
         <q-item-label>{{ section.label.value }}</q-item-label>
@@ -20,7 +20,7 @@
       :key="slideIndex"
       :ref="`slide_${sectionIndex}_${slideIndex}`"
       :active="isSelected(sectionIndex, slideIndex)"
-      active-class="text-bold text-white"
+      active-class="bg-dark text-white"
     >
       <q-item-section>
         <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
@@ -88,7 +88,7 @@ export default {
   transition: none;
   user-select: none;
   min-height: unset;
-  padding: 1px 13px;
+  padding: 1px 0px;
 
   .section-line {
     min-height: 0.2em;
@@ -99,7 +99,7 @@ export default {
   font-size: 0.7em;
   line-height: 0.7em;
   color: gray;
-  padding: 4px 13px;
+  padding: 4px 0px;
   margin-top: -8px;
 }
 </style>
