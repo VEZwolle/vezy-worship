@@ -91,6 +91,7 @@
         label="Livestream"
         icon="smart_display"
         dense
+        class="q-mr-sm"
         @click="openOutput('livestream')"
       />
 
@@ -101,30 +102,6 @@
         dense
         @click="openOutput('stage')"
       />
-    </div>
-
-    <div>
-      <q-btn
-        flat
-        icon="list"
-        dense
-        :disable="!$store.service"
-        @click="openPcoLive"
-      >
-        <q-tooltip>
-          Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
-        </q-tooltip>
-        <q-menu context-menu no-focus>
-          <q-list dense style="min-width: 100px">
-            <q-item v-close-popup clickable @click.stop="openPcoLiveWindow(true)">
-              <q-item-section>leeg pco live scherm</q-item-section>
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-menu>
-      </q-btn>
       <span class="q-px-md">|</span>
     </div>
 
@@ -156,6 +133,29 @@
       @click="openAppSettings"
     >
       <q-tooltip>Instellingen</q-tooltip>
+    </q-btn>
+
+    <q-btn
+      flat
+      icon="list"
+      dense
+      class="q-ml-sm"
+      :disable="!$store.service"
+      @click="openPcoLive"
+    >
+      <q-tooltip>
+        Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
+      </q-tooltip>
+      <q-menu context-menu no-focus>
+        <q-list dense style="min-width: 100px">
+          <q-item v-close-popup clickable @click.stop="openPcoLiveWindow(true)">
+            <q-item-section>leeg pco live scherm</q-item-section>
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
     </q-btn>
 
     <q-btn
