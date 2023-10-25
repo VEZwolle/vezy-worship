@@ -132,8 +132,8 @@ app.whenReady().then(() => {
     pcoLiveWindow = createWindow('about:blank', displays[outputDisplays.pcolive], true)
   } else {
     pcoLiveWindow = createWindow('about:blank', primaryDisplay, false, 960, 540)
+    pcoLiveWindow.hide()
   }
-  pcoLiveWindow.hide()
   pcoLiveWindow.setBackgroundColor('#000000')
   pcoLiveWindow.on('close', (event) => {
     if (app.quitting) {
