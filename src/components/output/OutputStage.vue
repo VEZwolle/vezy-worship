@@ -1,14 +1,16 @@
 <template>
   <div class="outputbox">
-    <div v-if="outputComponentLive" class="output title row q-px-md q-mt-md" v-html="titleLive" />
-    <div class="output row q-px-md">
-      <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation" :presentation="$store.livePresentation" :preview="false" />
-    </div>
-    <q-separator size="1vh" color="primary" class="q-mt-md" />
-    <div v-if="outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
-    <div class="output row q-px-md">
-      <component :is="outputComponentPreview" v-if="outputComponentPreview" :key="$store.previewPresentation" :presentation="$store.previewPresentation" :preview="true" />
-    </div>
+    <template v-if="$store.service">
+      <div v-if="outputComponentLive" class="output title row q-px-md q-mt-md" v-html="titleLive" />
+      <div class="output row q-px-md">
+        <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation" :presentation="$store.livePresentation" :preview="false" />
+      </div>
+      <q-separator size="1vh" color="primary" class="q-mt-md" />
+      <div v-if="outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
+      <div class="output row q-px-md">
+        <component :is="outputComponentPreview" v-if="outputComponentPreview" :key="$store.previewPresentation" :presentation="$store.previewPresentation" :preview="true" />
+      </div>
+    </template>
   </div>
 </template>
 
