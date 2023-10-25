@@ -17,9 +17,9 @@ export default {
         return this.settings.now
       }
 
-      const hours = this.settings.hours.toString()
-      const minutes = this.settings.minutes.toString().padStart(2, '0')
-      const seconds = this.settings.seconds.toString().padStart(2, '0')
+      const hours = this.settings.hours?.toString()
+      const minutes = this.settings.minutes?.toString().padStart(2, '0')
+      const seconds = this.settings.seconds?.toString().padStart(2, '0')
 
       if (this.settings.hours > 0) {
         return `${hours}:${minutes}:${seconds}`

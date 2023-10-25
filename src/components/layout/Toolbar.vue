@@ -94,6 +94,14 @@
         @click="openOutput('livestream')"
       />
 
+      <q-btn
+        flat
+        label="Stage"
+        icon="dvr"
+        dense
+        @click="openOutput('stage')"
+      />
+
       <span class="q-px-md">|</span>
     </div>
 
@@ -250,7 +258,7 @@ export default {
       this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {
-      window.open(`/#/output/${id}`, '_blank', 'popup,width=640,height=360')
+      window.open(`/#/output/${id}`, `output${id}`, 'popup,width=640,height=360')
     },
     openAppSettings () {
       this.$refs.appSettingsDialog.show()

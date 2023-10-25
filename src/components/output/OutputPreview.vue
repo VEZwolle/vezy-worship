@@ -1,5 +1,5 @@
 <template>
-  <q-responsive :ratio="$store.outputRatio" class="output-preview">
+  <q-responsive :ratio="$store.outputRatio" class="output-preview" :style="style">
     <iframe ref="iframe" />
     <img v-if="visualView" :src="require(`../../assets/view${visualView}.png`)" class="overlay">
   </q-responsive>
@@ -14,6 +14,16 @@ export default {
     visualView: {
       type: String,
       default: ''
+    },
+    bgStyle: Object
+  },
+  computed: {
+    style () {
+      if (this.bgStyle) return this.bgStyle
+      const style = {}
+      style.backgroundImage = 'repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px)'
+      style.backgroundBlendMode = 'screen'
+      return style
     }
   },
   mounted () {
@@ -40,8 +50,6 @@ export default {
   overflow: hidden;
   width: 100%;
   pointer-events: none;
-  background-image: repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px);
-  background-blend-mode: screen;
 }
 
 iframe {
