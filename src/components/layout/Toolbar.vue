@@ -93,6 +93,14 @@
         dense
         @click="openOutput('livestream')"
       />
+
+      <q-btn
+        flat
+        label="Stage"
+        icon="dvr"
+        dense
+        @click="openOutput('stage')"
+      />
     </div>
 
     <div>

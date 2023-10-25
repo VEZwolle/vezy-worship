@@ -125,6 +125,7 @@ app.whenReady().then(() => {
   createWindow('/output/beamer', displays[outputDisplays.beamer], true)
   createWindow('/output/livestream', displays[outputDisplays.livestream], true)
   createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], true)
+  createWindow('/output/stage', displays[outputDisplays.stage], true)
 
   // pcoLive window, create & hide, prevent closing
   if (displays[outputDisplays.pcolive]) {
