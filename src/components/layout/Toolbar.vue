@@ -79,29 +79,38 @@
 
       <q-btn
         flat
-        label="Beamer"
         icon="videocam"
         dense
         class="q-mr-sm"
         @click="openOutput('beamer')"
-      />
+      >
+        <q-tooltip>
+          Beamer
+        </q-tooltip>
+      </q-btn>
 
       <q-btn
         flat
-        label="Livestream"
         icon="smart_display"
         dense
         class="q-mr-sm"
         @click="openOutput('livestream')"
-      />
+      >
+        <q-tooltip>
+          Livestream
+        </q-tooltip>
+      </q-btn>
 
       <q-btn
         flat
-        label="Stage"
         icon="dvr"
         dense
         @click="openOutput('stage')"
-      />
+      >
+        <q-tooltip>
+          Stage
+        </q-tooltip>
+      </q-btn>
       <span class="q-px-md">|</span>
     </div>
 
