@@ -150,17 +150,23 @@
       dense
       class="q-ml-sm"
       :disable="!$store.service"
-      @click="openPcoLive"
+      @click="openPcoLive(false)"
     >
       <q-tooltip>
         Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
       </q-tooltip>
       <q-menu context-menu no-focus>
-        <q-list dense style="min-width: 100px">
+        <q-list v-show="$store.service" dense style="min-width: 100px">
           <q-item v-close-popup clickable @click.stop="openPcoLiveWindow(true)">
             <q-item-section>leeg pco live scherm</q-item-section>
             <q-item-section avatar>
               <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+            </q-item-section>
+          </q-item>
+          <q-item v-close-popup clickable @click.stop="openPcoLive(true)">
+            <q-item-section>Open Pco live met nieuw ID</q-item-section>
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white" size="28px" flat round icon="list" />
             </q-item-section>
           </q-item>
         </q-list>
@@ -298,8 +304,8 @@ export default {
     openHelp () {
       window.open('/#/help', 'vezyWorshipHelp', 'popup,width=1000,height=800')
     },
-    openPcoLive () {
-      if (this.$store.service?.pcoId) {
+    openPcoLive (newId = false) {
+      if (!newId && this.$store.service?.pcoId) {
         return this.openPcoLiveWindow()
       }
       this.$q.dialog({
