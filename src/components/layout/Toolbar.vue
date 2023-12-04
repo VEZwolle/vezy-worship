@@ -344,7 +344,7 @@ export default {
       let planId = ''
       if (pcoId) {
         const i = pcoId.search('-')
-        console.log(i)
+        // console.log(i)
         if (i >= 1 && pcoId.length > i) {
           serviceTypeId = pcoId.substring(0, i)
           if (pcoId.length > i) {
