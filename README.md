@@ -9,6 +9,7 @@ Presentatiesoftware voor beamer én livestream
   - Afbeeldingen en video's
   - Ondertitels/teksten (naambalk, melding, etc.)
 - Afzonderlijke weergave voor beamer en livestream, bijvoorbeeld liederen als 2-regel op livestream en 4-regel op beamer.
+- Stage & PCO live weergave 
 - Dienst thuis voor te bereiden via de web app.
 - Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
 - Automatisch importen setlist vanuit [PCO](https://planningcenteronline.com/)

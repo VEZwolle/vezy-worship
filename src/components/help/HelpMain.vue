@@ -6,7 +6,8 @@
     </div>
     <p>
       Presentatiesoftware voor beamer én livestream met afzonderlijke weergave voor beamer en livestream.<br>
-      De livestream uitvoer is voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).
+      De livestream uitvoer is voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).<br>
+      Tevens is eer een stage & PCO live weergave aanwezig mogelijk.
     </p>
     <p>De dienst is thuis voor te bereiden via de web app. En in de kerk te openen op de desktop met uitvoer naar de verschillende schermen.</p>
     <p>Tijdens de dienst kunnen er mededelingen/oproepen boven in het scherm weergeven worden.</p>
@@ -75,7 +76,10 @@
         Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.
       </li>
       <li>
-        Bij de web-app is de monitor keuze niet aanwezig; hier zijn 2 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer & van de livestream te tonen in een nieuw brouwser venster.
+        Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw brouwser venster.
+      </li>
+      <li>
+        De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
       </li>
       <li>
         Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma key (of weer leeg gehaald worden voor standaard waarden).
