@@ -9,6 +9,7 @@ const platform = process.platform || os.platform()
 let autoUpdaterDownloaded = false
 
 let mainWindow
+let pcoLiveWindow
 
 const config = new Store()
 
@@ -83,6 +84,14 @@ app.whenReady().then(() => {
   mainWindow.webContents.setWindowOpenHandler((details) => {
     // options: https://www.electronjs.org/docs/latest/api/browser-window
     switch (true) {
+      // pco live
+      case (details.url.toLowerCase().startsWith('https://services.planningcenteronline.com/live')): // live
+      case (details.url.toLowerCase().startsWith('https://services.planningcenteronline.com/service_types') && details.url.toLowerCase().endsWith('live')): // live
+      case (details.frameName === 'pcoLive' && details.url === 'about:blank'):
+        pcoLiveWindow.webContents.loadURL(details.url)
+        pcoLiveWindow.show()
+        return { action: 'deny' }
+      // pco login or pco - api
       case (details.url.toLowerCase().startsWith('https://login.planningcenteronline.com')):
       case (details.url.toLowerCase().startsWith('https://api.planningcenteronline.com')):
         return {
@@ -117,6 +126,24 @@ app.whenReady().then(() => {
   createWindow('/output/livestream', displays[outputDisplays.livestream], true)
   createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], true)
   createWindow('/output/stage', displays[outputDisplays.stage], true)
+
+  // pcoLive window, create & hide, prevent closing
+  if (displays[outputDisplays.pcolive]) {
+    pcoLiveWindow = createWindow('about:blank', displays[outputDisplays.pcolive], true)
+  } else {
+    pcoLiveWindow = createWindow('about:blank', primaryDisplay, false, 960, 540)
+    pcoLiveWindow.hide()
+  }
+  pcoLiveWindow.setBackgroundColor('#000000')
+  pcoLiveWindow.on('close', (event) => {
+    if (app.quitting) {
+      pcoLiveWindow = null
+    } else {
+      event.preventDefault()
+      pcoLiveWindow.hide()
+      pcoLiveWindow.webContents.loadURL('about:blank')
+    }
+  })
 })
 
 app.on('window-all-closed', () => {

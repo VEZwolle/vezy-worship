@@ -1,7 +1,11 @@
 <template>
   <q-card-section>
     <q-icon name="list" color="primary" size="3vh" />
-    Planning center online:<br>
+    <div class="row">
+      Planning center online:
+      <q-space />
+      (id dienst: {{ planId }} )<br>
+    </div>
     <q-btn
       v-if="!serviceTypes && !plans"
       stack
@@ -261,7 +265,7 @@ export default {
   created () {
     if (this.pcoId) {
       const i = this.pcoId.search('-')
-      if (i > 1 && this.pcoId.length > i) {
+      if (i >= 1 && this.pcoId.length > i) {
         this.serviceTypeId = this.pcoId.substring(0, i)
         if (this.pcoId.length > i) {
           this.planId = this.pcoId.substring(i + 1)
@@ -581,13 +585,24 @@ export default {
       }
     },
     askPcoPlanId () {
-      const PcoPlanId = prompt('Geef PCO dienst id (zie einde url): \nbijv. https://services.planningcenteronline.com/plans/55984013', '55984013')
-      this.planId = Number(PcoPlanId)
-      this.itemCount = ''
-      this.itemId = ''
-      if (this.planId) {
-        this.pco()
-      }
+      this.$q.dialog({
+        title: 'Geef PCO dienst id:',
+        message: 'zie einde url pco service: \nbijv. https://services.planningcenteronline.com/plans/55984013',
+        prompt: {
+          model: '55984013',
+          isValid: val => val.length > 5,
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        this.planId = Number(data)
+        this.itemCount = ''
+        this.itemId = ''
+        if (this.planId) {
+          this.pco()
+        }
+      })
     },
     async pcoLogout () {
       this.isPcoLoading = true

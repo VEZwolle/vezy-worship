@@ -79,29 +79,38 @@
 
       <q-btn
         flat
-        label="Beamer"
         icon="videocam"
         dense
         class="q-mr-sm"
         @click="openOutput('beamer')"
-      />
+      >
+        <q-tooltip>
+          Beamer
+        </q-tooltip>
+      </q-btn>
 
       <q-btn
         flat
-        label="Livestream"
         icon="smart_display"
         dense
+        class="q-mr-sm"
         @click="openOutput('livestream')"
-      />
+      >
+        <q-tooltip>
+          Livestream
+        </q-tooltip>
+      </q-btn>
 
       <q-btn
         flat
-        label="Stage"
         icon="dvr"
         dense
         @click="openOutput('stage')"
-      />
-
+      >
+        <q-tooltip>
+          Stage
+        </q-tooltip>
+      </q-btn>
       <span class="q-px-md">|</span>
     </div>
 
@@ -133,6 +142,35 @@
       @click="openAppSettings"
     >
       <q-tooltip>Instellingen</q-tooltip>
+    </q-btn>
+
+    <q-btn
+      flat
+      icon="list"
+      dense
+      class="q-ml-sm"
+      :disable="!$store.service"
+      @click="openPcoLive(false)"
+    >
+      <q-tooltip>
+        Open PCO live {{ $store.service?.pcoId ? 'van huidige dienst' : 'met dienst id' }}
+      </q-tooltip>
+      <q-menu context-menu no-focus>
+        <q-list v-show="$store.service" dense style="min-width: 100px">
+          <q-item v-close-popup clickable @click.stop="openPcoLiveWindow(true)">
+            <q-item-section>leeg pco live scherm</q-item-section>
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white" size="28px" flat round icon="clear" />
+            </q-item-section>
+          </q-item>
+          <q-item v-close-popup clickable @click.stop="openPcoLive(true)">
+            <q-item-section>Open Pco live met nieuw ID</q-item-section>
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white" size="28px" flat round icon="list" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
     </q-btn>
 
     <q-btn
@@ -258,13 +296,66 @@ export default {
       this.$refs.SetlistDatabaseCompareDialog.show()
     },
     openOutput (id) {
-      window.open(`/#/output/${id}`, `output${id}`, 'popup,width=640,height=360')
+      window.open(`/#/output/${id}`, `output${id}`, 'popup,width=960,height=540')
     },
     openAppSettings () {
       this.$refs.appSettingsDialog.show()
     },
     openHelp () {
       window.open('/#/help', 'vezyWorshipHelp', 'popup,width=1000,height=800')
+    },
+    openPcoLive (newId = false) {
+      if (!newId && this.$store.service?.pcoId) {
+        return this.openPcoLiveWindow()
+      }
+      this.$q.dialog({
+        title: 'Geef PCO dienst id:',
+        message: 'zie einde url pco service: \nbijv. https://services.planningcenteronline.com/plans/55984013',
+        prompt: {
+          model: '55984013',
+          isValid: val => val.length > 5,
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        this.$store.service.pcoId = `0-${data}` // add check/remove error input??
+        this.openPcoLiveWindow()
+      })
+    },
+    openPcoLiveWindow (blank = false) {
+      if (blank) return window.open('about:blank', 'pcoLive', 'popup,width=960,height=540')
+      const url = this.pcoLiveUrl()
+      window.open(url, 'pcoLive', 'popup,width=960,height=540')
+    },
+    pcoLiveUrl () {
+      if (this.$store.service?.pcoId) {
+        const service = this.splitPcoId(this.$store.service?.pcoId)
+        // live of plan
+        if (service.planId) return `https://services.planningcenteronline.com/live/${service.planId}`
+        // next comming plan of serviceType
+        if (service.serviceTypeId) return `https://services.planningcenteronline.com/service_types/${service.serviceTypeId}/plans/after/today/live`
+      }
+      return ''
+    },
+    // pcoId = serviceTypeId-planId
+    splitPcoId (pcoId) {
+      let serviceTypeId = ''
+      let planId = ''
+      if (pcoId) {
+        const i = pcoId.search('-')
+        console.log(i)
+        if (i >= 1 && pcoId.length > i) {
+          serviceTypeId = pcoId.substring(0, i)
+          if (pcoId.length > i) {
+            planId = pcoId.substring(i + 1)
+          }
+        } else {
+          serviceTypeId = ''
+          planId = pcoId
+        }
+      }
+      return { serviceTypeId, planId }
     }
   }
 }
