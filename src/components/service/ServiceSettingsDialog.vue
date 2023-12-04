@@ -125,6 +125,7 @@ export default {
       this.service.backgroundImageId = this.$store.addMedia(file)
     },
     save () {
+      if (this.isNew) this.$fs.fileHandle = null
       this.$store.fillService(this.service)
       this.$refs.pco.addItems()
       this.hide()
