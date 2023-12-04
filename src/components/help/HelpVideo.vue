@@ -34,7 +34,7 @@
       <b><u>Schuifbalk start, stop punt.</u></b><br>
       Hier kan je de schuifbalk opschuiven naar een tijd dat je de film bij live wilt gaan afspelen.<br>
       Door afspelen, op pauze zetten en dan op de knop "Huidig = Start positie" of "Huidig = Stop positie" te klikken kan je deze posities ook afspelen.<br>
-      Met de afspeelknop naast deze instel knoppek kan je de film laten afspelen vanaf de ingestelde positie of de laatste 5 sec. van de film afspelen.<br>
+      Met de afspeelknop naast deze instel knoppen kan je de film laten afspelen vanaf de ingestelde positie of de laatste 5 sec. van de film afspelen.<br>
       <i>opm. met de onderstaande switch kan je voor het instellen de film eventueel wel door laten lopen voorbij de ingestelde stop tijd. (alleen voor instellen, niet voor live)</i>
     </p>
     <p>
@@ -74,7 +74,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>

@@ -7,7 +7,7 @@
     <p>
       Presentatiesoftware voor beamer én livestream met afzonderlijke weergave voor beamer en livestream.<br>
       De livestream uitvoer is voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).<br>
-      Tevens is eer een stage & PCO live weergave aanwezig mogelijk.
+      Tevens is er een stage & PCO live weergave aanwezig mogelijk.
     </p>
     <p>De dienst is thuis voor te bereiden via de web app. En in de kerk te openen op de desktop met uitvoer naar de verschillende schermen.</p>
     <p>Tijdens de dienst kunnen er mededelingen/oproepen boven in het scherm weergeven worden.</p>
@@ -35,8 +35,8 @@
         Afbeeldingen
         <ul>
           <li>Er kunnen verschillende afbeeldingen voor beamer & livestream worden gebruikt.</li>
-          <li>Bij PNG bestanden wordt de transperantie uit de afbeelding meegenomen.</li>
-          <li>Via de geavenceerde opties kan de afbeelding verschaald, gedraaid & verplaatst worden.</li>
+          <li>Bij PNG bestanden wordt de transparantie uit de afbeelding meegenomen.</li>
+          <li>Via de geavanceerde opties kan de afbeelding verschaald, gedraaid & verplaatst worden.</li>
           <li>Standaard zijn de sheets voor de collecte, nazorg en einde dienst aanwezig.</li>
         </ul>
       </li>
@@ -76,7 +76,7 @@
         Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.
       </li>
       <li>
-        Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw brouwser venster.
+        Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
       </li>
       <li>
         De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
@@ -111,7 +111,7 @@
       </q-item>
     </q-list>
     Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm kan je de api-key instellen.<br>
-    Na wijzigen moet de desktop app opnieuw opgestart worden. (de instellingen worden per pc/brouwser opgeslagen.)<br>
+    Na wijzigen moet de desktop app opnieuw opgestart worden. (de instellingen worden per pc/browser opgeslagen.)<br>
   </p>
 </template>
 
@@ -121,7 +121,7 @@ export default {
     return {
       apiFunctions: [
         {
-          name: 'Inladen versen uit de bijbel vertalingen',
+          name: 'Inladen verzen uit de bijbel vertalingen',
           icon: 'menu_book'
         },
         {

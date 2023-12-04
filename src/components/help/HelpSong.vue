@@ -31,9 +31,9 @@
       <ul>
         <li>
           Deze moet dan starten met<br>
-          of<i>label</i> en een <i>( { [ : ; / \ |</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
+          of <i>label</i> en een <i>( { [ : ; / \ |</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
           of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
-          bijv. "infro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
+          bijv. "intro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
           Zie onderaan deze pagina voor een complete lijst van opties.
         </li>
         <li>
@@ -43,7 +43,7 @@
           refrein 2
         </li>
         <li>
-          De hulpregels krijgen na opslaan in de preview en liveweergave een apparte kleur meegegeven;<br>
+          De hulpregels krijgen na opslaan in de preview en liveweergave een aparte kleur meegegeven;<br>
           maar worden niet op de beamer en livestream getoond.
         </li>
       </ul>
@@ -69,7 +69,7 @@
     <p>
       <b><u>Vertaling</u></b><br>
       De vertaling dient dezelfde onderverdeling met lege regels te hebben al de originele tekst. De labels mogen ook gebruikt worden uit de lijst.<br>
-      De vertaling wordt nu automatisch in apparte opmaak onder de liedteksten geplaatst op de beamer en livestream.
+      De vertaling wordt nu automatisch in aparte opmaak onder de liedteksten geplaatst op de beamer en livestream.
     </p>
     <p>
       Er is een mogelijkheid om de tekst automatisch te laten vertalen. Hiervoor wordt "DeepL Translator" gebruikt.<br>
@@ -111,7 +111,7 @@
       <img src="../../assets/help/songdialogordenen.png">
       <ul>
         <li>
-          <img src="../../assets/help/songdialogordenen1kolom.png"> & <img src="../../assets/help/songdialogordenen2kolom.png"> Hiermee kan je switschen tussen de 1 & 2 kolommen weergave. In de 1 kolom weergave staat de tekst en vertaling onder elkaar en kan je ook de verwijderde regels zien (en herstellen). (het symbool geeft aan wat het is.)
+          <img src="../../assets/help/songdialogordenen1kolom.png"> & <img src="../../assets/help/songdialogordenen2kolom.png"> Hiermee kan je switchen tussen de 1 & 2 kolommen weergave. In de 1 kolom weergave staat de tekst en vertaling onder elkaar en kan je ook de verwijderde regels zien (en herstellen). (het symbool geeft aan wat het is.)
         </li>
         <li>
           Wanneer je met de muis boven een regel staat krijg je een aantal opties te zien.<img src="../../assets/help/songdialogordenenoptiesregel.png"><br>
@@ -126,14 +126,14 @@
           <img src="../../assets/help/songdialogordenenoptiesregelright.png"><br>
           - Door met rechts op de optie "label..." te klikken krijg je de andere labels te zien om uit te kiezen<br>
           - Lege regel invoegen is alleen voor de huidige kolom; bij (beide) voor beide kolommen
-          - Kopieren van onderdeel kopieerd het geheel; hierna kan je op een andere positie uit het menu kiezen voor plakken (met of zonder het label)<br>
+          - Kopiëren van onderdeel kopieert het geheel; hierna kan je op een andere positie uit het menu kiezen voor plakken (met of zonder het label)<br>
           - de onderste opties zijn gelijk aan bovenstaande knoppen wanneer je de muis boven de regel houdt.<br>
         </li>
         <li>
           <img src="../../assets/help/songdialogordenenzoektaal.png"> Deze knop haalt de nederlandse tekst uit de liedtekst en verplaatst deze naar de vertaling van het lied. Dit gebeurt via taalherkenning van DeepL. Hierdoor wordt 95-100% in de juiste kolom geplaatst. De labels blijven ongewijzigd in beide kolommen staan.
         </li>
         <li>
-          <img src="../../assets/help/songdialogordenenswitch.png"> Door deze switch om te zetten kan je de tekst in de regel bewerken. Dubbel klik met de muis op de regel activeerd deze bewerkmodus ook. Met "enter" ga je weer uit de bewerkmodes.
+          <img src="../../assets/help/songdialogordenenswitch.png"> Door deze switch om te zetten kan je de tekst in de regel bewerken. Dubbel klik met de muis op de regel activeert deze bewerkmodus ook. Met "enter" ga je weer uit de bewerkmodes.
         </li>
       </ul>
       Alleen na gebruik van de knop "toepassen" wordt de bewerking opgeslagen naar je liedtekst in de setlist; "annuleren" sluit het venster zonder opslaan.
@@ -143,18 +143,18 @@
     </div>
     <p>
       <img src="../../assets/help/addsongdialogadddatabase.png"><br>
-      Er kunnen via de databaseknop ook liederen uit de locale of online (Angolia) database toegevoegd worden.<br>
-      Met de switch voor de databaseknop kan je wisselen tussen de locale en de online database.<br>
-      opm. de Algolia database ondersteund ook zoeken met kleine typefouten, de locale database niet.
+      Er kunnen via de databaseknop ook liederen uit de lokale of online (Angolia) database toegevoegd worden.<br>
+      Met de switch voor de databaseknop kan je wisselen tussen de lokale en de online database.<br>
+      opm. de Algolia database ondersteund ook zoeken met kleine typefouten, de lokale database niet.
     </p>
     <p>
       <img src="../../assets/help/addsongdatabasedialog.png"><br>
-      - Links boven kan je wisselen tussen de locale en online database.<br>
+      - Links boven kan je wisselen tussen de lokale en online database.<br>
       - Vul in het zoekvak je zoektekst in.<br>
       - Kies eventueel een collectie om je resultaten te beperken.<br>
       - Standaard wordt alleen in de titel, collectie en nummer gezocht. Onderin kan je aangeven of je ook in de liedtekst wilt zoeken.<br>
-      - Voor de locale database kan je ook aanvinken dat je alleen liederen wilt vinden die een vertaling hebben.<br>
-      - met de knop toepassen wordt het lied uit de database gekopiereerd naar het actieve liedvenster.<br>
+      - Voor de lokale database kan je ook aanvinken dat je alleen liederen wilt vinden die een vertaling hebben.<br>
+      - met de knop toepassen wordt het lied uit de database gekopieerd naar het actieve liedvenster.<br>
       - In dit venster kan je ook liederen in de database bewerken of verwijderen; online alleen wanneer je hier de rechten voor hebt. (met de ongedaan maak knop kan je bepaalde wijzigingen weer ongedaan maken zolang je in dit venster zit.)<br>
       - Rechts kan je een voorbeeld zien van het geselecteerde lied in de database.
     </p>
@@ -166,7 +166,7 @@
     </p>
     <p>
       Liederen importeren uit de setlist naar de database kan via het uitklapvenster naast dienst opslaan.<br>
-      De liederen worden dan vergelekem met de database en je kan dan kiezen tussen, vervangen, toevoegen of niets doen..<br>
+      De liederen worden dan vergeleken met de database en je kan dan kiezen tussen, vervangen, toevoegen of niets doen..<br>
       Ook hier zoekt hij naar liederen die het meest op de liederen uit de setlist in de database lijken.<br>
       <img src="../../assets/help/addsetlistsongtodatabase.png"><br>
       <img src="../../assets/help/addsetlistsongtodatabasedialog.png">
@@ -209,7 +209,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
     <div class="text-h6 q-mb-md">
       Lijst toepasbare labels

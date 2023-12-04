@@ -61,7 +61,7 @@
       <ul>
         <li>
           <b>Standaard</b><br>
-          De groote van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.
+          De grootte van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.
         </li>
         <li>
           <b>Breed</b><br>
@@ -101,7 +101,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>
