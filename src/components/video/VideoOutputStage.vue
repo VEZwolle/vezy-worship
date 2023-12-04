@@ -1,5 +1,5 @@
 <template>
-  <div class="text">
+  <div ref="outputStage" class="text">
     Film: {{ settings.remainingF }}
   </div>
 </template>
@@ -8,7 +8,11 @@
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 
 export default {
-  extends: BaseOutputStage
+  extends: BaseOutputStage,
+
+  mounted () {
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 </script>
 

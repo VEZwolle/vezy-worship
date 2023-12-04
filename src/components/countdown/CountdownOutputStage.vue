@@ -1,13 +1,17 @@
 <template>
-  <div v-if="!isFinished" class="text" v-text="remaining" />
-  <div v-else class="text text-grey-9" v-text="'0:00'" />
+  <div v-if="!isFinished" ref="outputStage" class="text" v-text="remaining" />
+  <div v-else ref="outputStage" class="text text-grey-9" v-text="'0:00'" />
 </template>
 
 <script>
 import CountdownOutputLivestream from './CountdownOutputLivestream.vue'
 
 export default {
-  extends: CountdownOutputLivestream
+  extends: CountdownOutputLivestream,
+
+  mounted () {
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 </script>
 

@@ -1,12 +1,16 @@
 <template>
-  <div class="text" v-html="settings?.text" />
+  <div ref="outputStage" class="text" v-html="settings?.text" />
 </template>
 
 <script>
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 
 export default {
-  extends: BaseOutputStage
+  extends: BaseOutputStage,
+
+  mounted () {
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 </script>
 

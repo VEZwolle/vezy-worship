@@ -1,5 +1,5 @@
 <template>
-  <div class="row q-gutter-md image">
+  <div ref="outputStage" class="row q-gutter-md image">
     <div class="col">
       Beamer:<br>
       <OutputPreview :component="ImageOutputBeamer" :presentation="presentation" :bg-style="styleBeamer" />
@@ -36,6 +36,9 @@ export default {
       style.backgroundColor = '#1d1d1d'
       return style
     }
+  },
+  mounted () {
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 }
 </script>
