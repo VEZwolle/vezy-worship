@@ -93,6 +93,9 @@ export default {
       if (!this.moveSlider) return
       this.settings.time = val
     },
+    'remainingF' (val) {
+      this.settings.remainingF = val
+    },
     clear (val) {
       if (this.preview) return
 

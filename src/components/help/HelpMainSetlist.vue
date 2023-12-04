@@ -8,7 +8,7 @@
       Openen / opslaan dienst
     </div>
     <p>
-      De diensten worden opgeslagen met de *.vez extentie.<br>Afbeeldingen, teksten, video's worden alle in dit bestand mee opgeslagen.<br>
+      De diensten worden opgeslagen met de *.vez extensie.<br>Afbeeldingen, teksten, video's worden alle in dit bestand mee opgeslagen.<br>
       Openen van een opgeslagen dienst kan door op de knop <img src="../../assets/help/fileopen.png"> te klikken, of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor toevoegen aan huidige setlist.<br>
       Opslaan naar een bestand gebeurd met de knop <img src="../../assets/help/filesave.png"> of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor opslaan als een nieuw bestand.
     </p>
@@ -32,7 +32,7 @@
         <i>Hier worden titelbalken voor aangemaakt. (alleen wanneer ingevuld)</i>
       </li>
       <li>
-        Kies een achergrond afbeelding uit een bestand (in formaat uitvoerscherm 1920x1080).<br>
+        Kies een achtergrond afbeelding uit een bestand (in formaat uitvoerscherm 1920x1080).<br>
         <i>
           Deze afbeelding wordt standaard tijdens de dienst als achtergrond op de beamer getoond.
           (achteraf ook aan te passen)
@@ -60,7 +60,7 @@
       Via de <img src="../../assets/help/setlistadd.png">In het linker vak, onderin kan je onderdelen toevoegen.<br>
       Kies uit de lijst wat voor onderdeel je wilt toevoegen. (zie voor verdere info het betreffende onderdeel). Het onderdeel wordt dan onder in de lijst toegevoegd.<br>
       <img src="../../assets/help/setlistaddchoice.png"><br>
-      Ook via de de resultaten in het zoekvenster kunnen liederen door dubbelklik of de setlist knop toegevoegd worden.<br>
+      Ook via de resultaten in het zoekvenster kunnen liederen door dubbelklik of de setlist knop toegevoegd worden.<br>
       <img src="../../assets/help/quicksearch2.png">
     </p>
     <div class="text-h6 q-mb-md">
@@ -105,11 +105,11 @@
       Nu u de gegevens uit PCO zit kunt u:
       <ul>
         <li>
-          Bovenin dubblklik op de namen deze toevoegen aan VezyWorship, of via de knop "Update gegevens" alle gelijk.<br>
+          Bovenin dubbelklik op de namen deze toevoegen aan VezyWorship, of via de knop "Update gegevens" alle gelijk.<br>
           Achter de namen kunt u met een vinkje of kruisje zien welke gegevens reeds overgenomen zijn.
         </li>
         <li>
-          In het onderste deel kunt u aanvinken welke onderdelen geimporterd moeten worden naar VezyWorship.<br>
+          In het onderste deel kunt u aanvinken welke onderdelen geïmporteerd moeten worden naar VezyWorship.<br>
           Via de knoppen onderin kunt u in 1x alles aan/uit of alleen alle liederen e.d. aan/uit zetten.<br>
           Mocht het type niet juist herkend zijn kunt u dat aanpassen door op het symbool voor het onderdeel te klikken om te wisselen.<br>
         </li>
@@ -122,7 +122,7 @@
         </li>
       </ul>
       En aan het einde klikt u op Opslaan.<br>
-      Via bewerken van de dienst kunt u eventueel ook later weer onderdelen vanuit PCO toevoegen; reeds geimporteerde worden niet overschreven.
+      Via bewerken van de dienst kunt u eventueel ook later weer onderdelen vanuit PCO toevoegen; reeds geïmporteerde worden niet overschreven.
     </p>
   </div>
 </template>

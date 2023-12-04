@@ -5,16 +5,16 @@
       Bijbelteksten toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
-      Nieuwe bijbeltekst toevoegen aan setlist:
+      Nieuwe Bijbeltekst toevoegen aan setlist:
     </div>
     <p>
       Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddscripture.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
-      Op de eerste regel kan je de titel (bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
-      Vul op de 2e regel de <i>bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
-      Klik hiernaa op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database.<br>
+      Op de eerste regel kan je de titel (Bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een Bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
+      Vul op de 2e regel de <i>Bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
+      Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
       <img src="../../assets/help/addscripturedialog.png">
     </p>
@@ -95,7 +95,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>
