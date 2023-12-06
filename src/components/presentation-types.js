@@ -112,7 +112,8 @@ export default [
       play: false,
       time: 0,
       startTime: 0,
-      endTime: -1
+      endTime: -1,
+      noLivestream: false
     },
     components: {
       settings: require('./video/VideoSettings.vue').default,
