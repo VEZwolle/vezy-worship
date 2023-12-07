@@ -19,8 +19,8 @@
       v-for="(slide, slideIndex) in section.slides"
       :key="slideIndex"
       :ref="`slide_${sectionIndex}_${slideIndex}`"
-      :active="isSelected(sectionIndex, slideIndex)"
-      active-class="bg-dark text-white"
+      :active="isPastSelected(sectionIndex, slideIndex)"
+      :active-class="isPastSelectedClass(isSelected(sectionIndex, slideIndex))"
     >
       <q-item-section>
         <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
@@ -49,13 +49,23 @@ export default {
     scroll () {
       if (!this.preview) {
         const el = this.$refs[`slide_${this.presentation.selectedSectionIndex}_${this.presentation.selectedSlideIndex}`][0].$el
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
+    },
+    isPastSelected (sectionIndex, slideIndex) {
+      return !this.preview &&
+        (sectionIndex < this.presentation.selectedSectionIndex ||
+          (sectionIndex === this.presentation.selectedSectionIndex &&
+          slideIndex <= this.presentation.selectedSlideIndex)
+        )
     },
     isSelected (sectionIndex, slideIndex) {
       return !this.preview &&
         sectionIndex === this.presentation.selectedSectionIndex &&
         slideIndex === this.presentation.selectedSlideIndex
+    },
+    isPastSelectedClass (past = false) {
+      return past ? 'text-white' : 'text-gray'
     },
     isSelectedLabel (sectionIndex) {
       if (this.preview) return false

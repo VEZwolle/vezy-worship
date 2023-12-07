@@ -7,6 +7,9 @@ export default {
   computed: {
     settings () {
       return this.presentation.settings
+    },
+    classLive () {
+      return !this.preview ? 'text-white' : ''
     }
   }
 }

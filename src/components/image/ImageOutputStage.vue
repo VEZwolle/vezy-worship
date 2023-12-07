@@ -1,10 +1,10 @@
 <template>
   <div ref="outputStage" class="row q-gutter-md image">
-    <div class="col">
+    <div class="col" :class="classLive">
       Beamer:<br>
       <OutputPreview :component="ImageOutputBeamer" :presentation="presentation" :bg-style="styleBeamer" />
     </div>
-    <div class="col">
+    <div class="col" :class="classLive">
       <template v-if="!$store.noLivestream">
         Livestream:<br>
         <OutputPreview :component="ImageOutputLivestream" :presentation="presentation" :bg-style="styleLivestream" />
@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted () {
-    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 </script>
