@@ -46,7 +46,7 @@ export default {
   position: fixed;
   user-select: none;
   cursor: none;
-  color: white;
+  color: yellow;
   background-color: #000;
   background-size: cover;
   background-position: center;

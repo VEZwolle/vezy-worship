@@ -1,5 +1,5 @@
 <template>
-  <div ref="outputStage" class="text" v-html="settings?.text" />
+  <div ref="outputStage" class="text" :class="classLive" v-html="settings?.text" />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ export default {
   extends: BaseOutputStage,
 
   mounted () {
-    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 </script>
@@ -17,6 +17,6 @@ export default {
 <style scoped>
 .text {
   font-size: 7vh;
-  line-height: 9vh;
+  line-height: 10vh;
 }
 </style>

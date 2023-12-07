@@ -1,5 +1,5 @@
 <template>
-  <div ref="outputStage" class="text">
+  <div ref="outputStage" class="text" :class="classLive">
     Film: {{ settings.remainingF }}
   </div>
 </template>
@@ -11,14 +11,14 @@ export default {
   extends: BaseOutputStage,
 
   mounted () {
-    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 </script>
 
 <style scoped>
 .text {
-  font-size: 7vh;
-  line-height: 9vh;
+  font-size: 9vh;
+  line-height: 12vh;
 }
 </style>
