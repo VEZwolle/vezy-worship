@@ -1,8 +1,8 @@
 <template>
   <div class="bg-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <div v-if="alpha" v-show="!clear" class="alpha" :style="styleOpacity" />
-      <video v-else v-show="!clear" ref="player" :muted="muted" :src="fileUrl" class="video" />
+      <div v-if="alpha" v-show="!clear && show" class="alpha" :style="styleOpacity" />
+      <video v-else v-show="!clear && show" ref="player" :muted="muted" :src="fileUrl" class="video" />
     </Transition>
   </div>
 </template>
@@ -13,7 +13,8 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   props: {
-    muted: Boolean
+    muted: Boolean,
+    outputlivestream: Boolean
   },
   computed: {
     fileUrl () {
@@ -21,6 +22,10 @@ export default {
     },
     player () {
       return this.$refs.player
+    },
+    show () {
+      if (!this.outputlivestream) return true
+      return !this.settings.noLivestream
     }
   },
   watch: {

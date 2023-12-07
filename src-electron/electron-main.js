@@ -122,14 +122,15 @@ app.whenReady().then(() => {
   const displays = screen.getAllDisplays()
   const outputDisplays = config.get('displays') || {}
 
-  createWindow('/output/beamer', displays[outputDisplays.beamer], true)
-  createWindow('/output/livestream', displays[outputDisplays.livestream], true)
-  createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], true)
-  createWindow('/output/stage', displays[outputDisplays.stage], true)
+  // displays[i].id === primaryDisplay.id --> Check as equal --> only full screen if not equal
+  createWindow('/output/beamer', displays[outputDisplays.beamer], displays[outputDisplays.beamer].id !== primaryDisplay.id)
+  createWindow('/output/livestream', displays[outputDisplays.livestream], displays[outputDisplays.livestream].id !== primaryDisplay.id)
+  createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], displays[outputDisplays.livestreamAlpha].id !== primaryDisplay.id)
+  createWindow('/output/stage', displays[outputDisplays.stage], displays[outputDisplays.stage].id !== primaryDisplay.id)
 
   // pcoLive window, create & hide, prevent closing
   if (displays[outputDisplays.pcolive]) {
-    pcoLiveWindow = createWindow('about:blank', displays[outputDisplays.pcolive], true)
+    pcoLiveWindow = createWindow('about:blank', displays[outputDisplays.pcolive], displays[outputDisplays.pcolive].id !== primaryDisplay.id)
   } else {
     pcoLiveWindow = createWindow('about:blank', primaryDisplay, false, 960, 540)
     pcoLiveWindow.hide()
