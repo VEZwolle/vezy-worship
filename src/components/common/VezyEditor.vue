@@ -74,8 +74,13 @@ export default {
       this.backup()
       const text = e.clipboardData.getData('text/plain')
       this.$refs.editor.runCmd('insertText', text)
-      // eslint-disable-next-line
-      this.content = this.content.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
+      this.content = this.content.replace(/\s\s/g, '&nbsp;&nbsp;')
+        .replace(/\r*\n/g, '<br>').replace(/\n/g, '<br>')
+        .replace(/<div>\s<\/div>/g, '') // <div>SPATIE</div> verwijderen
+        .replace(/\s<div>/g, '<div>').replace(/\s<\/div>/g, '</div>') // SPATIE<div> verwijderen & SPATIE</div> verwijderen
+        .replace(/<div><br><\/div>/g, '<br>')
+        .replace(/(<br>)*$/, '') // alle eind enters verwijderen
+        .replace(/^(<br>)*/, '') // verwijder alle eerst enters
     },
     cleanText () {
       this.content = CleanText(this.content)
