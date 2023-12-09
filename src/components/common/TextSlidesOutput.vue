@@ -99,6 +99,7 @@ export default {
   user-select: none;
   min-height: unset;
   padding: 1px 0px;
+  scroll-margin-block-start: 0;
 
   .section-line {
     min-height: 0.2em;

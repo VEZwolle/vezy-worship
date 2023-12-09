@@ -1,6 +1,6 @@
 <template>
   <div ref="outputStage" class="text" :class="classLive">
-    Film: {{ settings.remainingF }}
+    Film: {{ remainingTime }}
   </div>
 </template>
 
@@ -10,6 +10,11 @@ import BaseOutputStage from '../output/BaseOutputStage.vue'
 export default {
   extends: BaseOutputStage,
 
+  computed: {
+    remainingTime () {
+      return !this.preview ? this.settings.remainingF : ''
+    }
+  },
   mounted () {
     if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
