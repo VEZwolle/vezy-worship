@@ -73,14 +73,14 @@ export default {
     pastePlainText (e) {
       this.backup()
       const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
-      this.content = this.content.replace(/\s\s/g, '&nbsp;&nbsp;')
-        .replace(/\r*\n/g, '<br>').replace(/\n/g, '<br>')
+      this.$refs.editor.runCmd('insertText', text.trim()) // begin/eind spaties e.d. verwijderen
+      this.content = this.content
+        .replace(/\s\s/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen
+        .replace(/\r*\n/g, '<br>') // (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind)
+        .replace(/\v/g, '<br>') // vertical tab [VT] (nieuwe regel)
         .replace(/<div>\s<\/div>/g, '') // <div>SPATIE</div> verwijderen
         .replace(/\s<div>/g, '<div>').replace(/\s<\/div>/g, '</div>') // SPATIE<div> verwijderen & SPATIE</div> verwijderen
-        .replace(/<div><br><\/div>/g, '<br>')
-        .replace(/(<br>)*$/, '') // alle eind enters verwijderen
-        .replace(/^(<br>)*/, '') // verwijder alle eerst enters
+        // uitzoeken losse <br> aanpassen naar <div> etc. volgens editor manier
     },
     cleanText () {
       this.content = CleanText(this.content)
