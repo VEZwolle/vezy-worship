@@ -73,16 +73,10 @@ export default {
     pastePlainText (e) {
       this.backup()
       const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text.trim()) // begin/eind spaties e.d. verwijderen
-      this.content = this.content
-        .replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen
-        .replace(/\r*\n/g, '<br>') // (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind)
-        .replace(/\v/g, '<br>') // vertical tab [VT] (nieuwe regel)
-        // onder nodig?
-        /*
-        * .replace(/<div> <\/div>/g, '') // <div>SPATIE</div> verwijderen
-        * .replace(/ <div>/g, '<div>').replace(/ <\/div>/g, '</div>') // SPATIE<div> verwijderen & SPATIE</div> verwijderen
-        */
+      this.$refs.editor.runCmd('insertText', text.replace(/(\r*\n)|(\r(?!\n))|(\v)/g, '\n')) // set all line breaks to \n [LF], due to proper convert to <br> and </div><div>
+      // [CR][LF] = \r\n  |  [LF] = \n  |  [CR] = \r  |  [VT] = \v  (Carriage Return, Line Feed, Vertical Tab)
+      this.content = this.content.replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen
+      this.cleanText()
     },
     cleanText () {
       this.content = CleanText(this.content)
