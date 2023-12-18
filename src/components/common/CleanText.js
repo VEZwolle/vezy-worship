@@ -2,10 +2,10 @@ export function CleanText (content) {
   // <\/?([biuspmal]*?)>)*? = </b> || </i> || </u> || </sup> || </small> || <b> || <i> || <u> || <sup> || <small>
   let text = content
     .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
-    .replace(/\sstyle="(.*?);*">/gi, '>') // verwijder alle extra "style" elementen
+    .replace(/ style="(.*?);*">/gi, '>') // verwijder alle extra "style" elementen
     .replace(/\r*\n/g, '<br>') //         (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind), soms door plakken/drag-drop.
     .replace(/\v/g, '<br>') //            vertical tab [VT] (nieuwe regel)
-    .replace(/(?<!&nbsp;|\s)&nbsp;(?!&nbsp;|\s)/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;') //                       losse spaties als ' ' plaatsen, tenzij tussen <div> </div>
+    .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;') //                       losse spaties als ' ' plaatsen, tenzij tussen <div> </div>
     .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line, remove <br>
     .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>') //              drag-drop to empy line, remove <br>
   let textStep = ''

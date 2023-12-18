@@ -77,9 +77,9 @@ export default {
       this.content = this.content
         .replace(/\r*\n/g, '<br>') // (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind)
         .replace(/\v/g, '<br>') // vertical tab [VT] (nieuwe regel)
-        .replace(/\s\s/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen [VT] wordt ook als spatie gezien, hierna.)
-        .replace(/<div>\s<\/div>/g, '') // <div>SPATIE</div> verwijderen
-        .replace(/\s<div>/g, '<div>').replace(/\s<\/div>/g, '</div>') // SPATIE<div> verwijderen & SPATIE</div> verwijderen
+        .replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen [VT] wordt ook als spatie gezien, hierna.)
+        .replace(/<div> <\/div>/g, '') // <div>SPATIE</div> verwijderen
+        .replace(/ <div>/g, '<div>').replace(/ <\/div>/g, '</div>') // SPATIE<div> verwijderen & SPATIE</div> verwijderen
         // uitzoeken losse <br> aanpassen naar <div> etc. volgens editor manier
     },
     cleanText () {
