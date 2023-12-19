@@ -26,6 +26,7 @@
 
 <script>
 import { CleanText } from './CleanText.js'
+import { debounce } from 'quasar'
 
 export default {
   props: {
@@ -65,10 +66,14 @@ export default {
     this.cleanText()
     this.update()
   },
+  created () {
+    this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
+  },
   methods: {
     update () {
       this.lastEmit = this.content
       this.$emit('update:modelValue', this.content)
+      this.cleanTextDebounce()
     },
     pastePlainText (e) {
       this.backup()
@@ -80,6 +85,9 @@ export default {
     },
     cleanText () {
       this.content = CleanText(this.content)
+    },
+    cleanTextDebounce () {
+      this.cleanText()
     },
     numberSup () {
       this.backup()
