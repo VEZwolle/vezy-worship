@@ -62,10 +62,6 @@ export default {
     this.cleanText()
     this.backup()
   },
-  beforeUnmount () {
-    this.cleanText()
-    this.update()
-  },
   created () {
     this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
