@@ -79,6 +79,18 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
+    case version <= 1.0902:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'caption':
+          case 'scripture': {
+            presentation.settings.text = CleanText(presentation.settings.text)
+            break
+          }
+          default:
+        }
+      })
+      // eslint-disable-next-line
     default: // no changes
       // console.log(`version file: ${version}`)
       break
