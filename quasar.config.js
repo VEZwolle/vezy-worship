@@ -232,8 +232,8 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'vezy-worship',
-        artifactName: 'VezyWorship-Setup-${version}.${ext}',
+        appId: 'vezy-worship-christmas',
+        artifactName: 'VezyWorship-Christmas-Setup-${version}.${ext}',
         win: {
           target: [
             {

@@ -2,10 +2,9 @@
   <div class="bg-output-beamer song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
       <svg v-show="!clear" :style="styleOpacity">
-        <text y="6.6vw">
-          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-          <tspan x="50%" dy="3vw">&nbsp;</tspan>
-          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
+        <text :y="`${christmasPadding}vw`">
+          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="3.2vw">{{ line }}</tspan>
+          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="3.2vw" class="translation">{{ line }}</tspan>
         </text>
       </svg>
     </Transition>
@@ -18,6 +17,17 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
+    christmasPadding () {
+      if (this.translatedLines.length) {
+        return 23.5
+      }
+
+      if (this.lines.length === 1) {
+        return 25
+      }
+
+      return 24
+    },
     lines () {
       const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
       return section?.slides.flat() || []
@@ -43,8 +53,9 @@ export default {
     height: 100%;
 
     tspan {
-      font-size: 3.8vw;
-      letter-spacing: 0.01vw;
+      font-family: 'CMG Sans';
+      font-size: 2.5vw;
+      letter-spacing: 0.1vw;
 
       fill: #fff;
       stroke: #000;
@@ -54,16 +65,12 @@ export default {
 
       text-anchor: middle;
       dominant-baseline: middle;
-
-      filter: shadow(0.8);
     }
 
     tspan.translation {
       fill: #bbb;
       font-style: italic;
       stroke-width: 0.4vw;
-      font-size: 3.4vw;
-      filter: shadow(0.6);
     }
   }
 }
