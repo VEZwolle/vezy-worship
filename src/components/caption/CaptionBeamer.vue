@@ -84,40 +84,40 @@ export default {
         .split('<br>')
 
       // for measurement text wrap (same as css)
-      let maxWidth = window.innerWidth
+      let maxWidth = 1000 // fictive width
       const letterSpacing = '0'
-      let fontSize = 3.4 // vw
+      let fontSize = 34 // px = 3.4vw /100*1000
       const fontBold = ''
 
       switch (this.format) {
         case 'Thema':
-          fontSize = 2.5 // vw
+          fontSize = 25 // px = 2.5vw /100*1000
           maxWidth *= 0.90
           break
         case 'Titel':
-          fontSize = 5 // vw
+          fontSize = 50 // px = 5vw /100*1000
           maxWidth *= 0.92
           break
         default:
           maxWidth *= 0.92
       }
 
-      return wrapTextLinesFormat(lines, maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
+      return wrapTextLinesFormat(lines, maxWidth, this.font, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing)
     },
     titleLines () {
       // for measurement text wrap (same as css)
-      let maxWidth = window.innerWidth
-      const letterSpacing = '0.01vw'
-      let fontSize = 4.6 // vw
+      let maxWidth = 1000 // fictive width
+      const letterSpacing = '0.1px' // = 0.01vw /100*1000
+      let fontSize = 46 // px = 4.6vw /100*1000
       let fontBold = '700'
 
       switch (this.format) {
         case 'Thema':
-          fontSize = 5.8 // vw
+          fontSize = 58 // px = 5.8vw /100*1000
           maxWidth *= 0.90
           break
         case 'Titel':
-          fontSize = 6 // vw
+          fontSize = 60 // px = 6vw /100*1000
           maxWidth *= 0.92
           break
         case 'Bijbeltekst':
@@ -130,7 +130,7 @@ export default {
           maxWidth *= 0.92
       }
 
-      return wrapTextLinesFormat([this.title], maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
+      return wrapTextLinesFormat([this.title], maxWidth, this.font, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing)
     },
     textStyle () {
       const style = {}
