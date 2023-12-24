@@ -165,8 +165,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'VezyWorship',
-        short_name: 'VezyWorship',
+        name: 'VezyWorshipChristmas',
+        short_name: 'VezyWorshipChristmas',
         description: 'Presentatiesoftware voor beamer én livestream',
         display: 'standalone',
         orientation: 'portrait',

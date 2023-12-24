@@ -59,7 +59,7 @@ export default {
 
       fill: #fff;
       stroke: #000;
-      stroke-width: 0.5vw;
+      stroke-width: 1vw;
       stroke-linejoin: round;
       paint-order: stroke;
 

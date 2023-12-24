@@ -1,8 +1,8 @@
 {
-  "name": "vezy-worship",
-  "version": "1.9.2",
+  "name": "vezy-worship-christmas",
+  "version": "1.9.2-Kerst",
   "description": "Presentatiesoftware voor beamer én livestream",
-  "productName": "VezyWorship",
+  "productName": "VezyWorship-christmas",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
   "private": true,
   "repository": "github:VEZwolle/vezy-worship",
