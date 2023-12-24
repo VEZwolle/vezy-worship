@@ -26,6 +26,7 @@
 
 <script>
 import { CleanText } from './CleanText.js'
+import { debounce } from 'quasar'
 
 export default {
   props: {
@@ -61,24 +62,28 @@ export default {
     this.cleanText()
     this.backup()
   },
-  beforeUnmount () {
-    this.cleanText()
-    this.update()
+  created () {
+    this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
   methods: {
     update () {
       this.lastEmit = this.content
       this.$emit('update:modelValue', this.content)
+      this.cleanTextDebounce()
     },
     pastePlainText (e) {
       this.backup()
       const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
-      // eslint-disable-next-line
-      this.content = this.content.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
+      this.$refs.editor.runCmd('insertText', text.replace(/(\r*\n)|(\r(?!\n))|(\v)/g, '\n')) // set all line breaks to \n [LF], due to proper convert to <br> and </div><div>
+      // [CR][LF] = \r\n  |  [LF] = \n  |  [CR] = \r  |  [VT] = \v  (Carriage Return, Line Feed, Vertical Tab)
+      this.content = this.content.replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen
+      this.cleanText()
     },
     cleanText () {
       this.content = CleanText(this.content)
+    },
+    cleanTextDebounce () {
+      this.cleanText()
     },
     numberSup () {
       this.backup()

@@ -82,8 +82,7 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: theme,
-            // Waarom worden de spaties en nieuwe regeleinden (\r\n) verwijderd??? <br> & &nbsp; blijft wel staan
-            text: 'Spreker &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + preacher + '<br>Aanbidding : ' + worshiplead + '<br>Host &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + host,
+            text: '<div>Spreker &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + preacher + '<br>Aanbidding : ' + worshiplead + '<br>Host &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ' + host + '</div>',
             formatBeamer: 'Thema',
             formatLivestream: 'Breed'
           }
@@ -97,7 +96,7 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: 'Host',
-            text: host,
+            text: '<div>' + host + '</div>',
             formatBeamer: 'Geen',
             formatLivestream: 'Standaard'
           }
@@ -111,7 +110,7 @@ export default defineStore('service', {
           type: 'caption',
           settings: {
             title: 'Spreker',
-            text: preacher,
+            text: '<div>' + preacher + '</div>',
             formatBeamer: 'Geen',
             formatLivestream: 'Standaard'
           }

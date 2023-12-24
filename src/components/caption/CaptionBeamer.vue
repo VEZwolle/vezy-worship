@@ -78,6 +78,7 @@ export default {
       const lines = this.text
         .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<br>') // lege regel tussenregel met alinea einden en eventuele opmaak <b><i><u><sup><small>
         .replace(/^<div>/, '') // remove 1e div wanneer opmaak niet standaard
+        .replace(/^((<br>)+)<div>/, '$1') // remove 1e div of br-(br)-div (div-(i)-br-(/i)-/div-div)
         .replace(/<div>/g, '<br>') // overige alinea regeleinden
         .replace(/<\/div>/g, '') // icm bovenstaand
         .split('<br>')

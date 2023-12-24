@@ -168,6 +168,8 @@
 </template>
 
 <script>
+import { CleanText } from '../common/CleanText.js'
+
 export default {
   props: {
     pcoId: String,
@@ -655,7 +657,7 @@ export default {
                 type: 'caption',
                 settings: {
                   title: this.planItems[id].title,
-                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  text: CleanText(`${this.planItems[id].description}${this.planItems[id].html_details}`),
                   bgOpacity: 0,
                   bgFileId: null,
                   formatBeamer: 'Geen',
@@ -674,7 +676,7 @@ export default {
                   chapter: null,
                   verseFrom: null,
                   verseTo: null,
-                  text: `${this.planItems[id].description}${this.planItems[id].html_details}`,
+                  text: CleanText(`${this.planItems[id].description}${this.planItems[id].html_details}`),
                   bgOpacity: 0,
                   bgFileId: null
                 }
