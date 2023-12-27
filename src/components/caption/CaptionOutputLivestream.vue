@@ -1,7 +1,7 @@
 <template>
   <Transition name="q-transition--fade">
     <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="caption-output">
-      <CaptionLivestream :title="settings.title" :text="settings.text" :format="style" :alpha="alpha" />
+      <CaptionLivestream :title="settings.title" :text="text" :format="style" :alpha="alpha" />
     </div>
   </Transition>
 </template>
@@ -14,6 +14,12 @@ export default {
   components: { CaptionLivestream },
   extends: BaseOutput,
   computed: {
+    text () {
+      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      const lines = section?.slides?.[this.presentation.selectedSlideIndex] || []
+
+      return lines[0] || ''
+    },
     style () {
       if (this.settings.formatLivestream === 'Breed') {
         return '-full'

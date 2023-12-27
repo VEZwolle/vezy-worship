@@ -3,7 +3,7 @@
     <Transition name="q-transition--fade">
       <div v-show="!clear" class="full" :style="styleOpacity">
         <div class="scripture-output">
-          <CaptionBeamer :title="title" :text="lines" format="Bijbeltekst" />
+          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" format="Bijbeltekst" />
         </div>
       </div>
     </Transition>
@@ -18,17 +18,12 @@ export default {
   components: { CaptionBeamer },
   extends: BaseOutput,
   computed: {
-    title () {
-      return this.settings.title ? this.settings.title : this.presentationType.title(this.settings)
-    },
-    lines () {
+    textLines () {
       const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
-      const lines = section?.slides.flat() || []
-      let totalSection = ''
-      lines.forEach(line => {
-        totalSection = [totalSection, line].filter(Boolean).join('')
-      })
-      return totalSection.replace(/<br>/g, '<div></div>')
+      return section?.beamerLines || []
+    },
+    titleLines () {
+      return this.presentation.beamerTitleLines || []
     }
   }
 }

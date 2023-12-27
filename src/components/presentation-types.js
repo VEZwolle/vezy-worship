@@ -30,7 +30,7 @@ export default [
       control: require('./song/SongControl.vue').default
     },
     outputs: {
-      stage: require('./song/SongOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./song/SongOutputBeamer.vue').default,
       livestream: require('./song/SongOutputLivestream.vue').default
     }
@@ -56,7 +56,7 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      stage: require('./caption/CaptionOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./caption/CaptionOutputBeamer.vue').default,
       livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
@@ -187,7 +187,7 @@ export default [
       control: require('./scripture/ScriptureControl.vue').default
     },
     outputs: {
-      stage: require('./scripture/ScriptureOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
       livestream: require('./scripture/ScriptureOutputLivestream.vue').default
     }
