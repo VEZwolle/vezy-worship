@@ -21,6 +21,7 @@
     @dragstart="backup"
     @dragend="cleanText"
     @update:model-value="update"
+    @click="getPosition"
   />
 </template>
 
@@ -34,10 +35,12 @@ export default {
       type: String,
       required: true
     },
+    savedPos: Number,
     minHeight: String
   },
   emits: [
-    'update:modelValue'
+    'update:modelValue',
+    'update:savedPos'
   ],
   data () {
     return {
@@ -69,6 +72,7 @@ export default {
     update () {
       this.lastEmit = this.content
       this.$emit('update:modelValue', this.content)
+      this.getPosition()
       this.cleanTextDebounce()
     },
     pastePlainText (e) {
@@ -109,6 +113,10 @@ export default {
       const b = this.content
       this.content = this.contentBackup
       this.contentBackup = b
+    },
+    getPosition () {
+      this.$refs.editor.caret.savePosition()
+      this.$emit('update:savedPos', this.$refs.editor.caret.savedPos)
     }
   }
 }

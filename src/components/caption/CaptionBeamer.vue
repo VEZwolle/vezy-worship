@@ -18,7 +18,7 @@
             :dy="titleLine.newLine ? titleTspanDy : null"
             :class="titleLine.class"
           >
-            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ titleLine.text ? titleLine.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
@@ -34,7 +34,7 @@
             :dy="line.newLine ? textTspanDy : null"
             :class="line.class"
           >
-            {{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ line.text ? line.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
@@ -50,7 +50,7 @@
             :dy="titleLine.newLine ? titleTspanDy : null"
             :class="titleLine.class"
           >
-            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ titleLine.text ? titleLine.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
