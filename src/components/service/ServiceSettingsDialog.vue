@@ -111,8 +111,8 @@ export default {
         const find = (id) => this.service.presentations.find(t => t.id === id)?.settings || {}
 
         this.service.time = find('countdown').time || this.service.time
-        this.service.host = find('host').text || this.service.host
-        this.service.preacher = find('preacher').text || this.service.preacher
+        this.service.host = find('host').text?.replace(/<.+?>/g, '') || this.service.host
+        this.service.preacher = find('preacher').text?.replace(/<.+?>/g, '') || this.service.preacher
         this.service.theme = find('info').title || this.service.theme
       }
 
