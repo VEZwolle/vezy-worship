@@ -40,7 +40,7 @@
             <q-input v-model="service.preacher" label="Spreker" :rules="['required']" />
             <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="['required']" />
 
-            <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" @update:model-value="updateBackgroundImage">
+            <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" clearable @update:model-value="updateBackgroundImage">
               <template #prepend>
                 <q-icon name="image" />
               </template>
@@ -111,8 +111,8 @@ export default {
         const find = (id) => this.service.presentations.find(t => t.id === id)?.settings || {}
 
         this.service.time = find('countdown').time || this.service.time
-        this.service.host = find('host').text || this.service.host
-        this.service.preacher = find('preacher').text || this.service.preacher
+        this.service.host = find('host').text?.replace(/<.+?>/g, '') || this.service.host
+        this.service.preacher = find('preacher').text?.replace(/<.+?>/g, '') || this.service.preacher
         this.service.theme = find('info').title || this.service.theme
       }
 
@@ -122,6 +122,10 @@ export default {
       this.$refs.dialog.hide()
     },
     updateBackgroundImage (file) {
+      if (!file) {
+        this.service.backgroundImageId = null
+        return
+      }
       this.service.backgroundImageId = this.$store.addMedia(file)
     },
     save () {

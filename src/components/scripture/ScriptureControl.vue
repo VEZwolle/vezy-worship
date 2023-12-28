@@ -5,44 +5,24 @@
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
+import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 
 export default {
   components: { TextSlidesControl },
   extends: BaseControl,
+  computed: {
+    title () {
+      if (this.settings.title) return this.settings.title
+      return this.presentationType?.title(this.settings) || ''
+    }
+  },
   created () {
-    if (this.$store.noLivestream) {
-      this.presentation.sections = splitScripture(this.presentation.settings.text, 10000)
+    this.presentation.beamerTitleLines = titleLines(this.title, this.presentation.settings.formatBeamer)
+    if (this.$store.noLivestream || this.presentation.settings.formatLivestream === 'Geen') {
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, 10000)
     } else {
-      this.presentation.sections = splitScripture(this.presentation.settings.text)
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 350)
     }
   }
-}
-
-function splitScripture (text, maxCharsPerSlide = 350) {
-  if (!text) return []
-
-  const lineBreaks = [
-    '<div><br></div>'
-  ]
-
-  return text
-    .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<div><br></div>')
-    .split(new RegExp(lineBreaks.join('|')))
-    .map((section) => {
-      if (!section) {
-        const slides = [['']]
-        return { slides }
-      }
-      const sentenceEndChars1 = '.?!’”\'";'
-      const sentenceEndChars2 = ',:'
-      const minMaxChars = `.{1,${maxCharsPerSlide}}`
-      const regex = new RegExp(`${minMaxChars}$|${minMaxChars}<div>|${minMaxChars}[${sentenceEndChars1}]|${minMaxChars}[${sentenceEndChars2}]|${minMaxChars} |${minMaxChars}.`, 'g')
-
-      const slides = section
-        .match(regex)
-        .map(line => [line])
-
-      return { slides }
-    })
 }
 </script>

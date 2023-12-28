@@ -21,11 +21,15 @@
     @dragstart="backup"
     @dragend="cleanText"
     @update:model-value="update"
+    @click="getPosition"
+    @keyup="getPositionArrowKeys"
+    @touchend="getPosition"
   />
 </template>
 
 <script>
 import { CleanText } from './CleanText.js'
+import { debounce } from 'quasar'
 
 export default {
   props: {
@@ -33,10 +37,12 @@ export default {
       type: String,
       required: true
     },
+    savedPos: Number,
     minHeight: String
   },
   emits: [
-    'update:modelValue'
+    'update:modelValue',
+    'update:savedPos'
   ],
   data () {
     return {
@@ -61,24 +67,29 @@ export default {
     this.cleanText()
     this.backup()
   },
-  beforeUnmount () {
-    this.cleanText()
-    this.update()
+  created () {
+    this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
   methods: {
     update () {
       this.lastEmit = this.content
       this.$emit('update:modelValue', this.content)
+      this.getPosition()
+      this.cleanTextDebounce()
     },
     pastePlainText (e) {
       this.backup()
       const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
-      // eslint-disable-next-line
-      this.content = this.content.replace(/  /g, '&nbsp;&nbsp;').replace(/\r*\n/g, '<br>')
+      this.$refs.editor.runCmd('insertText', text.replace(/(\r*\n)|(\r(?!\n))|(\v)/g, '\n')) // set all line breaks to \n [LF], due to proper convert to <br> and </div><div>
+      // [CR][LF] = \r\n  |  [LF] = \n  |  [CR] = \r  |  [VT] = \v  (Carriage Return, Line Feed, Vertical Tab)
+      this.content = this.content.replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen
+      this.cleanText()
     },
     cleanText () {
       this.content = CleanText(this.content)
+    },
+    cleanTextDebounce () {
+      this.cleanText()
     },
     numberSup () {
       this.backup()
@@ -104,6 +115,23 @@ export default {
       const b = this.content
       this.content = this.contentBackup
       this.contentBackup = b
+    },
+    getPositionArrowKeys (e) {
+      switch (e.keyCode) {
+        case 33: // page-up
+        case 34: // page-down
+        case 37: // arrowleft
+        case 38: // arrowup
+        case 39: // arrowright
+        case 40: // arrowdown
+          this.getPosition()
+          break
+        default:
+      }
+    },
+    getPosition () {
+      this.$refs.editor.caret.savePosition()
+      this.$emit('update:savedPos', this.$refs.editor.caret.savedPos)
     }
   }
 }

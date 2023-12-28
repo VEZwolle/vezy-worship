@@ -1,7 +1,7 @@
 <template>
   <Transition name="q-transition--fade">
-    <div v-show="!clear" class="scripture-output">
-      <CaptionLivestream :title="title" :text="text" format="-full" :alpha="alpha" />
+    <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="scripture-output">
+      <CaptionLivestream :title="title" :text="text" :format="style" :alpha="alpha" />
     </div>
   </Transition>
 </template>
@@ -22,6 +22,12 @@ export default {
       const lines = section?.slides?.[this.presentation.selectedSlideIndex] || []
 
       return lines[0] || ''
+    },
+    style () {
+      if (this.settings.formatLivestream === 'Breed') {
+        return '-full'
+      }
+      return '-default'
     }
   }
 }

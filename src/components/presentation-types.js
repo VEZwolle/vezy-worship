@@ -10,8 +10,8 @@ export default [
       title: '',
       collection: '',
       number: '',
-      text: '',
-      translation: '',
+      text: '', // text
+      translation: '', // text
       noSplitLines: false,
       bgOpacity: 0,
       bgFileId: null
@@ -30,23 +30,24 @@ export default [
       control: require('./song/SongControl.vue').default
     },
     outputs: {
-      stage: require('./song/SongOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./song/SongOutputBeamer.vue').default,
       livestream: require('./song/SongOutputLivestream.vue').default
     }
   },
   {
     id: 'caption',
-    name: 'Ondertitel',
+    name: 'Ondertitel & tekst',
     icon: 'short_text',
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...',
+      text: 'Lorem ipsum...', // html
       bgOpacity: 0,
       bgFileId: null,
       formatBeamer: 'Geen',
-      formatLivestream: 'Standaard'
+      formatLivestream: 'Standaard',
+      maxLivestreamChar: 500
     },
     description (settings) {
       return settings.text
@@ -56,7 +57,7 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      stage: require('./caption/CaptionOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./caption/CaptionOutputBeamer.vue').default,
       livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
@@ -164,9 +165,12 @@ export default [
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: '',
+      text: '', // html
       bgOpacity: 0,
-      bgFileId: null
+      bgFileId: null,
+      formatBeamer: 'Bijbeltekst',
+      formatLivestream: 'Breed',
+      maxLivestreamChar: 350
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
@@ -187,7 +191,7 @@ export default [
       control: require('./scripture/ScriptureControl.vue').default
     },
     outputs: {
-      stage: require('./scripture/ScriptureOutputStage.vue').default,
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
       livestream: require('./scripture/ScriptureOutputLivestream.vue').default
     }

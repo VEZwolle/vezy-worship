@@ -48,9 +48,9 @@
         </ul>
       </li>
       <li>
-        Titels (naambalk, melding, etc.)
+        Titels & tekst (naambalk, melding, etc.)
         <ul>
-          <li>Ondertitels (naambalk, melding, etc.) voor op de livestream</li>
+          <li>Ondertitels (naambalk, melding, etc.) voor op de livestream incl. mogelijkheid tot automatische splitsing tov beamer tekst.</li>
           <li>Verschillende opmaken om dezelfde teksten op de beamer te tonen.</li>
         </ul>
       </li>

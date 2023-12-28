@@ -15,6 +15,7 @@
       Vul hier de <i>titel</i> en de <i>tekst</i> in de betreffende vakken in. Onder <i>preview</i> zie je een voorbeeld.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld, je kan hier kiezen uit een aantal opmaken.<br>
       Zie onder wat aandachtspunten.<br>
+      Door een lege tussenregel te maken wordt het vervolg van de tekst op een vervolg sheet gezet. De sheet op de cursos positie wordt getoond.<br>
       <img src="../../assets/help/addcaptiondialog.png">
     </p>
     <p>
@@ -23,7 +24,8 @@
     </p>
     <p>
       <b><u>Tekst</u></b><br>
-      Vul hier de titel in die boven de tekst wordt weergegeven.
+      Vul hier de tekst in die je wilt weergegeven.<br>
+      Door een lege tussenregel te maken wordt het vervolg van de tekst op een vervolg sheet gezet. De sheet op de cursos positie wordt getoond.
     </p>
     <p>
       Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden,<br>
@@ -71,6 +73,19 @@
           <b>Geen</b><br>
           Er niets weergegeven.
         </li>
+        <li>
+          <b>Max tekens</b><br>
+          Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
+          Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+          <sup>
+            Zoek eerst of minder dan 'Max tekens' tekens<br>
+            Dan naar een regeleinde<br>
+            Dan naar [.?!]+['"’]<br>
+            Dan naar [.?!]<br>
+            Dan naar [,:; spatie]<br>
+            Dan naar iets binnen 'Max tekens'.
+          </sup>
+        </li>
       </ul>
     </p>
     <div class="text-h6 q-mb-md">
@@ -87,7 +102,7 @@
     </div>
     <p>
       Na opslaan/sluiten van het invoerscherm kan je in de basis omgeving een controle uitvoeren door de pagina te bekijken.<br>
-      Een ondertitel bestaat uit 1 pagina.<br>
+      Een ondertitel bestaat uit 1 of meerdere pagina's.<br>
       Onder in het scherm zie je een voorbeeld.<br>
       <img src="../../assets/help/captioncontrol.png">
     </p>

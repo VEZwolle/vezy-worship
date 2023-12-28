@@ -18,7 +18,7 @@
             :dy="titleLine.newLine ? titleTspanDy : null"
             :class="titleLine.class"
           >
-            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ titleLine.text ? titleLine.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
@@ -34,7 +34,7 @@
             :dy="line.newLine ? textTspanDy : null"
             :class="line.class"
           >
-            {{ line.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ line.text ? line.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
@@ -50,7 +50,7 @@
             :dy="titleLine.newLine ? titleTspanDy : null"
             :class="titleLine.class"
           >
-            {{ titleLine.text.replace(/  /g, '&nbsp;&nbsp;') }}
+            {{ titleLine.text ? titleLine.text.replace(/  /g, '&nbsp;&nbsp;') : '' }}
           </tspan>
         </text>
       </svg>
@@ -59,78 +59,13 @@
 </template>
 
 <script>
-import { wrapTextLinesFormat } from '../common/WrapText'
-
 export default {
   props: {
-    title: String,
-    text: String,
+    titleLines: Object,
+    textLines: Object,
     format: String
   },
-  data () {
-    return {
-      font: 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
-    }
-  },
   computed: {
-    textLines () {
-      // split text to main lines
-      const lines = this.text
-        .replace(/<div>((<([biuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div>/g, '<br>') // lege regel tussenregel met alinea einden en eventuele opmaak <b><i><u><sup><small>
-        .replace(/^<div>/, '') // remove 1e div wanneer opmaak niet standaard
-        .replace(/<div>/g, '<br>') // overige alinea regeleinden
-        .replace(/<\/div>/g, '') // icm bovenstaand
-        .split('<br>')
-
-      // for measurement text wrap (same as css)
-      let maxWidth = window.innerWidth
-      const letterSpacing = '0'
-      let fontSize = 3.4 // vw
-      const fontBold = ''
-
-      switch (this.format) {
-        case 'Thema':
-          fontSize = 2.5 // vw
-          maxWidth *= 0.90
-          break
-        case 'Titel':
-          fontSize = 5 // vw
-          maxWidth *= 0.92
-          break
-        default:
-          maxWidth *= 0.92
-      }
-
-      return wrapTextLinesFormat(lines, maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
-    },
-    titleLines () {
-      // for measurement text wrap (same as css)
-      let maxWidth = window.innerWidth
-      const letterSpacing = '0.01vw'
-      let fontSize = 4.6 // vw
-      let fontBold = '700'
-
-      switch (this.format) {
-        case 'Thema':
-          fontSize = 5.8 // vw
-          maxWidth *= 0.90
-          break
-        case 'Titel':
-          fontSize = 6 // vw
-          maxWidth *= 0.92
-          break
-        case 'Bijbeltekst':
-          fontBold = '300'
-          maxWidth *= 0.92
-          break
-        case 'Alleen tekst':
-          return []
-        default:
-          maxWidth *= 0.92
-      }
-
-      return wrapTextLinesFormat([this.title], maxWidth, this.font, `${fontSize}vw`, `${0.7 * fontSize}vw`, `${0.7 * fontSize}vw`, fontBold, letterSpacing)
-    },
     textStyle () {
       const style = {}
       style.position = 'relative'
@@ -155,12 +90,19 @@ export default {
       }
       return style
     },
+    titleNewLines () {
+      let i = 0
+      for (const titleLine of this.titleLines) {
+        if (titleLine.newLine) i++
+      }
+      return i
+    },
     titleStyle () {
       const style = {}
       style.padding = '0'
       style.top = '0'
       style.width = '100vw'
-      style.height = `${this.titleLines.length * 5 + 2}vw`
+      style.height = `${(this.titleNewLines || 0) * 5 + 2}vw`
       switch (this.format) {
         case 'Thema':
           style.position = 'fixed'
@@ -169,8 +111,8 @@ export default {
           style.padding = '0 0 0 2vw'
           break
         case 'Titel':
-          style.marginTop = this.titleLines.length !== 1 ? '2.1vw' : '6vw'
-          style.height = `${this.titleLines.length * 6.6 + 3}vw`
+          style.marginTop = this.titleNewLines !== 1 ? '2.1vw' : '6vw'
+          style.height = `${(this.titleNewLines || 0) * 6.6 + 3}vw`
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
           break
