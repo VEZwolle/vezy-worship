@@ -37,7 +37,7 @@ export default [
   },
   {
     id: 'caption',
-    name: 'Ondertitel',
+    name: 'Ondertitel & tekst',
     icon: 'short_text',
     color: 'primary',
     settings: {
