@@ -24,7 +24,20 @@
               </div>
             </div>
             <div class="col">
-              <q-select v-model="settings.formatLivestream" :options="formatLivestream" fill-input outlined label="Opmaak type" />
+              <div class="row">
+                <q-select v-model="settings.formatLivestream" :options="formatLivestream" fill-input class="col q-pb-none" outlined label="Opmaak type" />
+                <q-input
+                  v-model.number="settings.maxLivestreamChar"
+                  type="number"
+                  outlined
+                  stack-label
+                  class="col2 q-pl-md q-pb-none"
+                  min="100"
+                  step="50"
+                  label="max tekens"
+                  :rules="[min100]"
+                />
+              </div>
               <label class="label">Voorbeeld Livestream</label>
               <div>
                 <OutputPreview :key="`stream${keyTeller}`" :component="CaptionOutputLivestream" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" />
@@ -81,8 +94,6 @@ export default {
       sectionsCount: []
     }
   },
-  computed: {
-  },
   watch: {
     'settings.text' (val) {
       this.splitSlidesDebounce()
@@ -92,6 +103,9 @@ export default {
     },
     'settings.formatBeamer' (val) {
       this.beamerTitleDebounce()
+      this.splitSlidesDebounce()
+    },
+    'settings.maxLivestreamChar' (val) {
       this.splitSlidesDebounce()
     },
     'savedPos' (val) {
@@ -111,6 +125,12 @@ export default {
     this.splitSlidesDebounce = debounce(this.splitSlidesDebounce, 500)
   },
   methods: {
+    min100 (val) {
+      if (typeof val !== 'number') {
+        return
+      }
+      return val >= 100 || 'Minimaal 100'
+    },
     beamerTitle () {
       // title beamer
       this.beamerTitleLines = titleLines(this.settings.title, this.settings.formatBeamer)
@@ -121,7 +141,7 @@ export default {
     },
     splitSlides () {
       // slides livestream & beamer
-      this.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer)
+      this.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer, this.settings.maxLivestreamChar || 500)
       this.countCharSections()
       this.keyTeller++
     },

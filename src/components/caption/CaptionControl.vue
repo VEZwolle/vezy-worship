@@ -16,7 +16,7 @@ export default {
     if (this.$store.noLivestream || this.presentation.settings.formatLivestream === 'Geen') {
       this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, 10000)
     } else {
-      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer)
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 500)
     }
   }
 }

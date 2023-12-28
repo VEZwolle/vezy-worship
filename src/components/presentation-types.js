@@ -46,7 +46,8 @@ export default [
       bgOpacity: 0,
       bgFileId: null,
       formatBeamer: 'Geen',
-      formatLivestream: 'Standaard'
+      formatLivestream: 'Standaard',
+      maxLivestreamChar: 500
     },
     description (settings) {
       return settings.text
@@ -166,7 +167,10 @@ export default [
       verseTo: null,
       text: '', // html
       bgOpacity: 0,
-      bgFileId: null
+      bgFileId: null,
+      formatBeamer: 'Bijbeltekst',
+      formatLivestream: 'Breed',
+      maxLivestreamChar: 350
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)

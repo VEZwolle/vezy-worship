@@ -16,11 +16,11 @@ export default {
     }
   },
   created () {
-    this.presentation.beamerTitleLines = titleLines(this.title, 'Bijbeltekst')
+    this.presentation.beamerTitleLines = titleLines(this.title, this.presentation.settings.formatBeamer)
     if (this.$store.noLivestream || this.presentation.settings.formatLivestream === 'Geen') {
-      this.presentation.sections = splitTextCaption(this.presentation.settings.text, 'Bijbeltekst', 10000)
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, 10000)
     } else {
-      this.presentation.sections = splitTextCaption(this.presentation.settings.text, 'Bijbeltekst')
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 350)
     }
   }
 }

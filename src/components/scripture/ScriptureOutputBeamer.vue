@@ -1,9 +1,9 @@
 <template>
   <div class="bg-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <div v-show="!clear" class="full" :style="styleOpacity">
+      <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacity">
         <div class="scripture-output">
-          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" format="Bijbeltekst" />
+          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" />
         </div>
       </div>
     </Transition>
