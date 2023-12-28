@@ -15,7 +15,6 @@
 
           <label class="label">Tekst</label>
           <VezyEditor ref="vezyEditor" v-model="settings.text" v-model:savedPos="savedPos" min-height="80px" />
-          {{ savedPos }} | {{ selectedSectionIndex }} | {{ selectedSlideIndex }}
           <div class="q-pa-md row q-gutter-md">
             <div class="col">
               <q-select v-model="settings.formatBeamer" :options="formatBeamer" fill-input outlined label="Opmaak type" />
@@ -137,6 +136,7 @@ export default {
           if (this.sections[i].slides[j][0]) {
             const charLength = this.sections[i].slides[j][0]
               .replace(/<.+?>/g, '')
+              .replace(/&nbsp;/g, ' ')
               .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') // html-entities
               .length
             sumLength += charLength
