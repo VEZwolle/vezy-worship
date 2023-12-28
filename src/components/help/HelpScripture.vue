@@ -53,6 +53,8 @@
           Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
         </li>
         <li>
+          <b>Max tekens</b><br>
+          Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
           Splitsen van regels gebeurt met de volgende voorwaarden:<br>
           <sup>
             Zoek eerst of minder dan 350 tekens<br>
