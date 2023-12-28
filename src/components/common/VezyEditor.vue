@@ -23,6 +23,7 @@
     @update:model-value="update"
     @click="getPosition"
     @keyup="getPositionArrowKeys"
+    @touchend="getPosition"
   />
 </template>
 
