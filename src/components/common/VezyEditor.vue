@@ -21,6 +21,9 @@
     @dragstart="backup"
     @dragend="cleanText"
     @update:model-value="update"
+    @click="getPosition"
+    @keyup="getPositionArrowKeys"
+    @touchend="getPosition"
   />
 </template>
 
@@ -34,10 +37,12 @@ export default {
       type: String,
       required: true
     },
+    savedPos: Number,
     minHeight: String
   },
   emits: [
-    'update:modelValue'
+    'update:modelValue',
+    'update:savedPos'
   ],
   data () {
     return {
@@ -69,6 +74,7 @@ export default {
     update () {
       this.lastEmit = this.content
       this.$emit('update:modelValue', this.content)
+      this.getPosition()
       this.cleanTextDebounce()
     },
     pastePlainText (e) {
@@ -109,6 +115,23 @@ export default {
       const b = this.content
       this.content = this.contentBackup
       this.contentBackup = b
+    },
+    getPositionArrowKeys (e) {
+      switch (e.keyCode) {
+        case 33: // page-up
+        case 34: // page-down
+        case 37: // arrowleft
+        case 38: // arrowup
+        case 39: // arrowright
+        case 40: // arrowdown
+          this.getPosition()
+          break
+        default:
+      }
+    },
+    getPosition () {
+      this.$refs.editor.caret.savePosition()
+      this.$emit('update:savedPos', this.$refs.editor.caret.savedPos)
     }
   }
 }

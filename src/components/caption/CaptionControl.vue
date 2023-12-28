@@ -1,35 +1,24 @@
 <template>
-  <q-list>
-    <q-item
-      clickable
-      class="bg-primary text-white"
-      active
-      active-class="text-bold"
-      @dblclick="goLive"
-    >
-      <q-item-section>
-        <q-item-label>{{ settings.title }}</q-item-label>
-      </q-item-section>
-    </q-item>
-
-    <q-item
-      clickable
-      active
-      :active-class="!preview ? 'bg-secondary text-white' : null"
-      @dblclick="goLive"
-    >
-      <q-item-section>
-        <div v-html="settings.text" />
-      </q-item-section>
-    </q-item>
-  </q-list>
+  <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
 </template>
 
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
+import TextSlidesControl from '../common/TextSlidesControl.vue'
+import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 
 export default {
-  extends: BaseControl
+  components: { TextSlidesControl },
+  extends: BaseControl,
+
+  created () {
+    this.presentation.beamerTitleLines = this.presentation.settings.formatBeamer === 'Geen' ? [] : titleLines(this.presentation.settings.title, this.presentation.settings.formatBeamer)
+    if (this.$store.noLivestream || this.presentation.settings.formatLivestream === 'Geen') {
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, 10000)
+    } else {
+      this.presentation.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 500)
+    }
+  }
 }
 </script>
 

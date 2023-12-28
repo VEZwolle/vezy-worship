@@ -152,7 +152,9 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
       }
       // check if text or loop bij second format change
       if (linePieceText.length > 0) {
-        linePieceText = linePieceText.replace(/&nbsp;/g, ' ')
+        linePieceText = linePieceText
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') // html-entities
         // tspan class
         let resultClass = bold ? ' bold' : ''
         resultClass += italic ? ' italic' : ''

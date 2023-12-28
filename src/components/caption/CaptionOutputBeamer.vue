@@ -3,7 +3,7 @@
     <Transition name="q-transition--fade">
       <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacity">
         <div class="caption-output">
-          <CaptionBeamer :title="settings.title" :text="settings.text" :format="settings.formatBeamer" />
+          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" />
         </div>
       </div>
     </Transition>
@@ -16,7 +16,16 @@ import CaptionBeamer from './CaptionBeamer.vue'
 
 export default {
   components: { CaptionBeamer },
-  extends: BaseOutput
+  extends: BaseOutput,
+  computed: {
+    textLines () {
+      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      return section?.beamerLines || []
+    },
+    titleLines () {
+      return this.presentation.beamerTitleLines || []
+    }
+  }
 }
 </script>
 

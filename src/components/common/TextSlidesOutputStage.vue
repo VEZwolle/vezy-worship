@@ -1,6 +1,6 @@
 <template>
   <div class="line">
-    <TextSlidesOutput v-if="presentation.sections" :presentation="presentation" :preview="preview" />
+    <TextSlidesOutput v-if="presentation.settings.text && presentation.sections" :presentation="presentation" :preview="preview" />
   </div>
 </template>
 
@@ -10,7 +10,13 @@ import TextSlidesOutput from '../common/TextSlidesOutput.vue'
 
 export default {
   components: { TextSlidesOutput },
-  extends: BaseOutputStage
+  extends: BaseOutputStage,
+  mounted () {
+    if (!this.preview && !this.presentation.settings.text) {
+      // scroll to top
+      window.scrollTo({ behavior: 'smooth', top: 0 })
+    }
+  }
 }
 </script>
 
