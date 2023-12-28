@@ -26,7 +26,7 @@
       :ref="`slide_${sectionIndex}_${slideIndex}`"
       clickable
       :active="isSelected(sectionIndex, slideIndex)"
-      :active-class="!preview ? 'bg-secondary text-white' : null"
+      :active-class="!preview ? 'bg-secondary text-white' : 'text-secondary'"
       @click="select(sectionIndex, slideIndex)"
       @dblclick="goLive"
     >
