@@ -12,7 +12,8 @@ export default {
   extends: BaseControl,
   computed: {
     title () {
-      return this.settings.title ? this.settings.title : this.presentationType.title(this.settings)
+      if (this.settings.title) return this.settings.title
+      return this.presentationType?.title(this.settings) || ''
     }
   },
   created () {
