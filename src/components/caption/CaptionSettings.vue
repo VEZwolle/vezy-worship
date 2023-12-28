@@ -15,7 +15,7 @@
 
           <label class="label">Tekst</label>
           <VezyEditor ref="vezyEditor" v-model="settings.text" v-model:savedPos="savedPos" min-height="80px" />
-          <div class="q-pa-md row q-gutter-md">
+          <div class="row q-gutter-md">
             <div class="col">
               <q-select v-model="settings.formatBeamer" :options="formatBeamer" fill-input outlined label="Opmaak type" />
               <label class="label">Voorbeeld Beamer</label>
