@@ -90,12 +90,19 @@ export default {
       }
       return style
     },
+    titleNewLines () {
+      let i = 0
+      for (const titleLine of this.titleLines) {
+        if (titleLine.newLine) i++
+      }
+      return i
+    },
     titleStyle () {
       const style = {}
       style.padding = '0'
       style.top = '0'
       style.width = '100vw'
-      style.height = `${(this.titleLines.length || 0) * 5 + 2}vw`
+      style.height = `${(this.titleNewLines || 0) * 5 + 2}vw`
       switch (this.format) {
         case 'Thema':
           style.position = 'fixed'
@@ -104,8 +111,8 @@ export default {
           style.padding = '0 0 0 2vw'
           break
         case 'Titel':
-          style.marginTop = this.titleLines.length !== 1 ? '2.1vw' : '6vw'
-          style.height = `${(this.titleLines.length || 0) * 6.6 + 3}vw`
+          style.marginTop = this.titleNewLines !== 1 ? '2.1vw' : '6vw'
+          style.height = `${(this.titleNewLines || 0) * 6.6 + 3}vw`
           style.textAnchor = 'middle'
           style.dominantBaseline = 'middle'
           break
