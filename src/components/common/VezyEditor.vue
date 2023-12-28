@@ -22,6 +22,7 @@
     @dragend="cleanText"
     @update:model-value="update"
     @click="getPosition"
+    @keyup="getPositionArrowKeys"
   />
 </template>
 
@@ -113,6 +114,19 @@ export default {
       const b = this.content
       this.content = this.contentBackup
       this.contentBackup = b
+    },
+    getPositionArrowKeys (e) {
+      switch (e.keyCode) {
+        case 33: // page-up
+        case 34: // page-down
+        case 37: // arrowleft
+        case 38: // arrowup
+        case 39: // arrowright
+        case 40: // arrowdown
+          this.getPosition()
+          break
+        default:
+      }
     },
     getPosition () {
       this.$refs.editor.caret.savePosition()
