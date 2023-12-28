@@ -13,8 +13,8 @@
   },
   "main": "index.js",
   "dependencies": {
-    "algoliasearch": "^4.20.0",
-    "axios": "^1.6.2",
+    "algoliasearch": "^4.22.0",
+    "axios": "^1.6.3",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.5.0"
   },
