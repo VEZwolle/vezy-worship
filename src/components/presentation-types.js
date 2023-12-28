@@ -10,8 +10,8 @@ export default [
       title: '',
       collection: '',
       number: '',
-      text: '',
-      translation: '',
+      text: '', // text
+      translation: '', // text
       noSplitLines: false,
       bgOpacity: 0,
       bgFileId: null
@@ -42,7 +42,7 @@ export default [
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...',
+      text: 'Lorem ipsum...', // html
       bgOpacity: 0,
       bgFileId: null,
       formatBeamer: 'Geen',
@@ -164,7 +164,7 @@ export default [
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: '',
+      text: '', // html
       bgOpacity: 0,
       bgFileId: null
     },
