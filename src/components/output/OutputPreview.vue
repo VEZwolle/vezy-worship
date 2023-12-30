@@ -1,12 +1,13 @@
 <template>
   <q-responsive :ratio="$store.outputRatio" class="output-preview" :style="style">
-    <iframe ref="iframe" />
+    <iframe v-show="show" ref="iframe" />
     <img v-if="visualView" :src="require(`../../assets/view${visualView}.png`)" class="overlay">
   </q-responsive>
 </template>
 
 <script>
 import { createApp } from 'vue'
+import { debounce } from 'quasar'
 
 export default {
   props: {
@@ -17,6 +18,11 @@ export default {
     },
     bgStyle: Object
   },
+  data () {
+    return {
+      show: false
+    }
+  },
   computed: {
     style () {
       if (this.bgStyle) return this.bgStyle
@@ -25,6 +31,9 @@ export default {
       style.backgroundBlendMode = 'screen'
       return style
     }
+  },
+  created () {
+    this.showDebounce = debounce(this.showDebounce, 100)
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
@@ -41,6 +50,14 @@ export default {
     app.config.globalProperties.$store = this.$store
 
     app.mount(iframe.body)
+
+    // delay show ifarme: ivm eerst volledig geladen moet zijn voor weergave, anders zie je scrollbars
+    this.showDebounce()
+  },
+  methods: {
+    showDebounce () {
+      this.show = true
+    }
   }
 }
 </script>
