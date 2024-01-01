@@ -53,7 +53,7 @@ export default {
 
     app.mount(iframe.body)
 
-    // delay 1ms show ifarme: ivm eerst css volledig geladen moet zijn voor weergave, anders zie je tekst op verkeerde plek zonder opmaak
+    // delay 1ms show iframe: ivm first css must be fully loaded before display, otherwise you see text in wrong place without formatting
     this.showDebounce()
   },
   methods: {
