@@ -33,11 +33,13 @@ export default {
     }
   },
   created () {
-    this.showDebounce = debounce(this.showDebounce, 100)
+    this.showDebounce = debounce(this.showDebounce, 1)
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
 
+    // remove scrollbars on iframe body & change default electron margin.
+    iframe.body.style.cssText += 'overflow: hidden; margin: 0;'
     // Sync styles
     const styles = document.querySelectorAll('link,style')
     for (const style of styles) {
@@ -51,7 +53,7 @@ export default {
 
     app.mount(iframe.body)
 
-    // delay show ifarme: ivm eerst volledig geladen moet zijn voor weergave, anders zie je scrollbars
+    // delay 1ms show ifarme: ivm eerst css volledig geladen moet zijn voor weergave, anders zie je tekst op verkeerde plek zonder opmaak
     this.showDebounce()
   },
   methods: {
