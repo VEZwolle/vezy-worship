@@ -188,12 +188,12 @@ export default [
     },
     components: {
       settings: require('./scripture/ScriptureSettings.vue').default,
-      control: require('./scripture/ScriptureControl.vue').default
+      control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
       stage: require('./common/TextSlidesOutputStage.vue').default,
-      beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
-      livestream: require('./scripture/ScriptureOutputLivestream.vue').default
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   }
 ]
