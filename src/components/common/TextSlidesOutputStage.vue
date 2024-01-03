@@ -1,6 +1,6 @@
 <template>
   <div class="line">
-    <TextSlidesOutput v-if="presentation.settings.text && presentation.contol?.sections" :presentation="presentation" :preview="preview" />
+    <TextSlidesOutput v-if="presentation.settings.text && presentation.control?.sections" :presentation="presentation" :preview="preview" />
   </div>
 </template>
 
