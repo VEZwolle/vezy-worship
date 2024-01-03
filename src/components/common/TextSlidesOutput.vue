@@ -1,6 +1,6 @@
 <template>
   <q-list
-    v-for="(section, sectionIndex) in presentation.control.sections"
+    v-for="(section, sectionIndex) in control.sections"
     :key="sectionIndex"
     class="q-py-xs"
   >
@@ -34,48 +34,55 @@ import BaseOutputStage from '../output/BaseOutputStage.vue'
 
 export default {
   extends: BaseOutputStage,
+  computed: {
+    control () {
+      return this.presentation.control
+    }
+  },
   watch: {
-    'presentation.control.selectedSectionIndex' (val) {
+    'control.selectedSectionIndex' (val) {
       this.scroll()
     },
-    'presentation.control.selectedSlideIndex' (val) {
+    'control.selectedSlideIndex' (val) {
       this.scroll()
     }
   },
   mounted () {
+    console.log(this.control)
     this.scroll()
   },
   methods: {
     scroll () {
+      console.log(this.control)
       if (!this.preview) {
-        const el = this.$refs[`slide_${this.presentation.control.selectedSectionIndex}_${this.presentation.control.selectedSlideIndex}`][0].$el
+        const el = this.$refs[`slide_${this.control.selectedSectionIndex}_${this.control.selectedSlideIndex}`][0].$el
         el.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
     },
     isPastSelected (sectionIndex, slideIndex) {
       return !this.preview &&
-        (sectionIndex < this.presentation.control.selectedSectionIndex ||
-          (sectionIndex === this.presentation.control.selectedSectionIndex &&
-          slideIndex <= this.presentation.control.selectedSlideIndex)
+        (sectionIndex < this.control.selectedSectionIndex ||
+          (sectionIndex === this.control.selectedSectionIndex &&
+          slideIndex <= this.control.selectedSlideIndex)
         )
     },
     isSelected (sectionIndex, slideIndex) {
       return !this.preview &&
-        sectionIndex === this.presentation.control.selectedSectionIndex &&
-        slideIndex === this.presentation.control.selectedSlideIndex
+        sectionIndex === this.control.selectedSectionIndex &&
+        slideIndex === this.control.selectedSlideIndex
     },
     isPastSelectedClass (past = false) {
       return past ? 'text-white' : 'text-gray'
     },
     isSelectedLabel (sectionIndex) {
       if (this.preview) return false
-      const selectedIndex = this.presentation.control.selectedSectionIndex
+      const selectedIndex = this.control.selectedSectionIndex
 
       if (selectedIndex === sectionIndex) {
         return true
       }
 
-      const nextLabelIndex = this.presentation.control.sections
+      const nextLabelIndex = this.control.sections
         .findIndex((s, i) => i > sectionIndex && s.label !== null)
 
       if (nextLabelIndex === -1) { // No next labeled section found

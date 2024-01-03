@@ -18,12 +18,15 @@ import BaseOutput from '../output/BaseOutput.vue'
 export default {
   extends: BaseOutput,
   computed: {
+    control () {
+      return this.presentation.control
+    },
     lines () {
-      const section = this.presentation.control?.sections?.[this.presentation.control.selectedSectionIndex]
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },
     translatedLines () {
-      const section = this.presentation.control?.translationSections?.[this.presentation.control.selectedSectionIndex]
+      const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     }
   }
