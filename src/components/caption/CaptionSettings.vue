@@ -20,7 +20,7 @@
               <q-select v-model="settings.formatBeamer" :options="formatBeamer" fill-input outlined label="Opmaak type" />
               <label class="label">Voorbeeld Beamer</label>
               <div>
-                <OutputPreview :key="`beamer${keyTeller}`" :component="CaptionOutputBeamer" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" />
+                <OutputPreview :key="`beamer${keyTeller}`" :component="CaptionOutputBeamer" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" bg-show="beamer" />
               </div>
             </div>
             <div class="col">
@@ -40,7 +40,7 @@
               </div>
               <label class="label">Voorbeeld Livestream</label>
               <div>
-                <OutputPreview :key="`stream${keyTeller}`" :component="CaptionOutputLivestream" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" />
+                <OutputPreview :key="`stream${keyTeller}`" :component="CaptionOutputLivestream" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" bg-show="livestream" />
               </div>
             </div>
           </div>

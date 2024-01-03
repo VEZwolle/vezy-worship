@@ -16,11 +16,13 @@ export default {
       type: String,
       default: ''
     },
-    bgStyle: Object
+    bgStyle: Object,
+    bgShow: null // beamer / livestream
   },
   data () {
     return {
-      show: false
+      show: false,
+      backgroundColor: null
     }
   },
   computed: {
@@ -30,16 +32,35 @@ export default {
       style.backgroundImage = 'repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px)'
       style.backgroundBlendMode = 'screen'
       return style
+    },
+    backgroundImageUrl () {
+      return this.$store.getMediaUrl(this.$store.service?.backgroundImageId)
+    },
+    bodyBgStyle () {
+      if (this.bgStyle || !this.bgShow) return ''
+      if (this.bgShow === 'livestream' && this.backgroundColor) {
+        return ` background-color: ${this.backgroundColor};`
+      }
+      if (this.bgShow === 'beamer') {
+        if (this.backgroundColor && !this.backgroundImageUrl) {
+          return ` background-color: ${this.backgroundColor};`
+        } else {
+          const image = this.backgroundImageUrl || require('../../assets/bg.png')
+          return ` background-image: url(${image}); background-size: cover; background-position: center;`
+        }
+      }
+      return ''
     }
   },
   created () {
     this.showDebounce = debounce(this.showDebounce, 1)
+    if (this.bgShow) this.backgroundColor = localStorage.getItem(`backgroundColor.${this.bgShow}`) || ''
   },
   mounted () {
     const iframe = this.$refs.iframe.contentDocument
 
     // remove scrollbars on iframe body & change default electron margin.
-    iframe.body.style.cssText += 'overflow: hidden; margin: 0;'
+    iframe.body.style.cssText += `overflow: hidden; margin: 0;${this.bodyBgStyle}`
     // Sync styles
     const styles = document.querySelectorAll('link,style')
     for (const style of styles) {

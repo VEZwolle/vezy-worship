@@ -34,13 +34,13 @@
           <div class="row q-gutter-md">
             <div class="col">
               <ImageSelect :key="resetPreview" :label="equal ? 'Beamer & livestream' : 'Beamer'" :settings="settings.beamer" @update-file="updateTitle">
-                <OutputPreview :component="ImageOutputBeamer" :presentation="{ settings }" />
+                <OutputPreview :component="ImageOutputBeamer" :presentation="{ settings }" bg-show="beamer" />
               </ImageSelect>
             </div>
 
             <div class="col" :class="{ disabled: equal }">
               <ImageSelect :key="equal + resetPreview" label="Livestream" :settings="equal ? settings.beamer : settings.livestream">
-                <OutputPreview :component="ImageOutputLivestream" :presentation="{ settings }" />
+                <OutputPreview :component="ImageOutputLivestream" :presentation="{ settings }" bg-show="livestream" />
               </ImageSelect>
             </div>
           </div>
