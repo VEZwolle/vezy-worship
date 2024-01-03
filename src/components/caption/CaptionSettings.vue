@@ -20,7 +20,7 @@
               <q-select v-model="settings.formatBeamer" :options="formatBeamer" fill-input outlined label="Opmaak type" />
               <label class="label">Voorbeeld Beamer</label>
               <div>
-                <OutputPreview :key="`beamer${keyTeller}`" :component="CaptionOutputBeamer" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" bg-show="beamer" />
+                <OutputPreview :component="CaptionOutputBeamer" :presentation="{ settings, control }" bg-show="beamer" />
               </div>
             </div>
             <div class="col">
@@ -40,7 +40,7 @@
               </div>
               <label class="label">Voorbeeld Livestream</label>
               <div>
-                <OutputPreview :key="`stream${keyTeller}`" :component="CaptionOutputLivestream" :presentation="{ settings, sections, beamerTitleLines, selectedSectionIndex, selectedSlideIndex }" bg-show="livestream" />
+                <OutputPreview :component="CaptionOutputLivestream" :presentation="{ settings, control }" bg-show="livestream" />
               </div>
             </div>
           </div>
@@ -85,17 +85,20 @@ export default {
         'Titel',
         'Thema'
       ],
-      sections: null,
-      beamerTitleLines: null,
-      selectedSectionIndex: 0,
-      selectedSlideIndex: 0,
-      keyTeller: 0,
       savedPos: 0,
-      sectionsCount: []
+      updated: false,
+      sectionsCount: [],
+      control: {
+        sections: null,
+        beamerTitleLines: null,
+        selectedSectionIndex: 0,
+        selectedSlideIndex: 0
+      }
     }
   },
   watch: {
     'settings.text' (val) {
+      this.updated = false
       this.splitSlidesDebounce()
     },
     'settings.title' (val) {
@@ -106,16 +109,11 @@ export default {
       this.splitSlidesDebounce()
     },
     'settings.maxLivestreamChar' (val) {
+      this.updated = false
       this.splitSlidesDebounce()
     },
     'savedPos' (val) {
-      this.setActiveSlide()
-    },
-    'selectedSectionIndex' (val) {
-      this.keyTeller++
-    },
-    'selectedSlideIndex' (val) {
-      this.keyTeller++
+      if (this.updated) this.setActiveSlide()
     }
   },
   created () {
@@ -133,17 +131,15 @@ export default {
     },
     beamerTitle () {
       // title beamer
-      this.beamerTitleLines = titleLines(this.settings.title, this.settings.formatBeamer)
-      this.keyTeller++
+      this.control.beamerTitleLines = titleLines(this.settings.title, this.settings.formatBeamer)
     },
     beamerTitleDebounce () {
       this.beamerTitle()
     },
     splitSlides () {
       // slides livestream & beamer
-      this.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer, this.settings.maxLivestreamChar || 500)
+      this.control.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer, this.settings.maxLivestreamChar || 500)
       this.countCharSections()
-      this.keyTeller++
     },
     splitSlidesDebounce () {
       this.splitSlides()
@@ -151,10 +147,10 @@ export default {
     countCharSections () {
       const sumCharLength = []
       let sumLength = 0
-      for (let i = 0; i < this.sections.length; i++) {
-        for (let j = 0; j < this.sections[i].slides.length; j++) {
-          if (this.sections[i].slides[j][0]) {
-            const charLength = this.sections[i].slides[j][0]
+      for (let i = 0; i < this.control.sections.length; i++) {
+        for (let j = 0; j < this.control.sections[i].slides.length; j++) {
+          if (this.control.sections[i].slides[j][0]) {
+            const charLength = this.control.sections[i].slides[j][0]
               .replace(/<.+?>/g, '')
               .replace(/&nbsp;/g, ' ')
               .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') // html-entities
@@ -165,23 +161,24 @@ export default {
         }
       }
       this.sectionsCount = sumCharLength
+      this.updated = true
       this.setActiveSlide()
     },
     setActiveSlide () {
       if (!this.sectionsCount.length) {
-        this.selectedSectionIndex = 0
-        this.selectedSlideIndex = 0
+        this.control.selectedSectionIndex = 0
+        this.control.selectedSlideIndex = 0
         return
       }
       for (const slide of this.sectionsCount) {
         if (this.savedPos <= slide.count) {
-          this.selectedSectionIndex = slide.section
-          this.selectedSlideIndex = slide.slide
+          this.control.selectedSectionIndex = slide.section
+          this.control.selectedSlideIndex = slide.slide
           return
         }
       }
-      this.selectedSectionIndex = this.sectionsCount[this.sectionsCount.length - 1].section
-      this.selectedSlideIndex = this.sectionsCount[this.sectionsCount.length - 1].slide
+      this.control.selectedSectionIndex = this.sectionsCount[this.sectionsCount.length - 1].section
+      this.control.selectedSlideIndex = this.sectionsCount[this.sectionsCount.length - 1].slide
     }
   }
 }

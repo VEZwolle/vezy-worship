@@ -18,13 +18,14 @@ export default {
   },
   created () {
     const split = this.$store.noLivestream ? 100 : 1
+    if (!this.presentation.control) this.presentation.control = {}
     if (this.presentation.settings.translation) {
       // Use 1 line per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 1 * split, Math.floor(this.splitLines / 2))
-      this.presentation.translationSections = splitSong(this.presentation.settings.translation, 1 * split, Math.floor(this.splitLines / 2))
+      this.presentation.control.sections = splitSong(this.presentation.settings.text, 1 * split, Math.floor(this.splitLines / 2))
+      this.presentation.control.translationSections = splitSong(this.presentation.settings.translation, 1 * split, Math.floor(this.splitLines / 2))
     } else {
       // Use 2 lines per slide
-      this.presentation.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
+      this.presentation.control.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
     }
   }
 }

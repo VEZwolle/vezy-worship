@@ -19,11 +19,11 @@ export default {
   extends: BaseOutput,
   computed: {
     lines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      const section = this.presentation.control?.sections?.[this.presentation.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },
     translatedLines () {
-      const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
+      const section = this.presentation.control?.translationSections?.[this.presentation.control.selectedSectionIndex]
       return section?.slides.flat() || []
     }
   }

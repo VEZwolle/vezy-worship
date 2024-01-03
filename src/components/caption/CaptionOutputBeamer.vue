@@ -18,12 +18,15 @@ export default {
   components: { CaptionBeamer },
   extends: BaseOutput,
   computed: {
+    control () {
+      return this.presentation.control
+    },
     textLines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.beamerLines || []
     },
     titleLines () {
-      return this.presentation.beamerTitleLines || []
+      return this.control.beamerTitleLines || []
     }
   }
 }
