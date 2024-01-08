@@ -15,8 +15,8 @@ export default {
   extends: BaseOutput,
   computed: {
     text () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
-      const lines = section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
+      const lines = section?.slides?.[this.control.selectedSlideIndex] || []
 
       return lines[0] || ''
     },

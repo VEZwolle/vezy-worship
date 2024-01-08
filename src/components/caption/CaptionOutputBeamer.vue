@@ -19,11 +19,11 @@ export default {
   extends: BaseOutput,
   computed: {
     textLines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.beamerLines || []
     },
     titleLines () {
-      return this.presentation.beamerTitleLines || []
+      return this.control.beamerTitleLines || []
     }
   }
 }
