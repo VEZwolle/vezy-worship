@@ -80,17 +80,27 @@
           </div>
 
           <div class="col-2 q-pl-sm">
-            <q-btn
+            <q-btn-dropdown
+              split
               stack
               outline
               color="primary"
               label="Tekst inladen"
               icon="download"
               class="full-width"
-              :disabled="!settings.chapter || !settings.verseFrom"
+              :disable-main-btn="!settings.chapter || !settings.verseFrom"
+              :disable-dropdown="!settings.chapter || !settings.verseFrom || !settings.text"
               :loading="isLoadingScripture"
-              @click="loadScripture"
-            />
+              @click="loadScripture(true)"
+            >
+              <q-list>
+                <q-item v-close-popup clickable @click="loadScripture(false)">
+                  <q-item-section>
+                    <q-item-label>Toevoegen aan...</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
           </div>
         </div>
 
@@ -119,6 +129,7 @@ import bibles from './bibles'
 import books from './books'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditor from '../common/VezyEditor.vue'
+import { CleanText } from '../common/CleanText.js'
 
 export default {
   components: { CaptionSettingsPreview, BackgroundSetting, VezyEditor },
@@ -165,7 +176,7 @@ export default {
     titleUpdate () {
       this.settings.title = this.titleBible ? `${this.titleBook} <small>(${this.titleBible})</small>` : `${this.titleBook}`
     },
-    async loadScripture () {
+    async loadScripture (newText = true) {
       this.isLoadingScripture = true
 
       try {
@@ -179,17 +190,27 @@ export default {
           verseTo
         })
 
-        this.settings.text = result.verses
-          .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
-          .trim()
+        if (newText) {
+          this.settings.text = result.verses
+            .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
+            .trim()
+        } else {
+          this.settings.text += `<div><br></div><div>${this.title}</div>`
+          this.settings.text += result.verses
+            .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
+            .trim()
+        }
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
       } finally {
         this.isLoadingScripture = false
       }
-      this.titleBook = this.title
-      this.titleBible = this.settings.bible
-      this.titleUpdate()
+      if (newText) {
+        this.titleBook = this.title
+        this.titleBible = this.settings.bible
+        this.titleUpdate()
+      }
+      this.settings.text = CleanText(this.settings.text)
     },
     required (val) {
       return !!val || 'Verplicht'

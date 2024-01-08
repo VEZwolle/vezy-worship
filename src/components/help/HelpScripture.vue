@@ -14,7 +14,7 @@
       Je zie nu onderstaand scherm verschijnen.<br>
       Op de eerste regel kan je de titel (Bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een Bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
       Vul op de 2e regel de <i>Bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
-      Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database.<br>
+      Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database, via het dropdown menu kan je de tekst ook toevoegen.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
       <img src="../../assets/help/addscripturedialog.png">
     </p>
@@ -57,12 +57,12 @@
           Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
           Splitsen van regels gebeurt met de volgende voorwaarden:<br>
           <sup>
-            Zoek eerst of minder dan 350 tekens<br>
+            Zoek eerst of minder dan ingestelde aantal tekens<br>
             Dan naar een regeleinde<br>
             Dan naar [.?!]+['"’]<br>
             Dan naar [.?!]<br>
             Dan naar [,:; spatie]<br>
-            Dan naar iets binnen 350 tekens.
+            Dan naar iets binnen ingestelde aantal tekens.
           </sup>
         </li>
       </ul>
