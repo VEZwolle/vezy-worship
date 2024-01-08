@@ -18,9 +18,6 @@ export default {
   components: { CaptionBeamer },
   extends: BaseOutput,
   computed: {
-    control () {
-      return this.presentation.control
-    },
     textLines () {
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.beamerLines || []

@@ -14,9 +14,6 @@ export default {
   components: { CaptionLivestream },
   extends: BaseOutput,
   computed: {
-    control () {
-      return this.presentation.control
-    },
     text () {
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       const lines = section?.slides?.[this.control.selectedSlideIndex] || []

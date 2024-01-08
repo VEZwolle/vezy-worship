@@ -34,11 +34,6 @@ import BaseOutputStage from '../output/BaseOutputStage.vue'
 
 export default {
   extends: BaseOutputStage,
-  computed: {
-    control () {
-      return this.presentation.control
-    }
-  },
   watch: {
     'control.selectedSectionIndex' (val) {
       this.scroll()
@@ -48,12 +43,10 @@ export default {
     }
   },
   mounted () {
-    console.log(this.control)
     this.scroll()
   },
   methods: {
     scroll () {
-      console.log(this.control)
       if (!this.preview) {
         const el = this.$refs[`slide_${this.control.selectedSectionIndex}_${this.control.selectedSlideIndex}`][0].$el
         el.scrollIntoView({ behavior: 'smooth', block: 'start' })
