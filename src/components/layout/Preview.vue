@@ -1,49 +1,43 @@
 <template>
-  <q-layout view="lHh lpr lFf" container class="full-height">
-    <q-header>
-      <q-toolbar class="bg-grey-3 text-dark">
-        <q-toolbar-title class="text-subtitle2">
-          <q-badge rounded color="green" class="q-mr-sm" />
-          Preview
-          <span v-if="presentation" v-html="`- ${title}`" />
-        </q-toolbar-title>
+  <div style="height: calc(100vh - 50px);display:flex;flex-direction:column;">
+    <q-toolbar class="bg-grey-3 text-dark">
+      <q-toolbar-title class="text-subtitle2">
+        <q-badge rounded color="green" class="q-mr-sm" />
+        Preview
+        <span v-if="presentation" v-html="`- ${title}`" />
+      </q-toolbar-title>
 
-        <q-btn
-          v-shortkey="['ctrl', 'arrowright']"
-          label="Go live"
-          icon-right="arrow_forward"
-          :disabled="!presentation"
-          @click="$store.goLive(presentation)"
-          @shortkey="$store.goLive(presentation)"
-        >
-          <q-menu context-menu no-focus>
-            <q-list dense>
-              <q-item-label header>
-                QUICK LIVE:
-              </q-item-label>
+      <q-btn
+        v-shortkey="['ctrl', 'arrowright']"
+        label="Go live"
+        icon-right="arrow_forward"
+        :disabled="!presentation"
+        @click="$store.goLive(presentation)"
+        @shortkey="$store.goLive(presentation)"
+      >
+        <q-menu context-menu no-focus>
+          <q-list dense>
+            <q-item-label header>
+              QUICK LIVE:
+            </q-item-label>
 
-              <q-item v-for="preset in presentationPresets" :key="preset.id" v-close-popup clickable @click="$store.goLive(preset, false)">
-                <q-item-section>{{ preset.settings.title }}</q-item-section>
-                <q-item-section avatar>
-                  <q-icon name="arrow_forward" />
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </q-toolbar>
-    </q-header>
+            <q-item v-for="preset in presentationPresets" :key="preset.id" v-close-popup clickable @click="$store.goLive(preset, false)">
+              <q-item-section>{{ preset.settings.title }}</q-item-section>
+              <q-item-section avatar>
+                <q-icon name="arrow_forward" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </q-btn>
+    </q-toolbar>
 
-    <q-page-container>
-      <q-page>
-        <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
-      </q-page>
-    </q-page-container>
+    <div style="overflow-y:auto;flex:1;">
+      <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
+    </div>
 
-    <q-footer>
-      <OutputBoxes preview :beamer="true" :livestream="true" :alpha="false" />
-    </q-footer>
-  </q-layout>
+    <OutputBoxes preview :beamer="true" :livestream="true" :alpha="false" />
+  </div>
 </template>
 
 <script>
