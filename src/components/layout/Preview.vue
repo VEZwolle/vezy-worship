@@ -1,5 +1,5 @@
 <template>
-  <div style="height: calc(100vh - 50px);display:flex;flex-direction:column;">
+  <div class="layout-column">
     <q-toolbar class="bg-grey-3 text-dark">
       <q-toolbar-title class="text-subtitle2">
         <q-badge rounded color="green" class="q-mr-sm" />
@@ -32,7 +32,7 @@
       </q-btn>
     </q-toolbar>
 
-    <div style="overflow-y:auto;flex:1;">
+    <div class="layout-column-content">
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
     </div>
 

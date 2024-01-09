@@ -71,3 +71,14 @@ sup {
 [class*="output"] sup {
   vertical-align: top;
 }
+
+[class*="layout-column"] {
+  height: calc(100vh - 50px);
+  display:flex;
+  flex-direction:column;
+}
+
+[class*="layout-column-content"] {
+  overflow-y:auto;
+  flex:1;
+}

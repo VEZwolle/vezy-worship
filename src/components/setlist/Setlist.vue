@@ -1,52 +1,48 @@
 <template>
-  <q-layout view="lHh lpr lFf" container class="full-height">
-    <q-header>
-      <q-toolbar class="bg-grey-3 text-dark">
-        <q-toolbar-title class="text-subtitle2">
-          Dienst - {{ $date($store.service.date) }}
+  <div class="layout-column">
+    <q-toolbar class="bg-grey-3 text-dark">
+      <q-toolbar-title class="text-subtitle2">
+        Dienst - {{ $date($store.service.date) }}
 
-          <q-btn class="gt-xs text-grey-8" size="12px" flat dense round icon="edit" @click="openServiceSettings">
-            <q-tooltip>Dienst bewerken</q-tooltip>
-          </q-btn>
-        </q-toolbar-title>
+        <q-btn class="gt-xs text-grey-8" size="12px" flat dense round icon="edit" @click="openServiceSettings">
+          <q-tooltip>Dienst bewerken</q-tooltip>
+        </q-btn>
+      </q-toolbar-title>
 
-        <q-checkbox
-          v-model="$store.noLivestream"
-          left-label
-          label="Alleen beamer"
-          color="red"
-          @shortkey="$store.toggleNoLivestream"
-        >
-          <q-tooltip>
-            Vink aan om teksten niet op te splitsen voor de livestream<br>
-            (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
-          </q-tooltip>
-        </q-checkbox>
-      </q-toolbar>
-    </q-header>
+      <q-checkbox
+        v-model="$store.noLivestream"
+        left-label
+        label="Alleen beamer"
+        color="red"
+        @shortkey="$store.toggleNoLivestream"
+      >
+        <q-tooltip>
+          Vink aan om teksten niet op te splitsen voor de livestream<br>
+          (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
+        </q-tooltip>
+      </q-checkbox>
+    </q-toolbar>
 
-    <q-page-container>
-      <q-page>
-        <q-list class="q-pt-sm">
-          <Draggable v-model="$store.service.presentations" item-key="id">
-            <template #item="{ element: presentation }">
-              <SetlistItem
-                :presentation="presentation"
-                :active="$store.previewPresentation?.id === presentation.id"
-                @click="$store.preview(presentation)"
-                @preview="$store.preview(presentation)"
-                @dblclick="$store.goLive(presentation)"
-                @go-live="$store.goLive(presentation)"
-                @edit="edit(presentation)"
-                @remove="$store.removePresentation(presentation)"
-              />
-            </template>
-          </Draggable>
-        </q-list>
-      </q-page>
-    </q-page-container>
+    <div class="layout-column-content">
+      <q-list class="q-pt-sm">
+        <Draggable v-model="$store.service.presentations" item-key="id">
+          <template #item="{ element: presentation }">
+            <SetlistItem
+              :presentation="presentation"
+              :active="$store.previewPresentation?.id === presentation.id"
+              @click="$store.preview(presentation)"
+              @preview="$store.preview(presentation)"
+              @dblclick="$store.goLive(presentation)"
+              @go-live="$store.goLive(presentation)"
+              @edit="edit(presentation)"
+              @remove="$store.removePresentation(presentation)"
+            />
+          </template>
+        </Draggable>
+      </q-list>
+    </div>
 
-    <q-footer>
+    <div class="relative-position">
       <QuickSearchDatabase />
       <q-fab color="primary" icon="add" direction="up" class="absolute" style="top: -70px; right: 20px;">
         <q-fab-action
@@ -60,8 +56,8 @@
           @click="add(presentationType.id)"
         />
       </q-fab>
-    </q-footer>
-  </q-layout>
+    </div>
+  </div>
 
   <PresentationSettingsDialog ref="presentationSettingsDialog" />
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
