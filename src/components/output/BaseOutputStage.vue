@@ -8,6 +8,9 @@ export default {
     settings () {
       return this.presentation.settings
     },
+    control () {
+      return this.presentation.control || {}
+    },
     classLive () {
       return !this.preview ? 'text-white' : ''
     }

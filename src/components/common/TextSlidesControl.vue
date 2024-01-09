@@ -43,11 +43,11 @@ import BaseControl from '../presentation/BaseControl.vue'
 export default {
   extends: BaseControl,
   created () {
-    if (!this.presentation.control?.selectedSectionIndex) {
+    if (!this.presentation.control) this.presentation.control = {}
+    if (!this.presentation.control.selectedSectionIndex) {
       this.presentation.control.selectedSectionIndex = 0
     }
-
-    if (!this.presentation.control?.selectedSlideIndex) {
+    if (!this.presentation.control.selectedSlideIndex) {
       this.presentation.control.selectedSlideIndex = 0
     }
   },
