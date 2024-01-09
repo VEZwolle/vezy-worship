@@ -1,6 +1,6 @@
 <template>
   <div class="line">
-    <TextSlidesOutput v-if="presentation.settings.text && presentation.sections" :presentation="presentation" :preview="preview" />
+    <TextSlidesOutput v-if="presentation.settings.text && control.sections" :presentation="presentation" :preview="preview" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   components: { TextSlidesOutput },
   extends: BaseOutputStage,
   mounted () {
-    if (!this.preview && !this.presentation.settings.text) {
+    if (!this.preview && !this.settings.text) {
       // scroll to top
       window.scrollTo({ behavior: 'smooth', top: 0 })
     }

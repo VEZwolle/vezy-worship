@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
@@ -22,8 +22,8 @@
   "dependencies": {
     "@quasar/extras": "^1.16.9",
     "@zip.js/zip.js": "^2.7.32",
-    "axios": "^1.6.3",
-    "core-js": "^3.34.0",
+    "axios": "^1.6.5",
+    "core-js": "^3.35.0",
     "dayjs": "^1.11.10",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.7",
@@ -33,7 +33,7 @@
     "pinia": "^2.1.7",
     "pinia-shared-state": "^0.5.1",
     "quasar": "^2.14.2",
-    "vue": "^3.3.13",
+    "vue": "3.3.13",
     "vue-router": "^4.2.5",
     "vue-three-shortkey": "^4.0.1",
     "vuedraggable": "^4.1.0"
@@ -41,12 +41,12 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
     "@quasar/app-webpack": "^3.12.1",
-    "electron": "^28.1.0",
+    "electron": "^28.1.1",
     "electron-builder": "^24.9.1",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.5.0",
+    "eslint-plugin-n": "^16.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.19.2",
     "eslint-webpack-plugin": "^4.0.1"

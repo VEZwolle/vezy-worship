@@ -1,6 +1,6 @@
 <template>
   <q-list
-    v-for="(section, sectionIndex) in presentation.sections"
+    v-for="(section, sectionIndex) in presentation.control.sections"
     :key="sectionIndex"
     v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
     class="q-py-sm"
@@ -43,21 +43,21 @@ import BaseControl from '../presentation/BaseControl.vue'
 export default {
   extends: BaseControl,
   created () {
-    if (!this.presentation.selectedSectionIndex) {
-      this.presentation.selectedSectionIndex = 0
+    if (!this.presentation.control) this.presentation.control = {}
+    if (!this.presentation.control.selectedSectionIndex) {
+      this.presentation.control.selectedSectionIndex = 0
     }
-
-    if (!this.presentation.selectedSlideIndex) {
-      this.presentation.selectedSlideIndex = 0
+    if (!this.presentation.control.selectedSlideIndex) {
+      this.presentation.control.selectedSlideIndex = 0
     }
   },
   mounted () {
-    this.select(this.presentation.selectedSectionIndex, this.presentation.selectedSlideIndex, true)
+    this.select(this.presentation.control.selectedSectionIndex, this.presentation.control.selectedSlideIndex, true)
   },
   methods: {
     select (sectionIndex, slideIndex, scroll = false) {
-      this.presentation.selectedSectionIndex = sectionIndex
-      this.presentation.selectedSlideIndex = slideIndex
+      this.presentation.control.selectedSectionIndex = sectionIndex
+      this.presentation.control.selectedSlideIndex = slideIndex
 
       if (scroll) {
         const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`][0].$el
@@ -65,16 +65,16 @@ export default {
       }
     },
     jump (change = +1) {
-      const selectedSection = this.presentation.sections[this.presentation.selectedSectionIndex]
-      let newSlideIndex = this.presentation.selectedSlideIndex + change
+      const selectedSection = this.presentation.control.sections[this.presentation.control.selectedSectionIndex]
+      let newSlideIndex = this.presentation.control.selectedSlideIndex + change
 
       if (selectedSection.slides[newSlideIndex]) {
         // Slide is in current section, so stay on `selectedSectionIndex`
-        return this.select(this.presentation.selectedSectionIndex, newSlideIndex, true)
+        return this.select(this.presentation.control.selectedSectionIndex, newSlideIndex, true)
       }
 
-      const newSectionIndex = this.presentation.selectedSectionIndex + change
-      const section = this.presentation.sections[newSectionIndex]
+      const newSectionIndex = this.presentation.control.selectedSectionIndex + change
+      const section = this.presentation.control.sections[newSectionIndex]
 
       if (!section) {
         return
@@ -105,17 +105,17 @@ export default {
       }
     },
     isSelected (sectionIndex, slideIndex) {
-      return sectionIndex === this.presentation.selectedSectionIndex &&
-        slideIndex === this.presentation.selectedSlideIndex
+      return sectionIndex === this.presentation.control.selectedSectionIndex &&
+        slideIndex === this.presentation.control.selectedSlideIndex
     },
     isSelectedLabel (sectionIndex) {
-      const selectedIndex = this.presentation.selectedSectionIndex
+      const selectedIndex = this.presentation.control.selectedSectionIndex
 
       if (selectedIndex === sectionIndex) {
         return true
       }
 
-      const nextLabelIndex = this.presentation.sections
+      const nextLabelIndex = this.presentation.control.sections
         .findIndex((s, i) => i > sectionIndex && s.label !== null)
 
       if (nextLabelIndex === -1) { // No next labeled section found

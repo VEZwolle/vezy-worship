@@ -16,12 +16,12 @@ export default {
   extends: BaseOutput,
   computed: {
     lines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
-      return section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
+      return section?.slides?.[this.control.selectedSlideIndex] || []
     },
     translatedLines () {
-      const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
-      return section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.control.translationSections?.[this.control.selectedSectionIndex]
+      return section?.slides?.[this.control.selectedSlideIndex] || []
     }
   }
 }
