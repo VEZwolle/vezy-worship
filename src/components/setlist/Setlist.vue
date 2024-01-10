@@ -24,39 +24,41 @@
     </q-toolbar>
 
     <div class="layout-column-content">
-      <q-list class="q-pt-sm">
-        <Draggable v-model="$store.service.presentations" item-key="id">
-          <template #item="{ element: presentation }">
-            <SetlistItem
-              :presentation="presentation"
-              :active="$store.previewPresentation?.id === presentation.id"
-              @click="$store.preview(presentation)"
-              @preview="$store.preview(presentation)"
-              @dblclick="$store.goLive(presentation)"
-              @go-live="$store.goLive(presentation)"
-              @edit="edit(presentation)"
-              @remove="$store.removePresentation(presentation)"
-            />
-          </template>
-        </Draggable>
-      </q-list>
+      <div style="flex:1;">
+        <q-list class="q-pt-sm">
+          <Draggable v-model="$store.service.presentations" item-key="id">
+            <template #item="{ element: presentation }">
+              <SetlistItem
+                :presentation="presentation"
+                :active="$store.previewPresentation?.id === presentation.id"
+                @click="$store.preview(presentation)"
+                @preview="$store.preview(presentation)"
+                @dblclick="$store.goLive(presentation)"
+                @go-live="$store.goLive(presentation)"
+                @edit="edit(presentation)"
+                @remove="$store.removePresentation(presentation)"
+              />
+            </template>
+          </Draggable>
+        </q-list>
+      </div>
+      <div class="items-bottom">
+        <q-fab color="primary" icon="add" direction="up" style="top: -20px; right: 20px;">
+          <q-fab-action
+            v-for="presentationType in presentationTypes"
+            :key="presentationType.id"
+            :color="presentationType.color"
+            :icon="presentationType.icon"
+            external-label
+            label-position="left"
+            :label="`${presentationType.name} toevoegen`"
+            @click="add(presentationType.id)"
+          />
+        </q-fab>
+      </div>
     </div>
 
-    <div class="relative-position">
-      <QuickSearchDatabase />
-      <q-fab color="primary" icon="add" direction="up" class="absolute" style="top: -70px; right: 20px;">
-        <q-fab-action
-          v-for="presentationType in presentationTypes"
-          :key="presentationType.id"
-          :color="presentationType.color"
-          :icon="presentationType.icon"
-          external-label
-          label-position="left"
-          :label="`${presentationType.name} toevoegen`"
-          @click="add(presentationType.id)"
-        />
-      </q-fab>
-    </div>
+    <QuickSearchDatabase />
   </div>
 
   <PresentationSettingsDialog ref="presentationSettingsDialog" />
@@ -90,3 +92,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.items-bottom {
+  position: sticky;
+  bottom: 0;
+  left: 100%;
+  width: 56px
+}
+</style>
