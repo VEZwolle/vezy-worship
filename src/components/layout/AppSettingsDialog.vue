@@ -67,6 +67,13 @@
               </q-icon>
             </template>
           </q-input>
+
+          <q-separator color="secondary" class="q-my-md" />
+
+          <div class="text-h6">
+            Dienst type
+          </div>
+          <q-select v-model="$store.serviceType" :options="serviceTypes" emit-value map-options label="Dienst type" class="q-mb-sm" />
         </q-tab-panel>
 
         <q-tab-panel name="api">
@@ -193,6 +200,10 @@ export default {
         beamer: '',
         livestream: ''
       },
+      serviceTypes: [
+        'standaard',
+        'glow'
+      ],
       autoupdate: true,
       songDatabase: '',
       dbCollection: '',
@@ -254,6 +265,7 @@ export default {
       this.searchBaseIsLocal = !(localStorage.getItem('database.searchBase') === 'cloud' || false)
       this.vezyWorshipApiToken = localStorage.getItem('VezyWorshipApiToken') ? 'is ingesteld' : ''
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
+      this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -268,6 +280,7 @@ export default {
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
       if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.vezyWorshipApiToken || '')
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
+      localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',

@@ -62,6 +62,15 @@
     url("../assets/fonts/ubuntu/ubuntu-v20-latin-700italic.woff") format("woff");
 }
 
+// CMG Sans
+@font-face {
+  font-family: "CMG Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: local(""), url("../assets/fonts/cmg-sans/CMGSans-MediumCnCAPS.woff2") format("woff2"),
+    url("../assets/fonts/cmg-sans/CMGSans-MediumCnCAPS.woff") format("woff");
+}
+
 // Global styles
 sup {
   font-size: 0.8em;
