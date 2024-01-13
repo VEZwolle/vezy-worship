@@ -66,9 +66,17 @@
 @font-face {
   font-family: "CMG Sans";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   src: local(""), url("../assets/fonts/cmg-sans/CMGSans-MediumCnCAPS.woff2") format("woff2"),
     url("../assets/fonts/cmg-sans/CMGSans-MediumCnCAPS.woff") format("woff");
+}
+
+@font-face {
+  font-family: "CMG Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: local(""), url("../assets/fonts/cmg-sans/CMGSans-BoldCnCAPS.woff2") format("woff2"),
+    url("../assets/fonts/cmg-sans/CMGSans-BoldCnCAPS.woff") format("woff");
 }
 
 // Global styles
