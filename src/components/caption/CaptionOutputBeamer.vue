@@ -3,7 +3,7 @@
     <Transition name="q-transition--fade">
       <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacity">
         <div class="caption-output">
-          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" />
+          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" :alpha="alpha" />
         </div>
       </div>
     </Transition>
