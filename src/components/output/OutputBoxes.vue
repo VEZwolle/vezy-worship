@@ -29,16 +29,31 @@
         <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer & voor livestream bij tv randen</q-tooltip>
       </q-checkbox>
       <q-space />
-      <q-checkbox
-        v-for="view in views"
-        :key="view.id"
-        v-model="view.isActive"
-        right-label
-        size="xs"
-        :label="view.name"
-      >
-        <q-tooltip>Toon miniatuurweergave van {{ view.name }}</q-tooltip>
-      </q-checkbox>
+      <template v-for="(view, index) in views" :key="view.id">
+        <q-checkbox
+          v-if="!view.alpha"
+          v-model="view.isActive"
+          right-label
+          size="xs"
+          :label="view.name"
+        >
+          <q-tooltip>Toon miniatuurweergave van {{ view.name }}</q-tooltip>
+          <q-menu v-if="index + 1 < views.length" context-menu no-focus>
+            <q-list dense style="min-width: 210px">
+              <q-item v-close-popup clickable>
+                <q-item-section>
+                  <q-checkbox
+                    v-model="views[index+1].isActive"
+                    right-label
+                    size="xs"
+                    :label="views[index+1].name"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-checkbox>
+      </template>
     </div>
   </div>
 </template>
@@ -52,8 +67,7 @@ export default {
   props: {
     preview: Boolean,
     beamer: Boolean,
-    livestream: Boolean,
-    alpha: Boolean
+    livestream: Boolean
   },
   setup () {
     return { Output }
@@ -70,6 +84,14 @@ export default {
           isActive: this.beamer
         },
         {
+          id: 'beamer',
+          name: 'Beamer Alpha channel',
+          alpha: true,
+          showBackground: true,
+          showMessages: true,
+          isActive: false
+        },
+        {
           id: 'livestream',
           name: 'Livestream',
           alpha: false,
@@ -79,11 +101,11 @@ export default {
         },
         {
           id: 'livestream',
-          name: 'Alpha channel',
+          name: 'Livestream Alpha channel',
           alpha: true,
           showBackground: false,
           showMessages: false,
-          isActive: this.alpha
+          isActive: false
         }
       ],
       visualViewBeamer: false

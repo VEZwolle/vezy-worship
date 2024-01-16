@@ -19,6 +19,7 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="displays">
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
+          <q-select v-model="displays.beamerAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer alpha channel" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" class="q-mb-sm" />
           <q-select v-model="displays.stage" :options="availableDisplayOptions" emit-value map-options clearable label="Stage monitor" class="q-mb-sm" />
@@ -49,7 +50,7 @@
           <div class="text-h6">
             Achtergrond
           </div>
-          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
+          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto; of iets voor gebruik alpha channel)" class="q-mb-sm">
             <template #append>
               <q-icon name="colorize" class="cursor-pointer">
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
