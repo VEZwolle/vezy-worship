@@ -1,6 +1,6 @@
 <template>
   <div class="layout-column">
-    <q-toolbar class="bg-grey-3 text-dark">
+    <q-toolbar class="bg-subtoolbar text-subtoolbar">
       <q-toolbar-title class="text-subtitle2">
         <q-badge rounded color="red" class="q-mr-sm" />
         Live

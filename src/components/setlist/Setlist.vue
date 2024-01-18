@@ -1,6 +1,6 @@
 <template>
   <div class="layout-column">
-    <q-toolbar class="bg-grey-3 text-dark">
+    <q-toolbar class="bg-subtoolbar text-subtoolbar">
       <q-toolbar-title class="text-subtitle2">
         Dienst - {{ $date($store.service.date) }}
 

@@ -1,5 +1,5 @@
 <template>
-  <q-item clickable :active="active" active-class="bg-purple-1">
+  <q-item clickable :active="active" active-class="bg-active">
     <q-item-section avatar>
       <q-avatar :color="presentationType.color" text-color="white" :icon="presentationType.icon" />
     </q-item-section>

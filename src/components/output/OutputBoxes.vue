@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-3 output-boxes-container">
+  <div class="bg-subtoolbar output-boxes-container">
     <div v-if="activeViews.length" class="output-boxes">
       <template v-for="view in views" :key="view.id">
         <div v-if="view.isActive" class="col output-box">
@@ -19,7 +19,7 @@
       </template>
     </div>
 
-    <div class="output-boxes-selection text-caption text-dark">
+    <div class="output-boxes-selection text-caption text-subtolbar">
       <q-checkbox
         v-model="visualViewBeamer"
         right-label

@@ -87,7 +87,7 @@
               class="input-songtext"
               @scroll="scroll('song')"
             />
-            <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>
@@ -145,7 +145,7 @@
                 @click="translate"
               />
             </q-input>
-            <q-toolbar v-if="settings.translation" class="bg-grey-3 text-dark">
+            <q-toolbar v-if="settings.translation" class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>

@@ -48,4 +48,10 @@ export default {
     border-right: none;
   }
 }
+
+.body--dark {
+  .col {
+    border-right-color: rgba(255, 255, 255, 0.28);
+  }
+}
 </style>
