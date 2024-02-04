@@ -3,7 +3,7 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>
-          <span>Liedtekst vergelijken met {{ $store.searchBaseIsLocal ? 'lokale' : 'cloud' }} database</span>
+          <span>Liedtekst vergelijken met {{ $store.searchBaseIsLocal ? 'lokale database' : `cloud database "${algoliaActiveDatabaseName}"` }}</span>
           <q-inner-loading :showing="isLoading" />
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
@@ -109,7 +109,7 @@ export default {
       if (this.$store.searchBaseIsLocal && !this.$fsdb.localSongDatabase) {
         if (!(await this.$fsdb.openSongDatabase())) {
           // geen database geselecteerd of error bij opgeslagen versie
-          this.$q.notify.create({ type: 'negative', message: 'geen database gevonden' })
+          this.$q.notify({ type: 'negative', message: 'geen database gevonden' })
           this.hide()
           return
         }
@@ -119,7 +119,7 @@ export default {
       if (!(await this.searchSongs())) return this.hide()
       this.select(this.presentation)
       if (this.noNewSongs) {
-        this.$q.notify.create({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })
+        this.$q.notify({ type: 'positive', message: 'Lied is exact gelijk aan de database versie', position: 'top' })
         this.hide()
         return
       }

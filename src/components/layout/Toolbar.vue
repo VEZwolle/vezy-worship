@@ -219,7 +219,7 @@ export default {
       return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
     },
     apiKeyEditExist () {
-      return ApiKeyEdit()
+      return ApiKeyEdit(this.$store.algoliaIndexId)
     }
   },
   created () {
@@ -244,7 +244,7 @@ export default {
               this.autoupdate.indeterminateProgress = true
               this.autoupdate.percent = percent
               this.autoupdate.message = message
-              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify({ type: 'positive', message: this.autoupdate.message })
               break
             case 3:
               this.autoupdate.indeterminateProgress = false
@@ -254,7 +254,7 @@ export default {
               this.autoupdate.indeterminateProgress = false
               this.autoupdate.message = message
               this.autoupdate.percent = percent
-              this.$q.notify.create({ type: 'positive', message: this.autoupdate.message })
+              this.$q.notify({ type: 'positive', message: this.autoupdate.message })
               break
             default:
           }
