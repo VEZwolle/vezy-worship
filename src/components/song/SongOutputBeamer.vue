@@ -45,9 +45,9 @@ export default {
       switch (this.$store.serviceType) {
         case 'glow':
           if (this.translatedLines.length) {
-            style.marginTop = `calc(50vh - ${this.lines.length * 4.4 + 7.5}vw)`
+            style.marginTop = `calc(50vh - ${this.lines.length * 4.4 + 9.7}vw)` // 4.4vw*2/2 = 4.4vw & 6.6vw+3vw/2-4.4/2vw+3.8vw=8.2vw
           } else {
-            style.marginTop = `calc(50vh - ${this.lines.length * 2.2 + 6.0}vw)` // 4.4vw/2 = 2.2vw & 6.6vw-4.4vw+3.8vw=6.0vw
+            style.marginTop = `calc(50vh - ${this.lines.length * 2.2 + 8.2}vw)` // 4.4vw/2 = 2.2vw & 6.6vw-4.4/2vw+3.8vw=8.2vw
           }
           break
         default:
@@ -68,7 +68,7 @@ export default {
   svg {
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 120%;
 
     tspan {
       font-size: 3.8vw;
