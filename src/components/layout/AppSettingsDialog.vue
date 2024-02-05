@@ -75,6 +75,14 @@
             Dienst type
           </div>
           <q-select v-model="$store.serviceType" :options="serviceTypes" emit-value map-options label="Dienst type" class="q-mb-sm" />
+
+          <q-separator color="secondary" class="q-my-md" />
+
+          <q-toggle
+            v-model="darkMode"
+            label="Donkere modes"
+            @click.stop="toggleDarkMode"
+          />
         </q-tab-panel>
 
         <q-tab-panel name="api">
@@ -195,6 +203,7 @@ import { GetAlgoliaDatabase, getAlgoliaCollections } from '../song/database/algo
 export default {
   data () {
     return {
+      darkMode: false,
       availableDisplays: [],
       displays: {},
       backgroundColor: {
@@ -267,6 +276,7 @@ export default {
       this.vezyWorshipApiToken = localStorage.getItem('VezyWorshipApiToken') ? 'is ingesteld' : ''
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
       this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
+      this.darkMode = localStorage.getItem('darkMode') === 'true'
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -282,6 +292,7 @@ export default {
       if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.vezyWorshipApiToken || '')
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
       localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
+      localStorage.setItem('darkMode', this.$q.dark.isActive)
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
@@ -324,6 +335,10 @@ export default {
         return
       }
       return val >= 0 || 'Minimaal 0'
+    },
+    toggleDarkMode () {
+      this.$q.dark.toggle()
+      this.darkMode = this.$q.dark.isActive
     }
   }
 }

@@ -12,7 +12,7 @@
         @update:model-value="setListDiffWidth"
       >
         <template #before>
-          <q-toolbar class="bg-grey-3 text-dark">
+          <q-toolbar class="bg-subtoolbar text-subtoolbar">
             <q-toolbar-title class="text-subtitle2 row">
               Nieuw lied
               <q-space />
@@ -61,7 +61,7 @@
         </template>
 
         <template #after>
-          <q-toolbar class="bg-grey-3 text-dark">
+          <q-toolbar class="bg-subtoolbar text-subtoolbar">
             <q-toolbar-title class="text-subtitle2 row">
               <template v-if="selectedId">
                 <div>

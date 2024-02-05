@@ -10,7 +10,7 @@
       <div v-if="lyricsLines">
         <div class="row">
           <div class="col">
-            <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar class="bg-subtoolbar text-subtoolbar">
               <q-toolbar-title>
                 <span>{{ oneListView ? 'Songtext, Vertaling & verwijdere regels': 'Lied tekst' }}</span>
               </q-toolbar-title>
@@ -20,7 +20,7 @@
             </q-toolbar>
           </div>
           <div class="col">
-            <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar class="bg-subtoolbar text-subtoolbar">
               <q-toolbar-title>
                 <span>{{ oneListView ? '' : 'Vertaling' }}</span>
               </q-toolbar-title>

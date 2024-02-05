@@ -100,3 +100,28 @@ sup {
   overflow-y:auto;
   flex:1;
 }
+
+.body--light {
+  .bg-subtoolbar {
+    background: $grey-3 !important; // bg-grey-3
+  }
+  .text-subtoolbar {
+    color: var(--q-dark) !important; // text-dark
+  }
+  .bg-active {
+    background: $purple-1 !important; // bg-purple-1
+  }
+}
+
+.body--dark {
+  .bg-subtoolbar {
+    background: rgb(49, 49, 49);
+  }
+  .text-subtoolbar {
+    color: $grey !important;
+  }
+  .bg-active {
+    background: var(--q-secondary) !important; // bg-secondary
+    color: white;
+  }
+}
