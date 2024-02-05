@@ -123,6 +123,18 @@
       <q-separator />
 
       <q-card-actions align="right">
+        <q-select
+          v-if="!$store.searchBaseIsLocal"
+          v-model="$store.algoliaIndexId"
+          label="Algolia database voor zoeken"
+          emit-value
+          outlined
+          dense
+          options-dense
+          map-options
+          :options="algoliaIndexNames"
+          @update:model-value="setAlgoliaIndexId($store.algoliaIndexId)"
+        />
         <q-toggle
           v-model="searchLyrics"
           checked-icon="check"
@@ -293,8 +305,8 @@ export default {
             return
           }
         } else {
-          this.backupAlgoliaSongDatabase.push({ action: 'remove', record: props })
-          const result = await RemoveFromAlgoliaDatabase([props.objectID])
+          this.backupAlgoliaSongDatabase.push({ indexId: this.$store.algoliaIndexId, action: 'remove', record: props })
+          const result = await RemoveFromAlgoliaDatabase(this.$store.algoliaIndexId, [props.objectID])
           if (!result) { // error bij remove
             this.backupAlgoliaSongDatabase.pop()
             return
@@ -316,19 +328,21 @@ export default {
         }
       } else {
         const records = []
-        for (let i = 0; i < this.backupAlgoliaSongDatabase.length; i++) {
+        // reset only current database index
+        const backupAlgoliaSongDatabaseId = this.backupAlgoliaSongDatabase.filter((t) => t.indexId === this.$store.algoliaIndexId)
+        for (let i = 0; i < backupAlgoliaSongDatabaseId.length; i++) {
           // only first change of record
-          if (!records.find(t => t.objectID === this.backupAlgoliaSongDatabase[i]?.record?.objectID)) {
-            records.push(this.backupAlgoliaSongDatabase[i]?.record)
+          if (!records.find(t => t.objectID === backupAlgoliaSongDatabaseId[i]?.record?.objectID)) {
+            records.push(backupAlgoliaSongDatabaseId[i]?.record)
           }
         }
         if (records.length === 0) return
-        const result = await AddToAlgoliaDatabase(records, false)
+        const result = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, records, false)
         if (!result) {
-          this.$q.notify.create({ type: 'negative', message: 'Terugzetten wijzingen cloud mislukt!' })
+          this.$q.notify({ type: 'negative', message: 'Terugzetten wijzingen cloud mislukt!' })
           return
         } else {
-          this.backupAlgoliaSongDatabase = []
+          this.backupAlgoliaSongDatabase = this.backupAlgoliaSongDatabase.filter((t) => t.indexId !== this.$store.algoliaIndexId)
         }
         this.searchResults()
       }
@@ -336,11 +350,11 @@ export default {
     startEditSong (props) {
       if (this.$store.searchBaseIsLocal && !this.backupLocalSongDatabase) this.backupLocalSongDatabase = cloneDeep(this.$fsdb.localSongDatabase)
       if (!this.userName) {
-        return this.$q.notify.create({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!' })
+        return this.$q.notify({ type: 'negative', message: 'Vul eerst gebruikersnaam in voor bewerken database!' })
       }
       localStorage.setItem('database.userName', this.userName || '')
       if (props?.objectID) {
-        if (!this.$store.searchBaseIsLocal) this.backupAlgoliaSongDatabase.push({ action: 'edit', record: props })
+        if (!this.$store.searchBaseIsLocal) this.backupAlgoliaSongDatabase.push({ indexId: this.$store.algoliaIndexId, action: 'edit', record: props })
         // convert db --> presentation
         if (!this.editPresentation) {
           const type = presentationTypes.find(t => t.id === 'song')
@@ -364,17 +378,17 @@ export default {
     async saveEditSong () {
       if (this.$store.searchBaseIsLocal) { // local database
         let result = await this.$fsdb.addToDatabase(this.editPresentation.settings, this.userName, this.editPresentation.id)
-        if (!result) return this.$q.notify.create({ type: 'negative', message: 'Wijzingen in database maken is mislukt!' })
+        if (!result) return this.$q.notify({ type: 'negative', message: 'Wijzingen in database maken is mislukt!' })
         // save database
         result = await this.$fsdb.saveSongDatabase() // true = gelukt, false = niet gelukt
-        if (!result) return this.$q.notify.create({ type: 'negative', message: 'Opslaan wijzingen database mislukt!' })
+        if (!result) return this.$q.notify({ type: 'negative', message: 'Opslaan wijzingen database mislukt!' })
       } else { // cloud
-        const record = await ConvertToAlgoliaRecord(this.editPresentation.settings, this.userName, this.editPresentation.id)
+        const record = await ConvertToAlgoliaRecord(this.$store.algoliaIndexId, this.editPresentation.settings, this.userName, this.editPresentation.id)
         if (record) {
-          const result = await AddToAlgoliaDatabase([record], !!this.editPresentation.id)
+          const result = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, [record], !!this.editPresentation.id)
           if (!result) {
             this.backupAlgoliaSongDatabase.pop()
-            this.$q.notify.create({ type: 'negative', message: 'Opslaan wijzingen cloud mislukt!' })
+            this.$q.notify({ type: 'negative', message: 'Opslaan wijzingen cloud mislukt!' })
             return
           }
         }

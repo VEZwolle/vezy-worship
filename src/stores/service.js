@@ -17,6 +17,7 @@ export default defineStore('service', {
     isOnlyLivestreamClear: false,
     noLivestream: false,
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
+    algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest

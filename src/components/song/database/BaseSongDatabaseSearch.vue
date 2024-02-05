@@ -1,5 +1,5 @@
 <script>
-import { getAlgoliaSearch, getAlgoliaCollections, ApiKeyEdit } from './algolia.js'
+import { getAlgoliaSearch, getAlgoliaCollections, ApiKeyEdit, algoliaIndexNames } from './algolia.js'
 
 export default {
   data () {
@@ -16,10 +16,17 @@ export default {
   },
   computed: {
     apiKeyEditExist () {
-      return ApiKeyEdit()
+      return ApiKeyEdit(this.$store.algoliaIndexId)
     },
     selectedFalse () {
       return !this.selected[0]
+    },
+    algoliaIndexNames () {
+      return algoliaIndexNames
+    },
+    algoliaIndexNameLabel () {
+      const algoliaIndexName = this.algoliaIndexNames.find(t => t.value === this.$store.algoliaIndexId) || { label: 'geen' }
+      return algoliaIndexName.label
     }
   },
   methods: {
@@ -35,6 +42,21 @@ export default {
         // algolia --> no load needed.
       }
       // search input
+      this.searchResults()
+    },
+    setAlgoliaIndexId (indexId) {
+      this.$store.algoliaIndexId = indexId
+      this.$store.dbCollections = ['']
+      this.searchResults()
+    },
+    toggleAlgoliaIndexId () {
+      const id = this.algoliaIndexNames.findIndex(t => t.value === this.$store.algoliaIndexId) + 1 || 0
+      if (id < this.algoliaIndexNames.length) {
+        this.$store.algoliaIndexId = this.algoliaIndexNames[id].value
+      } else {
+        this.$store.algoliaIndexId = this.algoliaIndexNames[0].value
+      }
+      this.$store.dbCollections = ['']
       this.searchResults()
     },
     searchResults () {
@@ -109,7 +131,7 @@ export default {
       if (!this.searchInput) return
       this.isLoading = true
       this.selected = []
-      const result = await getAlgoliaSearch(this.searchInput, this.searchLyrics, this.dbCollection)
+      const result = await getAlgoliaSearch(this.$store.algoliaIndexId, this.searchInput, this.searchLyrics, this.dbCollection)
       if (result === false) {
         this.resultSongDatabase = []
       } else {
@@ -118,7 +140,7 @@ export default {
       this.isLoading = false
     },
     async algoliaCollections () {
-      this.$store.dbCollections = await getAlgoliaCollections()
+      this.$store.dbCollections = await getAlgoliaCollections(this.$store.algoliaIndexId)
     }
   }
 }

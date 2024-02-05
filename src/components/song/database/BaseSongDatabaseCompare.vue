@@ -1,7 +1,7 @@
 <script>
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
-import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase } from './algolia.js'
+import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase, algoliaIndexNames } from './algolia.js'
 
 export default {
   data () {
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     apiKeyEditExist () {
-      return ApiKeyEdit()
+      return ApiKeyEdit(this.$store.algoliaIndexId)
     },
     changesDatabase () {
       return this.songsTodoIndex.filter(i => i >= -1).length && this.userName.length
@@ -90,6 +90,9 @@ export default {
     },
     compareLyricsTranslation () {
       return HtmlDiff(this.databaseLyricsTranslation, this.newLyricsTranslation)
+    },
+    algoliaActiveDatabaseName () {
+      return algoliaIndexNames.find(t => t.value === this.$store.algoliaIndexId)?.label || ''
     }
   },
   methods: {
@@ -286,7 +289,7 @@ export default {
 
       let resultSongDatabase = []
       for (let i = 0; i < searchInputs.length; i++) {
-        const result = await getAlgoliaSearch(searchInputs[i], i >= noTextSeach, '')
+        const result = await getAlgoliaSearch(this.$store.algoliaIndexId, searchInputs[i], i >= noTextSeach, '')
         if (result === false) return false
         resultSongDatabase.push(result)
       }
@@ -327,25 +330,25 @@ export default {
           switch (todoIndex) {
             case undefined: break
             case -1: // add
-              record = await ConvertToAlgoliaRecord(this.songs[i].settings, this.userName)
+              record = await ConvertToAlgoliaRecord(this.$store.algoliaIndexId, this.songs[i].settings, this.userName)
               if (record) addRecords.push(record)
               break
             default: {
-              record = await ConvertToAlgoliaRecord(this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].objectID)
+              record = await ConvertToAlgoliaRecord(this.$store.algoliaIndexId, this.songs[i].settings, this.userName, this.songsSearchResults[i][todoIndex].objectID)
               if (record) editRecords.push(record)
             }
           }
         }
       }
       if (addRecords.length) {
-        const apiResult = await AddToAlgoliaDatabase(addRecords, false)
+        const apiResult = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, addRecords, false)
         if (!apiResult) {
           result = false
           return
         }
       }
       if (editRecords.length) {
-        const apiResult = await AddToAlgoliaDatabase(editRecords, true)
+        const apiResult = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, editRecords, true)
         if (!apiResult) {
           result = false
           return

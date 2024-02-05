@@ -3,7 +3,7 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>
-          <span>Liedtekst vergelijken/toevoegen met {{ $store.searchBaseIsLocal ? 'lokale' : 'cloud' }} database</span>
+          <span>Liedtekst vergelijken/toevoegen met {{ $store.searchBaseIsLocal ? 'lokale database' : `cloud database "${algoliaActiveDatabaseName}"` }}</span>
         </q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
@@ -228,7 +228,7 @@ export default {
       this.songs = this.$store.service.presentations.filter(t => t.type === 'song')
       if (this.songs.length < 1) {
         this.hide()
-        return this.$q.notify.create({ type: 'negative', message: 'geen liederen in setlist gevonden' })
+        return this.$q.notify({ type: 'negative', message: 'geen liederen in setlist gevonden' })
       }
       this.$nextTick(() => { this.setListDiffWidth() })
       // open database
@@ -238,7 +238,7 @@ export default {
           // make new
           await this.$fsdb.newEmptyDatabase()
           // return
-          this.$q.notify.create({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
+          this.$q.notify({ type: 'negative', message: 'geen database gevonden, er is een lege database aangemaakt' })
         }
       }
       // database is made open or empty
@@ -257,7 +257,7 @@ export default {
       let result = this.addToDatabase()
       if (!result) {
         this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
-        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
+        this.$q.notify({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
         this.isSaving = false
         return
       }
@@ -265,7 +265,7 @@ export default {
       result = await this.$fsdb.saveSongDatabase(newFile) // true = gelukt, false = niet gelukt
       if (!result) {
         this.$fsdb.localSongDatabase = cloneDeep(backupSongDatabase)
-        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
+        this.$q.notify({ type: 'negative', message: 'fout bij toevoegen liederen aan database' })
         this.isSaving = false
         return
       }
@@ -277,7 +277,7 @@ export default {
       localStorage.setItem('database.userName', this.userName || '')
       const result = this.addToDatabase()
       if (!result) {
-        this.$q.notify.create({ type: 'negative', message: 'fout bij toevoegen liederen aan cloud database' })
+        this.$q.notify({ type: 'negative', message: 'fout bij toevoegen liederen aan cloud database' })
         this.isSaving = false
         return
       }
@@ -293,7 +293,7 @@ export default {
     },
     async getAlgoliaDatabase () {
       this.isSavingDatabase = true
-      await GetAlgoliaDatabase()
+      await GetAlgoliaDatabase(this.$store.algoliaIndexId)
       this.isSavingDatabase = false
     }
   }

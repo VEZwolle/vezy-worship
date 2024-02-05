@@ -139,6 +139,17 @@
             >
               <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
             </q-toggle>
+            <div v-else class="algolia-database-label" @click.stop="toggleAlgoliaIndexId">
+              {{ algoliaIndexNameLabel }}
+              <q-tooltip>Selecteer Algolia database waarin gezocht wordt.</q-tooltip>
+              <q-menu context-menu no-focus>
+                <q-list dense style="min-width: 100px">
+                  <q-item v-for="algoliaIndexName in algoliaIndexNames" :key="algoliaIndexName.value" v-close-popup clickable @click.stop="setAlgoliaIndexId(algoliaIndexName.value)">
+                    <q-item-section>{{ algoliaIndexName.label }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </div>
           </div>
         </div>
       </template>
