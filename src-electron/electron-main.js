@@ -124,6 +124,7 @@ app.whenReady().then(() => {
 
   // displays[i].id === primaryDisplay.id --> Check as equal --> only full screen if not equal
   createWindow('/output/beamer', displays[outputDisplays.beamer], displays[outputDisplays.beamer].id !== primaryDisplay.id)
+  createWindow('/output/beamer/alpha', displays[outputDisplays.beamerAlpha], displays[outputDisplays.beamerAlpha].id !== primaryDisplay.id)
   createWindow('/output/livestream', displays[outputDisplays.livestream], displays[outputDisplays.livestream].id !== primaryDisplay.id)
   createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], displays[outputDisplays.livestreamAlpha].id !== primaryDisplay.id)
   createWindow('/output/stage', displays[outputDisplays.stage], displays[outputDisplays.stage].id !== primaryDisplay.id)

@@ -36,7 +36,7 @@
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
     </div>
 
-    <OutputBoxes preview :beamer="true" :livestream="true" :alpha="false" />
+    <OutputBoxes preview :beamer="true" :livestream="true" />
   </div>
 </template>
 

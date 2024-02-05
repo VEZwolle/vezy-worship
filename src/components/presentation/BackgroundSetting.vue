@@ -53,10 +53,19 @@ export default {
     backgroundUrl () {
       return this.$store.getMediaUrl(this.bgFileId || this.$store.service.backgroundImageId)
     },
+    backgroundColorBeamer () {
+      return localStorage.getItem('backgroundColor.beamer') || ''
+    },
     style () {
       const style = {}
-      const image = this.backgroundUrl || require('../../assets/bg.png')
-      style.backgroundImage = `url(${image})`
+
+      if (this.backgroundColorBeamer && !this.backgroundUrl) {
+        style.backgroundColor = this.backgroundColorBeamer || '#000'
+      } else {
+        const image = this.backgroundUrl || require('../../assets/bg.png')
+        style.backgroundImage = `url(${image})`
+      }
+
       return style
     },
     styleOpacity () {

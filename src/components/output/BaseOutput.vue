@@ -25,6 +25,9 @@ export default {
 
       if (this.backgroundImageUrl) {
         style.backgroundImage = `url(${this.backgroundImageUrl})`
+        if (this.alpha) {
+          style.filter = 'brightness(0) invert(1)'
+        }
       }
 
       return style
