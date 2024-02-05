@@ -18,6 +18,7 @@ export default defineStore('service', {
     noLivestream: false,
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
+    serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: ''
   }),

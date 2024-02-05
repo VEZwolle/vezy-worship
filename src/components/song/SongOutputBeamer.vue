@@ -1,13 +1,15 @@
 <template>
   <div class="bg-output-beamer song-output-beamer" :style="style">
     <Transition name="q-transition--fade">
-      <svg v-show="!clear" :style="styleOpacity">
-        <text y="6.6vw">
-          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-          <tspan x="50%" dy="3vw">&nbsp;</tspan>
-          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
-        </text>
-      </svg>
+      <div v-show="!clear" :style="offsetServiceType">
+        <svg :style="styleOpacity">
+          <text y="6.6vw">
+            <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw" :style="styleServiceType">{{ line }}</tspan>
+            <tspan x="50%" dy="3vw">&nbsp;</tspan>
+            <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation" :style="styleServiceType">{{ line }}</tspan>
+          </text>
+        </svg>
+      </div>
     </Transition>
   </div>
 </template>
@@ -25,6 +27,32 @@ export default {
     translatedLines () {
       const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
+    },
+    styleServiceType () {
+      if (!this.$store.serviceType || this.$store.serviceType === 'standaard') return ''
+      const style = {}
+      switch (this.$store.serviceType) {
+        case 'glow':
+          style.fontFamily = 'CMG Sans'
+          break
+        default:
+      }
+      return style
+    },
+    offsetServiceType () {
+      if (!this.$store.serviceType || this.$store.serviceType === 'standaard') return ''
+      const style = {}
+      switch (this.$store.serviceType) {
+        case 'glow':
+          if (this.translatedLines.length) {
+            style.marginTop = `calc(50vh - ${this.lines.length * 4.4 + 9.7}vw)` // 4.4vw*2/2 = 4.4vw & 6.6vw+3vw/2-4.4/2vw+3.8vw=8.2vw
+          } else {
+            style.marginTop = `calc(50vh - ${this.lines.length * 2.2 + 8.2}vw)` // 4.4vw/2 = 2.2vw & 6.6vw-4.4/2vw+3.8vw=8.2vw
+          }
+          break
+        default:
+      }
+      return style
     }
   }
 }
@@ -40,7 +68,7 @@ export default {
   svg {
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 120%;
 
     tspan {
       font-size: 3.8vw;
