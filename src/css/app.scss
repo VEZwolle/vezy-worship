@@ -110,6 +110,9 @@ sup {
   .bg-active {
     background: $purple-1 !important; // bg-purple-1
   }
+  .algolia-database-label {
+    color: #003DFF;
+  }
 }
 
 .body--dark {
@@ -121,6 +124,9 @@ sup {
   }
   .bg-active {
     background: var(--q-secondary) !important; // bg-secondary
+    color: white;
+  }
+  .algolia-database-label {
     color: white;
   }
 }
