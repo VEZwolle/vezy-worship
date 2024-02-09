@@ -81,8 +81,8 @@
       Voorbeeld uitvoer onderin "preview" & "live"
     </div>
     <p>
-      Onderin zijn 3 preview schermen mogelijk (zowel onder de preview kolom als wel onder de live kolom).<br>
-      Standaard staan alleen de bovenste 2 aan; maar je kan dit wisselen door de onderstaande vinkjes aan/uit te zetten.<br>
+      Onderin zijn 2(+2) preview schermen mogelijk (zowel onder de preview kolom als wel onder de live kolom).<br>
+      Standaard staan de beamer en livestream; maar je kan dit wisselen door de onderstaande vinkjes aan/uit te zetten; via de rechtermuisknop op beamer/livestream kan je ook de alpha uitvoer laten zien.<br>
       <img src="../../assets/help/previewkeuzeoutput.png">
       <ul>
         <li>
@@ -92,8 +92,11 @@
           De livestream uitvoer
         </li>
         <li>
-          Het alpha channel van de livestream.<br>
-          <i>Deze geeft met zwart/wit aan welke onderdelen wel of niet transparant moeten worden van de livestream uitvoer over de film beelden heen. (Zwart = op deze plek filmbeeld behouden; Wit = hier de livestream output tonen.)</i>
+          De alpha uitvoer van de beamer/livestream.<br>
+          <i>
+            Deze geeft met zwart/wit aan welke onderdelen wel of niet transparant moeten worden van de livestream uitvoer over de film beelden heen. (Zwart = op deze plek filmbeeld behouden; Wit = hier de livestream output tonen.)<br>
+            Let op om de alpha uitvoer van de beamer te laten werken dient bij de instellingen een zwarte achtergrond kleur gekozen te worden voor de beamer ipv de standaard afbeelding, daarnaast mag er ook geen afbeelding bij de dienst instellingen worden gekozen. Deze afbeeldingen zorgen er anders voor dat de alpha uitvoer van de beamer geheel wit is.
+          </i>
         </li>
         <li>
           Tevens kan je hier ook een overlay over je preview zetten om te beoordelen of de gegevens goed zichtbaar zijn in alle hoeken van de zaal.<br>

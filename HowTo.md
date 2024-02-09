@@ -54,6 +54,9 @@ in terminal:
     ALGOLIA_INDEX_NAME=...
     ALGOLIA_API_KEY_SEARCH=...
     ALGOLIA_USER=...
+    ALGOLIA_INDEX_NAME_1=...
+    ALGOLIA_API_KEY_EDIT_1=...
+    VEZY_API_TOKEN_EDIT_1=...
   ```
   `.secret.local` (deze ook in firebase secrets manager plaatsen | https://console.cloud.google.com/security/secret-manager)
   ```
@@ -131,12 +134,16 @@ in terminal:
 
 ### Aanmaken Algolia zoek index:
 - via algolia.com
-  - index aanmaken
+  - index(es) aanmaken
   - json van database lokaal importeren (.vezdb uitpakken = zip)
   - Searchable attributes: title(o) > collection(o) > number (o) > lyrics(u)
   - facets (display): collection, maxFacetHits = 50 (of anders afhankelijk aantal collections)
   - get api-key's
   - ps. onder de /dev/export-algolia-settings.json is een instelling bestand te vinden.
+  - Basis gebruikt nu 2 databases, kan je ook 1 of meer van maken; pas hiervoor ondertaande bestanden aan:
+    `\api\index.js` > `function algoliaIndexName, algoliaApiKeyEdit, vezApiTokenEdit`
+    `\api\.env` > voer hier de in bovestaand gebruikte variabelen in
+    `src\components\song\database\algolia.js` > vul de naamgeving van de databases in `algoliaIndexNames` 
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html
