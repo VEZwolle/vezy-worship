@@ -141,9 +141,9 @@ in terminal:
   - get api-key's
   - ps. onder de /dev/export-algolia-settings.json is een instelling bestand te vinden.
   - Basis gebruikt nu 2 databases, kan je ook 1 of meer van maken; pas hiervoor ondertaande bestanden aan:
-    `\api\index.js` > `function algoliaIndexName, algoliaApiKeyEdit, vezApiTokenEdit`
-    `\api\.env` > voer hier de in bovestaand gebruikte variabelen in
-    `src\components\song\database\algolia.js` > vul de naamgeving van de databases in `algoliaIndexNames` 
+    - `\api\index.js` > `function algoliaIndexName, algoliaApiKeyEdit, vezApiTokenEdit`
+    - `\api\.env` > voer hier de in bovestaand gebruikte variabelen in
+    - `src\components\song\database\algolia.js` > vul de naamgeving van de databases in `algoliaIndexNames` 
 
 ### VS-code extentions die ik gebruik:
 - es6-string-html
