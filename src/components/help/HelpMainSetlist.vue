@@ -35,7 +35,8 @@
         Kies een achtergrond afbeelding uit een bestand (in formaat uitvoerscherm 1920x1080).<br>
         <i>
           Deze afbeelding wordt standaard tijdens de dienst als achtergrond op de beamer getoond.
-          (achteraf ook aan te passen)
+          (achteraf ook aan te passen)<br>
+          Let op wanneer je gebruik maakt van de beamer alpha uitvoer, kies hier dan geen afbeelding!
         </i>
       </li>
       <li>

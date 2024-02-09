@@ -145,7 +145,8 @@
       <img src="../../assets/help/addsongdialogadddatabase.png"><br>
       Er kunnen via de databaseknop ook liederen uit de lokale of online (Angolia) database toegevoegd worden.<br>
       Met de switch voor de databaseknop kan je wisselen tussen de lokale en de online database.<br>
-      opm. de Algolia database ondersteund ook zoeken met kleine typefouten, de lokale database niet.
+      Er zijn meerdere online (Algolia) databases; rechts onderaan kun je deze kiezen/wisselen door aanklikken of via rechtermuisknop uit het menu te kiezen welke database je wilt gebruiken.<br>
+      opm. de Algolia database(s) ondersteund ook zoeken met kleine typefouten, de lokale database niet.
     </p>
     <p>
       <img src="../../assets/help/addsongdatabasedialog.png"><br>
@@ -168,6 +169,7 @@
       Liederen importeren uit de setlist naar de database kan via het uitklapvenster naast dienst opslaan.<br>
       De liederen worden dan vergeleken met de database en je kan dan kiezen tussen, vervangen, toevoegen of niets doen..<br>
       Ook hier zoekt hij naar liederen die het meest op de liederen uit de setlist in de database lijken.<br>
+      <i>opm.: toevoegen aan de cloud database kan alleen wanneer je daarvoor de bewerk api-key in de instellingen hebt opgegeven van de actieve online database.</i><br>
       <img src="../../assets/help/addsetlistsongtodatabase.png"><br>
       <img src="../../assets/help/addsetlistsongtodatabasedialog.png">
     </p>

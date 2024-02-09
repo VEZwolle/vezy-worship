@@ -13,11 +13,12 @@ Presentatiesoftware voor beamer én livestream
 - Dienst thuis voor te bereiden via de web app.
 - Automatische liedvertaling d.m.v. [DeepL](https://www.deepl.com/whydeepl).
 - Automatisch importen setlist vanuit [PCO](https://planningcenteronline.com/)
-- Zoeken naar liederen in lokale of online database [Algolia](https://algolia.com/)
+- Zoeken naar liederen in lokale of online database(s) [Algolia](https://algolia.com/)
 - Bijbelteksten inladen vanuit meerdere Bijbelvertalingen.
 - Mededelingen tonen die aandacht van de gemeente vereisen.
 - Countdown tot begin van de dienst.
-- Autoupdate functie bij nieuwe versie
+- Standaard en donkere weergave modes.
+- Autoupdate functie bij nieuwe versie.
 
 ## Licentie
 <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl"><img alt="Creative Commons-Licentie" style="border-width:0" src="https://licensebuttons.net/l/by-nc/4.0/88x31.png" /></a><br />VezyWorship valt onder een <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.nl">CC BY-NC 4.0 licentie</a>.
