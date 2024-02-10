@@ -29,7 +29,12 @@ export default {
     style () {
       if (this.bgStyle) return this.bgStyle
       const style = {}
-      style.backgroundImage = 'repeating-linear-gradient(#eee 0 8px, transparent 0 16px), repeating-linear-gradient(90deg, #eee 0 8px, transparent 0 16px)'
+      if (this.$q.dark.isActive) {
+        style.backgroundImage = 'repeating-conic-gradient(#656565 0% 25%, #595959 0% 50%)'
+      } else {
+        style.backgroundImage = 'repeating-conic-gradient(#fefefe 0% 25%, #eee 0% 50%)'
+      }
+      style.backgroundSize = '16px 16px'
       style.backgroundBlendMode = 'screen'
       return style
     },

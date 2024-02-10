@@ -240,6 +240,10 @@ export default {
   computed: {
     editEmit () {
       return this.presentation?.from === 'database'
+    },
+    scrollOff () {
+      if (this.settings.translation && this.settings.text) return false
+      return true
     }
   },
   mounted () {
@@ -270,7 +274,7 @@ export default {
       }
     },
     syncInputs (input, prop) {
-      if (!this.settings.translation) return
+      if (this.scrollOff) return
       if (this.ignoreInput === input) {
         this.ignoreInput = null
         return

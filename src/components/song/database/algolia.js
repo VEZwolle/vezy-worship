@@ -152,7 +152,7 @@ export async function AddToAlgoliaDatabase (indexId = 0, records, partUpdate = f
 }
 
 export async function RemoveFromAlgoliaDatabase (indexId = 0, objectIDs) {
-  // return {objectIDs} || false by error
+  // return {objectIDs or taskID if no objectID} || false by error
   if (objectIDs?.length === 0) return false
   const apiKeyEdit = ApiKeyEdit(indexId, true)
   if (!apiKeyEdit) return false
@@ -163,9 +163,9 @@ export async function RemoveFromAlgoliaDatabase (indexId = 0, objectIDs) {
       apiKeyEdit,
       objectIDs
     })
-    if (result.objectIDs || result.objectID) {
+    if (result.objectIDs || result.objectID || result.taskID) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens verwijderd: Het duurt vaak even voor dit zichtbaar is.' })
-      return result.objectIDs || result.objectID
+      return result.objectIDs || result.objectID || result.taskID
     } else {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       return false
