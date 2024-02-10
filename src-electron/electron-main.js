@@ -156,7 +156,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => { app.quitting = true })
 
-function createWindow (url, display, fullscreen = false, width = 1200, height = 800) {
+function createWindow (url, display, fullscreen = false, width = 1344, height = 765) {
   if (!display) {
     return // Display not found
   }
