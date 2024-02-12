@@ -151,7 +151,7 @@
           </q-item>
         </template>
       </q-list>
-      <div class="bg-grey-2 rounded-borders q-px-md">
+      <div class="bg-subtoolbar text-subtoolbar rounded-borders q-px-md">
         aan/uit:
         <template v-for="(type, index) in itemTypesSelect" :key="index">
           <q-checkbox v-model="itemTypesSelect[index].selected" :label="type.label" @click="togglePlanItems(type.type, type.selected)" />

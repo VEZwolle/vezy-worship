@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-3 quick-search-container">
+  <div class="bg-subtoolbar text-subtoolbar quick-search-container">
     <div
       v-if="!$store.searchBaseIsLocal || ($store.searchBaseIsLocal && !noLocalDatabase)"
       v-show="searchInput.length > 0"
@@ -16,7 +16,7 @@
         dense
         binary-state-sort
         color="secondary"
-        table-class="bg-grey-3"
+        table-class="bg-subtoolbar"
         table-header-class="bg-primary text-white"
         row-key="objectID"
         :visible-columns="['title', 'collection', 'number', 'actions']"
@@ -97,7 +97,7 @@
             outlined
             dense
             hide-bottom-space
-            popup-content-class="bg-grey-3"
+            popup-content-class="bg-subtoolbar"
             popup-content-style="height: 30vh;"
             options-dense
             :options="$store.dbCollections"
@@ -139,6 +139,17 @@
             >
               <q-tooltip>Schakel in om alleen liederen met vertalling te vinden.</q-tooltip>
             </q-toggle>
+            <div v-else class="algolia-database-label" @click.stop="toggleAlgoliaIndexId">
+              {{ algoliaIndexNameLabel }}
+              <q-tooltip>Selecteer Algolia database waarin gezocht wordt.</q-tooltip>
+              <q-menu context-menu no-focus>
+                <q-list dense style="min-width: 100px">
+                  <q-item v-for="algoliaIndexName in algoliaIndexNames" :key="algoliaIndexName.value" v-close-popup clickable @click.stop="setAlgoliaIndexId(algoliaIndexName.value)">
+                    <q-item-section>{{ algoliaIndexName.label }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </div>
           </div>
         </div>
       </template>

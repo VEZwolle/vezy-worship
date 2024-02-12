@@ -87,7 +87,7 @@
               class="input-songtext"
               @scroll="scroll('song')"
             />
-            <q-toolbar class="bg-grey-3 text-dark">
+            <q-toolbar class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>
@@ -145,7 +145,7 @@
                 @click="translate"
               />
             </q-input>
-            <q-toolbar v-if="settings.translation" class="bg-grey-3 text-dark">
+            <q-toolbar v-if="settings.translation" class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
               </q-btn>
@@ -240,6 +240,10 @@ export default {
   computed: {
     editEmit () {
       return this.presentation?.from === 'database'
+    },
+    scrollOff () {
+      if (this.settings.translation && this.settings.text) return false
+      return true
     }
   },
   mounted () {
@@ -270,7 +274,7 @@ export default {
       }
     },
     syncInputs (input, prop) {
-      if (!this.settings.translation) return
+      if (this.scrollOff) return
       if (this.ignoreInput === input) {
         this.ignoreInput = null
         return
@@ -295,7 +299,7 @@ export default {
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.$store.dbCollections = await getAlgoliaCollections()
+      this.$store.dbCollections = await getAlgoliaCollections(this.$store.algoliaIndexId)
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)

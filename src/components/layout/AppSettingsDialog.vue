@@ -19,6 +19,7 @@
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="displays">
           <q-select v-model="displays.beamer" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer" class="q-mb-sm" />
+          <q-select v-model="displays.beamerAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Beamer alpha channel" class="q-mb-sm" />
           <q-select v-model="displays.livestream" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream" class="q-mb-sm" />
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" class="q-mb-sm" />
           <q-select v-model="displays.stage" :options="availableDisplayOptions" emit-value map-options clearable label="Stage monitor" class="q-mb-sm" />
@@ -49,7 +50,7 @@
           <div class="text-h6">
             Achtergrond
           </div>
-          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto)" class="q-mb-sm">
+          <q-input v-model="backgroundColor.beamer" clearable :rules="['anyColor']" label="Beamer achtergrond kleur (Leeg voor foto; of iets voor gebruik alpha channel)" class="q-mb-sm">
             <template #append>
               <q-icon name="colorize" class="cursor-pointer">
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -67,6 +68,21 @@
               </q-icon>
             </template>
           </q-input>
+
+          <q-separator color="secondary" class="q-my-md" />
+
+          <div class="text-h6">
+            Dienst type
+          </div>
+          <q-select v-model="$store.serviceType" :options="serviceTypes" emit-value map-options label="Dienst type" class="q-mb-sm" />
+
+          <q-separator color="secondary" class="q-my-md" />
+
+          <q-toggle
+            v-model="darkMode"
+            label="Donkere modes"
+            @click.stop="toggleDarkMode"
+          />
         </q-tab-panel>
 
         <q-tab-panel name="api">
@@ -85,17 +101,6 @@
             <q-tooltip>Api key voor gebruik online functies</q-tooltip>
             <template #append>
               <q-icon v-if="vezyWorshipApiToken" name="cancel" class="cursor-pointer" @click="vezyWorshipApiToken = ''" />
-            </template>
-          </q-input>
-          <q-separator color="secondary" class="q-my-md" />
-          <div class="text">
-            Voor het bewerken van de cloud liederen database is extra api - key nodig:
-          </div>
-          <img src="../../assets/algolia-logo.svg" height="16">
-          <q-input v-model="apiKeyEdit" dense outlined label="Api key: bewerken online gegevens algolia">
-            <q-tooltip>Api key voor bewerken database algolia</q-tooltip>
-            <template #append>
-              <q-icon v-if="apiKeyEdit" name="cancel" class="cursor-pointer" @click="apiKeyEdit = ''" />
             </template>
           </q-input>
         </q-tab-panel>
@@ -135,19 +140,56 @@
             </template>
           </q-select>
           <q-separator color="secondary" class="q-my-md" />
-          <div class="text-h6">
-            Cloud algolia:
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-auto q-pt-xs text-h6" v-text="'Cloud '" />
+                <div class="col-auto q-pt-sm q-px-xs">
+                  <img src="../../assets/algolia-logo.svg" height="24">
+                </div>
+                <div class="col-auto q-pt-xs text-h6" v-text="' : '" />
+              </div>
+            </div>
+            <q-select
+              v-model="algoliaIndexId"
+              label="Standaard Algolia database voor zoeken"
+              emit-value
+              outlined
+              dense
+              options-dense
+              map-options
+              :options="algoliaIndexNames"
+              class="q-my-sm col"
+              @update:model-value="resetDbCollections"
+            />
           </div>
-          <div class="row q-mt-sm">
-            <q-btn label="Downloaden voor offline gebruik" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase" />
-            <template v-if="apiKeyEdit === 'is ingesteld'">
-              <q-space />
-              <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
-                <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+          <q-tabs v-model="algoliaTab" class="text-grey" active-color="primary" indicator-color="primary" align="left" :breakpoint="0">
+            <q-tab v-for="algoliaIndexName in algoliaIndexNames" :key="algoliaIndexName.value" :name="algoliaIndexName.value" :label="algoliaIndexName.label" />
+          </q-tabs>
+          <q-tab-panels v-model="algoliaTab" animated>
+            <q-tab-panel v-for="(algoliaIndexName, index) in algoliaIndexNames" :key="algoliaIndexName.value" :name="algoliaIndexName.value">
+              <div class="row q-mt-sm">
+                <q-btn label="Downloaden voor offline gebruik" :loading="isLoading" color="primary" @click="saveAlgoliaDatabase(algoliaIndexName.value)" />
+                <template v-if="apiKeyEdit[index] === 'is ingesteld'">
+                  <q-space />
+                  <q-input v-model="userName" dense outlined class="q-mr-md" label="Gebruikersnaam bewerken">
+                    <q-tooltip>Naam waaronder wijzigingen in de database worden opgeslagen</q-tooltip>
+                  </q-input>
+                  <q-btn :disable="apiKeyEdit[index] !== 'is ingesteld'" label="bewerken" color="primary" @click="editSongAlgoliaDatabase(algoliaIndexName.value)" />
+                </template>
+              </div>
+              <q-separator color="secondary" class="q-my-md" />
+              <div class="text">
+                Voor het bewerken van de cloud liederen database is extra api - key nodig:
+              </div>
+              <q-input v-model="apiKeyEdit[index]" dense outlined label="Api key: bewerken online gegevens algolia">
+                <q-tooltip>Api key voor bewerken database algolia</q-tooltip>
+                <template #append>
+                  <q-icon v-if="apiKeyEdit[index]" name="cancel" class="cursor-pointer" @click="apiKeyEdit[index] = ''" />
+                </template>
               </q-input>
-              <q-btn :disable="apiKeyEdit !== 'is ingesteld'" label="bewerken" color="primary" @click="editSongAlgoliaDatabase" />
-            </template>
-          </div>
+            </q-tab-panel>
+          </q-tab-panels>
           <q-separator color="secondary" class="q-my-md" />
           <div class="text-h6">
             Lokale database:
@@ -182,24 +224,29 @@
 </template>
 
 <script>
-import { GetAlgoliaDatabase, getAlgoliaCollections } from '../song/database/algolia.js'
+import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '../song/database/algolia.js'
 
 export default {
   data () {
     return {
+      darkMode: false,
       availableDisplays: [],
       displays: {},
       backgroundColor: {
         beamer: '',
         livestream: ''
       },
+      serviceTypes: [
+        'standaard',
+        'glow'
+      ],
       autoupdate: true,
       songDatabase: '',
       dbCollection: '',
       dbCollections: [''],
       userName: '',
       searchBaseIsLocal: true,
-      apiKeyEdit: '',
+      apiKeyEdit: [],
       vezyWorshipApiToken: '',
       isLoading: false,
       tab: 'settings',
@@ -220,7 +267,9 @@ export default {
           name: 'Zoeken & downloaden liederen via cloud (Algolia)',
           icon: 'img:images/algolia-mark.svg'
         }
-      ]
+      ],
+      algoliaTab: 0,
+      algoliaIndexId: 0
     }
   },
   computed: {
@@ -229,6 +278,9 @@ export default {
         value: i,
         label: `Monitor ${i + 1}`
       }))
+    },
+    algoliaIndexNames () {
+      return algoliaIndexNames
     }
   },
   methods: {
@@ -250,10 +302,16 @@ export default {
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
       this.dbCollection = localStorage.getItem('database.collection') || ''
       this.userName = localStorage.getItem('database.userName') || ''
-      this.apiKeyEdit = localStorage.getItem('database.apiKeyEdit') ? 'is ingesteld' : ''
+      for (let i = 0; i < this.algoliaIndexNames.length; i++) {
+        this.apiKeyEdit.push(localStorage.getItem(this.algoliaIndexNames[i].apiKeyEdit) ? 'is ingesteld' : '')
+      }
+      this.algoliaIndexId = localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0
+      this.algoliaTab = this.algoliaIndexId
       this.searchBaseIsLocal = !(localStorage.getItem('database.searchBase') === 'cloud' || false)
       this.vezyWorshipApiToken = localStorage.getItem('VezyWorshipApiToken') ? 'is ingesteld' : ''
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
+      this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
+      this.darkMode = localStorage.getItem('darkMode') === 'true'
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -264,10 +322,15 @@ export default {
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
       localStorage.setItem('database.collection', this.dbCollection || '')
       localStorage.setItem('database.userName', this.userName || '')
-      if (this.apiKeyEdit !== 'is ingesteld') localStorage.setItem('database.apiKeyEdit', this.apiKeyEdit || '')
+      for (let i = 0; i < this.algoliaIndexNames.length; i++) {
+        if (this.apiKeyEdit[i] !== 'is ingesteld') localStorage.setItem(this.algoliaIndexNames[i].apiKeyEdit, this.apiKeyEdit[i] || '')
+      }
+      localStorage.setItem('database.algoliaIndexId', this.algoliaIndexId || 0)
       localStorage.setItem('database.searchBase', this.searchBaseIsLocal ? 'local' : 'cloud')
       if (this.vezyWorshipApiToken !== 'is ingesteld') localStorage.setItem('VezyWorshipApiToken', this.vezyWorshipApiToken || '')
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
+      localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
+      localStorage.setItem('darkMode', this.$q.dark.isActive)
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
@@ -278,13 +341,16 @@ export default {
       await this.$fsdb.openSongDatabase(true)
       this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
     },
+    resetDbCollections () {
+      this.dbCollections = ['']
+    },
     async loadCollectionDatabase () {
       if (this.searchBaseIsLocal) {
         this.dbCollections = await this.$fsdb.getCollections(true)
         this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
         return
       }
-      this.dbCollections = await getAlgoliaCollections()
+      this.dbCollections = await getAlgoliaCollections(this.algoliaIndexId) // use default choice of algolia database
     },
     async newSongDatabase () {
       await this.$fsdb.newEmptyDatabase()
@@ -296,13 +362,14 @@ export default {
       this.$store.searchBaseIsLocal = true
       this.$refs.SearchDatabaseDialog.show(true)
     },
-    editSongAlgoliaDatabase () {
+    editSongAlgoliaDatabase (indexId = 0) {
       this.$store.searchBaseIsLocal = false
+      this.$store.algoliaIndexId = indexId
       this.$refs.SearchDatabaseDialog.show(true)
     },
-    async saveAlgoliaDatabase () {
+    async saveAlgoliaDatabase (indexId = 0) {
       this.isLoading = true
-      await GetAlgoliaDatabase()
+      await GetAlgoliaDatabase(indexId)
       this.isLoading = false
     },
     min0 (val) {
@@ -310,6 +377,10 @@ export default {
         return
       }
       return val >= 0 || 'Minimaal 0'
+    },
+    toggleDarkMode () {
+      this.$q.dark.toggle()
+      this.darkMode = this.$q.dark.isActive
     }
   }
 }

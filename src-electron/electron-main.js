@@ -123,10 +123,11 @@ app.whenReady().then(() => {
   const outputDisplays = config.get('displays') || {}
 
   // displays[i].id === primaryDisplay.id --> Check as equal --> only full screen if not equal
-  createWindow('/output/beamer', displays[outputDisplays.beamer], displays[outputDisplays.beamer].id !== primaryDisplay.id)
-  createWindow('/output/livestream', displays[outputDisplays.livestream], displays[outputDisplays.livestream].id !== primaryDisplay.id)
-  createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], displays[outputDisplays.livestreamAlpha].id !== primaryDisplay.id)
-  createWindow('/output/stage', displays[outputDisplays.stage], displays[outputDisplays.stage].id !== primaryDisplay.id)
+  if (displays[outputDisplays.beamer]) createWindow('/output/beamer', displays[outputDisplays.beamer], displays[outputDisplays.beamer].id !== primaryDisplay.id)
+  if (displays[outputDisplays.beamerAlpha]) createWindow('/output/beamer/alpha', displays[outputDisplays.beamerAlpha], displays[outputDisplays.beamerAlpha].id !== primaryDisplay.id)
+  if (displays[outputDisplays.livestream]) createWindow('/output/livestream', displays[outputDisplays.livestream], displays[outputDisplays.livestream].id !== primaryDisplay.id)
+  if (displays[outputDisplays.livestreamAlpha]) createWindow('/output/livestream/alpha', displays[outputDisplays.livestreamAlpha], displays[outputDisplays.livestreamAlpha].id !== primaryDisplay.id)
+  if (displays[outputDisplays.stage]) createWindow('/output/stage', displays[outputDisplays.stage], displays[outputDisplays.stage].id !== primaryDisplay.id)
 
   // pcoLive window, create & hide, prevent closing
   if (displays[outputDisplays.pcolive]) {
@@ -155,7 +156,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => { app.quitting = true })
 
-function createWindow (url, display, fullscreen = false, width = 1200, height = 800) {
+function createWindow (url, display, fullscreen = false, width = 1344, height = 765) {
   if (!display) {
     return // Display not found
   }

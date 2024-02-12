@@ -1,52 +1,46 @@
 <template>
-  <q-layout view="lHh lpr lFf" container class="full-height">
-    <q-header>
-      <q-toolbar class="bg-grey-3 text-dark">
-        <q-toolbar-title class="text-subtitle2">
-          <q-badge rounded color="red" class="q-mr-sm" />
-          Live
-          <span v-if="presentation" v-html="`- ${title}`" />
-        </q-toolbar-title>
+  <div class="layout-column">
+    <q-toolbar class="bg-subtoolbar text-subtoolbar">
+      <q-toolbar-title class="text-subtitle2">
+        <q-badge rounded color="red" class="q-mr-sm" />
+        Live
+        <span v-if="presentation" v-html="`- ${title}`" />
+      </q-toolbar-title>
 
-        <q-checkbox
-          v-model="$store.isClear"
-          v-shortkey="{ctrlc: ['ctrl', 'c'], f6: ['f6']}"
-          left-label
-          label="Clear"
-          color="red"
-          @shortkey="$store.toggleClear"
-        >
-          <q-tooltip>
-            Vink aan om scherm leeg te maken<br>
-            Bij beamer & livestream<br>
-            (Ctrl + C of F6)
-          </q-tooltip>
-        </q-checkbox>
-        <q-toggle
-          v-model="$store.isOnlyLivestreamClear"
-          checked-icon="tv_off"
-          unchecked-icon="tv"
-          color="red"
-          dense
-        >
-          <q-tooltip>
-            <b>Aan maakt livestream alvast leeg.</b><br>
-            wordt uitgezet bij nieuw item.
-          </q-tooltip>
-        </q-toggle>
-      </q-toolbar>
-    </q-header>
+      <q-checkbox
+        v-model="$store.isClear"
+        v-shortkey="{ctrlc: ['ctrl', 'c'], f6: ['f6']}"
+        left-label
+        label="Clear"
+        color="red"
+        @shortkey="$store.toggleClear"
+      >
+        <q-tooltip>
+          Vink aan om scherm leeg te maken<br>
+          Bij beamer & livestream<br>
+          (Ctrl + C of F6)
+        </q-tooltip>
+      </q-checkbox>
+      <q-toggle
+        v-model="$store.isOnlyLivestreamClear"
+        checked-icon="tv_off"
+        unchecked-icon="tv"
+        color="red"
+        dense
+      >
+        <q-tooltip>
+          <b>Aan maakt livestream alvast leeg.</b><br>
+          wordt uitgezet bij nieuw item.
+        </q-tooltip>
+      </q-toggle>
+    </q-toolbar>
 
-    <q-page-container>
-      <q-page>
-        <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
-      </q-page>
-    </q-page-container>
+    <div class="layout-column-content">
+      <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
+    </div>
 
-    <q-footer>
-      <OutputBoxes :beamer="true" :livestream="true" :alpha="false" />
-    </q-footer>
-  </q-layout>
+    <OutputBoxes :beamer="true" :livestream="true" />
+  </div>
 </template>
 
 <script>

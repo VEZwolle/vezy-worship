@@ -266,7 +266,33 @@ app.post('/api/pco', async (req, res) => {
 /**
  * Algolia - Search
  */
+function algoliaIndexName (id = 0) {
+  switch (id) {
+    case 1:
+      return process.env.ALGOLIA_INDEX_NAME_1
+    default:
+      return process.env.ALGOLIA_INDEX_NAME
+  }
+}
+function algoliaApiKeyEdit (id = 0) {
+  switch (id) {
+    case 1:
+      return process.env.ALGOLIA_API_KEY_EDIT_1
+    default:
+      return process.env.ALGOLIA_API_KEY_EDIT
+  }
+}
+function vezApiTokenEdit (id = 0) {
+  switch (id) {
+    case 1:
+      return process.env.VEZY_API_TOKEN_EDIT_1
+    default:
+      return process.env.VEZY_API_TOKEN_EDIT
+  }
+}
+
 app.post('/api/database/search', async (req, res) => {
+  const indexId = req.body.indexId || 0
   const getCollections = req.body.getCollections || false
   const query = req.body.search
   const textSearch = req.body.textSearch || false
@@ -283,7 +309,7 @@ app.post('/api/database/search', async (req, res) => {
     }
   })
   // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Search the index for...
   // https://www.algolia.com/doc/api-reference/api-methods/search/
   try {
@@ -337,13 +363,14 @@ app.post('/api/database/search', async (req, res) => {
 })
 
 app.post('/api/database/backup', async (req, res) => {
+  const indexId = req.body.indexId || 0
   const algoliasearch = require('algoliasearch')
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Download all records for the index...
   // https://www.algolia.com/doc/api-reference/api-methods/browse/
 
@@ -358,20 +385,21 @@ app.post('/api/database/backup', async (req, res) => {
 })
 
 app.post('/api/database/edit', async (req, res) => {
+  const indexId = req.body.indexId || 0
   const apiKeyEdit = req.body.apiKeyEdit || false
-  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+  if (apiKeyEdit !== vezApiTokenEdit(indexId)) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
 
   const records = req.body.records || [] // array of full reccords
   const partUpdate = req.body.partUpdate || false // array of full reccords
   if (records?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
 
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, algoliaApiKeyEdit(indexId), {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Add or Edit (if exist) by objectID
   // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
   try {
@@ -410,19 +438,20 @@ app.post('/api/database/edit', async (req, res) => {
 })
 
 app.post('/api/database/delete', async (req, res) => {
+  const indexId = req.body.indexId || 0
   const apiKeyEdit = req.body.apiKeyEdit || false
-  if (apiKeyEdit !== process.env.VEZY_API_TOKEN_EDIT) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
+  if (apiKeyEdit !== vezApiTokenEdit(indexId)) return res.status(401).json({ error: 'Geen rechten voor wijzigen data' })
 
   const objectIDs = req.body.objectIDs // array of objectID
   if (objectIDs?.length === 0) return res.status(204).json({ error: 'Geen wijzigingsdata ontvangen' })
 
   const algoliasearch = require('algoliasearch')
-  const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_EDIT, {
+  const client = algoliasearch(process.env.ALGOLIA_APP_ID, algoliaApiKeyEdit(indexId), {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX_NAME)
+  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Add or Edit  by objectID
   // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
   try {

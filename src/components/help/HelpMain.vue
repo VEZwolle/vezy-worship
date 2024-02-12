@@ -6,7 +6,7 @@
     </div>
     <p>
       Presentatiesoftware voor beamer én livestream met afzonderlijke weergave voor beamer en livestream.<br>
-      De livestream uitvoer is voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).<br>
+      De beamer & livestream uitvoer zijn tevens voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).<br>
       Tevens is er een stage & PCO live weergave aanwezig mogelijk.
     </p>
     <p>De dienst is thuis voor te bereiden via de web app. En in de kerk te openen op de desktop met uitvoer naar de verschillende schermen.</p>
@@ -82,17 +82,23 @@
         De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
       </li>
       <li>
-        Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma key (of weer leeg gehaald worden voor standaard waarden).
+        Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma en/of alpha key (of weer leeg gehaald worden voor standaard waarden).
+      </li>
+      <li>
+        Welk thema je wilt gebruiken voor (liederen) weergave: Standaard bovenin of Glow (gecentreerd in midden met capitalen).
       </li>
       <li>
         Hoeveel regels de liedtekst standaard gesplitst moet worden op de beamer.
       </li>
       <li>
-        Welke liederen database gebruikt moet worden standaard, de lokale of cloud versie.<br>
+        Welke liederen database gebruikt moet worden standaard, de lokale of een van de cloud versies.<br>
         In welke collectie je standaard wilt zoeken.<br>
         Welk lokale database bestand je wilt gebruiken.<br>
         De cloud database downloaden voor lokaal gebruik.<br>
         En je kunt de lokale database hier bewerken evenals de cloud versie mits je de juiste rechten hebt.
+      </li>
+      <li>
+        De app in donkere modes wilt weergeven ipv de standaard lichte weergave versie.
       </li>
     </ul>
   </p>

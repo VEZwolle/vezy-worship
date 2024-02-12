@@ -1,7 +1,7 @@
 <template>
   <div class="caption">
     <div v-if="format === 'Thema'" class="theme">
-      <svg>
+      <svg :class="{ alpha }">
         <text x="0" y="0">
           <tspan x="4vw" dy="2.6vw">Thema:</tspan>
         </text>
@@ -9,7 +9,7 @@
     </div>
 
     <div v-if="format !== 'Bijbeltekst'" class="title" :style="titleStyle">
-      <svg>
+      <svg :class="{ alpha }">
         <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(titleLine, i) in titleLines"
@@ -25,7 +25,7 @@
     </div>
 
     <div class="text" :style="textStyle">
-      <svg>
+      <svg :class="{ alpha }">
         <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(line, i) in textLines"
@@ -41,7 +41,7 @@
     </div>
 
     <div v-if="format === 'Bijbeltekst'" class="title" :style="titleStyle">
-      <svg>
+      <svg :class="{ alpha }">
         <text x="0" y="0" :class="formatTextClass">
           <tspan
             v-for="(titleLine, i) in titleLines"
@@ -63,7 +63,8 @@ export default {
   props: {
     titleLines: Object,
     textLines: Object,
-    format: String
+    format: String,
+    alpha: Boolean
   },
   computed: {
     textStyle () {
@@ -166,8 +167,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@function shadow($opacity) {
-  @return drop-shadow(0.3vw 0.3vw 0.3vw rgba(0, 0, 0, $opacity));
+@function shadow($color, $opacity) {
+  @return drop-shadow(0.3vw 0.3vw 0.3vw rgba($color, $opacity));
 }
 .caption {
   overflow: hidden;
@@ -198,7 +199,14 @@ export default {
         text-anchor: left;
         dominant-baseline: Auto;
 
-        filter: shadow(0.8);
+        filter: shadow(#000, 0.8);
+      }
+      &.alpha {
+        text {
+          fill: #fff;
+          stroke: #fff;
+          filter: shadow(#fff, 0.8);
+        }
       }
     }
   }
@@ -223,7 +231,15 @@ export default {
         text-anchor: left;
         dominant-baseline: Auto;
 
-        filter: shadow(0.8);
+        filter: shadow(#000, 0.8);
+      }
+
+      &.alpha {
+        text {
+          fill: #fff;
+          stroke: #fff;
+          filter: shadow(#fff, 0.8);
+        }
       }
     }
     .textTheme {
@@ -256,6 +272,12 @@ export default {
       stroke-width: 0.3vw;
       font-size: 0.7em;
     }
+    .alpha {
+      .textScripture{
+        fill: #fff;
+        stroke: #fff;
+      }
+    }
   }
 
   .text {
@@ -279,7 +301,15 @@ export default {
         text-anchor: left;
         dominant-baseline: Auto;
 
-        filter: shadow(0.8);
+        filter: shadow(#000, 0.8);
+      }
+
+      &.alpha {
+        text {
+          fill: #fff;
+          stroke: #fff;
+          filter: shadow(#fff, 0.8);
+        }
       }
     }
     .textTheme {
@@ -306,6 +336,11 @@ export default {
     .small {
       stroke-width: 0.3vw;
       font-size: 0.7em;
+    }
+    .alpha {
+      .sup {
+        fill: #fff;
+      }
     }
   }
 }

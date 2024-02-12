@@ -1,7 +1,7 @@
 <template>
   <Transition name="q-transition--fade">
-    <svg v-show="!clear && !isFinished" class="countdown-output" :class="{ alpha }">
-      <text y="2.5vw" x="5vw">{{ remaining }}</text>
+    <svg v-if="control" v-show="!clear && !control.isFinished" class="countdown-output" :class="{ alpha }">
+      <text y="2.5vw" x="5vw">{{ control.remaining }}</text>
     </svg>
   </Transition>
 </template>
@@ -10,27 +10,7 @@
 import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
-  extends: BaseOutput,
-  computed: {
-    remaining () {
-      if (this.settings.type === 1) {
-        return this.settings.now
-      }
-
-      const hours = this.settings.hours?.toString()
-      const minutes = this.settings.minutes?.toString().padStart(2, '0')
-      const seconds = this.settings.seconds?.toString().padStart(2, '0')
-
-      if (this.settings.hours > 0) {
-        return `${hours}:${minutes}:${seconds}`
-      }
-
-      return `${minutes}:${seconds}`
-    },
-    isFinished () {
-      return this.settings.hours < 0
-    }
-  }
+  extends: BaseOutput
 }
 </script>
 

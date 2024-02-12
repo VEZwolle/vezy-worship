@@ -1,32 +1,30 @@
 <template>
-  <q-layout view="lHh lpr lFf" container class="full-height">
-    <q-header>
-      <q-toolbar class="bg-grey-3 text-dark">
-        <q-toolbar-title class="text-subtitle2">
-          Dienst - {{ $date($store.service.date) }}
+  <div class="layout-column">
+    <q-toolbar class="bg-subtoolbar text-subtoolbar">
+      <q-toolbar-title class="text-subtitle2">
+        Dienst - {{ $date($store.service.date) }}
 
-          <q-btn class="gt-xs text-grey-8" size="12px" flat dense round icon="edit" @click="openServiceSettings">
-            <q-tooltip>Dienst bewerken</q-tooltip>
-          </q-btn>
-        </q-toolbar-title>
+        <q-btn class="gt-xs text-grey-8" size="12px" flat dense round icon="edit" @click="openServiceSettings">
+          <q-tooltip>Dienst bewerken</q-tooltip>
+        </q-btn>
+      </q-toolbar-title>
 
-        <q-checkbox
-          v-model="$store.noLivestream"
-          left-label
-          label="Alleen beamer"
-          color="red"
-          @shortkey="$store.toggleNoLivestream"
-        >
-          <q-tooltip>
-            Vink aan om teksten niet op te splitsen voor de livestream<br>
-            (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
-          </q-tooltip>
-        </q-checkbox>
-      </q-toolbar>
-    </q-header>
+      <q-checkbox
+        v-model="$store.noLivestream"
+        left-label
+        label="Alleen beamer"
+        color="red"
+        @shortkey="$store.toggleNoLivestream"
+      >
+        <q-tooltip>
+          Vink aan om teksten niet op te splitsen voor de livestream<br>
+          (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
+        </q-tooltip>
+      </q-checkbox>
+    </q-toolbar>
 
-    <q-page-container>
-      <q-page>
+    <div class="layout-column-content">
+      <div style="flex:1;">
         <q-list class="q-pt-sm">
           <Draggable v-model="$store.service.presentations" item-key="id">
             <template #item="{ element: presentation }">
@@ -43,25 +41,25 @@
             </template>
           </Draggable>
         </q-list>
-      </q-page>
-    </q-page-container>
+      </div>
+      <div class="items-bottom">
+        <q-fab color="primary" icon="add" direction="up" style="top: -20px; right: 20px;">
+          <q-fab-action
+            v-for="presentationType in presentationTypes"
+            :key="presentationType.id"
+            :color="presentationType.color"
+            :icon="presentationType.icon"
+            external-label
+            label-position="left"
+            :label="`${presentationType.name} toevoegen`"
+            @click="add(presentationType.id)"
+          />
+        </q-fab>
+      </div>
+    </div>
 
-    <q-footer>
-      <QuickSearchDatabase />
-      <q-fab color="primary" icon="add" direction="up" class="absolute" style="top: -70px; right: 20px;">
-        <q-fab-action
-          v-for="presentationType in presentationTypes"
-          :key="presentationType.id"
-          :color="presentationType.color"
-          :icon="presentationType.icon"
-          external-label
-          label-position="left"
-          :label="`${presentationType.name} toevoegen`"
-          @click="add(presentationType.id)"
-        />
-      </q-fab>
-    </q-footer>
-  </q-layout>
+    <QuickSearchDatabase />
+  </div>
 
   <PresentationSettingsDialog ref="presentationSettingsDialog" />
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
@@ -94,3 +92,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.items-bottom {
+  position: sticky;
+  bottom: 0;
+  left: 100%;
+  width: 56px
+}
+</style>
