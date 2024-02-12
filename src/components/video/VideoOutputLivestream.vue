@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video-output-beamer v-bind="$attrs" muted />
+    <video-output-beamer v-bind="$attrs" outputlivestream muted />
   </div>
 </template>
 

@@ -1,11 +1,13 @@
 <template>
-  <q-item clickable :active="active" active-class="bg-purple-1">
+  <q-item clickable :active="active" active-class="bg-active">
     <q-item-section avatar>
       <q-avatar :color="presentationType.color" text-color="white" :icon="presentationType.icon" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title" v-html="title" />
+      <q-item-label class="title">
+        <div v-html="title" />
+      </q-item-label>
       <q-item-label v-if="description" caption :lines="1">
         {{ $strip(description) }}
       </q-item-label>
@@ -67,6 +69,10 @@ export default {
       return presentationTypes.find(t => t.id === this.presentation.type)
     },
     title () {
+      if (this.presentation.type === 'song') {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
       if (this.presentation.settings.title) {
         return this.presentation.settings.title
       }

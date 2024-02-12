@@ -18,6 +18,7 @@
       Hierna kan je eventueel de <i>naam</i> nog invullen.<br>
       In basis wordt de afbeelding op de beamer en op de livestream getoond.<br>
       Dit kan je veranderen door op de knop <img src="../../assets/help/imagezelfde.png"> te klikken en dan via <img src="../../assets/help/imageselecteerlivestream.png"> een ander bestand te kiezen.<br>
+      Via de knop "Standaard" zijn de standaard sheets uit VezyWorship (extra) toe te voegen.<br>
       Zie onder wat aandachtspunten & andere opties.<br>
       <img src="../../assets/help/imagedialog.png">
     </p>
@@ -44,10 +45,10 @@
         <li>
           Er moet altijd een bestand gekozen zijn. <br>
           Leeg bij de livestream betekend: gebruik het zelfde bestand als de beamer.<br>
-          Beide leeg: geeft een nietgevonden afbeelding figuur op beamer en livestream weer.
+          Beide leeg: geeft een niet gevonden afbeelding figuur op beamer en livestream weer.
         </li>
         <li>
-          Wanneer je op de livestream of beamer geen afbeelding wilt zin kan je de afbeelding via de geavenceerde instellingen buiten beeld schuiven.
+          Wanneer je op de livestream of beamer geen afbeelding wilt zin kan je de afbeelding via de geavanceerde instellingen buiten beeld schuiven.
         </li>
       </ul>
     </p>
@@ -60,12 +61,12 @@
         <li>
           <i>Naar links geschoven</i> is de livestream verschillend van de beamer.<br>
           Dit kan een verschillende afbeelding zijn; maar hoeft niet.<br>
-          via de geavenceerde instellingen kan je ook alleen de positie/grootte wijzigen.
+          via de geavanceerde instellingen kan je ook alleen de positie/grootte wijzigen.
         </li>
       </ul>
     </p>
     <div class="text-h6 q-mb-md">
-      Geavenceerde instellingen
+      Geavanceerde instellingen
     </div>
     <p>
       Onder de voorbeeld afbeelding staat de knop <img src="../../assets/help/imagegeavenceerd.png">.<br>
@@ -77,8 +78,8 @@
             Formaat
           </q-item-section>
           <q-item-section>
-            Met de bovenste balk kan je de afbeelding in en uitzoomen waardoor het formaat wijzigd.<br>
-            Met de knop ↔ of ↕ kan je de afbeelding passend in breedte of hoogte laten schalen. Deze knop wisseld bij aanklikken.
+            Met de bovenste balk kan je de afbeelding in en uitzoomen waardoor het formaat wijzigt.<br>
+            Met de knop ↔ of ↕ kan je de afbeelding passend in breedte of hoogte laten schalen. Deze knop wisselt bij aanklikken.
           </q-item-section>
         </q-item>
         <q-item borderd dense>
@@ -104,10 +105,19 @@
             Reset
           </q-item-section>
           <q-item-section>
-            Door de knop "Geavenceerde instellingen" weer naar links te zetten wordt alles weer teruggezet in basis waarden.<br>
+            Door de knop "Geavanceerde instellingen" weer naar links te zetten wordt alles weer teruggezet in basis waarden.<br>
           </q-item-section>
         </q-item>
       </q-list>
+    </p>
+    <div class="text-h6 q-mb-md">
+      Afwijkende achtergrond
+    </div>
+    <p>
+      Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
@@ -115,7 +125,7 @@
     <p>
       Na opslaan/sluiten van het invoerscherm kan je in de basis omgeving een controle uitvoeren door de pagina te bekijken.<br>
       Een afbeelding bestaat uit 1 pagina.<br>
-      Bovenin kan je wel kiezen vie 3 tabbladen welke uitvoer (beamer / livestream) je wilt zien in de control. Beide blijven echter wel uitgezenden worden.<br>
+      Bovenin kan je wel kiezen via 3 tabbladen welke uitvoer (beamer / livestream) je wilt zien in de control. Beide blijven echter wel uitgezonden worden.<br>
       Onder in het scherm zie je een voorbeeld.<br>
       <img src="../../assets/help/imagecontrol.png">
     </p>
@@ -129,7 +139,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>

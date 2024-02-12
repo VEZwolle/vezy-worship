@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-grey-3 output-boxes-container">
+  <div class="bg-subtoolbar output-boxes-container">
     <div v-if="activeViews.length" class="output-boxes">
       <template v-for="view in views" :key="view.id">
         <div v-if="view.isActive" class="col output-box">
@@ -12,23 +12,48 @@
               :alpha="view.alpha"
               :show-background="view.showBackground"
               :show-messages="view.showMessages"
+              :visual-view="visualViewBeamer ? view.id : ''"
             />
           </Transition>
         </div>
       </template>
     </div>
 
-    <div class="output-boxes-selection text-caption text-dark">
+    <div class="output-boxes-selection text-caption text-subtolbar">
       <q-checkbox
-        v-for="view in views"
-        :key="view.id"
-        v-model="view.isActive"
+        v-model="visualViewBeamer"
         right-label
         size="xs"
-        :label="view.name"
+        label="check zichtbaarheid"
       >
-        <q-tooltip>Toon miniatuurweergave van {{ view.name }}</q-tooltip>
+        <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer & voor livestream bij tv randen</q-tooltip>
       </q-checkbox>
+      <q-space />
+      <template v-for="(view, index) in views" :key="view.id">
+        <q-checkbox
+          v-if="!view.alpha"
+          v-model="view.isActive"
+          right-label
+          size="xs"
+          :label="view.name"
+        >
+          <q-tooltip>Toon miniatuurweergave van {{ view.name }}</q-tooltip>
+          <q-menu v-if="index + 1 < views.length" context-menu no-focus>
+            <q-list dense style="min-width: 210px">
+              <q-item v-close-popup clickable>
+                <q-item-section>
+                  <q-checkbox
+                    v-model="views[index+1].isActive"
+                    right-label
+                    size="xs"
+                    :label="views[index+1].name"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-checkbox>
+      </template>
     </div>
   </div>
 </template>
@@ -42,8 +67,7 @@ export default {
   props: {
     preview: Boolean,
     beamer: Boolean,
-    livestream: Boolean,
-    alpha: Boolean
+    livestream: Boolean
   },
   setup () {
     return { Output }
@@ -60,6 +84,14 @@ export default {
           isActive: this.beamer
         },
         {
+          id: 'beamer',
+          name: 'Beamer Alpha channel',
+          alpha: true,
+          showBackground: true,
+          showMessages: true,
+          isActive: false
+        },
+        {
           id: 'livestream',
           name: 'Livestream',
           alpha: false,
@@ -69,13 +101,14 @@ export default {
         },
         {
           id: 'livestream',
-          name: 'Alpha channel',
+          name: 'Livestream Alpha channel',
           alpha: true,
           showBackground: false,
           showMessages: false,
-          isActive: this.alpha
+          isActive: false
         }
-      ]
+      ],
+      visualViewBeamer: false
     }
   },
   computed: {

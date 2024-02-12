@@ -31,7 +31,11 @@ import Preview from './layout/Preview.vue'
 import Live from './layout/Live.vue'
 
 export default {
-  components: { Toolbar, Setlist, Preview, Live }
+  components: { Toolbar, Setlist, Preview, Live },
+
+  mounted () {
+    if (localStorage.getItem('darkMode') === 'true') this.$q.dark.set(true)
+  }
 }
 </script>
 
@@ -42,6 +46,12 @@ export default {
 
   &:last-child {
     border-right: none;
+  }
+}
+
+.body--dark {
+  .col {
+    border-right-color: rgba(255, 255, 255, 0.28);
   }
 }
 </style>

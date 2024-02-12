@@ -19,6 +19,15 @@
       opm.: de tijd wordt alleen getoond wanneer hij in de toekomst van dezelfde dag ligt.
     </p>
     <div class="text-h6 q-mb-md">
+      Afwijkende achtergrond
+    </div>
+    <p>
+      Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
+    </p>
+    <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
     </div>
     <p>
@@ -35,7 +44,7 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>

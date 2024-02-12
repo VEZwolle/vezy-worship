@@ -60,8 +60,7 @@
       </div>
 
       <div class="col relative-position">
-        <OutputPreview :component="ImageOutput" :presentation="{ settings }" />
-
+        <slot />
         <div v-if="settings.advanced" class="position-buttons">
           <div>
             <q-btn flat round dense label="⭦" @click="align('top', 'left')" />
@@ -106,19 +105,12 @@
 </template>
 
 <script>
-import OutputPreview from '../output/OutputPreview.vue'
-import ImageOutput from './ImageOutput.vue'
-
 export default {
-  components: { OutputPreview },
   props: {
     label: String,
     settings: Object
   },
   emits: ['updateFile'],
-  setup () {
-    return { ImageOutput }
-  },
   data () {
     return {
       file: null,
