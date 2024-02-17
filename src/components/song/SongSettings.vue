@@ -252,10 +252,16 @@ export default {
 
     this.translateObserver = new ResizeObserver(this.resize('translate'))
     this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+
+    // fix: Chrome/Edge - scroll to top by enter textarea --> no scroll
+    this.$refs.inputSong.nativeEl.addEventListener('keydown', this.inputSongKeyEvent, true)
+    this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
   },
   beforeUnmount () {
     this.songObserver.disconnect()
     this.translateObserver.disconnect()
+    this.$refs.inputSong.nativeEl.removeEventListener('keydown', this.inputSongKeyEvent, true)
+    this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
   },
   methods: {
     importSongDb () {
@@ -303,6 +309,25 @@ export default {
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
+    },
+    inputSongKeyEvent (event) {
+      if (event.keyCode === 13) { // if the key code is 13 (ENTER)
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputSong.nativeEl)
+      }
+    },
+    inputTranslateKeyEvent (event) {
+      if (event.keyCode === 13) { // if the key code is 13 (ENTER)
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputTranslate.nativeEl)
+      }
+    },
+    textareaNoScroll (textareaEl) {
+      const currentPos = textareaEl.selectionStart
+      const orgValue = textareaEl.value
+      const newValue = orgValue.substr(0, currentPos) + '\n' + orgValue.substr(currentPos)
+      textareaEl.value = newValue
+      textareaEl.selectionEnd = currentPos + 1
     }
   }
 }
