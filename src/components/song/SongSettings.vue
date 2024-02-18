@@ -311,13 +311,13 @@ export default {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
     },
     inputSongKeyEvent (event) {
-      if (event.keyCode === 13) { // if the key code is 13 (ENTER)
+      if (event.key === 'Enter') {
         event.preventDefault() // prevent usual browser behavour
         this.textareaNoScroll(this.$refs.inputSong.nativeEl)
       }
     },
     inputTranslateKeyEvent (event) {
-      if (event.keyCode === 13) { // if the key code is 13 (ENTER)
+      if (event.key === 'Enter') {
         event.preventDefault() // prevent usual browser behavour
         this.textareaNoScroll(this.$refs.inputTranslate.nativeEl)
       }
