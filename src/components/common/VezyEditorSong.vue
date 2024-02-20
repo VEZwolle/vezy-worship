@@ -15,7 +15,7 @@
     @paste.prevent.stop="pastePlainText"
     @dragstart="backup"
     @dragend="cleanText"
-    @update:model-value="update"
+    @update:model-value="updateContent"
   />
 </template>
 
@@ -53,7 +53,7 @@ export default {
       }
     },
     'content' (val) {
-      if (this.lastEmitHtml !== val) this.update()
+      if (this.lastEmitHtml !== val) this.updateContent()
     }
   },
   mounted () {
@@ -61,13 +61,11 @@ export default {
     this.backup()
   },
   created () {
-    this.cleanTextDebounce = debounce(this.cleanTextDebounce, 1000)
+    this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
   methods: {
-    update () {
+    updateContent () {
       this.lastEmitHtml = this.content
-      this.lastEmitText = this.HtmlToText(CleanText(this.content))
-      this.$emit('update:modelValue', this.lastEmitText)
       this.cleanTextDebounce()
     },
     pastePlainText (e) {
@@ -79,7 +77,9 @@ export default {
       this.cleanText()
     },
     cleanText () {
-      this.content = this.textToHtml(this.HtmlToText(CleanText(this.content)))
+      this.lastEmitText = this.HtmlToText(CleanText(this.content))
+      this.$emit('update:modelValue', this.lastEmitText)
+      this.content = this.textToHtml(this.lastEmitText)
     },
     cleanTextDebounce () {
       this.cleanText()
@@ -102,7 +102,7 @@ export default {
         .replace(/<\/div>/g, '') // verwijder overige </div>
     },
     textToHtml (text) {
-      const sections = splitSong(text, 100, 0) // no auto split due to extra empty lines to be added
+      const sections = splitSong(text, 100, 0, false) // no auto split due to extra empty lines to be added
       let htmlText = ''
       for (const section of sections) { // beamer split
         if (section.label) {

@@ -30,7 +30,7 @@ export default {
   }
 }
 
-export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0) {
+export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0, minOneSlide = true) {
   if (!text) return []
 
   return splitSongMaxLines(text.replace(/\r?\n/g, '<br>'), linesPerSlideBeamer)
@@ -49,7 +49,7 @@ export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 
       }
 
       result.slides = chunk(lines, linesPerSlideLivestream)
-      if (!result.slides.length) { result.slides = [['']] }
+      if (!result.slides.length && minOneSlide) { result.slides = [['']] }
 
       return result
     })
