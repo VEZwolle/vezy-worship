@@ -23,6 +23,7 @@
 import { CleanText } from './CleanText.js'
 import { debounce } from 'quasar'
 import { splitSong } from '../song/SongControl.vue'
+import { getCaret, setCaret } from './Caret.js'
 
 export default {
   props: {
@@ -77,9 +78,14 @@ export default {
       this.cleanText()
     },
     cleanText () {
+      const cursorPosition = getCaret(this.$refs.editor.getContentEl())
       this.lastEmitText = this.HtmlToText(CleanText(this.content))
       this.$emit('update:modelValue', this.lastEmitText)
       this.content = this.textToHtml(this.lastEmitText)
+      // nexttick ivm caret without newline position of q-editor
+      this.$nextTick(() => {
+        setCaret(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
+      })
     },
     cleanTextDebounce () {
       this.cleanText()
