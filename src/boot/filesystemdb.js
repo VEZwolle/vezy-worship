@@ -94,6 +94,22 @@ const fsdb = {
     }
   },
 
+  async setFileHandleSongDatabase () {
+    if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by empty filehandle
+      try {
+        fsdb.fileHandleSongDatabase = await window.showSaveFilePicker(filePickerOptionsDb)
+      } catch (error) {
+        fsdb.fileHandleSongDatabase = null
+        if (error.name === 'AbortError') {
+          Notify.create({ type: 'negative', message: 'Opslaan is geannuleerd' }) // user abort or files too sensitive or dangerous
+          return false
+        }
+        console.error(error) // unknown error --> download file via catch by emty filehandle --> resume
+      }
+      return true
+    }
+  },
+
   async saveSongDatabase (showPicker = false, db = []) {
     if (!fsdb.localSongDatabase && db.length === 0) {
       Notify.create({ type: 'negative', message: 'Geen database gevonden voor opslaan.' })
@@ -109,7 +125,7 @@ const fsdb = {
     }
     // Show SaveFilePicker on first save
     if (showPicker || !fsdb.fileHandleSongDatabase) {
-      if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
+      if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by empty filehandle
         try {
           fsdb.fileHandleSongDatabase = await window.showSaveFilePicker(filePickerOptionsDb)
         } catch (error) {
