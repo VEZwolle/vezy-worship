@@ -81,7 +81,7 @@ export default {
       const cursorPosition = getCaret(this.$refs.editor.getContentEl())
       this.lastEmitText = this.HtmlToText(CleanText(this.content))
       this.$emit('update:modelValue', this.lastEmitText)
-      this.content = this.textToHtml(this.lastEmitText)
+      this.content = this.textToHtml(this.lastEmitText).replace(/ <\/div>/g, '&nbsp;</div>') // replace end space with code otherwise it will not be displayed in editor
       // nexttick ivm caret without newline position of q-editor
       this.$nextTick(() => {
         setCaret(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
