@@ -131,6 +131,8 @@ export default {
         .replace(/<div class="bg-grey-3" style="font-size: 0.7em;"><br><\/div>$/g, '') // remove last section new line
         .replace(/ {2}/g, '&nbsp;&nbsp;') // replace dubble space with code otherwise it will not be displayed in editor
         .replace(/ <\/div>/g, '&nbsp;</div>') // replace end space with code otherwise it will not be displayed in editor
+        // do not use color end space now; first update caret.js toe use parent/child node change add/remove whith cound offset en startnode.
+        // .replace(/((&nbsp;)+)<\/div>/g, '<span class="bg-grey-4">$1</span></div>') // color bg end space(s)
       if (!htmlText) return ''
       return htmlText
     }
