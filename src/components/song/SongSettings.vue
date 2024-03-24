@@ -2,6 +2,7 @@
   <div>
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Liedtekst" />
+      <q-tab name="textFormat" label="Liedtekst Opmaak" />
       <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
@@ -183,6 +184,89 @@
           </div>
         </div>
       </q-tab-panel>
+      <q-tab-panel name="textFormat">
+        <div class="row q-gutter-md">
+          <div class="col">
+            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+          </div>
+          <div class="col">
+            <div class="row q-gutter-md">
+              <div class="col">
+                <q-input v-model="settings.collection" outlined label="Collectie">
+                  <template #append>
+                    <q-select
+                      v-model="settings.collection"
+                      borderless
+                      hide-selected
+                      menu-anchor="bottom right"
+                      menu-self="top right"
+                      popup-content-style="height: 30vh;"
+                      options-dense
+                      :options="$store.dbCollections"
+                      @click="loadCollectionDatabase"
+                      @popup-show="loadCollectionDatabase"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-2">
+                <q-input v-model="settings.number" outlined label="Nr" />
+              </div>
+              <div v-if="!editEmit" class="col-auto">
+                <q-toggle
+                  v-model="$store.searchBaseIsLocal"
+                  checked-icon="lyrics"
+                  unchecked-icon="cloud"
+                  color="primary"
+                  dense
+                  @update:model-value="$store.dbCollections = ['']"
+                >
+                  <q-tooltip>cloud of locale database</q-tooltip>
+                </q-toggle>
+                <q-btn-dropdown
+                  split
+                  color="primary"
+                  label="Uit database"
+                  icon="lyrics"
+                  class="q-mt-sm"
+                  @click.stop="importSongDb"
+                >
+                  <template #label>
+                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                  </template>
+                  <q-list>
+                    <q-item v-close-popup clickable @click="CompareWithDb">
+                      <q-item-section>
+                        <q-item-label>
+                          Vergelijk met database versie
+                          <q-tooltip>
+                            Lied vergelijken met versie uit de database
+                          </q-tooltip>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row q-gutter-md">
+          <div class="col">
+            <VezyEditorSong
+              ref="inputEditorSong"
+              v-model="settings.text"
+            />
+          </div>
+
+          <div class="col">
+            <VezyEditorSong
+              ref="inputEditorTranslate"
+              v-model="settings.translation"
+            />
+          </div>
+        </div>
+      </q-tab-panel>
       <q-tab-panel name="settings">
         <div class="row q-gutter-xs">
           <div class="text">
@@ -223,12 +307,13 @@ import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditorSong from '../common/VezyEditorSong.vue'
 import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
   extends: SongSettingsTools,
   data () {
     return {

@@ -4,7 +4,7 @@ export function CleanText (content) {
   // <\/?([briuspmal]*?)>)*? = <br> || </b> || </i> || </u> || </sup> || </small> || <b> || <i> || <u> || <sup> || <small>
   let text = content
     .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
-    .replace(/ style="(.*?);*">/gi, '>') // verwijder alle extra "style" elementen
+    .replace(/( style="(.*?);*"| class="(.*?)")>/gi, '>') // verwijder alle extra "style" & class elementen
     .replace(/(\r*\n)|(\r(?!\n))|(\v)/g, '<br>') // (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind) of [CR] of vertical tab [VT] (nieuwe regel), soms door plakken/drag-drop.
     .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;') //                       losse spaties als ' ' plaatsen, tenzij tussen <div> </div>
     .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line, remove <br>
