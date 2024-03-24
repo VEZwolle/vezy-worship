@@ -78,14 +78,19 @@ export default {
       this.cleanText()
     },
     cleanText () {
-      const cursorPosition = getCaret(this.$refs.editor.getContentEl())
+      // save q-editor cusor position (without new line) | saved in: this.$refs.editor.caret.savedPos
+      this.$refs.editor.caret.savePosition()
+      // only if active edit (had cursor selection) get/set caret position
+      const cursorPosition = (this.$refs.editor.caret.savedPos > -1) ? getCaret(this.$refs.editor.getContentEl()) : false
       this.lastEmitText = this.HtmlToText(CleanText(this.content))
       this.$emit('update:modelValue', this.lastEmitText)
-      this.content = this.textToHtml(this.lastEmitText).replace(/ <\/div>/g, '&nbsp;</div>') // replace end space with code otherwise it will not be displayed in editor
-      // nexttick ivm caret without newline position of q-editor
-      this.$nextTick(() => {
-        setCaret(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
-      })
+      this.content = this.textToHtml(this.lastEmitText)
+      if (cursorPosition) {
+        // nexttick ivm caret without newline position of q-editor
+        this.$nextTick(() => {
+          setCaret(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
+        })
+      }
     },
     cleanTextDebounce () {
       this.cleanText()
@@ -106,6 +111,7 @@ export default {
         .replace(/<div><br><\/div>/g, '\n') // vervang lege regel door newline
         .replace(/<div>/g, '\n') // vervang regelstart door newline
         .replace(/<\/div>/g, '') // verwijder overige </div>
+        .replace(/&nbsp;/g, ' ') // html spatie --> spatie
     },
     textToHtml (text) {
       const sections = splitSong(text, 100, 0, false) // no auto split due to extra empty lines to be added
@@ -121,7 +127,10 @@ export default {
         }
         htmlText += '<div class="bg-grey-3" style="font-size: 0.7em;"><br></div>' // empty line
       }
-      htmlText = htmlText.replace(/<div class="bg-grey-3" style="font-size: 0.7em;"><br><\/div>$/g, '') // remove last section new line
+      htmlText = htmlText
+        .replace(/<div class="bg-grey-3" style="font-size: 0.7em;"><br><\/div>$/g, '') // remove last section new line
+        .replace(/ {2}/g, '&nbsp;&nbsp;') // replace dubble space with code otherwise it will not be displayed in editor
+        .replace(/ <\/div>/g, '&nbsp;</div>') // replace end space with code otherwise it will not be displayed in editor
       if (!htmlText) return ''
       return htmlText
     }
