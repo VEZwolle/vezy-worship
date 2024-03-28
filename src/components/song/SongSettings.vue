@@ -1,8 +1,7 @@
 <template>
   <div>
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0" @update:model-value="tabSwitch">
       <q-tab name="text" label="Liedtekst" />
-      <q-tab name="textFormat" label="Liedtekst Opmaak" />
       <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
@@ -79,7 +78,21 @@
         </div>
         <div class="row q-gutter-md">
           <div class="col">
+            <template v-if="textFormat">
+              <div>
+                <q-avatar icon="text_fields" size="md" />
+                Lied tekst
+              </div>
+              <VezyEditorSong
+                ref="inputEditorSong"
+                v-model="settings.text"
+                v-model:model-backup="backupSettingText"
+                height="50vh"
+                @scroll="syncInputsEditor('song')"
+              />
+            </template>
             <q-input
+              v-else
               ref="inputSong"
               v-model="settings.text"
               outlined
@@ -122,11 +135,39 @@
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
               </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of platte tekst</q-tooltip>
+              </q-btn>
             </q-toolbar>
           </div>
 
           <div class="col">
+            <template v-if="textFormat">
+              <div>
+                <q-avatar icon="translate" size="md" />
+                Vertaling
+              </div>
+              <VezyEditorSong
+                ref="inputEditorTranslate"
+                v-model="settings.translation"
+                v-model:model-backup="backupSettingTranslation"
+                height="50vh"
+                @scroll="syncInputsEditor('translate')"
+              />
+              <q-toolbar v-if="!settings.translation" class="bg-subtoolbar text-subtoolbar">
+                <q-btn
+                  flat
+                  dense
+                  icon="translate"
+                  label="Automatisch vertalen"
+                  :loading="isTranslating"
+                  @click="translate"
+                />
+              </q-toolbar>
+            </template>
             <q-input
+              v-else
               ref="inputTranslate"
               v-model="settings.translation"
               outlined
@@ -180,90 +221,11 @@
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
               </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of  platte tekst</q-tooltip>
+              </q-btn>
             </q-toolbar>
-          </div>
-        </div>
-      </q-tab-panel>
-      <q-tab-panel name="textFormat">
-        <div class="row q-gutter-md">
-          <div class="col">
-            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
-          </div>
-          <div class="col">
-            <div class="row q-gutter-md">
-              <div class="col">
-                <q-input v-model="settings.collection" outlined label="Collectie">
-                  <template #append>
-                    <q-select
-                      v-model="settings.collection"
-                      borderless
-                      hide-selected
-                      menu-anchor="bottom right"
-                      menu-self="top right"
-                      popup-content-style="height: 30vh;"
-                      options-dense
-                      :options="$store.dbCollections"
-                      @click="loadCollectionDatabase"
-                      @popup-show="loadCollectionDatabase"
-                    />
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-2">
-                <q-input v-model="settings.number" outlined label="Nr" />
-              </div>
-              <div v-if="!editEmit" class="col-auto">
-                <q-toggle
-                  v-model="$store.searchBaseIsLocal"
-                  checked-icon="lyrics"
-                  unchecked-icon="cloud"
-                  color="primary"
-                  dense
-                  @update:model-value="$store.dbCollections = ['']"
-                >
-                  <q-tooltip>cloud of locale database</q-tooltip>
-                </q-toggle>
-                <q-btn-dropdown
-                  split
-                  color="primary"
-                  label="Uit database"
-                  icon="lyrics"
-                  class="q-mt-sm"
-                  @click.stop="importSongDb"
-                >
-                  <template #label>
-                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
-                  </template>
-                  <q-list>
-                    <q-item v-close-popup clickable @click="CompareWithDb">
-                      <q-item-section>
-                        <q-item-label>
-                          Vergelijk met database versie
-                          <q-tooltip>
-                            Lied vergelijken met versie uit de database
-                          </q-tooltip>
-                        </q-item-label>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-btn-dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row q-gutter-md">
-          <div class="col">
-            <VezyEditorSong
-              ref="inputEditorSong"
-              v-model="settings.text"
-            />
-          </div>
-
-          <div class="col">
-            <VezyEditorSong
-              ref="inputEditorTranslate"
-              v-model="settings.translation"
-            />
           </div>
         </div>
       </q-tab-panel>
@@ -319,7 +281,9 @@ export default {
     return {
       tab: 'text',
       isTranslating: false,
-      ignoreInput: null
+      ignoreInput: null,
+      ignoreInputEditor: null,
+      textFormat: true
     }
   },
   computed: {
@@ -333,16 +297,37 @@ export default {
   },
   mounted () {
     this.songObserver = new ResizeObserver(this.resize('song'))
-    this.songObserver.observe(this.$refs.inputSong.nativeEl)
-
     this.translateObserver = new ResizeObserver(this.resize('translate'))
-    this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+    this.tabSwitch() // add observe by element exist
   },
   beforeUnmount () {
-    this.songObserver.disconnect()
-    this.translateObserver.disconnect()
+    this.removeObserveInput()
   },
   methods: {
+    toggleTextFormat () {
+      if (!this.textFormat) this.removeObserveInput() // remove observe before remove element
+      this.textFormat = !this.textFormat
+      if (!this.textFormat) this.addObserveInput() // add observe to element
+    },
+    tabSwitch () {
+      if (this.tab === 'text' && !this.textFormat) {
+        // add observe only when element exist
+        this.addObserveInput()
+      } else {
+        this.removeObserveInput()
+      }
+    },
+    addObserveInput () {
+      this.$nextTick(() => {
+        this.songObserver.observe(this.$refs.inputSong.nativeEl)
+        this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+      })
+    },
+    removeObserveInput () {
+      // remove observe, element not exist
+      this.songObserver.disconnect()
+      this.translateObserver.disconnect()
+    },
     importSongDb () {
       this.$refs.SearchDatabaseDialog.show()
     },
@@ -356,6 +341,20 @@ export default {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
         this.isTranslating = false
+      }
+    },
+    syncInputsEditor (input) {
+      if (this.scrollOff) return
+      if (this.ignoreInputEditor === input) {
+        this.ignoreInputEditor = null
+        return
+      }
+      if (input === 'song') {
+        this.ignoreInputEditor = 'translate'
+        this.$refs.inputEditorTranslate.setScrollPosition(this.$refs.inputEditorSong.getScrollPosition())
+      } else {
+        this.ignoreInputEditor = 'song'
+        this.$refs.inputEditorSong.setScrollPosition(this.$refs.inputEditorTranslate.getScrollPosition())
       }
     },
     syncInputs (input, prop) {

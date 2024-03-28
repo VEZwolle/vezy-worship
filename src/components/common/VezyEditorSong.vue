@@ -2,15 +2,9 @@
   <q-editor
     ref="editor"
     v-model="content"
-    :definitions="{
-      restore: {
-        tip: 'herstel vorige stand',
-        icon: 'settings_backup_restore',
-        handler: undochange
-      }
-    }"
-    :min-height="minHeight"
-    :toolbar="[['restore']]"
+    :height="height"
+    :toolbar="[]"
+    content-class="scroll-y"
     class="q-mb-md"
     @paste.prevent.stop="pastePlainText"
     @dragstart="backup"
@@ -21,9 +15,10 @@
 
 <script>
 import { CleanText } from './CleanText.js'
-import { debounce } from 'quasar'
+import { debounce, scroll } from 'quasar'
 import { splitSong } from '../song/SongControl.vue'
 import { getCaret, setCaret } from './Caret.js'
+const { getScrollTarget, getVerticalScrollPosition, setVerticalScrollPosition } = scroll
 
 export default {
   props: {
@@ -32,11 +27,12 @@ export default {
       required: true,
       default: ''
     },
-    minHeight: String
+    height: String,
+    modelBackup: String
   },
   emits: [
     'update:modelValue',
-    'update:savedPos'
+    'update:modelBackup'
   ],
   data () {
     return {
@@ -44,6 +40,12 @@ export default {
       lastEmitText: '',
       lastEmitHtml: '',
       contentBackup: ''
+    }
+  },
+  computed: {
+    scrollEl () {
+      // give content class - editor: "scroll" or "scroll-y" to find correct one
+      return getScrollTarget(this.$refs.editor.getContentEl())
     }
   },
   watch: {
@@ -65,6 +67,12 @@ export default {
     this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
   methods: {
+    getScrollPosition () {
+      return getVerticalScrollPosition(this.scrollEl) // returns a Number (pixels)
+    },
+    setScrollPosition (offset) {
+      setVerticalScrollPosition(this.scrollEl, offset)
+    },
     updateContent () {
       this.lastEmitHtml = this.content
       this.cleanTextDebounce()
@@ -82,7 +90,7 @@ export default {
       this.$refs.editor.caret.savePosition()
       // only if active edit (had cursor selection) get/set caret position
       const cursorPosition = (this.$refs.editor.caret.savedPos > -1) ? getCaret(this.$refs.editor.getContentEl()) : false
-      this.lastEmitText = this.HtmlToText(CleanText(this.content))
+      this.lastEmitText = this.htmlToText(CleanText(this.content))
       this.$emit('update:modelValue', this.lastEmitText)
       this.content = this.textToHtml(this.lastEmitText)
       if (cursorPosition) {
@@ -97,13 +105,9 @@ export default {
     },
     backup () {
       this.contentBackup = this.content
+      this.$emit('update:modelBackup', this.htmlToText(CleanText(this.contentBackup)))
     },
-    undochange () {
-      const b = this.content
-      this.content = this.contentBackup
-      this.contentBackup = b
-    },
-    HtmlToText (htmlText) {
+    htmlToText (htmlText) {
       // first run cleantext in editor
       return htmlText
         .replace(/(<\/?b>)|(<\/?i>)|(<\/?u>)|(<\/?sup>)|(<\/?small>)*?/g, '') // verwijder alle opmaak elementen
