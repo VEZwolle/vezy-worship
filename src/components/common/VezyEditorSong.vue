@@ -13,6 +13,7 @@
     @dragend="cleanText"
     @update:model-value="updateContent"
     @click.right="savePosition"
+    @scroll="$emit('scroll')"
   />
   <q-menu context-menu :target="`#${id}`">
     <q-list dense>
@@ -53,7 +54,7 @@ export default {
   },
   emits: [
     'update:modelValue',
-    'update:modelBackup'
+    'update:modelBackup', 'scroll'
   ],
   data () {
     return {
