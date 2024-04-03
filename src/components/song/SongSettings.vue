@@ -78,7 +78,7 @@
         </div>
         <div class="row q-gutter-md">
           <div class="col">
-            <div>
+            <div class="row">
               <q-avatar icon="text_fields" size="md" />
               Lied tekst
             </div>
@@ -142,9 +142,13 @@
           </div>
 
           <div class="col">
-            <div>
+            <div class="row">
               <q-avatar icon="translate" size="md" />
               Vertaling
+              <q-space />
+              <div v-if="notEqualCount" class="text-red">
+                Let op verschillend aantal regels!
+              </div>
             </div>
             <VezyEditorSong
               v-if="textFormat"
@@ -282,6 +286,16 @@ export default {
     scrollOff () {
       if (this.settings.translation && this.settings.text) return false
       return true
+    },
+    countTextLines () {
+      return this.countLines(this.settings.text)
+    },
+    countTranslateLines () {
+      return this.countLines(this.settings.translation)
+    },
+    notEqualCount () {
+      if (!this.settings.translation) return false
+      return this.countTextLines !== this.countTranslateLines
     }
   },
   mounted () {
@@ -376,6 +390,10 @@ export default {
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
+    },
+    countLines (text) {
+      const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
+      return lines.length || 0
     }
   }
 }
