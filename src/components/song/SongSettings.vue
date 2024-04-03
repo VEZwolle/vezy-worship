@@ -84,6 +84,7 @@
                 Lied tekst
               </div>
               <VezyEditorSong
+                id="inputEditorSong"
                 ref="inputEditorSong"
                 v-model="settings.text"
                 v-model:model-backup="backupSettingText"
@@ -149,6 +150,7 @@
                 Vertaling
               </div>
               <VezyEditorSong
+                id="inputEditorTranslate"
                 ref="inputEditorTranslate"
                 v-model="settings.translation"
                 v-model:model-backup="backupSettingTranslation"
