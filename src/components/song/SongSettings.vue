@@ -78,26 +78,24 @@
         </div>
         <div class="row q-gutter-md">
           <div class="col">
-            <template v-if="textFormat">
-              <div>
-                <q-avatar icon="text_fields" size="md" />
-                Lied tekst
-              </div>
-              <VezyEditorSong
-                id="inputEditorSong"
-                ref="inputEditorSong"
-                v-model="settings.text"
-                v-model:model-backup="backupSettingText"
-                height="50vh"
-                @scroll="syncInputsEditor('song')"
-              />
-            </template>
+            <div>
+              <q-avatar icon="text_fields" size="md" />
+              Lied tekst
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorSong"
+              ref="inputEditorSong"
+              v-model="settings.text"
+              v-model:model-backup="backupSettingText"
+              height="50vh"
+              @scroll="syncInputsEditor('song')"
+            />
             <q-input
               v-else
               ref="inputSong"
               v-model="settings.text"
               outlined
-              label="Tekst"
               type="textarea"
               class="input-songtext"
               @scroll="scroll('song')"
@@ -144,52 +142,40 @@
           </div>
 
           <div class="col">
-            <template v-if="textFormat">
-              <div>
-                <q-avatar icon="translate" size="md" />
-                Vertaling
-              </div>
-              <VezyEditorSong
-                id="inputEditorTranslate"
-                ref="inputEditorTranslate"
-                v-model="settings.translation"
-                v-model:model-backup="backupSettingTranslation"
-                height="50vh"
-                :border-read-only="!settings.translation"
-                @scroll="syncInputsEditor('translate')"
-              />
-              <q-toolbar v-if="!settings.translation" class="bg-subtoolbar text-subtoolbar">
-                <q-btn
-                  flat
-                  dense
-                  icon="translate"
-                  label="Automatisch vertalen"
-                  :loading="isTranslating"
-                  @click="translate"
-                />
-              </q-toolbar>
-            </template>
+            <div>
+              <q-avatar icon="translate" size="md" />
+              Vertaling
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorTranslate"
+              ref="inputEditorTranslate"
+              v-model="settings.translation"
+              v-model:model-backup="backupSettingTranslation"
+              height="50vh"
+              :border-read-only="!settings.translation"
+              @scroll="syncInputsEditor('translate')"
+            />
             <q-input
               v-else
               ref="inputTranslate"
               v-model="settings.translation"
               outlined
-              label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
               @scroll="scroll('translate')"
-            >
-              <q-btn
-                v-if="!settings.translation"
-                stack
-                icon="translate"
-                label="Automatisch vertalen"
-                class="translation-button"
-                :loading="isTranslating"
-                @click="translate"
-              />
-            </q-input>
+            />
+            <q-btn
+              v-if="!settings.translation"
+              stack
+              icon="translate"
+              label="Automatisch vertalen"
+              text-color="primary"
+              class="translation-button"
+              :loading="isTranslating"
+              @click="translate"
+            />
             <q-toolbar v-if="settings.translation" class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
@@ -407,7 +393,7 @@ export default {
 .translation-button {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 75%;
   transform: translate(-50%, -50%);
 }
 
