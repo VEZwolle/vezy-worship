@@ -7,6 +7,7 @@
     :toolbar="[]"
     content-class="scroll-y"
     class="q-mb-md"
+    :class="borderReadOnlyClass"
     @paste.prevent.stop="pastePlainText"
     @dragstart="backup"
     @dragend="cleanText"
@@ -44,6 +45,10 @@ export default {
     id: {
       type: String,
       default: 'editor'
+    },
+    borderReadOnly: {
+      type: Boolean,
+      default: false
     }
   },
   emits: [
@@ -60,6 +65,9 @@ export default {
     }
   },
   computed: {
+    borderReadOnlyClass () {
+      return this.borderReadOnly ? 'borderReadOnly' : ''
+    },
     labels () {
       return labels
     },
@@ -189,3 +197,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.borderReadOnly {
+  border-style: dashed;
+}
+</style>

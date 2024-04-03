@@ -155,6 +155,7 @@
                 v-model="settings.translation"
                 v-model:model-backup="backupSettingTranslation"
                 height="50vh"
+                :border-read-only="!settings.translation"
                 @scroll="syncInputsEditor('translate')"
               />
               <q-toolbar v-if="!settings.translation" class="bg-subtoolbar text-subtoolbar">
