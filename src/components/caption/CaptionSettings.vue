@@ -14,7 +14,7 @@
           <q-input v-model="settings.title" outlined :rules="['required']" />
 
           <label class="label">Tekst</label>
-          <VezyEditor ref="vezyEditor" v-model="settings.text" v-model:savedPos="savedPos" min-height="80px" />
+          <VezyEditor ref="vezyEditor" v-model="settings.text" v-model:savedPos="savedPos" min-height="80px" max-height="25vh" />
           <CaptionSettingsPreview
             v-model:formatBeamer="settings.formatBeamer"
             v-model:formatLivestream="settings.formatLivestream"
