@@ -189,9 +189,12 @@ export default {
       this.$emit('update:modelValue', this.lastEmitText)
       this.content = this.textToHtml(this.lastEmitText)
       if (cursorPosition) {
+        // set on label line
+        cursorPosition.start.container = [insertLine + 1, 0]
+        cursorPosition.start.lineOffset = 0
         // nexttick ivm caret without newline position of q-editor
         this.$nextTick(() => {
-          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
+          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.start)
         })
       }
     }
