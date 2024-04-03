@@ -90,8 +90,8 @@ module.exports = configure(function (ctx) {
       chainWebpack (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
-      },
-      devtool: 'source-map' // remove next line before build
+      } // ,
+      // devtool: 'source-map' // remove line before build
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-devServer
