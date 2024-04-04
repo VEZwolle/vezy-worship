@@ -263,6 +263,7 @@ import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditorSong from '../common/VezyEditorSong.vue'
+import { splitSong } from '../song/SongControl.vue'
 import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
@@ -337,9 +338,30 @@ export default {
     async translate () {
       this.isTranslating = true
 
+      const sections = splitSong(this.settings.text, 100, 0, false) // no auto split due to extra empty lines to be added
+      const textArray = []
+      for (const section of sections) { // beamer split
+        // section.label.value
+        for (const slide of section.slides) { // livestream split
+          textArray.push(slide.join('\n'))
+        }
+      }
+      if (!textArray.length) return this.settings.text // leeg of alleen labels geen onderdelen te vertalen.
+      console.log(textArray)
       try {
-        const result = await this.$api.post('/translate', { text: this.settings.text })
-        this.settings.translation = result.translation
+        const result = await this.$api.post('/translatearray', { textArray })
+        console.log(result)
+        let resultTranslation = ''
+        let count = 0
+        for (const section of sections) { // beamer split
+          if (section.label) resultTranslation += `${section.label.value}\n`
+          for (let i = 0; i < section.slides.length; i++) { // livestream split
+            resultTranslation += `${result.resultTranslations[count]}\n`
+            count++
+          }
+          resultTranslation += '\n'
+        }
+        this.settings.translation = resultTranslation.replace(/\n{2}$/, '') // verwijder laatste 2 lege regeleinden die teveel zijn geplaatst.
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {

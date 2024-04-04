@@ -77,6 +77,7 @@ app.post('/api/language', async (req, res) => {
 
 /**
  * Translate text into Dutch.
+ * used in old version < 1.9.6
  */
 app.post('/api/translate', async (req, res) => {
   const data = new URLSearchParams({
@@ -92,6 +93,34 @@ app.post('/api/translate', async (req, res) => {
   } catch {
     res.status(500).json({ error: 'deepl_error' })
   }
+})
+
+/**
+ * Translate textArray into Dutch.
+ */
+app.post('/api/translatearray', async (req, res) => {
+  const textArray = req.body.textArray
+  const resultTranslations = []
+  for (let k = 0; k < textArray.length; k += 50) { // max 50/sessie
+    const data = new URLSearchParams({
+      target_lang: 'NL',
+      formality: 'more'
+    })
+    for (let i = k; i < Math.min(textArray.length, k + 50); i++) {
+      data.append('text', textArray[i])
+    }
+    try {
+      const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+      const translations = result.data.translations
+      for (const translation of translations) {
+        resultTranslations.push(translation.text)
+      }
+    } catch {
+      res.status(500).json({ error: 'deepl_error' })
+      return
+    }
+  }
+  res.json({ resultTranslations })
 })
 
 /**
