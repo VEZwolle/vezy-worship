@@ -347,10 +347,8 @@ export default {
         }
       }
       if (!textArray.length) return this.settings.text // leeg of alleen labels geen onderdelen te vertalen.
-      console.log(textArray)
       try {
         const result = await this.$api.post('/translatearray', { textArray })
-        console.log(result)
         let resultTranslation = ''
         let count = 0
         for (const section of sections) { // beamer split
