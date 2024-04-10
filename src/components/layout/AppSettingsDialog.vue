@@ -219,23 +219,23 @@
               <q-btn color="primary" icon="image" :label="`Beamer: ${imageFile.label}`" class="full-width" @click="openPresentationPresetsSettings(imageFile.beamer)" />
               <template v-if="imageFile.beamer.handle">
                 <q-btn dence @click="removePresentationPresetsSettings(imageFile.beamer)">
-                  <q-img :key="imageFile.beamer" :src="imageFile.beamer.URL" height="9vh" width="16vh">
+                  <q-img :key="imageFile.beamer" :src="imageFile.beamer.URL" height="9vh" :width="imageWidth" :style="imageBgStyle">
                     <q-tooltip>{{ imageFile.beamer.handle.name }}</q-tooltip>
                   </q-img>
                   <q-icon right name="close" />
                 </q-btn>
               </template>
-              <q-img v-else :key="imageFile.beamer" :src="imageFile.beamer.baseFileId" height="9vh" width="16vh" />
+              <q-img v-else :key="imageFile.beamer" :src="imageFile.beamer.baseFileId" height="9vh" :width="imageWidth" :style="imageBgStyle" />
             </div>
             <div v-if="imageFile.name !== 'background'" class="col q-gutter-sm">
               <q-btn dence color="primary" icon="image" :label="`Livestream: ${imageFile.label}`" class="full-width" @click="openPresentationPresetsSettings(imageFile.livestream)" />
               <template v-if="imageFile.livestream.handle">
-                <q-img :key="imageFile.livestream" :src="imageFile.livestream.URL" height="9vh" width="16vh">
+                <q-img :key="imageFile.livestream" :src="imageFile.livestream.URL" height="9vh" :width="imageWidth" :style="imageBgStyle">
                   <q-tooltip>{{ imageFile.livestream.handle.name }}</q-tooltip>
                 </q-img>
                 <q-btn icon="close" @click="removePresentationPresetsSettings(imageFile.livestream)" />
               </template>
-              <q-img v-else :key="imageFile.livestream" :src="imageFile.livestream.baseFileId" height="9vh" width="16vh" />
+              <q-img v-else :key="imageFile.livestream" :src="imageFile.livestream.baseFileId" height="9vh" :width="imageWidth" :style="imageBgStyle" />
             </div>
           </div>
         </q-tab-panel>
@@ -314,6 +314,20 @@ export default {
     },
     algoliaIndexNames () {
       return algoliaIndexNames
+    },
+    imageWidth () {
+      return `${9 * this.$store.outputRatio}vh`
+    },
+    imageBgStyle () {
+      const style = {}
+      if (this.$q.dark.isActive) {
+        style.backgroundImage = 'repeating-conic-gradient(#656565 0% 25%, #595959 0% 50%)'
+      } else {
+        style.backgroundImage = 'repeating-conic-gradient(#fefefe 0% 25%, #eee 0% 50%)'
+      }
+      style.backgroundSize = '16px 16px'
+      style.backgroundBlendMode = 'screen'
+      return style
     }
   },
   methods: {
