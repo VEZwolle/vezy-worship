@@ -11,6 +11,7 @@
         <q-tab name="api" label="api-key's" />
         <q-tab name="database" label="Zoeken/database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
+        <q-tab name="images" label="Standaard media" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
 
@@ -209,6 +210,36 @@
           </q-badge>
         </q-tab-panel>
 
+        <q-tab-panel name="images">
+          <div class="q-mb-sm">
+            Stel hier onder eigen plaatjes bestanden in voor de verschillende onderdelen. (1920x1080)
+          </div>
+          <div v-for="(imageFile, index) in imageFiles" :key="index" class="row q-gutter-sm">
+            <div class="col q-gutter-sm">
+              <q-btn color="primary" icon="image" :label="`Beamer: ${imageFile.label}`" class="full-width" @click="openPresentationPresetsSettings(imageFile.beamer)" />
+              <template v-if="imageFile.beamer.handle">
+                <q-btn dence @click="removePresentationPresetsSettings(imageFile.beamer)">
+                  <q-img :key="imageFile.beamer" :src="imageFile.beamer.URL" height="9vh" width="16vh">
+                    <q-tooltip>{{ imageFile.beamer.handle.name }}</q-tooltip>
+                  </q-img>
+                  <q-icon right name="close" />
+                </q-btn>
+              </template>
+              <q-img v-else :key="imageFile.beamer" :src="imageFile.beamer.baseFileId" height="9vh" width="16vh" />
+            </div>
+            <div v-if="imageFile.name !== 'background'" class="col q-gutter-sm">
+              <q-btn dence color="primary" icon="image" :label="`Livestream: ${imageFile.label}`" class="full-width" @click="openPresentationPresetsSettings(imageFile.livestream)" />
+              <template v-if="imageFile.livestream.handle">
+                <q-img :key="imageFile.livestream" :src="imageFile.livestream.URL" height="9vh" width="16vh">
+                  <q-tooltip>{{ imageFile.livestream.handle.name }}</q-tooltip>
+                </q-img>
+                <q-btn icon="close" @click="removePresentationPresetsSettings(imageFile.livestream)" />
+              </template>
+              <q-img v-else :key="imageFile.livestream" :src="imageFile.livestream.baseFileId" height="9vh" width="16vh" />
+            </div>
+          </div>
+        </q-tab-panel>
+
         <q-tab-panel name="autoupdate">
           <q-checkbox v-model="autoupdate" label="Automatisch download & update Vezyworship" />
           <div>Wanneer er een update beschikbaar is wordt deze gedownload en na afsluiten van Vezyworship geinstalleerd.</div>
@@ -225,6 +256,7 @@
 
 <script>
 import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '../song/database/algolia.js'
+import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsSettings, setPresentationPresetsSettings } from '../presets-settings.js'
 
 export default {
   data () {
@@ -269,7 +301,8 @@ export default {
         }
       ],
       algoliaTab: 0,
-      algoliaIndexId: 0
+      algoliaIndexId: 0,
+      imageFiles
     }
   },
   computed: {
@@ -312,6 +345,7 @@ export default {
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
       this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
       this.darkMode = localStorage.getItem('darkMode') === 'true'
+      // image settings load by toolbar on new/open/appsettings start
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -331,6 +365,7 @@ export default {
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
       localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
       localStorage.setItem('darkMode', this.$q.dark.isActive)
+      setPresentationPresetsSettings() // save image handle's or empty
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
@@ -377,6 +412,12 @@ export default {
         return
       }
       return val >= 0 || 'Minimaal 0'
+    },
+    openPresentationPresetsSettings (imageFileOutput) {
+      openPresentationPresetsSettings(imageFileOutput)
+    },
+    removePresentationPresetsSettings (imageFileOutput) {
+      removePresentationPresetsSettings(imageFileOutput)
     },
     toggleDarkMode () {
       this.$q.dark.toggle()

@@ -197,6 +197,7 @@ import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { ApiKeyEdit } from '../song/database/algolia.js'
+import { getPresentationsPresetsSettings } from '../presets-settings.js'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
@@ -273,9 +274,11 @@ export default {
   },
   methods: {
     create () {
+      getPresentationsPresetsSettings() // check once /load default images set by settings -> werkt pas na user input (add to: new/open/appsetting)
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) this.$refs.serviceSettingsDialog.show()
     },
     open (add) {
+      getPresentationsPresetsSettings() // check once /load default images set by settings -> werkt pas na user input (add to: new/open/appsetting)
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
         this.isLoading = true
         this.$fs.open(add)
@@ -299,6 +302,7 @@ export default {
       window.open(`/#/output/${id}`, `output${id}`, 'popup,width=960,height=540')
     },
     openAppSettings () {
+      getPresentationsPresetsSettings() // check once /load default images set by settings -> werkt pas na user input (add to: new/open/appsetting)
       this.$refs.appSettingsDialog.show()
     },
     openHelp () {
