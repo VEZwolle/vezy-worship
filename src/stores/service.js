@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
 import presentationPresets from '../components/presentation-presets'
 import { versionUpdate } from './versionUpdate'
+import { getDefaultURL } from '../components/presets-settings.js'
 
 export default defineStore('service', {
   state: () => ({
@@ -199,6 +200,8 @@ export default defineStore('service', {
 
       // Media from `/public` folder
       if (id.startsWith('/')) {
+        const UrlSettings = getDefaultURL(id) // check if public/image is replaced by settings
+        if (UrlSettings) return UrlSettings
         return id.substring(1) // Remove leading slash to make it work on Electron
       }
 

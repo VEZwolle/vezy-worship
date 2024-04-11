@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import { replaceBackgroundUrl } from '../presets-settings.js'
+
 export default {
   props: {
     bgFileId: String,
@@ -62,7 +64,7 @@ export default {
       if (this.backgroundColorBeamer && !this.backgroundUrl) {
         style.backgroundColor = this.backgroundColorBeamer || '#000'
       } else {
-        const image = this.backgroundUrl || require('../../assets/bg.png')
+        const image = this.backgroundUrl || replaceBackgroundUrl || require('../../assets/bg.png')
         style.backgroundImage = `url(${image})`
       }
 
