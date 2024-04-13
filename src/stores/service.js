@@ -17,6 +17,7 @@ export default defineStore('service', {
     isClear: true,
     isOnlyLivestreamClear: false,
     noLivestream: false,
+    arrowKeyContinueSetlist: false,
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
@@ -168,6 +169,17 @@ export default defineStore('service', {
 
       this.livePresentation = cloneDeep(presentation)
       this.isOnlyLivestreamClear = false
+    },
+    goLiveNext () {
+      if (!this.previewPresentation) return
+      this.goLive(this.previewPresentation, true)
+    },
+    goLiveBack () {
+      if (!this.livePresentation) return
+      const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
+      if (i === 0) return
+      const backPresentation = this.service.presentations[i + -1]
+      this.goLive(backPresentation, true)
     },
 
     // Clear

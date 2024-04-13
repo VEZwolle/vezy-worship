@@ -1,5 +1,8 @@
 <template>
-  <q-list>
+  <q-list
+    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    @shortkey="baseHandleArrow"
+  >
     <q-item
       clickable
       class="bg-primary text-white"

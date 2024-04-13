@@ -1,5 +1,9 @@
 <template>
-  <div class="q-pa-md">
+  <div
+    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    class="q-pa-md"
+    @shortkey="baseHandleArrow"
+  >
     <video
       ref="player"
       :src="fileUrl"

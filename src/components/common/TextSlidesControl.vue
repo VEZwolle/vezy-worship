@@ -77,7 +77,9 @@ export default {
       const section = this.presentation.control.sections[newSectionIndex]
 
       if (!section) {
-        return
+        if (!this.$store.arrowKeyContinueSetlist || this.preview) return
+        if (change > 0) return this.$store.goLiveNext()
+        return this.$store.goLiveBack()
       }
 
       // Select last or first slide of section, based on going up (-1) or down (+1)

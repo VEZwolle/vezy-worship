@@ -21,6 +21,18 @@
           (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
         </q-tooltip>
       </q-checkbox>
+      <q-toggle
+        v-model="$store.arrowKeyContinueSetlist"
+        checked-icon="repeat"
+        unchecked-icon="repeat"
+        color="red"
+        dense
+      >
+        <q-tooltip>
+          Aan: gaat direct door naar volgend of vorige onderdeel in de setlist dmn de pijltoetsen<br>
+          bijv. voor afstandsbedieninggebruik.
+        </q-tooltip>
+      </q-toggle>
     </q-toolbar>
 
     <div class="layout-column-content">

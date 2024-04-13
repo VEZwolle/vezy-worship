@@ -19,6 +19,17 @@ export default {
       if (!this.preview) {
         this.$store.unclear()
       }
+    },
+    baseHandleArrow (event) {
+      if (!this.$store.arrowKeyContinueSetlist || this.preview) return
+      switch (event.srcKey) {
+        case 'up':
+        case 'left':
+          return this.$store.goLiveBack()
+        case 'down':
+        case 'right':
+          return this.$store.goLiveNext()
+      }
     }
   }
 }
