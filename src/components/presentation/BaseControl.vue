@@ -10,6 +10,9 @@ export default {
     },
     clear () {
       return this.$store.isClear
+    },
+    shortkeysNextBack () {
+      return this.$store.shortkeysNextBack()
     }
   },
   methods: {
@@ -21,13 +24,15 @@ export default {
       }
     },
     baseHandleArrow (event) {
-      if (!this.$store.arrowKeyContinueSetlist || this.preview) return
+      if (!this.$store.arrowKeyContinueRemoteSetlist || this.preview) return
       switch (event.srcKey) {
         case 'up':
         case 'left':
+        case 'pageup':
           return this.$store.goLiveBack()
         case 'down':
         case 'right':
+        case 'pagedown':
           return this.$store.goLiveNext()
       }
     }

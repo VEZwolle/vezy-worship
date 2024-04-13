@@ -2,7 +2,7 @@
   <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
   <div
     v-else
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    v-shortkey="shortkeysNextBack"
     @shortkey="baseHandleArrow"
   />
 </template>

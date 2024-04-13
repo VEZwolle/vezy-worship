@@ -2,7 +2,7 @@
   <q-list
     v-for="(section, sectionIndex) in presentation.control.sections"
     :key="sectionIndex"
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    v-shortkey="shortkeysNextBack"
     class="q-py-sm"
     @shortkey="handleArrow"
   >
@@ -42,6 +42,11 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
+  computed: {
+    shortkeysNextBack () {
+      return this.$store.shortkeysNextBack()
+    }
+  },
   created () {
     if (!this.presentation.control) this.presentation.control = {}
     if (!this.presentation.control.selectedSectionIndex) {
@@ -77,7 +82,7 @@ export default {
       const section = this.presentation.control.sections[newSectionIndex]
 
       if (!section) {
-        if (!this.$store.arrowKeyContinueSetlist || this.preview) return
+        if (!this.$store.arrowKeyContinueRemoteSetlist || this.preview) return
         if (change > 0) return this.$store.goLiveNext()
         return this.$store.goLiveBack()
       }
@@ -93,9 +98,11 @@ export default {
       switch (event.srcKey) {
         case 'up':
         case 'left':
+        case 'pageup':
           return this.jump(-1)
         case 'down':
         case 'right':
+        case 'pagedown':
           return this.jump(+1)
       }
     },

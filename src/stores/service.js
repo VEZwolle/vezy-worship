@@ -17,7 +17,7 @@ export default defineStore('service', {
     isClear: true,
     isOnlyLivestreamClear: false,
     noLivestream: false,
-    arrowKeyContinueSetlist: false,
+    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + reomte keys
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
@@ -194,6 +194,18 @@ export default defineStore('service', {
     },
     toggleNoLivestream () {
       this.noLivestream = !this.noLivestream
+    },
+    shortkeysClear () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { ctrlc: ['ctrl', 'c'], f6: ['f6'], period: ['.'] }
+      return { ctrlc: ['ctrl', 'c'], f6: ['f6'] }
+    },
+    shortkeysNextBack () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], pageup: ['pageup'], pagedown: ['pagedown'] }
+      return { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }
+    },
+    shortkeysPlay () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { f5: ['f5'], esc: ['esc'] }
+      return { }
     },
 
     // Media

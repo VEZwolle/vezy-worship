@@ -1,6 +1,6 @@
 <template>
   <div
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    v-shortkey="shortkeysNextBack"
     class="q-pa-md"
     @shortkey="baseHandleArrow"
   >
@@ -21,7 +21,14 @@
   </div>
   <div v-if="duration" class="q-px-md row">
     <div class="q-pa-md col2">
-      <q-btn round color="primary" :icon="iconPlayPause" @click="togglePlayPause">
+      <q-btn
+        v-shortkey="shortkeysPlay"
+        round
+        color="primary"
+        :icon="iconPlayPause"
+        @click="togglePlayPause"
+        @shortkey="togglePlayPause"
+      >
         <q-tooltip>Start/Pause</q-tooltip>
       </q-btn>
     </div>
@@ -81,6 +88,9 @@ export default {
     },
     currentTimeF () {
       return timeFormat(this.currentTime)
+    },
+    shortkeysPlay () {
+      return this.$store.shortkeysPlay()
     }
   },
   watch: {

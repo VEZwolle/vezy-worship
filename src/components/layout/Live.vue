@@ -9,7 +9,7 @@
 
       <q-checkbox
         v-model="$store.isClear"
-        v-shortkey="{ctrlc: ['ctrl', 'c'], f6: ['f6']}"
+        v-shortkey="shortkeysClear"
         left-label
         label="Clear"
         color="red"
@@ -69,6 +69,9 @@ export default {
       }
 
       return this.presentationType.name
+    },
+    shortkeysClear () {
+      return this.$store.shortkeysClear()
     }
   }
 }

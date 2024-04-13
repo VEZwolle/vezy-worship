@@ -1,6 +1,6 @@
 <template>
   <div
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    v-shortkey="shortkeysNextBack"
     @shortkey="baseHandleArrow"
   >
     <q-tabs v-model="presentation.tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
