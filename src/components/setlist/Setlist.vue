@@ -23,8 +23,7 @@
       </q-checkbox>
       <q-toggle
         v-model="$store.arrowKeyContinueSetlist"
-        checked-icon="repeat"
-        unchecked-icon="repeat"
+        icon="sync_alt"
         color="red"
         dense
       >
