@@ -103,14 +103,19 @@ export default {
       this.select(newSectionIndex, newSlideIndex, true)
     },
     handleArrow (event) {
+      if (event.srcKey === this.$store.lastShortKey) return
       switch (event.srcKey) {
+        case 'pageup':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'up':
         case 'left':
-        case 'pageup':
           return this.jump(-1)
+        case 'pagedown':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'down':
         case 'right':
-        case 'pagedown':
           return this.jump(+1)
       }
     },

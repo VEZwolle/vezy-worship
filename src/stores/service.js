@@ -6,6 +6,8 @@ import presentationPresets from '../components/presentation-presets'
 import { versionUpdate } from './versionUpdate'
 import { getDefaultURL } from '../components/presets-settings.js'
 
+let clearLastShortKey
+
 export default defineStore('service', {
   state: () => ({
     service: null,
@@ -23,7 +25,8 @@ export default defineStore('service', {
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
-    message: ''
+    message: '',
+    lastShortKey: ''
   }),
   actions: {
     setServiceSaved () {
@@ -207,6 +210,12 @@ export default defineStore('service', {
     shortkeysPlay () {
       if (this.arrowKeyContinueRemoteSetlist > 1) return { f5: ['f5'], esc: ['esc'] }
       return { }
+    },
+    setLastShortKey (key) {
+      this.lastShortKey = key
+      // reset delayed
+      clearTimeout(clearLastShortKey)
+      clearLastShortKey = setTimeout(() => { this.lastShortKey = '' }, 200)
     },
 
     // Media
