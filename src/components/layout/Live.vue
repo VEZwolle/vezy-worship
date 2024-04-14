@@ -18,7 +18,7 @@
         <q-tooltip>
           Vink aan om scherm leeg te maken<br>
           Bij beamer & livestream<br>
-          (Ctrl + C of F6)
+          (Ctrl + C of F6 of Spatie)
         </q-tooltip>
       </q-checkbox>
       <q-toggle

@@ -196,8 +196,8 @@ export default defineStore('service', {
       this.noLivestream = !this.noLivestream
     },
     shortkeysClear () {
-      if (this.arrowKeyContinueRemoteSetlist > 1) return { ctrlc: ['ctrl', 'c'], f6: ['f6'], period: ['.'] }
-      return { ctrlc: ['ctrl', 'c'], f6: ['f6'] }
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { ctrlc: ['ctrl', 'c'], f6: ['f6'], space: ['space'], period: ['.'] }
+      return { ctrlc: ['ctrl', 'c'], f6: ['f6'], space: ['space'] }
     },
     shortkeysNextBack () {
       if (this.arrowKeyContinueRemoteSetlist > 1) return { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], pageup: ['pageup'], pagedown: ['pagedown'] }
