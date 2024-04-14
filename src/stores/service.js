@@ -179,6 +179,7 @@ export default defineStore('service', {
       const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
       if (i === 0) return
       const backPresentation = this.service.presentations[i + -1]
+      if (backPresentation) backPresentation.startEnd = true // only used bij textslidescontrole to start at end.
       this.goLive(backPresentation, true)
     },
 
