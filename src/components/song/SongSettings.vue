@@ -323,7 +323,7 @@ export default {
       this.translateObserver.disconnect()
       if (this.$refs.inputSong && this.$refs.inputTranslate) {
         this.$refs.inputSong.nativeEl.removeEventListener('keydown', this.inputSongKeyEvent, true)
-        this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
+        this.$refs.inputTranslate.nativeEl.removeEventListener('keydown', this.inputTranslateKeyEvent, true)
       }
     },
     importSongDb () {
