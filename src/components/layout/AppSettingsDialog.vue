@@ -11,7 +11,7 @@
         <q-tab name="api" label="api-key's" />
         <q-tab name="database" label="Zoeken/database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
-        <q-tab name="images" label="Standaard media" />
+        <q-tab v-if="$q.platform.is.electron" name="images" label="Standaard media" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
 
@@ -344,6 +344,7 @@ export default {
         this.displays = await this.$electron.getConfig('displays') || {}
         this.autoupdate = await this.$electron.getConfig('autoupdate')
         if (this.autoupdate === undefined) this.autoupdate = true
+        // image settings load by toolbar on new/open/appsettings start
       }
       this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
       this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
@@ -359,12 +360,12 @@ export default {
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
       this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
       this.darkMode = localStorage.getItem('darkMode') === 'true'
-      // image settings load by toolbar on new/open/appsettings start
     },
     async save () {
       if (this.$q.platform.is.electron) {
         await this.$electron.setConfig('displays', { ...this.displays })
         await this.$electron.setConfig('autoupdate', this.autoupdate)
+        setPresentationPresetsSettings() // save image handle's or empty
       }
       localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
       localStorage.setItem('backgroundColor.livestream', this.backgroundColor.livestream || '')
@@ -379,7 +380,6 @@ export default {
       localStorage.setItem('splitSongLines', this.$store.splitSongLines || 4)
       localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
       localStorage.setItem('darkMode', this.$q.dark.isActive)
-      setPresentationPresetsSettings() // save image handle's or empty
 
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
