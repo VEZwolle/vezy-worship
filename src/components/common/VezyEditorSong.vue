@@ -95,6 +95,9 @@ export default {
   created () {
     this.cleanTextDebounce = debounce(this.cleanTextDebounce, 500)
   },
+  beforeUnmount () {
+    this.cleanText() // update modelValue
+  },
   methods: {
     savePosition () {
       this.savedPosition = getCaretLine(this.$refs.editor.getContentEl())

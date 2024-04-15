@@ -8,6 +8,7 @@
 <script>
 import { createApp } from 'vue'
 import { debounce } from 'quasar'
+import { replaceBackgroundUrl } from '../presets-settings.js'
 
 export default {
   props: {
@@ -50,7 +51,7 @@ export default {
         if (this.backgroundColor && !this.backgroundImageUrl) {
           return ` background-color: ${this.backgroundColor};`
         } else {
-          const image = this.backgroundImageUrl || require('../../assets/bg.png')
+          const image = this.backgroundImageUrl || replaceBackgroundUrl || require('../../assets/bg.png')
           return ` background-image: url(${image}); background-size: cover; background-position: center;`
         }
       }

@@ -117,13 +117,13 @@ export default {
       this.contentBackup = b
     },
     getPositionArrowKeys (e) {
-      switch (e.keyCode) {
-        case 33: // page-up
-        case 34: // page-down
-        case 37: // arrowleft
-        case 38: // arrowup
-        case 39: // arrowright
-        case 40: // arrowdown
+      switch (e.key) {
+        case 'PageUp':
+        case 'PageDown':
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'ArrowRight':
+        case 'ArrowDown':
           this.getPosition()
           break
         default:

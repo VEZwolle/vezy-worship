@@ -21,6 +21,24 @@
           (wordt alleen toegepast op nieuw geselecteerde Preview of GoLive)
         </q-tooltip>
       </q-checkbox>
+      <q-toggle
+        v-model="$store.arrowKeyContinueRemoteSetlist"
+        toggle-indeterminate
+        :false-value="0"
+        :indeterminate-value="1"
+        :true-value="2"
+        unchecked-icon="swap_vert"
+        indeterminate-icon="sync_alt"
+        checked-icon="settings_remote"
+        color="primary"
+        dense
+      >
+        <q-tooltip>
+          Uit: Ga via "GoLive" naar nieuwe live onderdeel<br>
+          Midden: Gaat direct door naar volgend of vorige onderdeel in de setlist dmv de pijltoetsen<br>
+          Aan: midden + gebruik van afstandsbediening mogelijk. (toetsen: Page Up/Down werken nu anders.)
+        </q-tooltip>
+      </q-toggle>
     </q-toolbar>
 
     <div class="layout-column-content">

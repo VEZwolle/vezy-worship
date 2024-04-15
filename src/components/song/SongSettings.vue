@@ -78,7 +78,7 @@
         </div>
         <div class="row q-gutter-md">
           <div class="col">
-            <div>
+            <div class="row">
               <q-avatar icon="text_fields" size="md" />
               Lied tekst
             </div>
@@ -142,9 +142,13 @@
           </div>
 
           <div class="col">
-            <div>
+            <div class="row">
               <q-avatar icon="translate" size="md" />
               Vertaling
+              <q-space />
+              <div v-if="notEqualCount" class="text-red">
+                Let op verschillend aantal regels!
+              </div>
             </div>
             <VezyEditorSong
               v-if="textFormat"
@@ -259,6 +263,7 @@ import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditorSong from '../common/VezyEditorSong.vue'
+import { splitSong } from '../song/SongControl.vue'
 import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
@@ -282,6 +287,16 @@ export default {
     scrollOff () {
       if (this.settings.translation && this.settings.text) return false
       return true
+    },
+    countTextLines () {
+      return this.countLines(this.settings.text)
+    },
+    countTranslateLines () {
+      return this.countLines(this.settings.translation)
+    },
+    notEqualCount () {
+      if (!this.settings.translation) return false
+      return this.countTextLines !== this.countTranslateLines
     }
   },
   mounted () {
@@ -332,9 +347,28 @@ export default {
     async translate () {
       this.isTranslating = true
 
+      const sections = splitSong(this.settings.text, 100, 0, false) // no auto split due to extra empty lines to be added
+      const textArray = []
+      for (const section of sections) { // beamer split
+        // section.label.value
+        for (const slide of section.slides) { // livestream split
+          textArray.push(slide.join('\n'))
+        }
+      }
+      if (!textArray.length) return this.settings.text // leeg of alleen labels geen onderdelen te vertalen.
       try {
-        const result = await this.$api.post('/translate', { text: this.settings.text })
-        this.settings.translation = result.translation
+        const result = await this.$api.post('/translatearray', { textArray })
+        let resultTranslation = ''
+        let count = 0
+        for (const section of sections) { // beamer split
+          if (section.label) resultTranslation += `${section.label.value}\n`
+          for (let i = 0; i < section.slides.length; i++) { // livestream split
+            resultTranslation += `${result.resultTranslations[count]}\n`
+            count++
+          }
+          resultTranslation += '\n'
+        }
+        this.settings.translation = resultTranslation.replace(/\n{2}$/, '') // verwijder laatste 2 lege regeleinden die teveel zijn geplaatst.
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
@@ -385,6 +419,10 @@ export default {
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
+    },
+    countLines (text) {
+      const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
+      return lines.length || 0
     },
     inputSongKeyEvent (event) {
       if (event.key === 'Enter') {

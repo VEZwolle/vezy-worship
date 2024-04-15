@@ -1,5 +1,8 @@
 <template>
-  <q-list>
+  <q-list
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+  >
     <q-item
       clickable
       class="bg-primary text-white"
