@@ -2,7 +2,7 @@
   <q-list
     v-for="(section, sectionIndex) in presentation.control.sections"
     :key="sectionIndex"
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
+    v-shortkey="shortkeysNextBack"
     class="q-py-sm"
     @shortkey="handleArrow"
   >
@@ -42,6 +42,11 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
+  computed: {
+    shortkeysNextBack () {
+      return this.$store.shortkeysNextBack()
+    }
+  },
   created () {
     if (!this.presentation.control) this.presentation.control = {}
     if (!this.presentation.control.selectedSectionIndex) {
@@ -49,6 +54,14 @@ export default {
     }
     if (!this.presentation.control.selectedSlideIndex) {
       this.presentation.control.selectedSlideIndex = 0
+    }
+    // check if back from last item --> start at end
+    if (this.presentation.startEnd) {
+      this.presentation.startEnd = false // reset
+      if (this.presentation.control.sections) {
+        this.presentation.control.selectedSectionIndex = this.presentation.control.sections.length - 1
+        this.presentation.control.selectedSlideIndex = this.presentation.control.sections[this.presentation.control.selectedSectionIndex].slides?.length - 1 || 0
+      }
     }
   },
   mounted () {
@@ -77,7 +90,9 @@ export default {
       const section = this.presentation.control.sections[newSectionIndex]
 
       if (!section) {
-        return
+        if (!this.$store.arrowKeyContinueRemoteSetlist || this.preview) return
+        if (change > 0) return this.$store.goLiveNext()
+        return this.$store.goLiveBack()
       }
 
       // Select last or first slide of section, based on going up (-1) or down (+1)
@@ -88,10 +103,17 @@ export default {
       this.select(newSectionIndex, newSlideIndex, true)
     },
     handleArrow (event) {
+      if (event.srcKey === this.$store.lastShortKey) return
       switch (event.srcKey) {
+        case 'pageup':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'up':
         case 'left':
           return this.jump(-1)
+        case 'pagedown':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'down':
         case 'right':
           return this.jump(+1)

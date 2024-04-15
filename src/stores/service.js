@@ -6,6 +6,8 @@ import presentationPresets from '../components/presentation-presets'
 import { versionUpdate } from './versionUpdate'
 import { getDefaultURL } from '../components/presets-settings.js'
 
+let clearLastShortKey
+
 export default defineStore('service', {
   state: () => ({
     service: null,
@@ -17,12 +19,14 @@ export default defineStore('service', {
     isClear: true,
     isOnlyLivestreamClear: false,
     noLivestream: false,
+    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + reomte keys
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
-    message: ''
+    message: '',
+    lastShortKey: ''
   }),
   actions: {
     setServiceSaved () {
@@ -169,6 +173,18 @@ export default defineStore('service', {
       this.livePresentation = cloneDeep(presentation)
       this.isOnlyLivestreamClear = false
     },
+    goLiveNext () {
+      if (!this.previewPresentation) return
+      this.goLive(this.previewPresentation, true)
+    },
+    goLiveBack () {
+      if (!this.livePresentation) return
+      const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
+      if (i === 0) return
+      const backPresentation = this.service.presentations[i + -1]
+      if (backPresentation) backPresentation.startEnd = true // only used bij textslidescontrole to start at end.
+      this.goLive(backPresentation, true)
+    },
 
     // Clear
     clear () {
@@ -182,6 +198,24 @@ export default defineStore('service', {
     },
     toggleNoLivestream () {
       this.noLivestream = !this.noLivestream
+    },
+    shortkeysClear () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { ctrlc: ['ctrl', 'c'], f6: ['f6'], space: ['space'], period: ['.'] }
+      return { ctrlc: ['ctrl', 'c'], f6: ['f6'], space: ['space'] }
+    },
+    shortkeysNextBack () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'], pageup: ['pageup'], pagedown: ['pagedown'] }
+      return { up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }
+    },
+    shortkeysPlay () {
+      if (this.arrowKeyContinueRemoteSetlist > 1) return { f5: ['f5'], esc: ['esc'] }
+      return { }
+    },
+    setLastShortKey (key) {
+      this.lastShortKey = key
+      // reset delayed
+      clearTimeout(clearLastShortKey)
+      clearLastShortKey = setTimeout(() => { this.lastShortKey = '' }, 200)
     },
 
     // Media

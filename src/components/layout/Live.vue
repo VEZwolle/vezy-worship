@@ -9,7 +9,7 @@
 
       <q-checkbox
         v-model="$store.isClear"
-        v-shortkey="{ctrlc: ['ctrl', 'c'], f6: ['f6']}"
+        v-shortkey="shortkeysClear"
         left-label
         label="Clear"
         color="red"
@@ -18,7 +18,7 @@
         <q-tooltip>
           Vink aan om scherm leeg te maken<br>
           Bij beamer & livestream<br>
-          (Ctrl + C of F6)
+          (Ctrl + C of F6 of Spatie)
         </q-tooltip>
       </q-checkbox>
       <q-toggle
@@ -69,6 +69,9 @@ export default {
       }
 
       return this.presentationType.name
+    },
+    shortkeysClear () {
+      return this.$store.shortkeysClear()
     }
   }
 }

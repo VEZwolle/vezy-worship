@@ -1,5 +1,10 @@
 <template>
   <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
+  <div
+    v-else
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+  />
 </template>
 
 <script>
