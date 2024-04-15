@@ -325,12 +325,21 @@ export default {
       this.$nextTick(() => {
         this.songObserver.observe(this.$refs.inputSong.nativeEl)
         this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+        // fix: Chrome/Edge - scroll to top by enter textarea --> no scroll
+        if (this.$refs.inputSong && this.$refs.inputTranslate) {
+          this.$refs.inputSong.nativeEl.addEventListener('keydown', this.inputSongKeyEvent, true)
+          this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
+        }
       })
     },
     removeObserveInput () {
       // remove observe, element not exist
       this.songObserver.disconnect()
       this.translateObserver.disconnect()
+      if (this.$refs.inputSong && this.$refs.inputTranslate) {
+        this.$refs.inputSong.nativeEl.removeEventListener('keydown', this.inputSongKeyEvent, true)
+        this.$refs.inputTranslate.nativeEl.removeEventListener('keydown', this.inputTranslateKeyEvent, true)
+      }
     },
     importSongDb () {
       this.$refs.SearchDatabaseDialog.show()
@@ -414,6 +423,25 @@ export default {
     countLines (text) {
       const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
       return lines.length || 0
+    },
+    inputSongKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputSong.nativeEl)
+      }
+    },
+    inputTranslateKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputTranslate.nativeEl)
+      }
+    },
+    textareaNoScroll (textareaEl) {
+      const currentPos = textareaEl.selectionStart
+      const orgValue = textareaEl.value
+      const newValue = orgValue.substr(0, currentPos) + '\n' + orgValue.substr(currentPos)
+      textareaEl.value = newValue
+      textareaEl.selectionEnd = currentPos + 1
     }
   }
 }
