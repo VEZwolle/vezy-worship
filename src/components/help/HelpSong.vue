@@ -102,6 +102,9 @@
           <img src="../../assets/help/addsongdialogordenen.png"> Hiermee start je het tekst ordenen dialoog op.<br>
           Zie onder voor verdere uitleg.
         </li>
+        <li>
+          <img src="../../assets/help/addsongdialogview.png"> Hiermee switch je tussen de opmaak en tekst weergave.
+        </li>
       </ul>
     </p>
     <p>
