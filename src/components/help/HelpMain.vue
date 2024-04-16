@@ -11,6 +11,7 @@
     </p>
     <p>De dienst is thuis voor te bereiden via de web app. En in de kerk te openen op de desktop met uitvoer naar de verschillende schermen.</p>
     <p>Tijdens de dienst kunnen er mededelingen/oproepen boven in het scherm weergeven worden.</p>
+    <p>Gebruik van een afstandbediening kan aan/uit gezet worden.</p>
     <div class="text-h6 q-mb-md">
       Verschillende presentatie-types:
     </div>
@@ -77,6 +78,9 @@
       </li>
       <li>
         Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
+      </li>
+      <li>
+        In de desktop app kan je een eigen standaard achtergrond & standaard collecte/nazorg en einde dienst afbeeldingen instellen.
       </li>
       <li>
         De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.

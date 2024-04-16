@@ -13,6 +13,8 @@
         row-key="name"
         dense
       />
+      <br>
+      <p>Opm.: de toetsen tussen ( ... ) werken alleen in de stand afstandsbediening.</p>
     </div>
     <div class="text-h6 q-mb-md">
       Quick live
@@ -39,13 +41,14 @@ const columns = [
 ]
 
 const rows = [
-  { shortkey: 'Ctrl + C of F6', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
-  { shortkey: '➡  of  ⬇', function: 'Ga naar volgende regel/onderdeel in live' },
-  { shortkey: '⬅  of  ⬆', function: 'Ga naar vorige regel/onderdeel in live' },
+  { shortkey: 'Ctrl + C of F6 of spatie of (.)', function: 'Live weergave aan/uit zetten (wijzig: clear)' },
+  { shortkey: '➡  of  ⬇ of (page down)', function: 'Ga naar volgende regel/onderdeel in live' },
+  { shortkey: '⬅  of  ⬆ of (page up)', function: 'Ga naar vorige regel/onderdeel in live' },
   { shortkey: 'Ctrl + ➡', function: 'Preview naar live verplaatsen (Go Live)' },
   { shortkey: 'Ctrl + N', function: 'Nieuwe dienst aanmaken' },
   { shortkey: 'Ctrl + O', function: 'Opgeslagen dienst openen' },
-  { shortkey: 'Ctrl + S', function: 'Huidige dienst opslaan' }
+  { shortkey: 'Ctrl + S', function: 'Huidige dienst opslaan' },
+  { shortkey: '(F5 of esc)', function: 'Play/Stop van film' }
 ]
 
 export default {

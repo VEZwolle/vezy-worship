@@ -197,6 +197,7 @@ import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl'
 import { ApiKeyEdit } from '../song/database/algolia.js'
+import { getPresentationsPresetsSettings } from '../presets-settings.js'
 
 export default {
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
@@ -269,6 +270,11 @@ export default {
           event.returnValue = 'false'
         }
       }
+    }
+  },
+  mounted () {
+    if (this.$q.platform.is.electron) {
+      getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; electron always
     }
   },
   methods: {

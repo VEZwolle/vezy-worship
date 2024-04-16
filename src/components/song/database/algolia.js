@@ -62,12 +62,14 @@ export async function getAlgoliaCollections (indexId = 0) {
 export async function GetAlgoliaDatabase (indexId = 0) {
   // return true || false by error
   try {
+    const setSaveName = await fsdb.setFileHandleSongDatabase() // set first the save name before download; otherwise the download may take too long to be allowed to show upslaanschrem.
+    if (!setSaveName) return // cancelled
     const result = await api.post('/database/backup', { indexId })
     if (result[0]?.objectID &&
       result[0]?.title &&
       result[0]?.lyrics
     ) { // ga uit dat database klopt
-      const saved = await fsdb.saveSongDatabase(true, result)
+      const saved = setSaveName ? await fsdb.saveSongDatabase(false, result) : await fsdb.saveSongDatabase(true, result)
       if (!saved) {
         Notify.create({ type: 'negative', message: 'Opslaan algolia database bestand mislukt' })
         return false

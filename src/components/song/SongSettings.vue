@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0" @update:model-value="tabSwitch">
       <q-tab name="text" label="Liedtekst" />
       <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
@@ -78,11 +78,24 @@
         </div>
         <div class="row q-gutter-md">
           <div class="col">
+            <div class="row">
+              <q-avatar icon="text_fields" size="md" />
+              Lied tekst
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorSong"
+              ref="inputEditorSong"
+              v-model="settings.text"
+              v-model:model-backup="backupSettingText"
+              height="50vh"
+              @scroll="syncInputsEditor('song')"
+            />
             <q-input
+              v-else
               ref="inputSong"
               v-model="settings.text"
               outlined
-              label="Tekst"
               type="textarea"
               class="input-songtext"
               @scroll="scroll('song')"
@@ -121,30 +134,52 @@
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
               </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of platte tekst</q-tooltip>
+              </q-btn>
             </q-toolbar>
           </div>
 
           <div class="col">
+            <div class="row">
+              <q-avatar icon="translate" size="md" />
+              Vertaling
+              <q-space />
+              <div v-if="notEqualCount" class="text-red">
+                Let op verschillend aantal regels!
+              </div>
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorTranslate"
+              ref="inputEditorTranslate"
+              v-model="settings.translation"
+              v-model:model-backup="backupSettingTranslation"
+              height="50vh"
+              :border-read-only="!settings.translation"
+              @scroll="syncInputsEditor('translate')"
+            />
             <q-input
+              v-else
               ref="inputTranslate"
               v-model="settings.translation"
               outlined
-              label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
               @scroll="scroll('translate')"
-            >
-              <q-btn
-                v-if="!settings.translation"
-                stack
-                icon="translate"
-                label="Automatisch vertalen"
-                class="translation-button"
-                :loading="isTranslating"
-                @click="translate"
-              />
-            </q-input>
+            />
+            <q-btn
+              v-if="!settings.translation"
+              stack
+              icon="translate"
+              label="Automatisch vertalen"
+              text-color="primary"
+              class="translation-button"
+              :loading="isTranslating"
+              @click="translate"
+            />
             <q-toolbar v-if="settings.translation" class="bg-subtoolbar text-subtoolbar">
               <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
                 <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
@@ -178,6 +213,10 @@
               <q-space />
               <q-btn flat dense label="Ordenen" @click.stop="arrange()">
                 <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of  platte tekst</q-tooltip>
               </q-btn>
             </q-toolbar>
           </div>
@@ -223,18 +262,22 @@ import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditorSong from '../common/VezyEditorSong.vue'
+import { splitSong } from '../song/SongControl.vue'
 import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog },
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
   extends: SongSettingsTools,
   data () {
     return {
       tab: 'text',
       isTranslating: false,
-      ignoreInput: null
+      ignoreInput: null,
+      ignoreInputEditor: null,
+      textFormat: true
     }
   },
   computed: {
@@ -244,33 +287,106 @@ export default {
     scrollOff () {
       if (this.settings.translation && this.settings.text) return false
       return true
+    },
+    countTextLines () {
+      return this.countLines(this.settings.text)
+    },
+    countTranslateLines () {
+      return this.countLines(this.settings.translation)
+    },
+    notEqualCount () {
+      if (!this.settings.translation) return false
+      return this.countTextLines !== this.countTranslateLines
     }
   },
   mounted () {
     this.songObserver = new ResizeObserver(this.resize('song'))
-    this.songObserver.observe(this.$refs.inputSong.nativeEl)
-
     this.translateObserver = new ResizeObserver(this.resize('translate'))
-    this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+    this.tabSwitch() // add observe by element exist
   },
   beforeUnmount () {
-    this.songObserver.disconnect()
-    this.translateObserver.disconnect()
+    this.removeObserveInput()
   },
   methods: {
+    toggleTextFormat () {
+      if (!this.textFormat) this.removeObserveInput() // remove observe before remove element
+      this.textFormat = !this.textFormat
+      if (!this.textFormat) this.addObserveInput() // add observe to element
+    },
+    tabSwitch () {
+      if (this.tab === 'text' && !this.textFormat) {
+        // add observe only when element exist
+        this.addObserveInput()
+      } else {
+        this.removeObserveInput()
+      }
+    },
+    addObserveInput () {
+      this.$nextTick(() => {
+        this.songObserver.observe(this.$refs.inputSong.nativeEl)
+        this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+        // fix: Chrome/Edge - scroll to top by enter textarea --> no scroll
+        if (this.$refs.inputSong && this.$refs.inputTranslate) {
+          this.$refs.inputSong.nativeEl.addEventListener('keydown', this.inputSongKeyEvent, true)
+          this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
+        }
+      })
+    },
+    removeObserveInput () {
+      // remove observe, element not exist
+      this.songObserver.disconnect()
+      this.translateObserver.disconnect()
+      if (this.$refs.inputSong && this.$refs.inputTranslate) {
+        this.$refs.inputSong.nativeEl.removeEventListener('keydown', this.inputSongKeyEvent, true)
+        this.$refs.inputTranslate.nativeEl.removeEventListener('keydown', this.inputTranslateKeyEvent, true)
+      }
+    },
     importSongDb () {
       this.$refs.SearchDatabaseDialog.show()
     },
     async translate () {
       this.isTranslating = true
 
+      const sections = splitSong(this.settings.text, 100, 0, false) // no auto split due to extra empty lines to be added
+      const textArray = []
+      for (const section of sections) { // beamer split
+        // section.label.value
+        for (const slide of section.slides) { // livestream split
+          textArray.push(slide.join('\n'))
+        }
+      }
+      if (!textArray.length) return this.settings.text // leeg of alleen labels geen onderdelen te vertalen.
       try {
-        const result = await this.$api.post('/translate', { text: this.settings.text })
-        this.settings.translation = result.translation
+        const result = await this.$api.post('/translatearray', { textArray })
+        let resultTranslation = ''
+        let count = 0
+        for (const section of sections) { // beamer split
+          if (section.label) resultTranslation += `${section.label.value}\n`
+          for (let i = 0; i < section.slides.length; i++) { // livestream split
+            resultTranslation += `${result.resultTranslations[count]}\n`
+            count++
+          }
+          resultTranslation += '\n'
+        }
+        this.settings.translation = resultTranslation.replace(/\n{2}$/, '') // verwijder laatste 2 lege regeleinden die teveel zijn geplaatst.
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
         this.isTranslating = false
+      }
+    },
+    syncInputsEditor (input) {
+      if (this.scrollOff) return
+      if (this.ignoreInputEditor === input) {
+        this.ignoreInputEditor = null
+        return
+      }
+      if (input === 'song') {
+        this.ignoreInputEditor = 'translate'
+        this.$refs.inputEditorTranslate.setScrollPosition(this.$refs.inputEditorSong.getScrollPosition())
+      } else {
+        this.ignoreInputEditor = 'song'
+        this.$refs.inputEditorSong.setScrollPosition(this.$refs.inputEditorTranslate.getScrollPosition())
       }
     },
     syncInputs (input, prop) {
@@ -303,6 +419,29 @@ export default {
     },
     CompareWithDb () {
       this.$refs.SongDatabaseCompareDialog.show(this.presentation)
+    },
+    countLines (text) {
+      const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
+      return lines.length || 0
+    },
+    inputSongKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputSong.nativeEl)
+      }
+    },
+    inputTranslateKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputTranslate.nativeEl)
+      }
+    },
+    textareaNoScroll (textareaEl) {
+      const currentPos = textareaEl.selectionStart
+      const orgValue = textareaEl.value
+      const newValue = orgValue.substr(0, currentPos) + '\n' + orgValue.substr(currentPos)
+      textareaEl.value = newValue
+      textareaEl.selectionEnd = currentPos + 1
     }
   }
 }
@@ -320,7 +459,7 @@ export default {
 .translation-button {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 75%;
   transform: translate(-50%, -50%);
 }
 

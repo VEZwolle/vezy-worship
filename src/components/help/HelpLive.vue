@@ -31,6 +31,10 @@
           1x aanklikken zorgt er voor dat het onderdeel in de preview kolom zichtbaar wordt.<br>
           Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.<br>
           Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opsplitsing van teksten te krijgen.<br>
+          Daarnaast zit een knop werking van het doorlopen van de setlist met de pijltjes toetsen te wijzigen.<br>
+          <img src="../../assets/help/normalchange.png"> is de normale stand waarbij een nieuw onderdeel via go live in de live kolom komt.<br>
+          <img src="../../assets/help/continuchange.png"> stel je in om continu door te gaan met de pijltjes toetsen (onderaan een lied gaat hij gelijk door naar volgende lied bijvoorbeeld.<br>
+          <img src="../../assets/help/remotechange.png"> Zet je de stand nog een verder kan je ook gebruik maken van een afstandsbediening om door de sheets/onderdelen door te klikken.<br>
           Onderin is een snel zoeken vak aanwezig voor liederen uit de lokale of cloud database.
         </li>
         <li>

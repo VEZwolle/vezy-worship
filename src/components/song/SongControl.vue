@@ -1,5 +1,10 @@
 <template>
   <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
+  <div
+    v-else
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+  />
 </template>
 
 <script>
@@ -30,7 +35,7 @@ export default {
   }
 }
 
-export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0) {
+export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0, minOneSlide = true) {
   if (!text) return []
 
   return splitSongMaxLines(text.replace(/\r?\n/g, '<br>'), linesPerSlideBeamer)
@@ -49,7 +54,7 @@ export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 
       }
 
       result.slides = chunk(lines, linesPerSlideLivestream)
-      if (!result.slides.length) { result.slides = [['']] }
+      if (!result.slides.length && minOneSlide) { result.slides = [['']] }
 
       return result
     })
