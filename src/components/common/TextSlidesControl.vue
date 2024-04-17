@@ -1,40 +1,44 @@
 <template>
-  <q-list
-    v-for="(section, sectionIndex) in presentation.control.sections"
-    :key="sectionIndex"
+  <div
     v-shortkey="shortkeysNextBack"
-    class="q-py-sm"
     @shortkey="handleArrow"
+    @click="setHandleArrowLocation"
   >
-    <q-item
-      v-if="section.label"
-      clickable
-      :class="`section-label text-white bg-${section.label.color}`"
-      :active="isSelectedLabel(sectionIndex)"
-      active-class="text-bold"
-      @click="select(sectionIndex, 0)"
-      @dblclick="goLive"
+    <q-list
+      v-for="(section, sectionIndex) in presentation.control.sections"
+      :key="sectionIndex"
+      class="q-py-sm"
     >
-      <q-item-section>
-        <q-item-label>{{ section.label.value }}</q-item-label>
-      </q-item-section>
-    </q-item>
+      <q-item
+        v-if="section.label"
+        clickable
+        :class="`section-label text-white bg-${section.label.color}`"
+        :active="isSelectedLabel(sectionIndex)"
+        active-class="text-bold"
+        @click="select(sectionIndex, 0)"
+        @dblclick="goLive"
+      >
+        <q-item-section>
+          <q-item-label>{{ section.label.value }}</q-item-label>
+        </q-item-section>
+      </q-item>
 
-    <q-item
-      v-for="(slide, slideIndex) in section.slides"
-      :key="slideIndex"
-      :ref="`slide_${sectionIndex}_${slideIndex}`"
-      clickable
-      :active="isSelected(sectionIndex, slideIndex)"
-      :active-class="!preview ? 'bg-secondary text-white' : 'text-secondary'"
-      @click="select(sectionIndex, slideIndex)"
-      @dblclick="goLive"
-    >
-      <q-item-section>
-        <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
-      </q-item-section>
-    </q-item>
-  </q-list>
+      <q-item
+        v-for="(slide, slideIndex) in section.slides"
+        :key="slideIndex"
+        :ref="`slide_${sectionIndex}_${slideIndex}`"
+        clickable
+        :active="isSelected(sectionIndex, slideIndex)"
+        :active-class="!preview ? 'bg-secondary text-white' : 'text-secondary'"
+        @click="select(sectionIndex, slideIndex)"
+        @dblclick="goLive"
+      >
+        <q-item-section>
+          <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
 </template>
 
 <script>
@@ -42,11 +46,7 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
-  computed: {
-    shortkeysNextBack () {
-      return this.$store.shortkeysNextBack()
-    }
-  },
+
   created () {
     if (!this.presentation.control) this.presentation.control = {}
     if (!this.presentation.control.selectedSectionIndex) {

@@ -2,6 +2,7 @@
   <div
     v-shortkey="shortkeysNextBack"
     @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
   >
     <q-tabs v-model="presentation.tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="both" label="Beamer & Livestream" />
