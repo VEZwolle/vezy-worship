@@ -41,7 +41,7 @@
       </q-toggle>
     </q-toolbar>
 
-    <div class="layout-column-content">
+    <div class="layout-column-content arrowKey">
       <div style="flex:1;">
         <q-list class="q-pt-sm">
           <Draggable v-model="$store.service.presentations" item-key="id">
