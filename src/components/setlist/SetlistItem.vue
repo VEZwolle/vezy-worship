@@ -94,7 +94,8 @@ export default {
   methods: {
     scrollToCenter () {
       const el = this.$refs.setlistItem
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      if ('scrollIntoViewIfNeeded' in el) return el.scrollIntoViewIfNeeded() // non default specs
+      el.scrollIntoView({ behavior: 'smooth', block: 'center', scrollMode: 'if-needed' }) // if-needed scrollmode in futher specs probably
     }
   }
 }
