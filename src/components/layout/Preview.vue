@@ -12,8 +12,8 @@
         label="Go live"
         icon-right="arrow_forward"
         :disabled="!presentation"
-        @click="$store.goLive(presentation)"
-        @shortkey="$store.goLive(presentation)"
+        @click="$store.goLive(presentation, true, true)"
+        @shortkey="$store.goLive(presentation, true, true)"
       >
         <q-menu context-menu no-focus>
           <q-list dense>

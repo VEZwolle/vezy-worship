@@ -26,7 +26,8 @@ export default defineStore('service', {
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: '',
-    lastShortKey: ''
+    lastShortKey: '',
+    setlistScroll: false
   }),
   actions: {
     setServiceSaved () {
@@ -159,7 +160,7 @@ export default defineStore('service', {
 
       this.previewPresentation = cloneDeep(presentation)
     },
-    goLive (presentation, previewNextPresentation = true) {
+    goLive (presentation, previewNextPresentation = true, scroll = false) {
       if (!presentation) return
 
       if (previewNextPresentation) {
@@ -172,6 +173,7 @@ export default defineStore('service', {
 
       this.livePresentation = cloneDeep(presentation)
       this.isOnlyLivestreamClear = false
+      if (scroll) this.setlistScroll = true
     },
     goLiveNext () {
       if (!this.previewPresentation) return
