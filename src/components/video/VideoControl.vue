@@ -3,6 +3,7 @@
     v-shortkey="shortkeysNextBack"
     class="q-pa-md"
     @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
   >
     <video
       ref="player"
@@ -89,8 +90,11 @@ export default {
     currentTimeF () {
       return timeFormat(this.currentTime)
     },
-    shortkeysPlay () {
+    storeShortkeysPlay () {
       return this.$store.shortkeysPlay()
+    },
+    shortkeysPlay () {
+      return this.storeArrowKeyLocation === this.preview ? this.storeShortkeysPlay : {}
     }
   },
   watch: {

@@ -4,6 +4,7 @@
     v-else
     v-shortkey="shortkeysNextBack"
     @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
   />
 </template>
 

@@ -19,7 +19,8 @@ export default defineStore('service', {
     isClear: true,
     isOnlyLivestreamClear: false,
     noLivestream: false,
-    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + reomte keys
+    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + remote keys
+    arrowKeyLocation: false, // true = preview, false = live
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
