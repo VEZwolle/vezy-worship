@@ -160,7 +160,7 @@ export default defineStore('service', {
 
       this.previewPresentation = cloneDeep(presentation)
     },
-    goLive (presentation, previewNextPresentation = true, scroll = false) {
+    goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
       if (previewNextPresentation) {
@@ -168,12 +168,12 @@ export default defineStore('service', {
         const nextPresentation = this.service.presentations[i + 1]
         if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
           this.previewPresentation = cloneDeep(nextPresentation)
+          this.setlistScroll = true
         }
       }
 
       this.livePresentation = cloneDeep(presentation)
       this.isOnlyLivestreamClear = false
-      if (scroll) this.setlistScroll = true
     },
     goLiveNext () {
       if (!this.previewPresentation) return
