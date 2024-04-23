@@ -6,7 +6,7 @@
 
     <q-item-section>
       <q-item-label class="title">
-        <div v-html="title" />
+        <div ref="setlistItem" v-html="title" />
       </q-item-label>
       <q-item-label v-if="description" caption :lines="1">
         {{ $strip(description) }}
@@ -89,6 +89,13 @@ export default {
       }
 
       return this.presentationType.description(this.presentation.settings)
+    }
+  },
+  methods: {
+    scrollToCenter () {
+      const el = this.$refs.setlistItem
+      if ('scrollIntoViewIfNeeded' in el) return el.scrollIntoViewIfNeeded() // non default specs
+      el.scrollIntoView({ behavior: 'smooth', block: 'center', scrollMode: 'if-needed' }) // if-needed scrollmode in futher specs probably
     }
   }
 }

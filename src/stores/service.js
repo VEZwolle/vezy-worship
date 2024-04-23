@@ -27,7 +27,8 @@ export default defineStore('service', {
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: '',
-    lastShortKey: ''
+    lastShortKey: '',
+    setlistScroll: false
   }),
   actions: {
     setServiceSaved () {
@@ -168,6 +169,7 @@ export default defineStore('service', {
         const nextPresentation = this.service.presentations[i + 1]
         if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
           this.previewPresentation = cloneDeep(nextPresentation)
+          this.setlistScroll = true
         }
       }
 
