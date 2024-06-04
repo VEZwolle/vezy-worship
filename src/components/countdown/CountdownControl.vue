@@ -2,6 +2,7 @@
   <q-list
     v-shortkey="shortkeysNextBack"
     @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
   >
     <q-item
       clickable

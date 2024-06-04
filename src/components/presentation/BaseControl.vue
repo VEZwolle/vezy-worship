@@ -11,8 +11,14 @@ export default {
     clear () {
       return this.$store.isClear
     },
-    shortkeysNextBack () {
+    storeArrowKeyLocation () {
+      return this.$store.arrowKeyLocation
+    },
+    storeShortkeysNextBack () {
       return this.$store.shortkeysNextBack()
+    },
+    shortkeysNextBack () {
+      return this.storeArrowKeyLocation === this.preview ? this.storeShortkeysNextBack : {}
     }
   },
   methods: {
@@ -40,6 +46,9 @@ export default {
         case 'right':
           return this.$store.goLiveNext()
       }
+    },
+    setHandleArrowLocation () {
+      this.$store.arrowKeyLocation = this.preview
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
@@ -21,35 +21,35 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.11",
-    "@zip.js/zip.js": "^2.7.41",
-    "axios": "^1.6.8",
-    "core-js": "^3.36.1",
-    "dayjs": "^1.11.10",
-    "electron-store": "^8.2.0",
-    "electron-updater": "^6.1.8",
+    "@zip.js/zip.js": "^2.7.45",
+    "axios": "^1.7.2",
+    "core-js": "^3.37.1",
+    "dayjs": "^1.11.11",
+    "electron-store": "8.2.0",
+    "electron-updater": "^6.2.1",
     "idb-keyval": "^6.2.1",
     "lodash": "^4.17.21",
     "nanoid": "^5.0.7",
     "pinia": "^2.1.7",
     "pinia-shared-state": "^0.5.1",
-    "quasar": "^2.15.2",
-    "vue": "^3.4.22",
-    "vue-router": "^4.3.0",
+    "quasar": "^2.16.4",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.2",
     "vue-three-shortkey": "^4.0.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.24.1",
-    "@quasar/app-webpack": "^3.12.4",
-    "electron": "^29.3.0",
+    "@babel/eslint-parser": "^7.24.6",
+    "@quasar/app-webpack": "^3.13.2",
+    "electron": "^30.0.9",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.25.0",
-    "eslint-webpack-plugin": "^4.1.0"
+    "eslint-plugin-promise": "^6.2.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "eslint-webpack-plugin": "^4.2.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
@@ -63,8 +63,8 @@
     "last 5 Opera versions"
   ],
   "engines": {
-    "node": ">= 18.20.2",
-    "npm": ">= 6.13.4",
+    "node": ">= 20.11.1",
+    "npm": ">= 10.5.2",
     "yarn": ">= 1.21.1"
   }
 }

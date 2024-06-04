@@ -319,6 +319,20 @@ function vezApiTokenEdit (id = 0) {
       return process.env.VEZY_API_TOKEN_EDIT
   }
 }
+// max 3 call's per second in Algolia - Build
+const algoliaCalls = []
+const delay = (delayInms) => {
+  return new Promise(resolve => setTimeout(resolve, delayInms))
+}
+const algoliaCheckMaxCallsWait = async () => {
+  const msNow = Date.now()
+  if (algoliaCalls.length < 3) return algoliaCalls.push(msNow)
+  const oldExecuteTime = algoliaCalls.shift()
+  if ((oldExecuteTime + 1100) < msNow) return algoliaCalls.push(msNow)
+  algoliaCalls.push(oldExecuteTime + 1100)
+  // to many calls in second --> waiting...
+  await delay(oldExecuteTime + 1100 - msNow)
+}
 
 app.post('/api/database/search', async (req, res) => {
   const indexId = req.body.indexId || 0
@@ -329,6 +343,8 @@ app.post('/api/database/search', async (req, res) => {
   // Niet (goed) mogelijk om op "" te filteren [controle op met/zonder vertaling weg laten] --> moet extra atribuut of tag in database zetten; nu weg laten
   // https://support.algolia.com/hc/en-us/articles/15072471836561-Can-I-filter-by-an-attribute-value-which-is-null-or-an-empty-string-
   // const isTranslation = req.body.isTranslation || false
+
+  algoliaCheckMaxCallsWait()
 
   const algoliasearch = require('algoliasearch')
   // Start the API client
@@ -402,6 +418,8 @@ app.post('/api/database/backup', async (req, res) => {
   const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Download all records for the index...
   // https://www.algolia.com/doc/api-reference/api-methods/browse/
+
+  algoliaCheckMaxCallsWait()
 
   let result = []
   algoliaIndex.browseObjects({

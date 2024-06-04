@@ -32,7 +32,7 @@
       </q-btn>
     </q-toolbar>
 
-    <div class="layout-column-content">
+    <div class="layout-column-content arrowKey" :class="classArrowKeyActive">
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" preview :presentation="presentation" />
     </div>
 
@@ -70,6 +70,12 @@ export default {
       }
 
       return this.presentationType.name
+    },
+    arrowKeyActive () {
+      return this.$store.arrowKeyLocation
+    },
+    classArrowKeyActive () {
+      return this.arrowKeyActive ? 'arrowKeyActive' : ''
     }
   }
 }

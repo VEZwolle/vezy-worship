@@ -35,7 +35,7 @@
       </q-toggle>
     </q-toolbar>
 
-    <div class="layout-column-content">
+    <div class="layout-column-content arrowKey" :class="classArrowKeyActive">
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
     </div>
 
@@ -72,6 +72,12 @@ export default {
     },
     shortkeysClear () {
       return this.$store.shortkeysClear()
+    },
+    arrowKeyActive () {
+      return !this.$store.arrowKeyLocation
+    },
+    classArrowKeyActive () {
+      return this.arrowKeyActive ? 'arrowKeyActive' : ''
     }
   }
 }

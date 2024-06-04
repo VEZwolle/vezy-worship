@@ -19,14 +19,16 @@ export default defineStore('service', {
     isClear: true,
     isOnlyLivestreamClear: false,
     noLivestream: false,
-    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + reomte keys
+    arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + remote keys
+    arrowKeyLocation: false, // true = preview, false = live
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
     serviceType: localStorage.getItem('serviceType') || 'standaard',
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: '',
-    lastShortKey: ''
+    lastShortKey: '',
+    setlistScroll: false
   }),
   actions: {
     setServiceSaved () {
@@ -167,6 +169,7 @@ export default defineStore('service', {
         const nextPresentation = this.service.presentations[i + 1]
         if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
           this.previewPresentation = cloneDeep(nextPresentation)
+          this.setlistScroll = true
         }
       }
 

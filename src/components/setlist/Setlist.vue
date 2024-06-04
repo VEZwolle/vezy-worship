@@ -41,12 +41,13 @@
       </q-toggle>
     </q-toolbar>
 
-    <div class="layout-column-content">
+    <div class="layout-column-content arrowKey">
       <div style="flex:1;">
         <q-list class="q-pt-sm">
           <Draggable v-model="$store.service.presentations" item-key="id">
             <template #item="{ element: presentation }">
               <SetlistItem
+                :ref="`setlistItem_${presentation.id}`"
                 :presentation="presentation"
                 :active="$store.previewPresentation?.id === presentation.id"
                 @click="$store.preview(presentation)"
@@ -97,6 +98,16 @@ export default {
       presentationTypes: presentationTypes.reverse()
     }
   },
+  computed: {
+    setlistScroll () {
+      return this.$store.setlistScroll
+    }
+  },
+  watch: {
+    'setlistScroll' (val) {
+      if (val) this.scrollActive()
+    }
+  },
   methods: {
     add (typeId) {
       this.$refs.presentationSettingsDialog.new(typeId)
@@ -106,6 +117,10 @@ export default {
     },
     openServiceSettings () {
       this.$refs.serviceSettingsDialog.show(this.$store.service)
+    },
+    scrollActive () {
+      this.$refs[`setlistItem_${this.$store.previewPresentation?.id}`].scrollToCenter()
+      this.$store.setlistScroll = false
     }
   }
 }
