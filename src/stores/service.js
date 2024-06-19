@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
-import presentationPresets from '../components/presentation-presets'
-import { versionUpdate } from './versionUpdate'
+import presentationPresets from '../components/presentation-presets.js'
+import { versionUpdate } from './versionUpdate.js'
 import { getDefaultURL } from '../components/presets-settings.js'
 
 let clearLastShortKey

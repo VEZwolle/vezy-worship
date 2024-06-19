@@ -125,8 +125,8 @@
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
 import CaptionSettingsPreview from '../caption/CaptionSettingsPreview.vue'
-import bibles from './bibles'
-import books from './books'
+import bibles from './bibles.js'
+import books from './books.js'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditor from '../common/VezyEditor.vue'
 import { CleanText } from '../common/CleanText.js'

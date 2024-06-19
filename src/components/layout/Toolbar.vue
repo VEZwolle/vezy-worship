@@ -190,12 +190,12 @@
 </template>
 
 <script>
-import ServiceSettingsDialog from '../service/ServiceSettingsDialog'
-import AppSettingsDialog from './AppSettingsDialog'
+import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
+import AppSettingsDialog from './AppSettingsDialog.vue'
 import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompareDialog.vue'
 import icon from 'assets/icon.svg'
 import PACKAGE from '../../../package.json'
-import MessageControl from '../message/MessageControl'
+import MessageControl from '../message/MessageControl.vue'
 import { ApiKeyEdit } from '../song/database/algolia.js'
 import { getPresentationsPresetsSettings } from '../presets-settings.js'
 

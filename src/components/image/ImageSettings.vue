@@ -60,7 +60,7 @@ import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutputBeamer from './ImageOutputBeamer.vue'
 import ImageOutputLivestream from './ImageOutputLivestream.vue'
-import presentationPresets from '../presentation-presets'
+import presentationPresets from '../presentation-presets.js'
 
 export default {
   components: { OutputPreview, ImageSelect, BackgroundSetting },
