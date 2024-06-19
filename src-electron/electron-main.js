@@ -196,7 +196,7 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
   if (process.env.DEV) {
     window.loadURL(process.env.APP_URL + '#' + url)
   } else {
-    window.loadFile('index.html' + '/#' + url)
+    window.loadFile('index.html', { hash: url })
   }
 
   return window
