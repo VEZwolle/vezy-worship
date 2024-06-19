@@ -9,9 +9,10 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
-import MessageOutput from '../message/MessageOutput'
+import presentationTypes from '../presentation-types.js'
+import MessageOutput from '../message/MessageOutput.vue'
 import { replaceBackgroundUrl } from '../presets-settings.js'
+import BgPng from '../../assets/bg.png'
 
 export default {
   components: { MessageOutput },
@@ -62,7 +63,7 @@ export default {
             style.backgroundColor = this.backgroundColor.beamer || '#000'
           }
         } else {
-          const image = this.backgroundImageUrl || replaceBackgroundUrl || require('../../assets/bg.png')
+          const image = this.backgroundImageUrl || replaceBackgroundUrl || BgPng
           style.backgroundImage = `url(${image})`
           if (this.alpha) {
             style.filter = 'brightness(0) invert(1)'
