@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x # use the latest LTS version of Node
       - name: Install Dependencies
         run: npm install
       - name: Build
