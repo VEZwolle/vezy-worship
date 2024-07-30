@@ -47,6 +47,7 @@ export default {
 
 <style>
 .bg-output-beamer {
+  position: absolute;
   overflow: hidden;
   width: 100%;
   height: 100%;
