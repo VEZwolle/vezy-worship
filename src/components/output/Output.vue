@@ -1,6 +1,6 @@
 <template>
   <div class="output" :style="style">
-    <Transition name="q-transition--fade" mode="in-out">
+    <Transition name="q-transition--fade">
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
     </Transition>
   </div>
