@@ -1,9 +1,11 @@
 <template>
-  <Transition name="q-transition--fade">
-    <svg v-if="control" v-show="!clear && !control.isFinished" class="countdown-output" :class="{ alpha }">
-      <text y="2.5vw" x="5vw">{{ control.remaining }}</text>
-    </svg>
-  </Transition>
+  <div class="bg-output">
+    <Transition name="q-transition--fade">
+      <svg v-if="control" v-show="!clear && !control.isFinished" class="countdown-output" :class="{ alpha }">
+        <text y="2.5vw" x="5vw">{{ control.remaining }}</text>
+      </svg>
+    </Transition>
+  </div>
 </template>
 
 <script>

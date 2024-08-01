@@ -21,6 +21,7 @@ export default defineStore('service', {
     noLivestream: false,
     arrowKeyContinueRemoteSetlist: 0, // 0 = false, 1 = true, 2 = true + remote keys
     arrowKeyLocation: false, // true = preview, false = live
+    startEnd: false, // start in live aan einde item
     searchBaseIsLocal: !(localStorage.getItem('database.searchBase') === 'cloud' || false),
     algoliaIndexId: localStorage.getItem('database.algoliaIndexId') ? parseInt(localStorage.getItem('database.algoliaIndexId')) : 0,
     splitSongLines: localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4,
@@ -177,6 +178,7 @@ export default defineStore('service', {
       this.isOnlyLivestreamClear = false
     },
     goLiveNext () {
+      this.startEnd = false
       if (!this.previewPresentation) return
       this.goLive(this.previewPresentation, true)
     },
@@ -185,7 +187,16 @@ export default defineStore('service', {
       const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
       if (i === 0) return
       const backPresentation = this.service.presentations[i + -1]
-      if (backPresentation) backPresentation.startEnd = true // only used bij textslidescontrole to start at end.
+      if (backPresentation) {
+        switch (backPresentation.type) {
+          case 'song':
+          case 'caption':
+          case 'scripture':
+            this.startEnd = true // only used bij textslidescontrole to start at end.
+            break
+          default:
+        }
+      }
       this.goLive(backPresentation, true)
     },
 

@@ -56,8 +56,8 @@ export default {
       this.presentation.control.selectedSlideIndex = 0
     }
     // check if back from last item --> start at end
-    if (this.presentation.startEnd) {
-      this.presentation.startEnd = false // reset
+    if (!this.preview && this.$store.startEnd) {
+      this.$store.startEnd = false // reset
       if (this.presentation.control.sections) {
         this.presentation.control.selectedSectionIndex = this.presentation.control.sections.length - 1
         this.presentation.control.selectedSlideIndex = this.presentation.control.sections[this.presentation.control.selectedSectionIndex].slides?.length - 1 || 0

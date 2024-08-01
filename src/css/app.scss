@@ -140,3 +140,16 @@ sup {
     color: white;
   }
 }
+
+// transition
+.vezy-fadeinout-enter-active {
+  transition: opacity 0.3s ease-out;
+}
+.vezy-fadeinout-leave-active {
+  transition: opacity 0.5s cubic-bezier(1,0,.58,1);
+}
+
+.vezy-fadeinout-enter-from,
+.vezy-fadeinout-leave-to {
+  opacity: 0;
+}

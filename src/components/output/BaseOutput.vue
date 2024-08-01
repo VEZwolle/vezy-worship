@@ -20,7 +20,7 @@ export default {
     backgroundImageUrl () {
       return this.$store.getMediaUrl(this.settings.bgFileId)
     },
-    style () {
+    styleBgBeamer () {
       const style = {}
 
       if (this.backgroundImageUrl) {
@@ -32,7 +32,7 @@ export default {
 
       return style
     },
-    styleOpacity () {
+    styleOpacityBeamer () {
       const style = {}
 
       if (this.settings.bgOpacity) {
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style>
-.bg-output-beamer {
+.bg-output {
   position: absolute;
   overflow: hidden;
   width: 100%;
