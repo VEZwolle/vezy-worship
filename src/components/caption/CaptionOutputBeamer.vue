@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-output-beamer" :style="style">
+  <div class="bg-output" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacity">
+      <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacityBeamer">
         <div class="caption-output">
           <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" :alpha="alpha" />
         </div>

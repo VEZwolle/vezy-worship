@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-output-beamer" :style="style">
+  <div class="bg-output" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <div v-show="!clear" class="full" :style="styleOpacity" />
+      <div v-show="!clear" class="full" :style="styleOpacityBeamer" />
     </Transition>
   </div>
 </template>
