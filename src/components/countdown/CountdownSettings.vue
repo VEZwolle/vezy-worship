@@ -25,6 +25,14 @@
             color="primary"
             inline
           />
+          <q-select
+            v-model="settings.position"
+            :options="positions"
+            emit-value
+            map-options
+            label="Positie"
+            outlined
+          />
         </q-card-section>
       </q-tab-panel>
       <q-tab-panel name="background">
@@ -54,6 +62,24 @@ export default {
           label: 'Klok',
           value: 1,
           definition: 'Klok tot (weergave bij tijd in de toekomst op dezelfde dag)'
+        }
+      ],
+      positions: [
+        {
+          label: 'Rechts onder (standaard)',
+          value: 'RO'
+        },
+        {
+          label: 'Links onder',
+          value: 'LO'
+        },
+        {
+          label: 'Links boven',
+          value: 'LB'
+        },
+        {
+          label: 'Rechts boven',
+          value: 'RB'
         }
       ]
     }
