@@ -134,6 +134,7 @@ export default [
     settings: {
       time: null,
       type: 0,
+      position: 'RO',
       bgOpacity: 0,
       bgFileId: null
     },

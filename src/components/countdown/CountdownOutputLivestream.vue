@@ -1,8 +1,8 @@
 <template>
   <div class="bg-output">
     <Transition name="q-transition--fade">
-      <svg v-if="control" v-show="!clear && !control.isFinished" class="countdown-output" :class="{ alpha }">
-        <text y="2.5vw" x="5vw">{{ control.remaining }}</text>
+      <svg v-if="control" v-show="!clear && !control.isFinished" class="countdown-output" :class="{ alpha }" :style="positionstyle">
+        <text y="2.5vw" x="5vw" :style="positionstyle">{{ control.remaining }}</text>
       </svg>
     </Transition>
   </div>
@@ -12,7 +12,34 @@
 import BaseOutput from '../output/BaseOutput.vue'
 
 export default {
-  extends: BaseOutput
+  extends: BaseOutput,
+
+  computed: {
+    positionstyle () {
+      const style = {}
+
+      if (this.settings.position) {
+        console.log(this.settings.position)
+        switch (this.settings.position) {
+          case 'RO': // RO
+            style.transform = 'scale(-1, -1)'
+            break
+          case 'LO': // LO
+            style.transform = 'scale(1, -1)'
+            break
+          case 'LB': // LB
+            style.transform = 'scale(1, 1)'
+            break
+          case 'RB': // RB
+            style.transform = 'scale(-1, 1)'
+            break
+          default:
+        }
+      }
+
+      return style
+    }
+  }
 }
 </script>
 
