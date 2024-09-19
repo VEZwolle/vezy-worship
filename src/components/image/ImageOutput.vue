@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-output-beamer" :style="beamer ? style : ''">
+  <div class="bg-output" :style="beamer ? styleBgBeamer : ''">
     <Transition name="q-transition--fade">
-      <div v-show="!clear && imgLoaded" class="image-output" :style="beamer ? styleOpacity : ''">
+      <div v-show="!clear && imgLoaded" class="image-output" :style="beamer ? styleOpacityBeamer : ''">
         <div :style="containerStyle">
           <img :src="fileUrl" loading="eager" :style="imageStyle" @load="imgLoad">
         </div>

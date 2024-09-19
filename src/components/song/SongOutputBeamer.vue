@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-output-beamer song-output-beamer" :style="style">
+  <div class="bg-output song-output-beamer" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
       <div v-show="!clear" :style="offsetServiceType">
-        <svg :style="styleOpacity" :class="{ alpha }">
+        <svg :style="styleOpacityBeamer" :class="{ alpha }">
           <text y="6.6vw">
             <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw" :style="styleServiceType">{{ line }}</tspan>
             <tspan x="50%" dy="3vw">&nbsp;</tspan>

@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-output-beamer" :style="style">
+  <div class="bg-output" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <div v-if="alpha" v-show="!clear && show" class="alpha" :style="styleOpacity" />
+      <div v-if="alpha" v-show="!clear && show" class="alpha" :style="styleOpacityBeamer" />
       <video v-else v-show="!clear && show" ref="player" :muted="muted" :src="fileUrl" class="video" />
     </Transition>
   </div>
