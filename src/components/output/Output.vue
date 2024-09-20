@@ -91,13 +91,11 @@ export default {
         if (this.presentation.settings?.bgFileId) {
           if (!this.backgroundColor.beamer) {
             this.lastItemBG = true
-            // console.log(`${this.preview} : ${this.id} : ${this.presentation.settings?.title} : ${this.lastItemBG}`)
             return
           }
         }
       }
       this.lastItemBG = false
-      // console.log(`${this.preview} : ${this.id} : ${this.presentation.settings?.title} : ${this.lastItemBG}`)
     }
   }
 }
