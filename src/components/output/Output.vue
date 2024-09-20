@@ -1,6 +1,10 @@
 <template>
   <div class="output" :style="style">
-    <Transition name="q-transition--fade">
+    <Transition
+      :name="lastItemBG ? 'vezy-fadeinout' : 'q-transition--fade'"
+      appear
+      @after-enter="setLastBg"
+    >
       <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
     </Transition>
   </div>
@@ -28,7 +32,8 @@ export default {
       backgroundColor: {
         beamer: '',
         livestream: ''
-      }
+      },
+      lastItemBG: false
     }
   },
   computed: {
@@ -78,6 +83,19 @@ export default {
   mounted () {
     this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
     this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
+  },
+  methods: {
+    setLastBg () {
+      if (this.showBackground) {
+        if (this.presentation.settings?.bgFileId) {
+          if (!this.backgroundColor.beamer) {
+            this.lastItemBG = true
+            return
+          }
+        }
+      }
+      this.lastItemBG = false
+    }
   }
 }
 </script>

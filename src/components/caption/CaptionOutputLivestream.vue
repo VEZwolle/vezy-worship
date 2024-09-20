@@ -1,9 +1,11 @@
 <template>
-  <Transition name="q-transition--fade">
-    <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="caption-output">
-      <CaptionLivestream :title="settings.title" :text="text" :format="style" :alpha="alpha" />
-    </div>
-  </Transition>
+  <div class="bg-output">
+    <Transition name="q-transition--fade">
+      <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="caption-output">
+        <CaptionLivestream :title="settings.title" :text="text" :format="style" :alpha="alpha" />
+      </div>
+    </Transition>
+  </div>
 </template>
 
 <script>
