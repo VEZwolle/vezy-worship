@@ -102,14 +102,40 @@ const fs = {
       if (!service.includes(fileId)) {
         continue // File isn't used anymore, so don't save it
       }
-
       // Read the file from its url
-      const reader = new zip.HttpReader(fileUrl, {
-        preventHeadRequest: true
-      })
+      try {
+        const reader = new zip.HttpReader(fileUrl, {
+          preventHeadRequest: true
+        })
 
-      // Add file to zip (by its id, which includes the file extension)
-      await zipWriter.add(fileId, reader)
+        // Add file to zip (by its id, which includes the file extension)
+        await zipWriter.add(fileId, reader)
+      } catch (error) {
+        // zoek item in setlist waar gebruikt
+        let notify = false
+        Object.values(store.service.presentations).forEach(presentation => {
+          const presentationJSON = JSON.stringify(presentation)
+          if (presentationJSON.includes(fileId)) {
+            Notify.create({
+              type: 'negative',
+              message: `Media bestand niet gevonden in setlist item met titel: "${presentation.settings?.title}", deze wordt niet opgeslagen.`,
+              timeout: 0,
+              actions: [{ icon: 'close', color: 'white' }],
+              position: 'top'
+            })
+            notify = true
+          }
+        })
+        if (!notify) {
+          Notify.create({
+            type: 'negative',
+            message: `Media bestand niet gevonden: "${fileId}", deze wordt niet opgeslagen.`,
+            timeout: 0,
+            actions: [{ icon: 'close', color: 'white' }],
+            position: 'top'
+          })
+        }
+      }
     }
 
     const blob = await zipWriter.close()
@@ -120,7 +146,7 @@ const fs = {
       await writable.write(blob)
       await writable.close()
 
-      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}`, position: 'top' })
+      Notify.create({ type: 'positive', message: `Dienst opgeslagen als ${fs.fileHandle.name}`, position: 'top' })
       store.setServiceSaved()
     } catch {
       Notify.create({
@@ -135,6 +161,80 @@ const fs = {
       link.href = URL.createObjectURL(blob)
       link.click()
       URL.revokeObjectURL(link.href)
+    }
+  },
+
+  async download (addMedia = false) {
+    const blobWriter = new zip.BlobWriter('application/zip')
+    const zipWriter = new zip.ZipWriter(blobWriter)
+
+    const store = useServiceStore()
+
+    // Add service data to zip
+    const service = JSON.stringify(store.service)
+    await zipWriter.add('service.json', new zip.TextReader(service))
+
+    // Add media files to zip
+    if (addMedia) {
+      for (const [fileId, fileUrl] of Object.entries(store.media)) {
+        if (!service.includes(fileId)) {
+          continue // File isn't used anymore, so don't save it
+        }
+        // Read the file from its url
+        try {
+          const reader = new zip.HttpReader(fileUrl, {
+            preventHeadRequest: true
+          })
+
+          // Add file to zip (by its id, which includes the file extension)
+          await zipWriter.add(fileId, reader)
+        } catch (error) {
+          // zoek item in setlist waar gebruikt
+          let notify = false
+          Object.values(store.service.presentations).forEach(presentation => {
+            const presentationJSON = JSON.stringify(presentation)
+            if (presentationJSON.includes(fileId)) {
+              Notify.create({
+                type: 'negative',
+                message: `Media bestand niet gevonden in setlist item met titel: "${presentation.settings?.title}", deze wordt niet opgeslagen.`,
+                timeout: 0,
+                actions: [{ icon: 'close', color: 'white' }],
+                position: 'top'
+              })
+              notify = true
+            }
+          })
+          if (!notify) {
+            Notify.create({
+              type: 'negative',
+              message: `Media bestand niet gevonden: "${fileId}", deze wordt niet opgeslagen.`,
+              timeout: 0,
+              actions: [{ icon: 'close', color: 'white' }],
+              position: 'top'
+            })
+          }
+        }
+      }
+    }
+
+    const blob = await zipWriter.close()
+
+    // Download zip file to disk
+    try {
+      Notify.create({ type: 'info', message: 'Downloaden wordt gestart...' })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'setlist.vez'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
+    } catch {
+      Notify.create({
+        type: 'negative',
+        message: 'De dienst kon niet worden opgeslagen... Error 1',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
     }
   }
 }
