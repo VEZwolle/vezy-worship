@@ -305,6 +305,9 @@ export default {
     save (showPicker) {
       this.isSaving = true
       this.$fs.save(showPicker)
+        .then((ready) => {
+          if (!ready) this.$q.notify({ type: 'negative', message: 'Fout tijdens opslaan' })
+        })
         .finally(() => {
           this.isSaving = false
         })

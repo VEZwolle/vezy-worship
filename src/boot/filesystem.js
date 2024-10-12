@@ -148,6 +148,7 @@ const fs = {
 
       Notify.create({ type: 'positive', message: `Dienst opgeslagen als ${fs.fileHandle.name}`, position: 'top' })
       store.setServiceSaved()
+      return true
     } catch {
       Notify.create({
         type: 'negative',
