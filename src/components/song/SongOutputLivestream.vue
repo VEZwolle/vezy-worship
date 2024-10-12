@@ -1,10 +1,14 @@
 <template>
-  <svg v-if="!clear" class="song-output-livestream" :class="{ alpha }">
-    <text y="1.6vw">
-      <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-      <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.2vw" class="translation">{{ line }}</tspan>
-    </text>
-  </svg>
+  <div class="bg-output">
+    <Transition name="q-transition--fade">
+      <svg v-show="!clear" class="song-output-livestream" :class="{ alpha }">
+        <text y="1.6vw">
+          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
+          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.2vw" class="translation">{{ line }}</tspan>
+        </text>
+      </svg>
+    </Transition>
+  </div>
 </template>
 
 <script>
@@ -14,12 +18,12 @@ export default {
   extends: BaseOutput,
   computed: {
     lines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
-      return section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
+      return section?.slides?.[this.control.selectedSlideIndex] || []
     },
     translatedLines () {
-      const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
-      return section?.slides?.[this.presentation.selectedSlideIndex] || []
+      const section = this.control.translationSections?.[this.control.selectedSectionIndex]
+      return section?.slides?.[this.control.selectedSlideIndex] || []
     }
   }
 }

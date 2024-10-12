@@ -1,5 +1,9 @@
 <template>
-  <q-list>
+  <q-list
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
+  >
     <q-item
       clickable
       class="bg-primary text-white"
@@ -42,6 +46,7 @@ export default {
     }
   },
   created () {
+    if (!this.presentation.control) this.presentation.control = { isFinished: true, remaining: '' }
     this.ticker = setInterval(this.tick, 1000)
     this.tick()
   },
@@ -51,15 +56,25 @@ export default {
   methods: {
     tick () {
       const now = dayjs()
-
-      this.settings.now = now.format('H:mm:ss')
-
       const end = dayjs(this.settings.time, 'HH:mm')
-      const seconds = end.diff(now, 'seconds')
+      const remainingSeconds = end.diff(now, 'seconds')
 
-      this.settings.seconds = seconds % 60
-      this.settings.minutes = Math.floor((seconds % 3600) / 60)
-      this.settings.hours = Math.floor(seconds / 3600)
+      const remainingHours = Math.floor(remainingSeconds / 3600)
+      this.presentation.control.isFinished = remainingHours < 0
+
+      if (this.settings.type === 1) { // klok
+        this.presentation.control.remaining = now.format('H:mm:ss')
+        return
+      }
+      // countdown klok
+      const hours = remainingHours.toString()
+      const minutes = Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2, '0')
+      const seconds = (remainingSeconds % 60).toString().padStart(2, '0')
+      if (remainingHours > 0) {
+        this.presentation.control.remaining = `${hours}:${minutes}:${seconds}`
+        return
+      }
+      this.presentation.control.remaining = `${minutes}:${seconds}`
     }
   }
 }

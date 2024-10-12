@@ -27,11 +27,13 @@ module.exports = configure(function (ctx) {
       'store',
       'api',
       'filesystem',
+      'filesystemdb',
       'electron',
       'date',
       'strip',
       'shortkey',
-      'notify'
+      'notify',
+      'global-components'
     ],
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
@@ -59,7 +61,10 @@ module.exports = configure(function (ctx) {
       env: {
         API_URL: ctx.dev
           ? 'http://localhost:5000/api'
-          : 'https://vezy-worship.web.app/api'
+          : 'https://vezy-worship.web.app/api',
+        API_HOST_URL: ctx.dev
+          ? 'http://localhost:5000'
+          : 'https://vezy-worship.web.app'
       },
 
       // transpile: false,
@@ -85,7 +90,8 @@ module.exports = configure(function (ctx) {
       chainWebpack (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
-      }
+      } // ,
+      // devtool: 'source-map' // remove line before build
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-devServer
@@ -227,7 +233,19 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'vezy-worship'
+        appId: 'vezy-worship',
+        artifactName: 'VezyWorship-Setup-${version}.${ext}',
+        win: {
+          target: [
+            {
+              target: 'nsis',
+              arch: ['x64']
+            }
+          ]
+        },
+        publish: {
+          provider: 'github'
+        }
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

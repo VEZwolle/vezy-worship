@@ -1,128 +1,400 @@
 <template>
   <div>
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0" @update:model-value="tabSwitch">
       <q-tab name="text" label="Liedtekst" />
-      <q-tab name="background" label="Achtergrond" />
+      <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
+      <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
     </q-tabs>
 
     <q-separator />
 
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
-        <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
-
         <div class="row q-gutter-md">
           <div class="col">
+            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+          </div>
+          <div class="col">
+            <div class="row q-gutter-md">
+              <div class="col">
+                <q-input v-model="settings.collection" outlined label="Collectie">
+                  <template #append>
+                    <q-select
+                      v-model="settings.collection"
+                      borderless
+                      hide-selected
+                      menu-anchor="bottom right"
+                      menu-self="top right"
+                      popup-content-style="height: 30vh;"
+                      options-dense
+                      :options="$store.dbCollections"
+                      @click="loadCollectionDatabase"
+                      @popup-show="loadCollectionDatabase"
+                    />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-2">
+                <q-input v-model="settings.number" outlined label="Nr" />
+              </div>
+              <div v-if="!editEmit" class="col-auto">
+                <q-toggle
+                  v-model="$store.searchBaseIsLocal"
+                  checked-icon="lyrics"
+                  unchecked-icon="cloud"
+                  color="primary"
+                  dense
+                  @update:model-value="$store.dbCollections = ['']"
+                >
+                  <q-tooltip>cloud of locale database</q-tooltip>
+                </q-toggle>
+                <q-btn-dropdown
+                  split
+                  color="primary"
+                  label="Uit database"
+                  icon="lyrics"
+                  class="q-mt-sm"
+                  @click.stop="importSongDb"
+                >
+                  <template #label>
+                    <q-tooltip>Songtekst uit locale database opzoeken</q-tooltip>
+                  </template>
+                  <q-list>
+                    <q-item v-close-popup clickable @click="CompareWithDb">
+                      <q-item-section>
+                        <q-item-label>
+                          Vergelijk met database versie
+                          <q-tooltip>
+                            Lied vergelijken met versie uit de database
+                          </q-tooltip>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row q-gutter-md">
+          <div class="col">
+            <div class="row">
+              <q-avatar icon="text_fields" size="md" />
+              Lied tekst
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorSong"
+              ref="inputEditorSong"
+              v-model="settings.text"
+              v-model:model-backup="backupSettingText"
+              height="50vh"
+              @scroll="syncInputsEditor('song')"
+            />
             <q-input
+              v-else
               ref="inputSong"
               v-model="settings.text"
               outlined
-              label="Tekst"
               type="textarea"
               class="input-songtext"
               @scroll="scroll('song')"
             />
+            <q-toolbar class="bg-subtoolbar text-subtoolbar">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='text')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='text')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ...X <" @click.stop="trimRemovePunctuation(input='text')">
+                <q-tooltip>Verwijder spaties begin/eind &<br>verwijder leesteken ( . , ; ) eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense @click="insertLabelsLines(input='text', label='vers')">
+                <template #label>
+                  label
+                  <q-tooltip>Plaat label bij ALLE onderdelen zonder label</q-tooltip>
+                </template>
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='text', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+              <q-space />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='text')">
+                <q-tooltip>Herstel opdracht (songtekst)</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of platte tekst</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
 
           <div class="col">
+            <div class="row">
+              <q-avatar icon="translate" size="md" />
+              Vertaling
+              <q-space />
+              <div v-if="notEqualCount" class="text-red">
+                Let op verschillend aantal regels!
+              </div>
+            </div>
+            <VezyEditorSong
+              v-if="textFormat"
+              id="inputEditorTranslate"
+              ref="inputEditorTranslate"
+              v-model="settings.translation"
+              v-model:model-backup="backupSettingTranslation"
+              height="50vh"
+              :border-read-only="!settings.translation"
+              @scroll="syncInputsEditor('translate')"
+            />
             <q-input
+              v-else
               ref="inputTranslate"
               v-model="settings.translation"
               outlined
-              label="Vertaling"
               type="textarea"
               class="input-songtext"
               :class="{ 'q-field--readonly': !settings.translation }"
               @scroll="scroll('translate')"
-            >
-              <q-btn
-                v-if="!settings.translation"
-                stack
-                icon="translate"
-                label="Automatisch vertalen"
-                class="translation-button"
-                :loading="isTranslating"
-                @click="translate"
-              />
-            </q-input>
+            />
+            <q-btn
+              v-if="!settings.translation"
+              stack
+              icon="translate"
+              label="Automatisch vertalen"
+              text-color="primary"
+              class="translation-button"
+              :loading="isTranslating"
+              @click="translate"
+            />
+            <q-toolbar v-if="settings.translation" class="bg-subtoolbar text-subtoolbar">
+              <q-btn flat dense label="2 > 1 ⏎" @click.stop="replaceDubbeleNewline(input='translation')">
+                <q-tooltip>Vervang 2 regeleinden door 1</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ... <" @click.stop="trimLines(input='translation')">
+                <q-tooltip>Verwijder spaties begin/eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="> ...X <" @click.stop="trimRemovePunctuation(input='translation')">
+                <q-tooltip>Verwijder spaties begin/eind &<br>verwijder leesteken ( . , ; ) eind regels</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn-dropdown split flat dense @click="insertLabelsLines(input='translation', label='vers')">
+                <template #label>
+                  label
+                  <q-tooltip>Plaat label bij ALLE onderdelen zonder label</q-tooltip>
+                </template>
+                <q-list dense>
+                  <q-item v-for="label, index of labels" :key="index" v-close-popup clickable style @click="insertLabelsLines(input='translation', label=label.key)">
+                    <q-item-section>
+                      <q-item-label>{{ label.key }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+              <q-space />
+              <q-btn flat dense icon="settings_backup_restore" @click.stop="restorBackup(input='translation')">
+                <q-tooltip>Herstel opdracht (vertaling)</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense label="Ordenen" @click.stop="arrange()">
+                <q-tooltip>Songtekst ordenen<br>EN/NL splitsen<br>Label toevoegen</q-tooltip>
+              </q-btn>
+              <q-space />
+              <q-btn flat dense :icon="textFormat ? 'visibility' : 'visibility_off'" @click.stop="toggleTextFormat">
+                <q-tooltip>Wissel van editor: Toon verdeling met labels of  platte tekst</q-tooltip>
+              </q-btn>
+            </q-toolbar>
           </div>
         </div>
       </q-tab-panel>
-
+      <q-tab-panel name="settings">
+        <div class="row q-gutter-xs">
+          <div class="text">
+            Automatisch opsplitsen regels uitzetten
+          </div>
+          <q-toggle
+            v-model="settings.noSplitLines"
+            color="primary"
+            keep-color
+            dense
+          />
+        </div>
+      </q-tab-panel>
       <q-tab-panel name="background">
-        <q-file v-model="background" accept="image/*" label="Selecteer achtergrondafbeelding" outlined @update:model-value="updateBackground">
-          <template #prepend>
-            <q-icon name="image" />
-          </template>
-
-          <template v-if="settings.fileId" #append>
-            <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
-          </template>
-        </q-file>
-
-        <img :src="backgroundUrl" class="q-mt-sm full-width">
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
     </q-tab-panels>
   </div>
+
+  <SongArrangeDialog
+    ref="SongArrangeDialog"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
+  <SearchDatabaseDialog
+    ref="SearchDatabaseDialog"
+    v-model:title="settings.title"
+    v-model:collection="settings.collection"
+    v-model:number="settings.number"
+    v-model:text="settings.text"
+    v-model:translation="settings.translation"
+  />
+  <SongDatabaseCompareDialog ref="SongDatabaseCompareDialog" />
 </template>
 
 <script>
-import BaseSettings from '../presentation/BaseSettings.vue'
+import SongSettingsTools from './SongSettingsTools.vue'
+import SongArrangeDialog from './SongArrangeDialog.vue'
+import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
+import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditorSong from '../common/VezyEditorSong.vue'
+import { splitSong } from '../song/SongControl.vue'
+import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 export default {
-  extends: BaseSettings,
+  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
+  extends: SongSettingsTools,
   data () {
     return {
       tab: 'text',
       isTranslating: false,
-      background: null,
-      ignoreInput: null
+      ignoreInput: null,
+      ignoreInputEditor: null,
+      textFormat: true
     }
   },
   computed: {
-    backgroundUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId || this.$store.service.backgroundImageId)
+    editEmit () {
+      return this.presentation?.from === 'database'
+    },
+    scrollOff () {
+      if (this.settings.translation && this.settings.text) return false
+      return true
+    },
+    countTextLines () {
+      return this.countLines(this.settings.text)
+    },
+    countTranslateLines () {
+      return this.countLines(this.settings.translation)
+    },
+    notEqualCount () {
+      if (!this.settings.translation) return false
+      return this.countTextLines !== this.countTranslateLines
     }
   },
   mounted () {
     this.songObserver = new ResizeObserver(this.resize('song'))
-    this.songObserver.observe(this.$refs.inputSong.nativeEl)
-
     this.translateObserver = new ResizeObserver(this.resize('translate'))
-    this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+    this.tabSwitch() // add observe by element exist
   },
   beforeUnmount () {
-    this.songObserver.disconnect()
-    this.translateObserver.disconnect()
+    this.removeObserveInput()
   },
   methods: {
+    toggleTextFormat () {
+      if (!this.textFormat) this.removeObserveInput() // remove observe before remove element
+      this.textFormat = !this.textFormat
+      if (!this.textFormat) this.addObserveInput() // add observe to element
+    },
+    tabSwitch () {
+      if (this.tab === 'text' && !this.textFormat) {
+        // add observe only when element exist
+        this.addObserveInput()
+      } else {
+        this.removeObserveInput()
+      }
+    },
+    addObserveInput () {
+      this.$nextTick(() => {
+        this.songObserver.observe(this.$refs.inputSong.nativeEl)
+        this.translateObserver.observe(this.$refs.inputTranslate.nativeEl)
+        // fix: Chrome/Edge - scroll to top by enter textarea --> no scroll
+        if (this.$refs.inputSong && this.$refs.inputTranslate) {
+          this.$refs.inputSong.nativeEl.addEventListener('keydown', this.inputSongKeyEvent, true)
+          this.$refs.inputTranslate.nativeEl.addEventListener('keydown', this.inputTranslateKeyEvent, true)
+        }
+      })
+    },
+    removeObserveInput () {
+      // remove observe, element not exist
+      this.songObserver.disconnect()
+      this.translateObserver.disconnect()
+      if (this.$refs.inputSong && this.$refs.inputTranslate) {
+        this.$refs.inputSong.nativeEl.removeEventListener('keydown', this.inputSongKeyEvent, true)
+        this.$refs.inputTranslate.nativeEl.removeEventListener('keydown', this.inputTranslateKeyEvent, true)
+      }
+    },
+    importSongDb () {
+      this.$refs.SearchDatabaseDialog.show()
+    },
     async translate () {
       this.isTranslating = true
 
+      const sections = splitSong(this.settings.text, 100, 0, false) // no auto split due to extra empty lines to be added
+      const textArray = []
+      for (const section of sections) { // beamer split
+        // section.label.value
+        for (const slide of section.slides) { // livestream split
+          textArray.push(slide.join('\n'))
+        }
+      }
+      if (!textArray.length) return this.settings.text // leeg of alleen labels geen onderdelen te vertalen.
       try {
-        const result = await this.$api.post('/translate', { text: this.settings.text })
-        this.settings.translation = result.translation
+        const result = await this.$api.post('/translatearray', { textArray })
+        let resultTranslation = ''
+        let count = 0
+        for (const section of sections) { // beamer split
+          if (section.label) resultTranslation += `${section.label.value}\n`
+          for (let i = 0; i < section.slides.length; i++) { // livestream split
+            resultTranslation += `${result.resultTranslations[count]}\n`
+            count++
+          }
+          resultTranslation += '\n'
+        }
+        this.settings.translation = resultTranslation.replace(/\n{2}$/, '') // verwijder laatste 2 lege regeleinden die teveel zijn geplaatst.
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het vertalen. Probeer het later opnieuw.' })
       } finally {
         this.isTranslating = false
       }
     },
-    updateBackground (file) {
-      this.settings.fileId = this.$store.addMedia(file)
-    },
-    resetBackground () {
-      this.settings.fileId = null
-      this.background = null
+    syncInputsEditor (input) {
+      if (this.scrollOff) return
+      if (this.ignoreInputEditor === input) {
+        this.ignoreInputEditor = null
+        return
+      }
+      if (input === 'song') {
+        this.ignoreInputEditor = 'translate'
+        this.$refs.inputEditorTranslate.setScrollPosition(this.$refs.inputEditorSong.getScrollPosition())
+      } else {
+        this.ignoreInputEditor = 'song'
+        this.$refs.inputEditorSong.setScrollPosition(this.$refs.inputEditorTranslate.getScrollPosition())
+      }
     },
     syncInputs (input, prop) {
+      if (this.scrollOff) return
       if (this.ignoreInput === input) {
         this.ignoreInput = null
         return
       }
-
       if (input === 'song') {
         this.ignoreInput = 'translate'
         set(this.$refs.inputTranslate.nativeEl, prop, get(this.$refs.inputSong.nativeEl, prop))
@@ -136,28 +408,78 @@ export default {
     },
     resize (input) {
       return () => this.syncInputs(input, 'style.height')
+    },
+    async loadCollectionDatabase () {
+      if (this.$store.searchBaseIsLocal) {
+        this.$store.dbCollections = await this.$fsdb.getCollections(true)
+        this.songDatabase = await this.$fsdb.getSongDatabaseSettings()
+        return
+      }
+      this.$store.dbCollections = await getAlgoliaCollections(this.$store.algoliaIndexId)
+    },
+    CompareWithDb () {
+      this.$refs.SongDatabaseCompareDialog.show(this.presentation)
+    },
+    countLines (text) {
+      const lines = text.replace(/\r?\n/g, '<br>').split('<br>')
+      return lines.length || 0
+    },
+    inputSongKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputSong.nativeEl)
+      }
+    },
+    inputTranslateKeyEvent (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault() // prevent usual browser behavour
+        this.textareaNoScroll(this.$refs.inputTranslate.nativeEl)
+      }
+    },
+    textareaNoScroll (textareaEl) {
+      const currentPos = textareaEl.selectionStart
+      const orgValue = textareaEl.value
+      const newValue = orgValue.substr(0, currentPos) + '\n' + orgValue.substr(currentPos)
+      textareaEl.value = newValue
+      textareaEl.selectionEnd = currentPos + 1
     }
   }
 }
 </script>
 
-<style scoped>
-.input-songtext::v-deep(textarea) {
-  height: 60vh;
+<style scoped lang="scss">
+.input-songtext :deep(textarea) {
+  height: 50vh;
 }
 
-.input-songtext::v-deep(textarea:read-only) {
+.input-songtext :deep(textarea:read-only) {
   color: #ccc;
 }
 
 .translation-button {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 75%;
   transform: translate(-50%, -50%);
 }
 
 .q-field--focused .translation-button {
   display: none;
+}
+
+.q-input {
+  :deep(.q-select) {
+    margin-right: -12px;
+
+    .q-field__control,
+    .q-field__control::before {
+      background-color: transparent;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .q-field__append {
+      padding-left: 0;
+    }
+  }
 }
 </style>

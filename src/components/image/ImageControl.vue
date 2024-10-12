@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+  <div
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
+  >
+    <q-tabs v-model="presentation.tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="both" label="Beamer & Livestream" />
       <q-tab name="beamer" label="Beamer" />
       <q-tab name="livestream" label="Livestream" />
@@ -8,7 +12,7 @@
 
     <q-separator />
 
-    <q-tab-panels v-model="tab">
+    <q-tab-panels v-model="presentation.tab">
       <q-tab-panel name="both">
         <div class="row q-gutter-md">
           <div class="col">
@@ -45,9 +49,14 @@ export default {
   setup () {
     return { ImageOutputBeamer, ImageOutputLivestream }
   },
-  data () {
-    return {
-      tab: 'both'
+  created () {
+    if (this.presentation.tab) {
+      return
+    }
+    if (this.$store.noLivestream) {
+      this.presentation.tab = 'beamer'
+    } else {
+      this.presentation.tab = 'both'
     }
   }
 }

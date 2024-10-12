@@ -1,40 +1,44 @@
 <template>
-  <q-list
-    v-for="(section, sectionIndex) in presentation.sections"
-    :key="sectionIndex"
-    v-shortkey="{ up: ['arrowup'], down: ['arrowdown'], left: ['arrowleft'], right: ['arrowright'] }"
-    class="q-py-sm"
+  <div
+    v-shortkey="shortkeysNextBack"
     @shortkey="handleArrow"
+    @click="setHandleArrowLocation"
   >
-    <q-item
-      v-if="section.label"
-      clickable
-      :class="`section-label text-white bg-${section.label.color}`"
-      :active="isSelectedLabel(sectionIndex)"
-      active-class="text-bold"
-      @click="select(sectionIndex, 0)"
-      @dblclick="goLive"
+    <q-list
+      v-for="(section, sectionIndex) in presentation.control.sections"
+      :key="sectionIndex"
+      class="q-py-sm"
     >
-      <q-item-section>
-        <q-item-label>{{ section.label.value }}</q-item-label>
-      </q-item-section>
-    </q-item>
+      <q-item
+        v-if="section.label"
+        clickable
+        :class="`section-label text-white bg-${section.label.color}`"
+        :active="isSelectedLabel(sectionIndex)"
+        active-class="text-bold"
+        @click="select(sectionIndex, 0)"
+        @dblclick="goLive"
+      >
+        <q-item-section>
+          <q-item-label>{{ section.label.value }}</q-item-label>
+        </q-item-section>
+      </q-item>
 
-    <q-item
-      v-for="(slide, slideIndex) in section.slides"
-      :key="slideIndex"
-      :ref="`slide_${sectionIndex}_${slideIndex}`"
-      clickable
-      :active="isSelected(sectionIndex, slideIndex)"
-      :active-class="!preview ? 'bg-secondary text-white' : null"
-      @click="select(sectionIndex, slideIndex)"
-      @dblclick="goLive"
-    >
-      <q-item-section>
-        <div v-for="(line, i) in slide" :key="i" v-html="line" />
-      </q-item-section>
-    </q-item>
-  </q-list>
+      <q-item
+        v-for="(slide, slideIndex) in section.slides"
+        :key="slideIndex"
+        :ref="`slide_${sectionIndex}_${slideIndex}`"
+        clickable
+        :active="isSelected(sectionIndex, slideIndex)"
+        :active-class="!preview ? 'bg-secondary text-white' : 'text-secondary'"
+        @click="select(sectionIndex, slideIndex)"
+        @dblclick="goLive"
+      >
+        <q-item-section>
+          <div v-for="(line, i) in slide" :key="i" class="section-line" v-html="line" />
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
 </template>
 
 <script>
@@ -42,22 +46,31 @@ import BaseControl from '../presentation/BaseControl.vue'
 
 export default {
   extends: BaseControl,
-  created () {
-    if (!this.presentation.selectedSectionIndex) {
-      this.presentation.selectedSectionIndex = 0
-    }
 
-    if (!this.presentation.selectedSlideIndex) {
-      this.presentation.selectedSlideIndex = 0
+  created () {
+    if (!this.presentation.control) this.presentation.control = {}
+    if (!this.presentation.control.selectedSectionIndex) {
+      this.presentation.control.selectedSectionIndex = 0
+    }
+    if (!this.presentation.control.selectedSlideIndex) {
+      this.presentation.control.selectedSlideIndex = 0
+    }
+    // check if back from last item --> start at end
+    if (!this.preview && this.$store.startEnd) {
+      this.$store.startEnd = false // reset
+      if (this.presentation.control.sections) {
+        this.presentation.control.selectedSectionIndex = this.presentation.control.sections.length - 1
+        this.presentation.control.selectedSlideIndex = this.presentation.control.sections[this.presentation.control.selectedSectionIndex].slides?.length - 1 || 0
+      }
     }
   },
   mounted () {
-    this.select(this.presentation.selectedSectionIndex, this.presentation.selectedSlideIndex, true)
+    this.select(this.presentation.control.selectedSectionIndex, this.presentation.control.selectedSlideIndex, true)
   },
   methods: {
     select (sectionIndex, slideIndex, scroll = false) {
-      this.presentation.selectedSectionIndex = sectionIndex
-      this.presentation.selectedSlideIndex = slideIndex
+      this.presentation.control.selectedSectionIndex = sectionIndex
+      this.presentation.control.selectedSlideIndex = slideIndex
 
       if (scroll) {
         const el = this.$refs[`slide_${sectionIndex}_${slideIndex}`][0].$el
@@ -65,19 +78,21 @@ export default {
       }
     },
     jump (change = +1) {
-      const selectedSection = this.presentation.sections[this.presentation.selectedSectionIndex]
-      let newSlideIndex = this.presentation.selectedSlideIndex + change
+      const selectedSection = this.presentation.control.sections[this.presentation.control.selectedSectionIndex]
+      let newSlideIndex = this.presentation.control.selectedSlideIndex + change
 
       if (selectedSection.slides[newSlideIndex]) {
         // Slide is in current section, so stay on `selectedSectionIndex`
-        return this.select(this.presentation.selectedSectionIndex, newSlideIndex, true)
+        return this.select(this.presentation.control.selectedSectionIndex, newSlideIndex, true)
       }
 
-      const newSectionIndex = this.presentation.selectedSectionIndex + change
-      const section = this.presentation.sections[newSectionIndex]
+      const newSectionIndex = this.presentation.control.selectedSectionIndex + change
+      const section = this.presentation.control.sections[newSectionIndex]
 
       if (!section) {
-        return
+        if (!this.$store.arrowKeyContinueRemoteSetlist || this.preview) return
+        if (change > 0) return this.$store.goLiveNext()
+        return this.$store.goLiveBack()
       }
 
       // Select last or first slide of section, based on going up (-1) or down (+1)
@@ -88,10 +103,17 @@ export default {
       this.select(newSectionIndex, newSlideIndex, true)
     },
     handleArrow (event) {
+      if (event.srcKey === this.$store.lastShortKey) return
       switch (event.srcKey) {
+        case 'pageup':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'up':
         case 'left':
           return this.jump(-1)
+        case 'pagedown':
+          this.$store.setLastShortKey(event.srcKey)
+        // eslint-disable-next-line no-fallthrough
         case 'down':
         case 'right':
           return this.jump(+1)
@@ -105,17 +127,17 @@ export default {
       }
     },
     isSelected (sectionIndex, slideIndex) {
-      return sectionIndex === this.presentation.selectedSectionIndex &&
-        slideIndex === this.presentation.selectedSlideIndex
+      return sectionIndex === this.presentation.control.selectedSectionIndex &&
+        slideIndex === this.presentation.control.selectedSlideIndex
     },
     isSelectedLabel (sectionIndex) {
-      const selectedIndex = this.presentation.selectedSectionIndex
+      const selectedIndex = this.presentation.control.selectedSectionIndex
 
       if (selectedIndex === sectionIndex) {
         return true
       }
 
-      const nextLabelIndex = this.presentation.sections
+      const nextLabelIndex = this.presentation.control.sections
         .findIndex((s, i) => i > sectionIndex && s.label !== null)
 
       if (nextLabelIndex === -1) { // No next labeled section found
@@ -140,6 +162,10 @@ export default {
   cursor: default !important;
   min-height: unset;
   padding: 1px 13px;
+
+  .section-line {
+    min-height: 0.7em;
+  }
 }
 
 .section-label {

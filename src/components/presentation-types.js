@@ -8,9 +8,19 @@ export default [
     color: 'blue',
     settings: {
       title: '',
-      text: '',
-      translation: '',
-      fileId: null
+      collection: '',
+      number: '',
+      text: '', // text
+      translation: '', // text
+      noSplitLines: false,
+      bgOpacity: 0,
+      bgFileId: null
+    },
+    title (settings) {
+      let collectionNumber = settings.collection ? ` ${settings.collection}` : ''
+      collectionNumber += settings.number ? ` ${settings.number}` : ''
+      collectionNumber = collectionNumber ? ` |${collectionNumber}` : ''
+      return `${settings.title}${collectionNumber}`
     },
     description (settings) {
       return settings.text
@@ -20,18 +30,24 @@ export default [
       control: require('./song/SongControl.vue').default
     },
     outputs: {
+      stage: require('./common/TextSlidesOutputStage.vue').default,
       beamer: require('./song/SongOutputBeamer.vue').default,
       livestream: require('./song/SongOutputLivestream.vue').default
     }
   },
   {
     id: 'caption',
-    name: 'Ondertitel',
+    name: 'Ondertitel & tekst',
     icon: 'short_text',
     color: 'primary',
     settings: {
       title: 'Titel',
-      text: 'Lorem ipsum...'
+      text: 'Lorem ipsum...', // html
+      bgOpacity: 0,
+      bgFileId: null,
+      formatBeamer: 'Geen',
+      formatLivestream: 'Standaard',
+      maxLivestreamChar: 500
     },
     description (settings) {
       return settings.text
@@ -41,7 +57,9 @@ export default [
       control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      livestream: require('./caption/CaptionOutput.vue').default
+      stage: require('./common/TextSlidesOutputStage.vue').default,
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   },
   {
@@ -51,6 +69,8 @@ export default [
     color: 'teal',
     settings: {
       title: '',
+      bgOpacity: 0,
+      bgFileId: null,
       beamer: {
         fileId: null,
         ratio: null,
@@ -75,6 +95,7 @@ export default [
       control: require('./image/ImageControl.vue').default
     },
     outputs: {
+      stage: require('./image/ImageOutputStage.vue').default,
       beamer: require('./image/ImageOutputBeamer.vue').default,
       livestream: require('./image/ImageOutputLivestream.vue').default
     }
@@ -86,15 +107,21 @@ export default [
     color: 'red',
     settings: {
       title: '',
+      bgOpacity: 0,
+      bgFileId: null,
       fileId: null,
       play: false,
-      time: 0
+      time: 0,
+      startTime: 0,
+      endTime: -1,
+      noLivestream: false
     },
     components: {
       settings: require('./video/VideoSettings.vue').default,
       control: require('./video/VideoControl.vue').default
     },
     outputs: {
+      stage: require('./video/VideoOutputStage.vue').default,
       beamer: require('./video/VideoOutputBeamer.vue').default,
       livestream: require('./video/VideoOutputLivestream.vue').default
     }
@@ -106,7 +133,10 @@ export default [
     color: 'orange',
     settings: {
       time: null,
-      type: 0
+      type: 0,
+      position: 'RO',
+      bgOpacity: 0,
+      bgFileId: null
     },
     description (settings) {
       if (settings.type === 1) {
@@ -119,7 +149,9 @@ export default [
       control: require('./countdown/CountdownControl.vue').default
     },
     outputs: {
-      livestream: require('./countdown/CountdownOutput.vue').default
+      stage: require('./countdown/CountdownOutputStage.vue').default,
+      beamer: require('./countdown/CountdownOutputBeamer.vue').default,
+      livestream: require('./countdown/CountdownOutputLivestream.vue').default
     }
   },
   {
@@ -128,12 +160,18 @@ export default [
     icon: 'menu_book',
     color: 'brown',
     settings: {
+      title: '',
       bible: 'nbv21',
       book: 'GEN',
       chapter: null,
       verseFrom: null,
       verseTo: null,
-      text: ''
+      text: '', // html
+      bgOpacity: 0,
+      bgFileId: null,
+      formatBeamer: 'Bijbeltekst',
+      formatLivestream: 'Breed',
+      maxLivestreamChar: 350
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
@@ -151,11 +189,12 @@ export default [
     },
     components: {
       settings: require('./scripture/ScriptureSettings.vue').default,
-      control: require('./scripture/ScriptureControl.vue').default
+      control: require('./caption/CaptionControl.vue').default
     },
     outputs: {
-      beamer: require('./scripture/ScriptureOutputBeamer.vue').default,
-      livestream: require('./scripture/ScriptureOutputLivestream.vue').default
+      stage: require('./common/TextSlidesOutputStage.vue').default,
+      beamer: require('./caption/CaptionOutputBeamer.vue').default,
+      livestream: require('./caption/CaptionOutputLivestream.vue').default
     }
   }
 ]

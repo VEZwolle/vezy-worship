@@ -1,9 +1,9 @@
-name: Build and Deploy
+name: Firebase - Build and Deploy
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
@@ -12,15 +12,23 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x # use the latest LTS version of Node
       - name: Install Dependencies
         run: npm install
       - name: Build
         run: npm run build
       - name: Install Functions Dependencies
         run: cd api && npm install
+      - name: Create Functions env file
+        run: |
+          cd api
+          echo "${{ secrets.FIREBASE_FUNCTIONS_ENV_FILE }}" > .env
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting,functions
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VEZY_WORSHIP }}

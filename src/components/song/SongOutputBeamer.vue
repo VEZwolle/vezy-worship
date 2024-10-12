@@ -1,13 +1,15 @@
 <template>
-  <div class="song-output-beamer" :style="style">
+  <div class="bg-output song-output-beamer" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <svg v-if="!clear">
-        <text y="6.6vw">
-          <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
-          <tspan x="50%" dy="3vw">&nbsp;</tspan>
-          <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation">{{ line }}</tspan>
-        </text>
-      </svg>
+      <div v-show="!clear" :style="offsetServiceType">
+        <svg :style="styleOpacityBeamer" :class="{ alpha }">
+          <text y="6.6vw">
+            <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw" :style="styleServiceType">{{ line }}</tspan>
+            <tspan x="50%" dy="3vw">&nbsp;</tspan>
+            <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation" :style="styleServiceType">{{ line }}</tspan>
+          </text>
+        </svg>
+      </div>
     </Transition>
   </div>
 </template>
@@ -19,23 +21,37 @@ export default {
   extends: BaseOutput,
   computed: {
     lines () {
-      const section = this.presentation.sections?.[this.presentation.selectedSectionIndex]
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },
     translatedLines () {
-      const section = this.presentation.translationSections?.[this.presentation.selectedSectionIndex]
+      const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },
-    backgroundImageUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId)
-    },
-    style () {
+    styleServiceType () {
+      if (!this.$store.serviceType || this.$store.serviceType === 'standaard') return ''
       const style = {}
-
-      if (this.backgroundImageUrl) {
-        style.backgroundImage = `url(${this.backgroundImageUrl})`
+      switch (this.$store.serviceType) {
+        case 'glow':
+          style.fontFamily = 'CMG Sans'
+          break
+        default:
       }
-
+      return style
+    },
+    offsetServiceType () {
+      if (!this.$store.serviceType || this.$store.serviceType === 'standaard') return ''
+      const style = {}
+      switch (this.$store.serviceType) {
+        case 'glow':
+          if (this.translatedLines.length) {
+            style.marginTop = `calc(50vh - ${this.lines.length * 4.4 + 9.7}vw)` // 4.4vw*2/2 = 4.4vw & 6.6vw+3vw/2-4.4/2vw+3.8vw=8.2vw
+          } else {
+            style.marginTop = `calc(50vh - ${this.lines.length * 2.2 + 8.2}vw)` // 4.4vw/2 = 2.2vw & 6.6vw-4.4/2vw+3.8vw=8.2vw
+          }
+          break
+        default:
+      }
       return style
     }
   }
@@ -43,20 +59,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@function shadow($opacity) {
-  @return drop-shadow(0.3vw 0.3vw 0.3vw rgba(0, 0, 0, $opacity));
+@function shadow($color, $opacity) {
+  @return drop-shadow(0.3vw 0.3vw 0.3vw rgba($color, $opacity));
 }
 
 .song-output-beamer {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
 
   svg {
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 120%;
 
     tspan {
       font-size: 3.8vw;
@@ -71,7 +83,7 @@ export default {
       text-anchor: middle;
       dominant-baseline: middle;
 
-      filter: shadow(0.8);
+      filter: shadow(#000, 0.8);
     }
 
     tspan.translation {
@@ -79,8 +91,21 @@ export default {
       font-style: italic;
       stroke-width: 0.4vw;
       font-size: 3.4vw;
-      filter: shadow(0.6);
+      filter: shadow(#000, 0.6);
     }
+
+    &.alpha {
+      tspan {
+        fill: #fff;
+        stroke: #fff;
+        filter: shadow(#fff, 0.8);
+      }
+
+      tspan.translation {
+        filter: shadow(#fff, 0.6);
+      }
+    }
+
   }
 }
 </style>

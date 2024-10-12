@@ -10,6 +10,15 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="text">
         <div class="row">
+          <div class="col">
+            <q-input v-model="titleBook" outlined label="Titel (boek, vers)" :rules="['required']" @change="titleUpdate" />
+          </div>
+          <div class="col q-pl-sm">
+            <q-input v-model="titleBible" outlined label="Titel (vertaling)" :rules="['required']" @change="titleUpdate" />
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-4">
             <q-select
               v-model="settings.bible"
@@ -71,41 +80,43 @@
           </div>
 
           <div class="col-2 q-pl-sm">
-            <q-btn
+            <q-btn-dropdown
+              split
               stack
               outline
               color="primary"
               label="Tekst inladen"
               icon="download"
               class="full-width"
-              :disabled="!settings.chapter || !settings.verseFrom"
+              :disable-main-btn="!settings.chapter || !settings.verseFrom"
+              :disable-dropdown="!settings.chapter || !settings.verseFrom || !settings.text"
               :loading="isLoadingScripture"
-              @click="loadScripture"
-            />
+              @click="loadScripture(true)"
+            >
+              <q-list>
+                <q-item v-close-popup clickable @click="loadScripture(false)">
+                  <q-item-section>
+                    <q-item-label>Toevoegen aan...</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
           </div>
         </div>
 
-        <q-editor
-          ref="editor"
-          v-model="settings.text"
-          min-height="60vh"
-          :toolbar="[['bold', 'italic', 'underline', 'superscript']]"
-          @paste.prevent.stop="pastePlainText"
+        <VezyEditor ref="vezyEditor" v-model="settings.text" v-model:savedPos="savedPos" min-height="80px" max-height="25vh" />
+
+        <CaptionSettingsPreview
+          v-model:formatBeamer="settings.formatBeamer"
+          v-model:formatLivestream="settings.formatLivestream"
+          v-model:maxLivestreamChar="settings.maxLivestreamChar"
+          :settings="settings"
+          :saved-pos="savedPos"
         />
       </q-tab-panel>
 
       <q-tab-panel name="background">
-        <q-file v-model="background" accept="image/*" label="Selecteer achtergrondafbeelding" outlined @update:model-value="updateBackground">
-          <template #prepend>
-            <q-icon name="image" />
-          </template>
-
-          <template v-if="settings.backgroundImageId" #append>
-            <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
-          </template>
-        </q-file>
-
-        <img :src="backgroundUrl" class="q-mt-sm full-width">
+        <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -113,19 +124,34 @@
 
 <script>
 import BaseSettings from '../presentation/BaseSettings.vue'
+import CaptionSettingsPreview from '../caption/CaptionSettingsPreview.vue'
 import bibles from './bibles'
 import books from './books'
+import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import VezyEditor from '../common/VezyEditor.vue'
+import { CleanText } from '../common/CleanText.js'
 
 export default {
+  components: { CaptionSettingsPreview, BackgroundSetting, VezyEditor },
   extends: BaseSettings,
   data () {
     return {
       tab: 'text',
-      background: null,
-      isLoadingScripture: false
+      titleBook: '',
+      titleBible: '',
+      isLoadingScripture: false,
+      savedPos: 0
     }
   },
   computed: {
+    title () {
+      const bookDefinition = books.find(b => b.id === this.settings.book)
+      let title = `${bookDefinition.name} ${this.settings.chapter}:${this.settings.verseFrom}`
+      if (this.settings.verseTo) {
+        title += `-${this.settings.verseTo}`
+      }
+      return `${title}`
+    },
     bibleOptions () {
       return bibles.map(b => ({
         label: b.name,
@@ -137,13 +163,20 @@ export default {
         label: b.name,
         value: b.id
       }))
-    },
-    backgroundUrl () {
-      return this.$store.getMediaUrl(this.settings.backgroundImageId || this.$store.service.backgroundImageId)
+    }
+  },
+  created () {
+    if (this.settings.title) {
+      const i = this.settings.title.indexOf('<small>(')
+      this.titleBook = i > -1 ? this.settings.title.substring(0, i - 1).trim() : this.settings.title
+      this.titleBible = i > -1 ? this.settings.title.substring(i + 8, this.settings.title.length - 9).trim() : ''
     }
   },
   methods: {
-    async loadScripture () {
+    titleUpdate () {
+      this.settings.title = this.titleBible ? `${this.titleBook} <small>(${this.titleBible})</small>` : `${this.titleBook}`
+    },
+    async loadScripture (newText = true) {
       this.isLoadingScripture = true
 
       try {
@@ -157,25 +190,27 @@ export default {
           verseTo
         })
 
-        this.settings.text = result.verses
-          .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
-          .trim()
+        if (newText) {
+          this.settings.text = result.verses
+            .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
+            .trim()
+        } else {
+          this.settings.text += `<div><br></div><div>${this.title}</div>`
+          this.settings.text += result.verses
+            .reduce((result, verse) => `${result} <sup>${verse.verse}</sup> ${verse.content}`, '')
+            .trim()
+        }
       } catch {
         this.$q.notify({ type: 'negative', message: 'Er is iets fout gegaan met het ophalen van de Bijbeltekst. Probeer het later opnieuw.' })
       } finally {
         this.isLoadingScripture = false
       }
-    },
-    pastePlainText (e) {
-      const text = e.clipboardData.getData('text/plain')
-      this.$refs.editor.runCmd('insertText', text)
-    },
-    updateBackground (file) {
-      this.settings.backgroundImageId = this.$store.addMedia(file)
-    },
-    resetBackground () {
-      this.settings.backgroundImageId = null
-      this.background = null
+      if (newText) {
+        this.titleBook = this.title
+        this.titleBible = this.settings.bible
+        this.titleUpdate()
+      }
+      this.settings.text = CleanText(this.settings.text)
     },
     required (val) {
       return !!val || 'Verplicht'
@@ -184,9 +219,16 @@ export default {
       if (typeof val !== 'number') {
         return
       }
-
       return val > 0 || 'Minimaal 1'
     }
   }
 }
 </script>
+
+<style scoped>
+.label {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 22px;
+}
+</style>
