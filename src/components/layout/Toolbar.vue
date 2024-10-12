@@ -47,6 +47,18 @@
             <q-item-label>Opslaan als</q-item-label>
           </q-item-section>
         </q-item>
+        <q-separator />
+        <q-item v-close-popup clickable @click="download(true)">
+          <q-item-section>
+            <q-item-label>Downloaden</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item v-close-popup clickable @click="download(false)">
+          <q-item-section>
+            <q-item-label>Downloaden (zonder media)</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-separator />
         <q-item v-close-popup clickable @click="compareSongData(true)">
           <q-item-section>
             <q-item-label>
@@ -293,6 +305,13 @@ export default {
     save (showPicker) {
       this.isSaving = true
       this.$fs.save(showPicker)
+        .finally(() => {
+          this.isSaving = false
+        })
+    },
+    download (addMedia) {
+      this.isSaving = true
+      this.$fs.download(addMedia)
         .finally(() => {
           this.isSaving = false
         })

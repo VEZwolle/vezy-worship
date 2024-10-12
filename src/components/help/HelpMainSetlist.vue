@@ -10,7 +10,7 @@
     <p>
       De diensten worden opgeslagen met de *.vez extensie.<br>Afbeeldingen, teksten, video's worden alle in dit bestand mee opgeslagen.<br>
       Openen van een opgeslagen dienst kan door op de knop <img src="../../assets/help/fileopen.png"> te klikken, of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor toevoegen aan huidige setlist.<br>
-      Opslaan naar een bestand gebeurd met de knop <img src="../../assets/help/filesave.png"> of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor opslaan als een nieuw bestand.
+      Opslaan naar een bestand gebeurd met de knop <img src="../../assets/help/filesave.png"> of je kan via <img src="../../assets/help/filesaveas.png"> kiezen voor opslaan als een nieuw bestand. (hiernaast kan je het bestand ook downloaden (met en zonder de media bestanden), wanneer opslaan niet door je brouwser ondersteund wordt.)
     </p>
     <p>
       Let op! Er wordt niet automatische opgeslagen tijdens bewerken of sluiten van het programma, dit moet je zelf handmatig doen.
