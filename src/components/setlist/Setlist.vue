@@ -86,7 +86,7 @@
 
 <script>
 import SetlistItem from './SetlistItem.vue'
-import presentationTypes from '../presentation-types'
+import presentationTypes from '../presentation-types.js'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
 import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'

@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import bibles from '../scripture/bibles'
+import bibles from '../scripture/bibles.js'
 
 export default {
   computed: {

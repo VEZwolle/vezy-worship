@@ -1,15 +1,17 @@
 {
   "name": "vezy-worship",
-  "version": "1.9.10",
+  "version": "2.0.0-beta",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
-  "author": "Jan-Paul Kleemans <jpkleemans@gmail.com>",
+  "author": "Jan-Paul Kleemans <jpkleemans@gmail.com> & Jeroen Faber",
+  "type": "module",
   "private": true,
   "repository": "github:VEZwolle/vezy-worship",
   "scripts": {
+    "lint": "eslint --ext .js,.vue ./",
+    "test": "echo \"No test specified\" && exit 0",
     "serve": "quasar dev",
     "build": "quasar build",
-    "lint": "eslint --fix --ext .js,.vue ./",
     "electron:serve": "quasar dev -m electron",
     "electron:build": "quasar build -m electron -P never",
     "electron:build-debug": "quasar build -m electron -d -P never",
@@ -20,7 +22,6 @@
     "api:update-data": "powershell ./dev/emulator-update-data.ps1"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.11",
     "@zip.js/zip.js": "^2.7.45",
     "axios": "^1.7.2",
     "core-js": "^3.37.1",
@@ -32,6 +33,7 @@
     "nanoid": "^5.0.7",
     "pinia": "^2.1.7",
     "pinia-shared-state": "^0.5.1",
+    "@quasar/extras": "^1.16.11",
     "quasar": "^2.16.4",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
@@ -39,32 +41,22 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.24.6",
-    "@quasar/app-webpack": "^3.13.2",
-    "electron": "^30.0.9",
+    "vite-plugin-checker": "^0.6.4",
+    "electron": "^31.0.1",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.26.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.2.0",
-    "eslint-plugin-vue": "^9.26.0",
-    "eslint-webpack-plugin": "^4.2.0"
+    "@quasar/app-vite": "^2.0.0-beta.14",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38"
   },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
-  ],
   "engines": {
-    "node": ">= 20.11.1",
-    "npm": ">= 10.5.2",
+    "node": "^24 || ^22 || ^20 || ^18",
+    "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }
 }

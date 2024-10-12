@@ -11,7 +11,7 @@
 <script>
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
-import { isLabel } from './labels'
+import { isLabel } from './labels.js'
 import chunk from 'lodash/chunk'
 
 export default {

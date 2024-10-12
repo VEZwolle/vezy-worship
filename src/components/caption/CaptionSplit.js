@@ -1,4 +1,4 @@
-import { wrapTextLinesFormat } from '../common/WrapText'
+import { wrapTextLinesFormat } from '../common/WrapText.js'
 
 const beamerFont = 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
 

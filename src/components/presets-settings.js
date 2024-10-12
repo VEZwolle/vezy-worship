@@ -1,6 +1,7 @@
 import { Notify } from 'quasar'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
-import presentationPresets from './presentation-presets'
+import presentationPresets from './presentation-presets.js'
+import BgPng from '../assets/bg.png'
 
 const fileDefaults = {
   baseFileId: null,
@@ -126,7 +127,7 @@ export async function getPresentationsPresetsSettings () {
     }
     // background
     const index = imageFiles.findIndex(t => t.name === 'background')
-    imageFiles[index].beamer.baseFileId = require('../assets/bg.png')
+    imageFiles[index].beamer.baseFileId = BgPng
     if (imageFiles[index]?.beamer.URL) replaceBackgroundUrl = imageFiles[index].beamer.URL
   }
 }

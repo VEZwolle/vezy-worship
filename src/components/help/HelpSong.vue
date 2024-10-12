@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import labels from '../song/labels'
+import labels from '../song/labels.js'
 
 export default {
   setup () {

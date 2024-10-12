@@ -1,8 +1,8 @@
 import { Notify } from 'quasar'
 import dayjs from 'dayjs'
 import { nanoid } from 'nanoid'
-import { api } from '../../../boot/api'
-import { fsdb } from '../../../boot/filesystemdb'
+import { api } from '../../../boot/api.js'
+import { fsdb } from '../../../boot/filesystemdb.js'
 
 export const algoliaIndexNames = [
   { value: 0, label: 'VEZ projectie', apiKeyEdit: 'database.apiKeyEdit' },

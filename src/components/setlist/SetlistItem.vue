@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
+import presentationTypes from '../presentation-types.js'
 
 export default {
   props: {

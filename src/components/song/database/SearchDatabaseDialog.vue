@@ -194,7 +194,7 @@
 <script>
 import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import cloneDeep from 'lodash/cloneDeep'
-import presentationTypes from '../../presentation-types'
+import presentationTypes from '../../presentation-types.js'
 import { ConvertToAlgoliaRecord, AddToAlgoliaDatabase, RemoveFromAlgoliaDatabase } from './algolia.js'
 
 export default {

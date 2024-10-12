@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
-import OutputBoxes from '../output/OutputBoxes'
+import presentationTypes from '../presentation-types.js'
+import OutputBoxes from '../output/OutputBoxes.vue'
 
 export default {
   components: { OutputBoxes },
