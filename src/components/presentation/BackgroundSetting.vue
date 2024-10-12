@@ -1,13 +1,26 @@
 <template>
-  <q-file v-model="background" accept="image/*" label="Selecteer eventueel een afwijkende achtergrondafbeelding (beamer)" outlined @update:model-value="updateBackground">
-    <template #prepend>
-      <q-icon name="image" />
-    </template>
+  <div class="row">
+    <q-file v-model="background" accept="image/*" label="Selecteer eventueel een afwijkende achtergrondafbeelding (beamer)" outlined class="col" @update:model-value="updateBackground">
+      <template #prepend>
+        <q-icon name="image" />
+      </template>
 
-    <template v-if="bgFileId" #append>
-      <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
-    </template>
-  </q-file>
+      <template v-if="bgFileId" #append>
+        <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
+      </template>
+    </q-file>
+    <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length">
+      <q-list>
+        <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="addMedia(id)">
+          <q-item-section>
+            <q-img :src="$store.getMediaUrl(id)" loading="lazy" fit="contain" height="8vh" width="16vh">
+              <q-tooltip>{{ id }}</q-tooltip>
+            </q-img>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
+  </div>
   <div class="q-mt-sm preview">
     <q-responsive :ratio="ratio" class="output-preview">
       <div class="bg-output-beamer" :style="style">
@@ -79,6 +92,9 @@ export default {
     },
     ratio () {
       return this.$store.outputRatio
+    },
+    imageIds () {
+      return this.$store.getImageIds()
     }
   },
   methods: {
@@ -87,6 +103,10 @@ export default {
     },
     updateBackground (file) {
       this.$emit('update:bgFileId', this.$store.addMedia(file))
+    },
+    addMedia (id) {
+      this.background = null
+      this.$emit('update:bgFileId', id)
     },
     resetBackground () {
       this.$emit('update:bgFileId', null)

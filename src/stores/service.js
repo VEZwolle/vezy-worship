@@ -254,6 +254,10 @@ export default defineStore('service', {
       }
 
       return this.media[id]
+    },
+    getImageIds () {
+      return Object.keys(this.media)
+      // Nu zowel image als video; video er nog uit filteren.
     }
   }
 })
