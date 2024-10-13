@@ -256,8 +256,19 @@ export default defineStore('service', {
       return this.media[id]
     },
     getImageIds () {
-      return Object.keys(this.media)
-      // Nu zowel image als video; video er nog uit filteren.
+      const imageExt = ['png', 'jpg', 'gif', 'tga', 'tif']
+      const videoExt = ['mp4', 'mov', 'avi', 'wmv', 'vob', 'mpg', 'mp2', 'mpv2', 'mpe', 'mpeg', 'mpev2']
+      let mediaIds = Object.keys(this.media)
+      if (mediaIds.length) {
+        mediaIds = mediaIds.filter((id) => {
+          const ext = id.split('.').pop().toLowerCase()
+          if (imageExt.includes(ext)) return true
+          if (videoExt.includes(ext)) return false
+          // Nu wannneer extentie niet bekend, vanuitgaan dat image is
+          return true
+        })
+      }
+      return mediaIds
     }
   }
 })
