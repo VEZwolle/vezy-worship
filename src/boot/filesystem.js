@@ -45,6 +45,8 @@ const fs = {
       // Load media into store
       const mediaEntries = entries.filter(e => e.filename !== 'service.json')
 
+      if (!add) store.clearMediaBut() // clear media list by open new setlist
+
       for (const file of mediaEntries) {
         const blob = await file.getData(new zip.BlobWriter())
 

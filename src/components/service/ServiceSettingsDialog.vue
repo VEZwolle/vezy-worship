@@ -46,7 +46,7 @@
                   <q-icon name="image" />
                 </template>
               </q-file>
-              <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length" flat>
+              <q-btn-dropdown v-if="imageIds.length && !isNew" :disable="!imageIds.length" flat>
                 <q-list>
                   <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="addMedia(id)">
                     <q-item-section>
@@ -149,7 +149,10 @@ export default {
       this.service.backgroundImageId = id
     },
     save () {
-      if (this.isNew) this.$fs.fileHandle = null
+      if (this.isNew) {
+        this.$fs.fileHandle = null
+        this.$store.clearMediaBut(this.service.backgroundImageId)
+      }
       this.$store.fillService(this.service)
       this.$refs.pco.addItems()
       this.hide()

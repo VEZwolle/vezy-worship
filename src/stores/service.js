@@ -241,6 +241,15 @@ export default defineStore('service', {
 
       return id
     },
+    clearMediaBut (id = 0) {
+      if (id) {
+        const mediaId = this.media[id]
+        this.media = {}
+        this.media[id] = mediaId
+      } else {
+        this.media = {}
+      }
+    },
     getMediaUrl (id) {
       if (!id) {
         return null
