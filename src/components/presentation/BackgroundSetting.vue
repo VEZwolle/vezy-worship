@@ -9,7 +9,7 @@
         <q-icon name="cancel" class="cursor-pointer" @click="resetBackground" />
       </template>
     </q-file>
-    <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length">
+    <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length" flat>
       <q-list>
         <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="addMedia(id)">
           <q-item-section>
