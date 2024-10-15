@@ -248,16 +248,18 @@ export default defineStore('service', {
       if (id.startsWith('/')) {
         return null
       }
-      // check if not used:
+      // check if not used in service, preview or live:
       if (!check || !JSON.stringify(this.service).includes(id)) {
-        URL.revokeObjectURL(this.media[id])
-        delete this.media[id]
+        if (!JSON.stringify(this.livePresentation).includes(id) && !JSON.stringify(this.previewPresentation).includes(id)) {
+          URL.revokeObjectURL(this.media[id])
+          delete this.media[id]
+        }
       }
     },
-    clearMediaBut (id = 0) {
+    cleanMedia (notId, check = false) {
       for (const mediaId of Object.keys(this.media)) {
-        if (mediaId !== id) {
-          this.removeMedia(mediaId)
+        if (mediaId !== notId) {
+          this.removeMedia(mediaId, check)
         }
       }
     },

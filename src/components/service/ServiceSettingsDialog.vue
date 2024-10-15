@@ -158,7 +158,7 @@ export default {
     save () {
       if (this.isNew) {
         this.$fs.fileHandle = null
-        this.$store.clearMediaBut(this.service.backgroundImageId)
+        this.$store.cleanMedia(this.service.backgroundImageId, false)
       }
       this.$store.fillService(this.service)
       this.$refs.pco.addItems()

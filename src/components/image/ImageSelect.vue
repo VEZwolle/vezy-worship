@@ -18,7 +18,7 @@
     </q-btn-dropdown>
   </div>
 
-  <div v-if="fileUrl" class="q-mt-md">
+  <div v-if="fileUrl && settings.ratio" class="q-mt-md">
     <!-- Zoom -->
     <div v-if="settings.advanced" class="row">
       <div class="col-narrow">
