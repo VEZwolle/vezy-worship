@@ -41,9 +41,12 @@
             <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="['required']" />
 
             <div class="row">
-              <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" clearable class="col" @update:model-value="updateBackgroundImage">
+              <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" class="col" @update:model-value="updateBackgroundImage">
                 <template #prepend>
                   <q-icon name="image" />
+                </template>
+                <template v-if="service.backgroundImageId" #append>
+                  <q-icon name="cancel" class="cursor-pointer" @click="resetBackgroundImage" />
                 </template>
               </q-file>
               <q-btn-dropdown v-if="imageIds.length && !isNew" :disable="!imageIds.length" flat>
@@ -143,6 +146,10 @@ export default {
         return
       }
       this.service.backgroundImageId = this.$store.addMedia(file)
+    },
+    resetBackgroundImage () {
+      this.backgroundImageFile = null
+      this.service.backgroundImageId = null
     },
     addMedia (id) {
       this.backgroundImageFile = null
