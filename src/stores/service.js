@@ -241,13 +241,24 @@ export default defineStore('service', {
 
       return id
     },
+    removeMedia (id, check = false) {
+      if (!id) {
+        return null
+      }
+      if (id.startsWith('/')) {
+        return null
+      }
+      // check if not used:
+      if (!check || !JSON.stringify(this.service).includes(id)) {
+        URL.revokeObjectURL(this.media[id])
+        delete this.media[id]
+      }
+    },
     clearMediaBut (id = 0) {
-      if (id) {
-        const mediaId = this.media[id]
-        this.media = {}
-        this.media[id] = mediaId
-      } else {
-        this.media = {}
+      for (const mediaId of Object.keys(this.media)) {
+        if (mediaId !== id) {
+          this.removeMedia(mediaId)
+        }
       }
     },
     getMediaUrl (id) {
