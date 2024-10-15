@@ -11,7 +11,7 @@
     </q-file>
     <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length" flat>
       <q-list>
-        <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="addMedia(id)">
+        <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="setMedia(id)">
           <q-item-section>
             <q-img :src="$store.getMediaUrl(id)" loading="lazy" fit="contain" height="8vh" width="16vh">
               <q-tooltip>{{ id }}</q-tooltip>
@@ -104,7 +104,7 @@ export default {
     updateBackground (file) {
       this.$emit('update:bgFileId', this.$store.addMedia(file))
     },
-    addMedia (id) {
+    setMedia (id) {
       this.background = null
       this.$emit('update:bgFileId', id)
     },
