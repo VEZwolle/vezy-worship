@@ -45,6 +45,8 @@ const fs = {
       // Load media into store
       const mediaEntries = entries.filter(e => e.filename !== 'service.json')
 
+      if (!add) store.cleanMedia(null, false) // clear media list by open new setlist
+
       for (const file of mediaEntries) {
         const blob = await file.getData(new zip.BlobWriter())
 
@@ -100,6 +102,7 @@ const fs = {
     // Add media files to zip
     for (const [fileId, fileUrl] of Object.entries(store.media)) {
       if (!service.includes(fileId)) {
+        store.removeMedia(fileId) // File isn't used anymore, remove from list
         continue // File isn't used anymore, so don't save it
       }
       // Read the file from its url
