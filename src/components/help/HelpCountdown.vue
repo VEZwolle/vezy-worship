@@ -24,6 +24,7 @@
     <p>
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
       Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
+      Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
       <img src="../../assets/help/scriptureachtergronddialog.png"><br>
       <img src="../../assets/help/achtergronddonkerder.png">
     </p>
