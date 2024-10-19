@@ -109,7 +109,7 @@ export default {
       return this.$store.getMediaUrl(this.service.backgroundImageId)
     },
     isNew () {
-      return !this.service.id
+      return !this.service?.id
     },
     imageIds () {
       return this.$store.getImageIds()
@@ -117,6 +117,10 @@ export default {
   },
   methods: {
     show (service = null) {
+      // reset dialog by open
+      this.backgroundImageFile = null
+      this.pcoDialog = false
+
       const defaults = {
         date: dayjs().day(7).format('YYYY/MM/DD'), // Next sunday
         time: '09:30',
