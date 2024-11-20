@@ -1,11 +1,24 @@
 <template>
-  <q-file v-model="file" accept="image/*" :label="label" :loading="isLoading" outlined @update:model-value="updateFile">
-    <template #prepend>
-      <q-icon name="image" />
-    </template>
-  </q-file>
+  <div class="row">
+    <q-file v-model="file" accept="image/*" :label="label" :loading="isLoading" outlined class="col" @update:model-value="updateFile">
+      <template #prepend>
+        <q-icon name="image" />
+      </template>
+    </q-file>
+    <q-btn-dropdown v-if="imageIds.length" :disable="!imageIds.length" flat>
+      <q-list>
+        <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="setMedia(id)">
+          <q-item-section>
+            <q-img :src="$store.getMediaUrl(id)" loading="lazy" fit="contain" height="8vh" width="16vh">
+              <q-tooltip>{{ id }}</q-tooltip>
+            </q-img>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
+  </div>
 
-  <div v-if="fileUrl" class="q-mt-md">
+  <div v-if="fileUrl && settings.ratio" class="q-mt-md">
     <!-- Zoom -->
     <div v-if="settings.advanced" class="row">
       <div class="col-narrow">
@@ -123,21 +136,36 @@ export default {
       return this.$store.getMediaUrl(this.settings.fileId)
     },
     factor () {
-      return this.$store.outputRatio / this.settings.ratio
+      if (this.$store.outputRatio && this.settings.ratio) {
+        return this.$store.outputRatio / this.settings.ratio
+      }
+      return 1
+    },
+    imageIds () {
+      return this.$store.getImageIds()
     }
   },
   methods: {
     async updateFile (file) {
       this.isLoading = true
 
-      this.settings.ratio = await this.getImageRatio(file)
       this.settings.fileId = this.$store.addMedia(file)
+      this.settings.ratio = await this.getImageRatio(this.settings.fileId)
 
       this.$emit('updateFile', file)
 
       this.isLoading = false
     },
-    getImageRatio (file) {
+    async setMedia (id) {
+      this.file = null
+      this.isLoading = true
+
+      this.settings.fileId = id
+      this.settings.ratio = await this.getImageRatio(id)
+
+      this.isLoading = false
+    },
+    getImageRatio (id) {
       return new Promise((resolve) => {
         const img = new Image()
 
@@ -150,7 +178,7 @@ export default {
           resolve(1) // Default to 1:1 ratio if something goes wrong
         }
 
-        img.src = URL.createObjectURL(file)
+        img.src = this.$store.getMediaUrl(id)
       })
     },
     fit () {

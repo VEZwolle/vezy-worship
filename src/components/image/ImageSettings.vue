@@ -100,7 +100,7 @@ export default {
       }
     },
     updateTitle (file) {
-      this.settings.title = file.name
+      if (file) this.settings.title = file.name
     },
     setPreset (id) {
       const preset = this.presentationPresets.find(p => p.id === id)
