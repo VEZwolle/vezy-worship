@@ -40,11 +40,27 @@
             <q-input v-model="service.preacher" label="Spreker" :rules="['required']" />
             <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="['required']" />
 
-            <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" clearable @update:model-value="updateBackgroundImage">
-              <template #prepend>
-                <q-icon name="image" />
-              </template>
-            </q-file>
+            <div class="row">
+              <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" class="col" @update:model-value="updateBackgroundImage">
+                <template #prepend>
+                  <q-icon name="image" />
+                </template>
+                <template v-if="service.backgroundImageId" #append>
+                  <q-icon name="cancel" class="cursor-pointer" @click="resetBackgroundImage" />
+                </template>
+              </q-file>
+              <q-btn-dropdown v-if="imageIds.length && !isNew" :disable="!imageIds.length" flat>
+                <q-list>
+                  <q-item v-for="id in imageIds" :key="id" v-close-popup clickable @click="setMedia(id)">
+                    <q-item-section>
+                      <q-img :src="$store.getMediaUrl(id)" loading="lazy" fit="contain" height="8vh" width="16vh">
+                        <q-tooltip>{{ id }}</q-tooltip>
+                      </q-img>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </div>
 
             <img v-if="backgroundImageUrl" :src="backgroundImageUrl" class="full-width">
           </q-card-section>
@@ -93,11 +109,18 @@ export default {
       return this.$store.getMediaUrl(this.service.backgroundImageId)
     },
     isNew () {
-      return !this.service.id
+      return !this.service?.id
+    },
+    imageIds () {
+      return this.$store.getImageIds()
     }
   },
   methods: {
     show (service = null) {
+      // reset dialog by open
+      this.backgroundImageFile = null
+      this.pcoDialog = false
+
       const defaults = {
         date: dayjs().day(7).format('YYYY/MM/DD'), // Next sunday
         time: '09:30',
@@ -128,8 +151,19 @@ export default {
       }
       this.service.backgroundImageId = this.$store.addMedia(file)
     },
+    resetBackgroundImage () {
+      this.backgroundImageFile = null
+      this.service.backgroundImageId = null
+    },
+    setMedia (id) {
+      this.backgroundImageFile = null
+      this.service.backgroundImageId = id
+    },
     save () {
-      if (this.isNew) this.$fs.fileHandle = null
+      if (this.isNew) {
+        this.$fs.fileHandle = null
+        this.$store.cleanMedia(this.service.backgroundImageId, false)
+      }
       this.$store.fillService(this.service)
       this.$refs.pco.addItems()
       this.hide()

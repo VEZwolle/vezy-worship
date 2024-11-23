@@ -215,6 +215,7 @@
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
       <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
     </p>
     <div class="text-h6 q-mb-md">
       Lijst toepasbare labels
