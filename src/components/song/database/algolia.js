@@ -138,9 +138,9 @@ export async function AddToAlgoliaDatabase (indexId = 0, records, partUpdate = f
       records,
       partUpdate
     })
-    if (result.objectIDs || result.objectID) {
+    if (result[0]?.objectIDs?.length || result.objectID) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens aangepast: Het duurt vaak even voor dit zichtbaar is.' })
-      return result.objectIDs || result.objectID
+      return result[0]?.objectIDs || result.objectID
     } else {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
@@ -165,9 +165,9 @@ export async function RemoveFromAlgoliaDatabase (indexId = 0, objectIDs) {
       apiKeyEdit,
       objectIDs
     })
-    if (result.objectIDs || result.objectID || result.taskID) {
+    if (result[0]?.objectIDs.length || result.objectID || result.taskID) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens verwijderd: Het duurt vaak even voor dit zichtbaar is.' })
-      return result.objectIDs || result.objectID || result.taskID
+      return result[0]?.objectIDs || result.objectID || result.taskID
     } else {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       return false
