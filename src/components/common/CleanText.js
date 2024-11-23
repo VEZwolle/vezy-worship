@@ -6,7 +6,7 @@ export function CleanText (content) {
     .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
     .replace(/( style="(.*?);*"| class="(.*?)")>/gi, '>') // verwijder alle extra "style" & class elementen
     .replace(/(\r*\n)|(\r(?!\n))|(\v)/g, '<br>') // (Carriage Return[CR] en/of) Linefeed [LF] (alinea-eind) of [CR] of vertical tab [VT] (nieuwe regel), soms door plakken/drag-drop.
-    .replace(/(?<!&nbsp;| )&nbsp;(?!&nbsp;| )/g, ' ').replace(/(?<=>) (?=<)/g, '&nbsp;') //                       losse spaties als ' ' plaatsen, tenzij tussen <div> </div>
+    .replace(/(?<!&nbsp;| |>)&nbsp;(?!&nbsp;| |<)/g, ' ') //                       losse spaties als ' ' plaatsen, tenzij na <..> of voor <..>
     .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<\/div><div>/g, '$1$2$5</div><div>') // drag-drop to empy line, remove <br>
     .replace(/([^>])((<\/?([briuspmal]*?)>)*?)<br>((<\/([biuspmal]*?)>)*?)<div>/g, '$1$2$5<div>') //              drag-drop to empy line, remove <br>
   let textStep = ''
