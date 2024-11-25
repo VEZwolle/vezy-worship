@@ -417,7 +417,7 @@ app.post('/api/database/search', async (req, res) => {
       "status":404
     } */
   } catch {
-    res.json({status: 500, message: '500: Algolia error' })
+    res.json({ status: 500, message: '500: Algolia error' })
   }
 })
 
@@ -442,7 +442,7 @@ app.post('/api/database/backup', async (req, res) => {
   }).then(() => {
     console.log(result)
     res.json(result) // all data records
-  }).catch(() => res.json({status: 500, message: '500: Algolia error' }))
+  }).catch(() => res.json({ status: 500, message: '500: Algolia error' }))
 })
 
 app.post('/api/database/edit', async (req, res) => {
@@ -506,7 +506,7 @@ app.post('/api/database/edit', async (req, res) => {
 app.post('/api/database/delete', async (req, res) => {
   const indexId = req.body.indexId || 0
   const apiKeyEdit = req.body.apiKeyEdit || false
-  if (apiKeyEdit !== vezApiTokenEdit(indexId)) return res.json({status: 401, message: 'Geen rechten voor wijzigen data' })
+  if (apiKeyEdit !== vezApiTokenEdit(indexId)) return res.json({ status: 401, message: 'Geen rechten voor wijzigen data' })
 
   const objectIDs = req.body.objectIDs // array of objectID
   if (objectIDs?.length === 0) return res.json({ status: 204, message: 'Geen wijzigingsdata ontvangen' })
