@@ -1,19 +1,19 @@
 <template>
   <q-layout>
     <q-header>
-      <Toolbar />
+      <ToolbarTop />
     </q-header>
 
     <q-page-container>
       <q-page v-if="$store.service" class="row">
         <div class="col">
-          <Setlist />
+          <SetlistControl />
         </div>
         <div class="col">
-          <Preview />
+          <PreviewControl />
         </div>
         <div class="col">
-          <Live />
+          <LiveControl />
         </div>
       </q-page>
 
@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import Toolbar from './layout/Toolbar.vue'
-import Setlist from './setlist/Setlist.vue'
-import Preview from './layout/Preview.vue'
-import Live from './layout/Live.vue'
+import ToolbarTop from './layout/ToolbarTop.vue'
+import SetlistControl from './setlist/SetlistControl.vue'
+import PreviewControl from './layout/PreviewControl.vue'
+import LiveControl from './layout/LiveControl.vue'
 
 export default {
-  components: { Toolbar, Setlist, Preview, Live },
+  components: { ToolbarTop, SetlistControl, PreviewControl, LiveControl },
 
   mounted () {
     if (localStorage.getItem('darkMode') === 'true') this.$q.dark.set(true)

@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
-import presentationPresets from '../presentation-presets'
-import OutputBoxes from '../output/OutputBoxes'
+import presentationTypes from '../presentation-types.js'
+import presentationPresets from '../presentation-presets.js'
+import OutputBoxes from '../output/OutputBoxes.vue'
 
 export default {
   components: { OutputBoxes },

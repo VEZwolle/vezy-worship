@@ -1,7 +1,7 @@
 <template>
   <q-responsive :ratio="$store.outputRatio" class="output-preview" :style="style">
     <iframe v-show="show" ref="iframe" />
-    <img v-if="visualView" :src="require(`../../assets/view${visualView}.png`)" class="overlay">
+    <img v-if="visualView" :src="visualViewPng" class="overlay">
   </q-responsive>
 </template>
 
@@ -9,6 +9,9 @@
 import { createApp } from 'vue'
 import { debounce } from 'quasar'
 import { replaceBackgroundUrl } from '../presets-settings.js'
+import BgPng from '../../assets/bg.png'
+import ViewbeamerPng from '../../assets/viewbeamer.png'
+import ViewlivestreamPng from '../../assets/viewlivestream.png'
 
 export default {
   props: {
@@ -27,6 +30,10 @@ export default {
     }
   },
   computed: {
+    visualViewPng () {
+      if (!this.visualView) return ''
+      return this.visualView === 'beamer' ? ViewbeamerPng : ViewlivestreamPng
+    },
     style () {
       if (this.bgStyle) return this.bgStyle
       const style = {}
@@ -51,7 +58,7 @@ export default {
         if (this.backgroundColor && !this.backgroundImageUrl) {
           return ` background-color: ${this.backgroundColor};`
         } else {
-          const image = this.backgroundImageUrl || replaceBackgroundUrl || require('../../assets/bg.png')
+          const image = this.backgroundImageUrl || replaceBackgroundUrl || BgPng
           return ` background-image: url(${image}); background-size: cover; background-position: center;`
         }
       }

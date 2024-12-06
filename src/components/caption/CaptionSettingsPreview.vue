@@ -102,22 +102,22 @@ export default {
     }
   },
   watch: {
-    'settings.text' (val) {
+    'settings.text' () {
       this.updated = false
       this.splitSlidesDebounce()
     },
-    'settings.title' (val) {
+    'settings.title' () {
       this.beamerTitleDebounce()
     },
-    'settings.formatBeamer' (val) {
+    'settings.formatBeamer' () {
       this.beamerTitleDebounce()
       this.splitSlidesDebounce()
     },
-    'settings.maxLivestreamChar' (val) {
+    'settings.maxLivestreamChar' () {
       this.updated = false
       this.splitSlidesDebounce()
     },
-    'savedPos' (val) {
+    'savedPos' () {
       if (this.updated) this.setActiveSlide()
     }
   },

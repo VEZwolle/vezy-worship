@@ -72,40 +72,40 @@
   <p>
     Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm kan je diverse instellingen doen.<br>
     Na wijzigen moet de desktop app opnieuw opgestart worden. (de instellingen worden per pc opgeslagen.)<br>
-    <ul>
-      <li>
-        Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.
-      </li>
-      <li>
-        Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
-      </li>
-      <li>
-        In de desktop app kan je een eigen standaard achtergrond & standaard collecte/nazorg en einde dienst afbeeldingen instellen.
-      </li>
-      <li>
-        De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
-      </li>
-      <li>
-        Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma en/of alpha key (of weer leeg gehaald worden voor standaard waarden).
-      </li>
-      <li>
-        Welk thema je wilt gebruiken voor (liederen) weergave: Standaard bovenin of Glow (gecentreerd in midden met capitalen).
-      </li>
-      <li>
-        Hoeveel regels de liedtekst standaard gesplitst moet worden op de beamer.
-      </li>
-      <li>
-        Welke liederen database gebruikt moet worden standaard, de lokale of een van de cloud versies.<br>
-        In welke collectie je standaard wilt zoeken.<br>
-        Welk lokale database bestand je wilt gebruiken.<br>
-        De cloud database downloaden voor lokaal gebruik.<br>
-        En je kunt de lokale database hier bewerken evenals de cloud versie mits je de juiste rechten hebt.
-      </li>
-      <li>
-        De app in donkere modes wilt weergeven ipv de standaard lichte weergave versie.
-      </li>
-    </ul>
   </p>
+  <ul>
+    <li>
+      Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.
+    </li>
+    <li>
+      Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
+    </li>
+    <li>
+      In de desktop app kan je een eigen standaard achtergrond & standaard collecte/nazorg en einde dienst afbeeldingen instellen.
+    </li>
+    <li>
+      De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
+    </li>
+    <li>
+      Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma en/of alpha key (of weer leeg gehaald worden voor standaard waarden).
+    </li>
+    <li>
+      Welk thema je wilt gebruiken voor (liederen) weergave: Standaard bovenin of Glow (gecentreerd in midden met capitalen).
+    </li>
+    <li>
+      Hoeveel regels de liedtekst standaard gesplitst moet worden op de beamer.
+    </li>
+    <li>
+      Welke liederen database gebruikt moet worden standaard, de lokale of een van de cloud versies.<br>
+      In welke collectie je standaard wilt zoeken.<br>
+      Welk lokale database bestand je wilt gebruiken.<br>
+      De cloud database downloaden voor lokaal gebruik.<br>
+      En je kunt de lokale database hier bewerken evenals de cloud versie mits je de juiste rechten hebt.
+    </li>
+    <li>
+      De app in donkere modes wilt weergeven ipv de standaard lichte weergave versie.
+    </li>
+  </ul>
   <div class="text-h6 q-mb-md">
     Gebruik cloud functies:
   </div>

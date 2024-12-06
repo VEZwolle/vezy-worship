@@ -33,38 +33,38 @@
     </p>
     <p>
       <i><u>aandachtspunten / opmerkingen:</u></i>
-      <ul>
-        <li>
-          De bestanden worden ongewijzigd opgeslagen in het *.vez bestand.<br>
-          opm. Erg grote bestanden (groter 1920x1080) kunnen het beste vooraf verkleind worden om laadtijd te verkleinen.
-        </li>
-        <li>
-          De transparantie van *.png afbeeldingen wordt herkend en toegepast.<br>
-          t.p.v. transparante vlakken wordt de basis achtergrond of de camerabeelden bij de livestream zichtbaar.
-        </li>
-        <li>
-          Er moet altijd een bestand gekozen zijn. <br>
-          Leeg bij de livestream betekend: gebruik het zelfde bestand als de beamer.<br>
-          Beide leeg: geeft een niet gevonden afbeelding figuur op beamer en livestream weer.
-        </li>
-        <li>
-          Wanneer je op de livestream of beamer geen afbeelding wilt zin kan je de afbeelding via de geavanceerde instellingen buiten beeld schuiven.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        De bestanden worden ongewijzigd opgeslagen in het *.vez bestand.<br>
+        opm. Erg grote bestanden (groter 1920x1080) kunnen het beste vooraf verkleind worden om laadtijd te verkleinen.
+      </li>
+      <li>
+        De transparantie van *.png afbeeldingen wordt herkend en toegepast.<br>
+        t.p.v. transparante vlakken wordt de basis achtergrond of de camerabeelden bij de livestream zichtbaar.
+      </li>
+      <li>
+        Er moet altijd een bestand gekozen zijn. <br>
+        Leeg bij de livestream betekend: gebruik het zelfde bestand als de beamer.<br>
+        Beide leeg: geeft een niet gevonden afbeelding figuur op beamer en livestream weer.
+      </li>
+      <li>
+        Wanneer je op de livestream of beamer geen afbeelding wilt zin kan je de afbeelding via de geavanceerde instellingen buiten beeld schuiven.
+      </li>
+    </ul>
     <p>
       <b><u>knop: zelfde bestand & positie</u></b><br>
-      <ul>
-        <li>
-          <i>Naar rechts geschoven</i> wordt op de livestream hetzelfde als op de beamer getoond. Het terug zetten naar rechts reset dit ook.
-        </li>
-        <li>
-          <i>Naar links geschoven</i> is de livestream verschillend van de beamer.<br>
-          Dit kan een verschillende afbeelding zijn; maar hoeft niet.<br>
-          via de geavanceerde instellingen kan je ook alleen de positie/grootte wijzigen.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        <i>Naar rechts geschoven</i> wordt op de livestream hetzelfde als op de beamer getoond. Het terug zetten naar rechts reset dit ook.
+      </li>
+      <li>
+        <i>Naar links geschoven</i> is de livestream verschillend van de beamer.<br>
+        Dit kan een verschillende afbeelding zijn; maar hoeft niet.<br>
+        via de geavanceerde instellingen kan je ook alleen de positie/grootte wijzigen.
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Geavanceerde instellingen
     </div>

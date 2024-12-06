@@ -35,10 +35,10 @@ import BaseOutputStage from '../output/BaseOutputStage.vue'
 export default {
   extends: BaseOutputStage,
   watch: {
-    'control.selectedSectionIndex' (val) {
+    'control.selectedSectionIndex' () {
       this.scroll()
     },
-    'control.selectedSlideIndex' (val) {
+    'control.selectedSlideIndex' () {
       this.scroll()
     }
   },

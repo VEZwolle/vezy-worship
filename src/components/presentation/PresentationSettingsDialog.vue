@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
+import presentationTypes from '../presentation-types.js'
 import cloneDeep from 'lodash/cloneDeep'
 
 export default {

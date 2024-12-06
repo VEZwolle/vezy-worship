@@ -104,24 +104,26 @@
     </p>
     <p>
       Nu u de gegevens uit PCO zit kunt u:
-      <ul>
-        <li>
-          Bovenin dubbelklik op de namen deze toevoegen aan VezyWorship, of via de knop "Update gegevens" alle gelijk.<br>
-          Achter de namen kunt u met een vinkje of kruisje zien welke gegevens reeds overgenomen zijn.
-        </li>
-        <li>
-          In het onderste deel kunt u aanvinken welke onderdelen geïmporteerd moeten worden naar VezyWorship.<br>
-          Via de knoppen onderin kunt u in 1x alles aan/uit of alleen alle liederen e.d. aan/uit zetten.<br>
-          Mocht het type niet juist herkend zijn kunt u dat aanpassen door op het symbool voor het onderdeel te klikken om te wisselen.<br>
-        </li>
-        <li>
-          De gegevens uit de titel, de beschrijving, de details en bij liederen ook eventueel uit de lyrics worden overgenomen.<br>
-          Mocht hier overlap in zitten bijv. zowel details als ook lyrics worden ze beiden geimporteerd in 1 onderdeel met een appart label hier boven.
-        </li>
-        <li>
-          Alleen de onderdelen die tijdens de dienst voorkomen worden weergegeven; onderdelen voor of na de dienst niet.
-        </li>
-      </ul>
+    </p>
+    <ul>
+      <li>
+        Bovenin dubbelklik op de namen deze toevoegen aan VezyWorship, of via de knop "Update gegevens" alle gelijk.<br>
+        Achter de namen kunt u met een vinkje of kruisje zien welke gegevens reeds overgenomen zijn.
+      </li>
+      <li>
+        In het onderste deel kunt u aanvinken welke onderdelen geïmporteerd moeten worden naar VezyWorship.<br>
+        Via de knoppen onderin kunt u in 1x alles aan/uit of alleen alle liederen e.d. aan/uit zetten.<br>
+        Mocht het type niet juist herkend zijn kunt u dat aanpassen door op het symbool voor het onderdeel te klikken om te wisselen.<br>
+      </li>
+      <li>
+        De gegevens uit de titel, de beschrijving, de details en bij liederen ook eventueel uit de lyrics worden overgenomen.<br>
+        Mocht hier overlap in zitten bijv. zowel details als ook lyrics worden ze beiden geimporteerd in 1 onderdeel met een appart label hier boven.
+      </li>
+      <li>
+        Alleen de onderdelen die tijdens de dienst voorkomen worden weergegeven; onderdelen voor of na de dienst niet.
+      </li>
+    </ul>
+    <p>
       En aan het einde klikt u op Opslaan.<br>
       Via bewerken van de dienst kunt u eventueel ook later weer onderdelen vanuit PCO toevoegen; reeds geïmporteerde worden niet overschreven.
     </p>

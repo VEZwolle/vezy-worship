@@ -1,31 +1,34 @@
 import App from 'components/App.vue'
-import Output from 'components/output/Output.vue'
+import OutputView from 'src/components/output/OutputView.vue'
 import OutputStage from 'components/output/OutputStage.vue'
-import Help from 'components/help/Help.vue'
+import HelpDocu from 'components/help/HelpDocu.vue'
 
 export default [
   {
     path: '/',
     component: App
+    // loaded on demand only, using dynamic imports:
+    // component: () => import('components/App.vue')
+    // no import at start required
   },
   {
     path: '/output/beamer',
-    component: Output,
+    component: OutputView,
     props: () => ({ id: 'beamer', showBackground: true, showMessages: true })
   },
   {
     path: '/output/beamer/alpha',
-    component: Output,
+    component: OutputView,
     props: () => ({ id: 'beamer', showBackground: true, showMessages: true, alpha: true })
   },
   {
     path: '/output/livestream',
-    component: Output,
+    component: OutputView,
     props: () => ({ id: 'livestream' })
   },
   {
     path: '/output/livestream/alpha',
-    component: Output,
+    component: OutputView,
     props: () => ({ id: 'livestream', alpha: true })
   },
   {
@@ -34,6 +37,6 @@ export default [
   },
   {
     path: '/help',
-    component: Help
+    component: HelpDocu
   }
 ]

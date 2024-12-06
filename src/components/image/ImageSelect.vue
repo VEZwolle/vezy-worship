@@ -18,9 +18,9 @@
     </q-btn-dropdown>
   </div>
 
-  <div v-if="fileUrl && settings.ratio" class="q-mt-md">
+  <div v-if="fileUrl && imageSettings.ratio" class="q-mt-md">
     <!-- Zoom -->
-    <div v-if="settings.advanced" class="row">
+    <div v-if="imageSettings.advanced" class="row">
       <div class="col-narrow">
         <q-btn flat round dense :label="fitType" class="reset-button" @click="fit">
           <q-tooltip>Reset zoom naar volledige {{ fitType === '↕' ? 'hoogte' : 'breedte' }}</q-tooltip>
@@ -29,18 +29,18 @@
 
       <div class="col">
         <q-slider
-          v-model="settings.zoom"
+          v-model="imageSettings.zoom"
           :min="0"
           :max="100"
           label
-          :label-value="`Zoom: ${settings.zoom}%`"
+          :label-value="`Zoom: ${imageSettings.zoom}%`"
           label-always
         />
       </div>
     </div>
 
     <!-- Rotate -->
-    <div v-if="settings.advanced" class="row">
+    <div v-if="imageSettings.advanced" class="row">
       <div class="col-narrow">
         <q-btn flat round dense label="🗘" class="reset-button" @click="resetRotate">
           <q-tooltip>Reset rotatie naar 0°</q-tooltip>
@@ -49,32 +49,32 @@
 
       <div class="col">
         <q-slider
-          v-model="settings.rotate"
+          v-model="imageSettings.rotate"
           :min="-180"
           :max="180"
           label
-          :label-value="`Rotatie: ${settings.rotate}°`"
+          :label-value="`Rotatie: ${imageSettings.rotate}°`"
           label-always
         />
       </div>
     </div>
 
     <div class="row">
-      <div v-if="settings.advanced" class="col-narrow">
+      <div v-if="imageSettings.advanced" class="col-narrow">
         <q-slider
-          v-model="settings.y"
+          v-model="imageSettings.y"
           vertical
           :min="-110"
           :max="110"
           label
-          :label-value="`Vanaf midden: ${settings.y > 0 ? '+' : ''}${settings.y}%`"
+          :label-value="`Vanaf midden: ${imageSettings.y > 0 ? '+' : ''}${imageSettings.y}%`"
           class="full-height"
         />
       </div>
 
       <div class="col relative-position">
         <slot />
-        <div v-if="settings.advanced" class="position-buttons">
+        <div v-if="imageSettings.advanced" class="position-buttons">
           <div>
             <q-btn flat round dense label="⭦" @click="align('top', 'left')" />
             <q-btn flat round dense label="⭡" @click="align('top', 'center')" />
@@ -94,23 +94,23 @@
       </div>
     </div>
 
-    <div v-if="settings.advanced" class="row">
+    <div v-if="imageSettings.advanced" class="row">
       <div class="col-narrow" />
 
       <div class="col">
         <q-slider
-          v-model="settings.x"
+          v-model="imageSettings.x"
           :min="-110"
           :max="110"
           label
-          :label-value="`Vanaf midden: ${settings.x > 0 ? '+' : ''}${settings.x}%`"
+          :label-value="`Vanaf midden: ${imageSettings.x > 0 ? '+' : ''}${imageSettings.x}%`"
           class="q-pt-xs"
         />
       </div>
     </div>
 
     <div class="text-center q-mt-xs">
-      <q-toggle v-model="settings.advanced" size="xs" label="Geavanceerde instellingen" @click="toggleAdvanced">
+      <q-toggle v-model="imageSettings.advanced" size="xs" label="Geavanceerde instellingen" @click="toggleAdvanced">
         <q-tooltip>Toon instellingen als zoom, positie, etc.</q-tooltip>
       </q-toggle>
     </div>
@@ -126,6 +126,7 @@ export default {
   emits: ['updateFile'],
   data () {
     return {
+      imageSettings: this.settings,
       file: null,
       fitType: '↕',
       isLoading: false
@@ -133,11 +134,11 @@ export default {
   },
   computed: {
     fileUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId)
+      return this.$store.getMediaUrl(this.imageSettings.fileId)
     },
     factor () {
-      if (this.$store.outputRatio && this.settings.ratio) {
-        return this.$store.outputRatio / this.settings.ratio
+      if (this.$store.outputRatio && this.imageSettings.ratio) {
+        return this.$store.outputRatio / this.imageSettings.ratio
       }
       return 1
     },
@@ -149,8 +150,8 @@ export default {
     async updateFile (file) {
       this.isLoading = true
 
-      this.settings.fileId = this.$store.addMedia(file)
-      this.settings.ratio = await this.getImageRatio(this.settings.fileId)
+      this.imageSettings.fileId = this.$store.addMedia(file)
+      this.imageSettings.ratio = await this.getImageRatio(this.imageSettings.fileId)
 
       this.$emit('updateFile', file)
 
@@ -160,8 +161,8 @@ export default {
       this.file = null
       this.isLoading = true
 
-      this.settings.fileId = id
-      this.settings.ratio = await this.getImageRatio(id)
+      this.imageSettings.fileId = id
+      this.imageSettings.ratio = await this.getImageRatio(id)
 
       this.isLoading = false
     },
@@ -183,10 +184,10 @@ export default {
     },
     fit () {
       if (this.fitType === '↕') {
-        this.settings.zoom = 100 / this.factor
+        this.imageSettings.zoom = 100 / this.factor
         this.fitType = '↔'
       } else {
-        this.settings.zoom = 100
+        this.imageSettings.zoom = 100
         this.fitType = '↕'
       }
     },
@@ -196,17 +197,17 @@ export default {
       this.resetPosition()
     },
     resetZoom () {
-      this.settings.zoom = 100
+      this.imageSettings.zoom = 100
     },
     resetRotate () {
-      this.settings.rotate = 0
+      this.imageSettings.rotate = 0
     },
     resetPosition () {
-      this.settings.x = 0
-      this.settings.y = 0
+      this.imageSettings.x = 0
+      this.imageSettings.y = 0
     },
     toggleAdvanced () {
-      if (!this.settings.advanced) {
+      if (!this.imageSettings.advanced) {
         this.reset()
       }
     },
@@ -221,8 +222,8 @@ export default {
 
       const bounds = { top, bottom, left, right, center }
 
-      this.settings.y = bounds[y]
-      this.settings.x = bounds[x]
+      this.imageSettings.y = bounds[y]
+      this.imageSettings.x = bounds[x]
     }
   }
 }

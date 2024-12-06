@@ -42,31 +42,31 @@
     </p>
     <p>
       <i><u>aandachtspunten / opmerkingen:</u></i>
-      <ul>
-        <li>
-          Er is een internet verbinding nodig om de tekst vanuit de database te kunnen inladen.
-        </li>
-        <li>
-          Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst en titel.
-        </li>
-        <li>
-          Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
-        </li>
-        <li>
-          <b>Max tekens</b><br>
-          Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
-          Splitsen van regels gebeurt met de volgende voorwaarden:<br>
-          <sup>
-            Zoek eerst of minder dan ingestelde aantal tekens<br>
-            Dan naar een regeleinde<br>
-            Dan naar [.?!]+['"’]<br>
-            Dan naar [.?!]<br>
-            Dan naar [,:; spatie]<br>
-            Dan naar iets binnen ingestelde aantal tekens.
-          </sup>
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        Er is een internet verbinding nodig om de tekst vanuit de database te kunnen inladen.
+      </li>
+      <li>
+        Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst en titel.
+      </li>
+      <li>
+        Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
+      </li>
+      <li>
+        <b>Max tekens</b><br>
+        Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
+        Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+        <sup>
+          Zoek eerst of minder dan ingestelde aantal tekens<br>
+          Dan naar een regeleinde<br>
+          Dan naar [.?!]+['"’]<br>
+          Dan naar [.?!]<br>
+          Dan naar [,:; spatie]<br>
+          Dan naar iets binnen ingestelde aantal tekens.
+        </sup>
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
     </div>
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import bibles from '../scripture/bibles'
+import bibles from '../scripture/bibles.js'
 
 export default {
   computed: {

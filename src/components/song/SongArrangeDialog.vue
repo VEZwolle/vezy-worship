@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import labels, { isLabel } from './labels'
+import labels, { isLabel } from './labels.js'
 
 export default {
   props: {

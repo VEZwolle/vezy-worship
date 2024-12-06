@@ -19,38 +19,36 @@
     <div class="text-h6 q-mb-md">
       Indeling scherm
     </div>
-    <p>
-      <ul>
-        <li>
-          <u><b>Functiebalk</b>: bovenin het scherm</u><br>
-          In de functiebalk zit links het bestandbeheer, in het midden de mededelingen en aan de rechterzijde de output en help knoppen.
-        </li>
-        <li>
-          <u><b>Onderdelenlijst/setlist:</b> Linker kolom</u><br>
-          Hier kan je de verschillende onderdelen van de dienst terug vinden, gesorteerd op de volgorde van de dienst.<br>
-          1x aanklikken zorgt er voor dat het onderdeel in de preview kolom zichtbaar wordt.<br>
-          Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.<br>
-          Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opsplitsing van teksten te krijgen.<br>
-          Daarnaast zit een knop werking van het doorlopen van de setlist met de pijltjes toetsen te wijzigen.<br>
-          <img src="../../assets/help/normalchange.png"> is de normale stand waarbij een nieuw onderdeel via go live in de live kolom komt.<br>
-          <img src="../../assets/help/continuchange.png"> stel je in om continu door te gaan met de pijltjes toetsen (onderaan een lied gaat hij gelijk door naar volgende lied bijvoorbeeld.<br>
-          <img src="../../assets/help/remotechange.png"> Zet je de stand nog een verder kan je ook gebruik maken van een afstandsbediening om door de sheets/onderdelen door te klikken.<br>
-          Onderin is een snel zoeken vak aanwezig voor liederen uit de lokale of cloud database.
-        </li>
-        <li>
-          <u><b>Voorbeeld/preview:</b> Midden kolom</u><br>
-          Hier kan je een voorbeeld zien van het geselecteerde onderdeel uit de setlist van de linker kolom.<br>
-          Wanneer je boven in en de kolom op de knop "GO live" klikt wordt dit onderdeel naar de rechterkolom (live) verplaatst.<br>
-          Gelijk wordt ook het volgende onderdeel uit de setlist in deze kolom geplaatst.
-        </li>
-        <li>
-          <u><b>Actief/Live:</b> Rechter kolom</u><br>
-          Alles wat in deze kolom staat wordt live getoond op de beamer en livestream.<br>
-          Het tijdelijk verbergen en weer aanzetten hiervan, op beamer & livestream, kan door de "Clear" knop aan te klikken.<br>
-          De livestream kan met de naast staande schuifknop al eerder verborgen worden.
-        </li>
-      </ul>
-    </p>
+    <ul>
+      <li>
+        <u><b>Functiebalk</b>: bovenin het scherm</u><br>
+        In de functiebalk zit links het bestandbeheer, in het midden de mededelingen en aan de rechterzijde de output en help knoppen.
+      </li>
+      <li>
+        <u><b>Onderdelenlijst/setlist:</b> Linker kolom</u><br>
+        Hier kan je de verschillende onderdelen van de dienst terug vinden, gesorteerd op de volgorde van de dienst.<br>
+        1x aanklikken zorgt er voor dat het onderdeel in de preview kolom zichtbaar wordt.<br>
+        Dubbel aanklikken zorgt er voor dat het onderdeel direct naar de live kolom toe gaat en het volgende onderdeel in de preview kolom terecht komt.<br>
+        Bovenin kan je ook aangeven of de dienst alleen voor de beamer bedoeld is, om geen opsplitsing van teksten te krijgen.<br>
+        Daarnaast zit een knop werking van het doorlopen van de setlist met de pijltjes toetsen te wijzigen.<br>
+        <img src="../../assets/help/normalchange.png"> is de normale stand waarbij een nieuw onderdeel via go live in de live kolom komt.<br>
+        <img src="../../assets/help/continuchange.png"> stel je in om continu door te gaan met de pijltjes toetsen (onderaan een lied gaat hij gelijk door naar volgende lied bijvoorbeeld.<br>
+        <img src="../../assets/help/remotechange.png"> Zet je de stand nog een verder kan je ook gebruik maken van een afstandsbediening om door de sheets/onderdelen door te klikken.<br>
+        Onderin is een snel zoeken vak aanwezig voor liederen uit de lokale of cloud database.
+      </li>
+      <li>
+        <u><b>Voorbeeld/preview:</b> Midden kolom</u><br>
+        Hier kan je een voorbeeld zien van het geselecteerde onderdeel uit de setlist van de linker kolom.<br>
+        Wanneer je boven in en de kolom op de knop "GO live" klikt wordt dit onderdeel naar de rechterkolom (live) verplaatst.<br>
+        Gelijk wordt ook het volgende onderdeel uit de setlist in deze kolom geplaatst.
+      </li>
+      <li>
+        <u><b>Actief/Live:</b> Rechter kolom</u><br>
+        Alles wat in deze kolom staat wordt live getoond op de beamer en livestream.<br>
+        Het tijdelijk verbergen en weer aanzetten hiervan, op beamer & livestream, kan door de "Clear" knop aan te klikken.<br>
+        De livestream kan met de naast staande schuifknop al eerder verborgen worden.
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Linker kolom: Setlist
     </div>
@@ -88,26 +86,26 @@
       Onderin zijn 2(+2) preview schermen mogelijk (zowel onder de preview kolom als wel onder de live kolom).<br>
       Standaard staan de beamer en livestream; maar je kan dit wisselen door de onderstaande vinkjes aan/uit te zetten; via de rechtermuisknop op beamer/livestream kan je ook de alpha uitvoer laten zien.<br>
       <img src="../../assets/help/previewkeuzeoutput.png">
-      <ul>
-        <li>
-          De beamer uitvoer
-        </li>
-        <li>
-          De livestream uitvoer
-        </li>
-        <li>
-          De alpha uitvoer van de beamer/livestream.<br>
-          <i>
-            Deze geeft met zwart/wit aan welke onderdelen wel of niet transparant moeten worden van de livestream uitvoer over de film beelden heen. (Zwart = op deze plek filmbeeld behouden; Wit = hier de livestream output tonen.)<br>
-            Let op om de alpha uitvoer van de beamer te laten werken dient bij de instellingen een zwarte achtergrond kleur gekozen te worden voor de beamer ipv de standaard afbeelding, daarnaast mag er ook geen afbeelding bij de dienst instellingen worden gekozen. Deze afbeeldingen zorgen er anders voor dat de alpha uitvoer van de beamer geheel wit is.
-          </i>
-        </li>
-        <li>
-          Tevens kan je hier ook een overlay over je preview zetten om te beoordelen of de gegevens goed zichtbaar zijn in alle hoeken van de zaal.<br>
-          Vink daarvoor "check zichtbaarheid" aan.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        De beamer uitvoer
+      </li>
+      <li>
+        De livestream uitvoer
+      </li>
+      <li>
+        De alpha uitvoer van de beamer/livestream.<br>
+        <i>
+          Deze geeft met zwart/wit aan welke onderdelen wel of niet transparant moeten worden van de livestream uitvoer over de film beelden heen. (Zwart = op deze plek filmbeeld behouden; Wit = hier de livestream output tonen.)<br>
+          Let op om de alpha uitvoer van de beamer te laten werken dient bij de instellingen een zwarte achtergrond kleur gekozen te worden voor de beamer ipv de standaard afbeelding, daarnaast mag er ook geen afbeelding bij de dienst instellingen worden gekozen. Deze afbeeldingen zorgen er anders voor dat de alpha uitvoer van de beamer geheel wit is.
+        </i>
+      </li>
+      <li>
+        Tevens kan je hier ook een overlay over je preview zetten om te beoordelen of de gegevens goed zichtbaar zijn in alle hoeken van de zaal.<br>
+        Vink daarvoor "check zichtbaarheid" aan.
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Mededelingen
     </div>

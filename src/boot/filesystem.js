@@ -113,7 +113,7 @@ const fs = {
 
         // Add file to zip (by its id, which includes the file extension)
         await zipWriter.add(fileId, reader)
-      } catch (error) {
+      } catch {
         // zoek item in setlist waar gebruikt
         let notify = false
         Object.values(store.service.presentations).forEach(presentation => {
@@ -192,7 +192,7 @@ const fs = {
 
           // Add file to zip (by its id, which includes the file extension)
           await zipWriter.add(fileId, reader)
-        } catch (error) {
+        } catch {
           // zoek item in setlist waar gebruikt
           let notify = false
           Object.values(store.service.presentations).forEach(presentation => {

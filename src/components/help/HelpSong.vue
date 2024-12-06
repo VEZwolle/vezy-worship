@@ -28,44 +28,44 @@
     </p>
     <p>
       Voor overzicht kan er een hulpregel worden toegevoegd met een label.
-      <ul>
-        <li>
-          Deze moet dan starten met<br>
-          of <i>label</i> en een <i>( { [ : ; / \ |</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
-          of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
-          bijv. "intro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
-          Zie onderaan deze pagina voor een complete lijst van opties.
-        </li>
-        <li>
-          voorbeelden:<br>
-          refrein (2x)
-          refrein
-          refrein 2
-        </li>
-        <li>
-          De hulpregels krijgen na opslaan in de preview en liveweergave een aparte kleur meegegeven;<br>
-          maar worden niet op de beamer en livestream getoond.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        Deze moet dan starten met<br>
+        of <i>label</i> en een <i>( { [ : ; / \ |</i> teken of een <i>getal</i> in de tekst, en daarna kan een willekeurige tekst geplaatst worden.<br>
+        of alleen bestaan uit exact het <i>label</i> zonder spaties.<br>
+        bijv. "intro", "verse", "refrein", "bridge", "tussenspel" of "eind".<br>
+        Zie onderaan deze pagina voor een complete lijst van opties.
+      </li>
+      <li>
+        voorbeelden:<br>
+        refrein (2x)
+        refrein
+        refrein 2
+      </li>
+      <li>
+        De hulpregels krijgen na opslaan in de preview en liveweergave een aparte kleur meegegeven;<br>
+        maar worden niet op de beamer en livestream getoond.
+      </li>
+    </ul>
     <p>
       Wanneer je een lege pagina wilt toevoegen kan dat alleen door een label te plaatsen tussen 2 lege regels in. Bijvoorbeeld "tussenspel"
     </p>
     <p>
       <i><u>aandachtspunten / opmerkingen:</u></i>
-      <ul>
-        <li>
-          Bij teksten met een vertaling komt de vertaling onder de liedtekst te staan op de beamer en livestream.<br>
-          Halveer het aantal regels per pagina tov van een lied zonder vertaling om het scherm niet te vol te krijgen.
-        </li>
-        <li>
-          Te lange regels verdwijnen buiten het scherm, er wordt niet verkleind of naar een volgende regel gegaan.
-        </li>
-        <li>
-          2 lege regels achter elkaar zorgen voor verspringingen; de 2e lege regel wordt namelijk als "tekstregel" gezien/toegepast.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        Bij teksten met een vertaling komt de vertaling onder de liedtekst te staan op de beamer en livestream.<br>
+        Halveer het aantal regels per pagina tov van een lied zonder vertaling om het scherm niet te vol te krijgen.
+      </li>
+      <li>
+        Te lange regels verdwijnen buiten het scherm, er wordt niet verkleind of naar een volgende regel gegaan.
+      </li>
+      <li>
+        2 lege regels achter elkaar zorgen voor verspringingen; de 2e lege regel wordt namelijk als "tekstregel" gezien/toegepast.
+      </li>
+    </ul>
     <p>
       <b><u>Vertaling</u></b><br>
       De vertaling dient dezelfde onderverdeling met lege regels te hebben al de originele tekst. De labels mogen ook gebruikt worden uit de lijst.<br>
@@ -79,66 +79,68 @@
     <p>
       <b><u>Bewerkingshulpmiddelen</u></b><br>
       Onder aan het venster ziet u een aantal knoppen staan die kunnen helpen bij het bewerken van de teksten.
-      <ul>
-        <li>
-          <img src="../../assets/help/addsongdialog2to1enter.png"> Deze knop vervangt in de tekst alle dubbele regeleinden door een enkele.
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialogspaceremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels.<br>
-          <i>Dit voorkomt vaak vreemde fouten in de splitsing van liederen of uitlijningsverschillen van dezelfde teksten.</i>
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialogspaceinterpunctieremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels en daarna de " . , ; " die aan einde van een regel staan.
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen;<br>
-          Dit gebeurt niet wanneer de zin reeds met een label begint.
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je 1 van de gebruikte tools, 1x ongedaan maken.<br>
-          <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i>
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialogordenen.png"> Hiermee start je het tekst ordenen dialoog op.<br>
-          Zie onder voor verdere uitleg.
-        </li>
-        <li>
-          <img src="../../assets/help/addsongdialogview.png"> Hiermee switch je tussen de opmaak en tekst weergave.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        <img src="../../assets/help/addsongdialog2to1enter.png"> Deze knop vervangt in de tekst alle dubbele regeleinden door een enkele.
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialogspaceremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels.<br>
+        <i>Dit voorkomt vaak vreemde fouten in de splitsing van liederen of uitlijningsverschillen van dezelfde teksten.</i>
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialogspaceinterpunctieremove.png"> Deze knop verwijderd alle voorloop en achterloop spaties uit de regels en daarna de " . , ; " die aan einde van een regel staan.
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialoglabel.png"> Met deze knop kan je bij alle onderdelen tegelijk een gekozen label toevoegen;<br>
+        Dit gebeurt niet wanneer de zin reeds met een label begint.
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je 1 van de gebruikte tools, 1x ongedaan maken.<br>
+        <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i>
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialogordenen.png"> Hiermee start je het tekst ordenen dialoog op.<br>
+        Zie onder voor verdere uitleg.
+      </li>
+      <li>
+        <img src="../../assets/help/addsongdialogview.png"> Hiermee switch je tussen de opmaak en tekst weergave.
+      </li>
+    </ul>
     <p>
       <b><u>Bewerkingshulpmiddel - Ordenen</u></b><br>
       Deze tool is via de knop "ordenen" op te starten.<br>
       Bij het opstarten worden gelijk alle voor en achterloop spaties verwijderd. Tevens worden alleen de labels van de tekst gebruikt, zowel voor tekst als voor de vertaling.<br>
       <img src="../../assets/help/songdialogordenen.png">
-      <ul>
-        <li>
-          <img src="../../assets/help/songdialogordenen1kolom.png"> & <img src="../../assets/help/songdialogordenen2kolom.png"> Hiermee kan je switchen tussen de 1 & 2 kolommen weergave. In de 1 kolom weergave staat de tekst en vertaling onder elkaar en kan je ook de verwijderde regels zien (en herstellen). (het symbool geeft aan wat het is.)
-        </li>
-        <li>
-          Wanneer je met de muis boven een regel staat krijg je een aantal opties te zien.<img src="../../assets/help/songdialogordenenoptiesregel.png"><br>
-          - voeg een lege regel in.<br>
-          - verwijder de regel<br>
-          - verplaats naar de tekst<br>
-          - verplaats naar de vertaling<br>
-          - pas bei beide toe<br>
-        </li>
-        <li>
-          Wanneer je met de rechter muisknop op een regel klikt krijg je de onderstaande opties te zien.<br>
-          <img src="../../assets/help/songdialogordenenoptiesregelright.png"><br>
-          - Door met rechts op de optie "label..." te klikken krijg je de andere labels te zien om uit te kiezen<br>
-          - Lege regel invoegen is alleen voor de huidige kolom; bij (beide) voor beide kolommen
-          - Kopiëren van onderdeel kopieert het geheel; hierna kan je op een andere positie uit het menu kiezen voor plakken (met of zonder het label)<br>
-          - de onderste opties zijn gelijk aan bovenstaande knoppen wanneer je de muis boven de regel houdt.<br>
-        </li>
-        <li>
-          <img src="../../assets/help/songdialogordenenzoektaal.png"> Deze knop haalt de nederlandse tekst uit de liedtekst en verplaatst deze naar de vertaling van het lied. Dit gebeurt via taalherkenning van DeepL. Hierdoor wordt 95-100% in de juiste kolom geplaatst. De labels blijven ongewijzigd in beide kolommen staan.
-        </li>
-        <li>
-          <img src="../../assets/help/songdialogordenenswitch.png"> Door deze switch om te zetten kan je de tekst in de regel bewerken. Dubbel klik met de muis op de regel activeert deze bewerkmodus ook. Met "enter" ga je weer uit de bewerkmodes.
-        </li>
-      </ul>
+    </p>
+    <ul>
+      <li>
+        <img src="../../assets/help/songdialogordenen1kolom.png"> & <img src="../../assets/help/songdialogordenen2kolom.png"> Hiermee kan je switchen tussen de 1 & 2 kolommen weergave. In de 1 kolom weergave staat de tekst en vertaling onder elkaar en kan je ook de verwijderde regels zien (en herstellen). (het symbool geeft aan wat het is.)
+      </li>
+      <li>
+        Wanneer je met de muis boven een regel staat krijg je een aantal opties te zien.<img src="../../assets/help/songdialogordenenoptiesregel.png"><br>
+        - voeg een lege regel in.<br>
+        - verwijder de regel<br>
+        - verplaats naar de tekst<br>
+        - verplaats naar de vertaling<br>
+        - pas bei beide toe<br>
+      </li>
+      <li>
+        Wanneer je met de rechter muisknop op een regel klikt krijg je de onderstaande opties te zien.<br>
+        <img src="../../assets/help/songdialogordenenoptiesregelright.png"><br>
+        - Door met rechts op de optie "label..." te klikken krijg je de andere labels te zien om uit te kiezen<br>
+        - Lege regel invoegen is alleen voor de huidige kolom; bij (beide) voor beide kolommen
+        - Kopiëren van onderdeel kopieert het geheel; hierna kan je op een andere positie uit het menu kiezen voor plakken (met of zonder het label)<br>
+        - de onderste opties zijn gelijk aan bovenstaande knoppen wanneer je de muis boven de regel houdt.<br>
+      </li>
+      <li>
+        <img src="../../assets/help/songdialogordenenzoektaal.png"> Deze knop haalt de nederlandse tekst uit de liedtekst en verplaatst deze naar de vertaling van het lied. Dit gebeurt via taalherkenning van DeepL. Hierdoor wordt 95-100% in de juiste kolom geplaatst. De labels blijven ongewijzigd in beide kolommen staan.
+      </li>
+      <li>
+        <img src="../../assets/help/songdialogordenenswitch.png"> Door deze switch om te zetten kan je de tekst in de regel bewerken. Dubbel klik met de muis op de regel activeert deze bewerkmodus ook. Met "enter" ga je weer uit de bewerkmodes.
+      </li>
+    </ul>
+    <p>
       Alleen na gebruik van de knop "toepassen" wordt de bewerking opgeslagen naar je liedtekst in de setlist; "annuleren" sluit het venster zonder opslaan.
     </p>
     <div class="text-h6 q-mb-md">
@@ -229,7 +231,7 @@
 </template>
 
 <script>
-import labels from '../song/labels'
+import labels from '../song/labels.js'
 
 export default {
   setup () {
