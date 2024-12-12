@@ -175,6 +175,7 @@ export default defineStore('service', {
       }
 
       this.livePresentation = cloneDeep(presentation)
+      this.arrowKeyLocation = false // active arrow keys naar live
       this.isOnlyLivestreamClear = false
     },
     goLiveNext () {
