@@ -59,14 +59,14 @@ export default {
       const end = dayjs(this.settings.time, 'HH:mm')
       const remainingSeconds = end.diff(now, 'seconds')
 
-      const remainingHours = Math.floor(remainingSeconds / 3600)
-      this.presentation.control.isFinished = remainingHours < 0
+      this.presentation.control.isFinished = remainingSeconds <= 0
 
       if (this.settings.type === 1) { // klok
         this.presentation.control.remaining = now.format('H:mm:ss')
         return
       }
       // countdown klok
+      const remainingHours = Math.floor(remainingSeconds / 3600)
       const hours = remainingHours.toString()
       const minutes = Math.floor((remainingSeconds % 3600) / 60).toString().padStart(2, '0')
       const seconds = (remainingSeconds % 60).toString().padStart(2, '0')
