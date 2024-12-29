@@ -2,7 +2,7 @@
   <div class="bg-output">
     <Transition name="q-transition--fade">
       <div v-if="settings.formatLivestream !== 'Geen' && settings.formatLivestream !== undefined" v-show="!clear" class="caption-output">
-        <CaptionLivestream :title="settings.title" :text="text" :format="style" :alpha="alpha" />
+        <CaptionLivestream :title="settings.title" :showtext="showtext" :text="text" :format="style" :alpha="alpha" />
       </div>
     </Transition>
   </div>
@@ -16,6 +16,9 @@ export default {
   components: { CaptionLivestream },
   extends: BaseOutput,
   computed: {
+    showtext () {
+      return !!this.settings.text
+    },
     text () {
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       const lines = section?.slides?.[this.control.selectedSlideIndex] || []
