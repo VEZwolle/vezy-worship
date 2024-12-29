@@ -1,60 +1,62 @@
 <template>
-  <div
-    v-shortkey="shortkeysNextBack"
-    class="q-pa-md"
-    @shortkey="baseHandleArrow"
-    @click="setHandleArrowLocation"
-  >
-    <video
-      ref="player"
-      :src="fileUrl"
-      preload="auto"
-      muted
-      class="full-width"
-      playsinline
-      disablePictureInPicture
-      controlsList="nodownload noremoteplayback noplaybackrate"
-      x-webkit-airplay="deny"
-      @timeupdate="timeupdate"
-      @loadedmetadata="loadedmetadata"
-      @canplaythrough="canplaythrough"
-    />
-  </div>
-  <div v-if="duration" class="q-px-md row">
-    <div class="q-pa-md col2">
-      <q-btn
-        v-shortkey="shortkeysPlay"
-        round
-        color="primary"
-        :icon="iconPlayPause"
-        @click="togglePlayPause"
-        @shortkey="togglePlayPause"
-      >
-        <q-tooltip>Start/Pause</q-tooltip>
-      </q-btn>
-    </div>
-    <div class="q-px-md col">
-      <q-badge color="secondary">
-        {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
-      </q-badge>
-      <q-slider
-        v-model="currentTime"
-        track-size="1vh"
-        color="primary"
-        inner-track-color="secondary"
-        :min="0"
-        :max="duration"
-        :inner-min="settings.startTime"
-        :inner-max="settings.endTime"
-        label
-        :label-value="currentTimeF"
-        :marker-labels="markerLabels"
-        @pan="moveTime"
-        @click="moveTime"
+  <div>
+    <div
+      v-shortkey="shortkeysNextBack"
+      class="q-pa-md"
+      @shortkey="baseHandleArrow"
+      @click="setHandleArrowLocation"
+    >
+      <video
+        ref="player"
+        :src="fileUrl"
+        preload="auto"
+        muted
+        class="full-width"
+        playsinline
+        disablePictureInPicture
+        controlsList="nodownload noremoteplayback noplaybackrate"
+        x-webkit-airplay="deny"
+        @timeupdate="timeupdate"
+        @loadedmetadata="loadedmetadata"
+        @canplaythrough="canplaythrough"
       />
     </div>
-    <div class="q-px-md col2">
-      <h6>{{ remainingF }}</h6>
+    <div v-if="duration" class="q-px-md row">
+      <div class="q-pa-md col2">
+        <q-btn
+          v-shortkey="shortkeysPlay"
+          round
+          color="primary"
+          :icon="iconPlayPause"
+          @click="togglePlayPause"
+          @shortkey="togglePlayPause"
+        >
+          <q-tooltip>Start/Pause</q-tooltip>
+        </q-btn>
+      </div>
+      <div class="q-px-md col">
+        <q-badge color="secondary">
+          {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
+        </q-badge>
+        <q-slider
+          v-model="currentTime"
+          track-size="1vh"
+          color="primary"
+          inner-track-color="secondary"
+          :min="0"
+          :max="duration"
+          :inner-min="settings.startTime"
+          :inner-max="settings.endTime"
+          label
+          :label-value="currentTimeF"
+          :marker-labels="markerLabels"
+          @pan="moveTime"
+          @click="moveTime"
+        />
+      </div>
+      <div class="q-px-md col2">
+        <h6>{{ remainingF }}</h6>
+      </div>
     </div>
   </div>
 </template>
@@ -71,7 +73,9 @@ export default {
       readyStateFirst: -1,
       moveSlider: false,
       movePlayState: false,
-      markerLabels: []
+      markerLabels: [],
+      setTimeoutIdPlay: null,
+      setTimeoutIdPauze: null
     }
   },
   computed: {
@@ -107,11 +111,13 @@ export default {
       this.player.currentTime = val
     },
     'currentTime' (val) {
+      if (!this.player) return
       if (val >= this.settings.endTime) this.end()
       if (!this.moveSlider) return
       this.settings.time = val
     },
     'remainingF' (val) {
+      if (!this.player) return
       this.settings.remainingF = val
     },
     clear (val) {
@@ -122,13 +128,18 @@ export default {
         return
       }
 
-      setTimeout(() => this.pause(), 300)
+      if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze) // no dubble
+      this.setTimeoutIdPauze = setTimeout(() => this.pause(), 300)
     }
   },
   mounted () {
     this.pause()
     this.readyStateFirst = -1
     if (this.preview) this.settings.time = this.settings.startTime
+  },
+  unmouted () {
+    if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay)
+    if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze)
   },
   methods: {
     togglePlayPause () {
@@ -152,8 +163,9 @@ export default {
       this.settings.time = this.currentTime
     },
     play () {
-      if (this.player.readyState < 4) {
-        setTimeout(() => this.play(), 50)
+      if (!this.player || this.player.readyState < 4) {
+        if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+        this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)
         return
       }
       this.settings.play = true
