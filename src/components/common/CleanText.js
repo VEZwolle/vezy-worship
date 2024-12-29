@@ -19,6 +19,8 @@ export function CleanText (content) {
     // remove <div> in <div> etc. </div></div> to <div>...</div><div>...</div>
     .replace(/(?<!(<\/div>)|(^))<div>/g, '</div><div>') // <div> zonder </div> ervoor, behalve 1e bij start
     .replace(/(<\/div>){2,}/g, '</div>') // vervang dubbele (of meer) </div> door een enkele
-    .replace(/<div><\/div>/g, '') // lege div's verwijderen
+    .replace(/<div><\/div>/g, '') // lege div's
+
+  if (text === '<div><br></div>' || text === '<div></div>') return ''
   return text
 }
