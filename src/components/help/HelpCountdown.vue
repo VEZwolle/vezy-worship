@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       (Aftel)klok toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
