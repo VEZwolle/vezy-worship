@@ -75,7 +75,8 @@
   </p>
   <ul>
     <li>
-      Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.
+      Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.<br>
+      Onderin kan je de scherm nummers op de monitors tonen zoals VezyWorship deze hanteerd. (Dit kan anders zijn dan windows.) Bij wijzigen fysieke monitoren/aansluitingen kan het nodig zijn deze opnieuw in te stellen.
     </li>
     <li>
       Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.

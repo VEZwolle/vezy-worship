@@ -1,6 +1,7 @@
 import App from 'components/App.vue'
 import OutputView from 'src/components/output/OutputView.vue'
 import OutputStage from 'components/output/OutputStage.vue'
+import ShowText from 'components/output/ShowText.vue'
 import HelpDocu from 'components/help/HelpDocu.vue'
 
 export default [
@@ -38,5 +39,9 @@ export default [
   {
     path: '/help',
     component: HelpDocu
+  },
+  {
+    path: '/showtext/:nr',
+    component: ShowText
   }
 ]

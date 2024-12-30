@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld('electron', {
   getConfig: (key) => ipcRenderer.invoke('getConfig', key),
   setConfig: (key, val) => ipcRenderer.invoke('setConfig', key, val),
   getAllDisplays: () => ipcRenderer.invoke('getAllDisplays'),
+  showDisplaysNr: (show) => ipcRenderer.invoke('showDisplaysNr', show),
   onAutoUpdate: (status, percent, message) => ipcRenderer.on('autoUpdate', status, percent, message),
   onAppClose: (key) => ipcRenderer.on('appClose', key),
   closeApp: () => ipcRenderer.send('closeApp')

@@ -1,7 +1,7 @@
 <template>
   <div class="caption" :class="{ alpha }">
     <div class="title" v-html="title" />
-    <div class="text" :class="'text' + format" v-html="text" />
+    <div v-show="showtext" class="text" :class="'text' + format" v-html="text" />
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 export default {
   props: {
     title: String,
+    showtext: Boolean,
     text: String,
     format: {
       type: String,
