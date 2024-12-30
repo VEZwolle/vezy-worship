@@ -3,7 +3,7 @@
     <q-card>
       <q-toolbar class="bg-secondary text-white">
         <q-toolbar-title>Instellingen</q-toolbar-title>
-        <q-btn v-close-popup flat round dense icon="close" />
+        <q-btn v-close-popup flat round dense icon="close" @click="hide" />
       </q-toolbar>
 
       <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
@@ -25,6 +25,7 @@
           <q-select v-model="displays.livestreamAlpha" :options="availableDisplayOptions" emit-value map-options clearable label="Livestream alpha channel" class="q-mb-sm" />
           <q-select v-model="displays.stage" :options="availableDisplayOptions" emit-value map-options clearable label="Stage monitor" class="q-mb-sm" />
           <q-select v-model="displays.pcolive" :options="availableDisplayOptions" emit-value map-options clearable label="PCO Live" />
+          <q-toggle v-model="showDisplayNr" checked-icon="check" color="primary" label="Monitor nummer weergeven" unchecked-icon="clear" @click="toggleShowDisplayNr" />
         </q-tab-panel>
 
         <q-tab-panel name="settings">
@@ -261,6 +262,7 @@ import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsS
 export default {
   data () {
     return {
+      showDisplayNr: false,
       darkMode: false,
       availableDisplays: [],
       displays: {},
@@ -309,7 +311,7 @@ export default {
     availableDisplayOptions () {
       return this.availableDisplays.map((display, i) => ({
         value: i,
-        label: `Monitor ${i + 1}`
+        label: `Monitor ${i + 1} (${display.size?.width}x${display.size?.height}) ${display.internal ? 'intern' : display.label}`
       }))
     },
     algoliaIndexNames () {
@@ -336,7 +338,14 @@ export default {
       this.$refs.dialog.show()
     },
     hide () {
-      this.$refs.dialog.hide()
+      if (this.$q.platform.is.electron) {
+        if (this.showDisplayNr) {
+          // remove display nummer
+          this.showDisplayNr = false
+          this.toggleShowDisplayNr()
+        }
+      }
+      // this.$refs.dialog.hide() // --> v-close-popup
     },
     async load () {
       if (this.$q.platform.is.electron) {
@@ -436,6 +445,11 @@ export default {
     toggleDarkMode () {
       this.$q.dark.toggle()
       this.darkMode = this.$q.dark.isActive
+    },
+    async toggleShowDisplayNr () {
+      if (this.$q.platform.is.electron) {
+        this.showDisplayNr = await this.$electron.showDisplaysNr(this.showDisplayNr)
+      }
     }
   }
 }

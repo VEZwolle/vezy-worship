@@ -10,6 +10,7 @@ let autoUpdaterDownloaded = false
 
 let mainWindow
 let pcoLiveWindow
+const displayWindowsNr = []
 
 const config = new Store()
 
@@ -22,6 +23,26 @@ ipcMain.handle('setConfig', (e, key, val) => {
 })
 ipcMain.handle('getAllDisplays', () => {
   return screen.getAllDisplays()
+})
+ipcMain.handle('showDisplaysNr', (e, show) => {
+  // remove existing display numbers
+  for (let i = 0; i < displayWindowsNr.length; i++) {
+    if (displayWindowsNr[i]) displayWindowsNr[i].close()
+  }
+  displayWindowsNr.length = 0
+
+  if (show) {
+    // show display numbers
+    const displays = screen.getAllDisplays()
+    for (let i = 0; i < displays.length; i++) {
+      displayWindowsNr.push(createWindow(`/showtext/${i + 1}`, displays[i], false, 150, 150, false))
+      displayWindowsNr[i].setAlwaysOnTop(true)
+      displayWindowsNr[i].setSkipTaskbar(true)
+    }
+    return true
+  }
+
+  return false
 })
 ipcMain.on('closeApp', () => {
   const autoupdateCheck = config.get('autoupdate')
@@ -156,7 +177,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => { app.quitting = true })
 
-function createWindow (url, display, fullscreen = false, width = 1344, height = 765) {
+function createWindow (url, display, fullscreen = false, width = 1344, height = 765, frame = true) {
   if (!display) {
     return // Display not found
   }
@@ -167,6 +188,7 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
     width,
     height,
+    frame,
     x: x + 50,
     y: y + 50,
     useContentSize: true,
