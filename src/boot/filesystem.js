@@ -15,10 +15,10 @@ const filePickerOptions = {
 const fs = {
   fileHandle: null,
 
-  async open (add = false) {
-    if (!('showOpenFilePicker' in window)) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+  async open (add = false, openHandle = null) {
+    if (!('showOpenFilePicker' in window) && !openHandle) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
     try {
-      const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
+      const [fileHandle] = openHandle ? [openHandle] : await window.showOpenFilePicker(filePickerOptions)
       if (!add) {
         fs.fileHandle = fileHandle
       }
