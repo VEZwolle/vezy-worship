@@ -18,7 +18,7 @@
       </q-page>
 
       <q-page v-else class="flex items-center justify-center text-grey-5">
-        Open linksboven een dienst om verder te gaan.
+        <OpenDragDrop />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -29,9 +29,10 @@ import ToolbarTop from './layout/ToolbarTop.vue'
 import SetlistControl from './setlist/SetlistControl.vue'
 import PreviewControl from './layout/PreviewControl.vue'
 import LiveControl from './layout/LiveControl.vue'
+import OpenDragDrop from './layout/OpenDragDrop.vue'
 
 export default {
-  components: { ToolbarTop, SetlistControl, PreviewControl, LiveControl },
+  components: { ToolbarTop, SetlistControl, PreviewControl, LiveControl, OpenDragDrop },
 
   mounted () {
     if (localStorage.getItem('darkMode') === 'true') this.$q.dark.set(true)
