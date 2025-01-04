@@ -2,6 +2,7 @@
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
 import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase, algoliaIndexNames } from './algolia.js'
+import { sanitizerHtmlPresentation } from '../../common/CleanText.js';
 
 export default {
   data () {
@@ -298,6 +299,10 @@ export default {
       return resultSongDatabase
     },
     async addToDatabase () {
+      this.songs.forEach(song => {
+        // eslint-disable-next-line no-unused-vars
+        song = sanitizerHtmlPresentation(song)
+      })
       if (this.$store.searchBaseIsLocal) return this.addToLocalDatabase()
       return await this.addToAlgoliaDatabase()
     },
