@@ -75,6 +75,7 @@
 
 <script>
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
+import { sanitizerHtml } from '../../common/CleanText.js'
 
 export default {
   extends: BaseSongDatabaseCompare,
@@ -131,11 +132,11 @@ export default {
     },
     useDatabase () {
       if (this.presentation.settings) {
-        this.presentation.settings.title = this.selectedDatabase.title || ''
-        this.presentation.settings.collection = this.selectedDatabase.collection || ''
-        this.presentation.settings.number = this.selectedDatabase.number || ''
-        this.presentation.settings.text = this.selectedDatabase.lyrics || ''
-        this.presentation.settings.translation = this.selectedDatabase.lyricstranslate || ''
+        this.presentation.settings.title = sanitizerHtml(this.selectedDatabase.title) || ''
+        this.presentation.settings.collection = sanitizerHtml(this.selectedDatabase.collection) || ''
+        this.presentation.settings.number = sanitizerHtml(this.selectedDatabase.number) || ''
+        this.presentation.settings.text = sanitizerHtml(this.selectedDatabase.lyrics) || ''
+        this.presentation.settings.translation = sanitizerHtml(this.selectedDatabase.lyricstranslate) || ''
         this.hide()
       }
     },

@@ -6,7 +6,7 @@
 
     <q-item-section>
       <q-item-label class="title row">
-        <div :class="todoTextClass" class="q-pr-md" v-html="title" />
+        <div :class="todoTextClass" class="q-pr-md" v-text="title" />
         <q-badge v-if="collectionNumber" :color="todoLabelColor">
           {{ collectionNumber }}
         </q-badge>
