@@ -129,7 +129,7 @@ export default {
       if (cursorPosition) {
         // nexttick ivm caret without newline position of q-editor
         this.$nextTick(() => {
-          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
+          if (this.$refs.editor) setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
         })
       }
     },
@@ -197,7 +197,7 @@ export default {
         cursorPosition.start.lineOffset = 0
         // nexttick ivm caret without newline position of q-editor
         this.$nextTick(() => {
-          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.start)
+          if (this.$refs.editor) setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.start)
         })
       }
     }
