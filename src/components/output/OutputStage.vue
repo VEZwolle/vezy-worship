@@ -6,9 +6,9 @@
         <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation?.id" :presentation="$store.livePresentation" :preview="false" />
       </div>
       <q-separator size="1vh" color="primary" class="q-mt-md" />
-      <div v-if="outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
+      <div v-if="showPreview && outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
       <div class="output row q-px-md">
-        <component :is="outputComponentPreview" v-if="outputComponentPreview" :key="$store.previewPresentation?.id" :presentation="$store.previewPresentation" :preview="true" />
+        <component :is="outputComponentPreview" v-if="showPreview && outputComponentPreview" :key="$store.previewPresentation?.id" :presentation="$store.previewPresentation" :preview="true" />
       </div>
     </template>
   </div>
@@ -31,6 +31,9 @@ export default {
     },
     titlePreview () {
       return this.$store.previewPresentation?.settings ? `... ${this.$store.previewPresentation.settings.title || this.presentationType(this.$store.previewPresentation)?.name || ''}` : ''
+    },
+    showPreview () {
+      return !(this.$store.livePresentation?.type === 'countdown')
     }
   },
   methods: {
