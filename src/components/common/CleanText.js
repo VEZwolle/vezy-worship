@@ -24,3 +24,62 @@ export function CleanText (content) {
   if (text === '<div><br></div>' || text === '<div></div>') return ''
   return text
 }
+
+export function sanitizerHtml (content) {
+  if (!content) return content
+  // validHtml = 'div|br|p|b|i|u|sub|sup|small|ins|del|mark'
+  let text = content
+    .replace(/<\/?script(.*?)>/gi, '') //  verwijder alle <script ...> & </script> elementen
+    .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
+    .replace(/( style="(.*?);*"| class="(.*?)")>/gi, '>') // verwijder alle extra "style" & class elementen
+    .replace(/<(?!\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)>)/gi, '&#60;') // vervang alle "<"...> welke niet validHtml hebben
+    .replace(/(?<!(<\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)))>/gi, '&#62;') // vervang alle <...">" welke niet validHtml hebben
+  return text
+}
+
+export function sanitizerHtmlPresentation (presentation) {
+  if (!presentation) return presentation
+  // clean for xxs attack in v-html
+  switch (presentation.type) {
+    case 'song':
+      presentation.settings.title = sanitizerHtml(presentation.settings.title)
+      presentation.settings.collection = sanitizerHtml(presentation.settings.collection)
+      presentation.settings.number = sanitizerHtml(presentation.settings.number)
+      presentation.settings.text = sanitizerHtml(presentation.settings.text)
+      presentation.settings.translation = sanitizerHtml(presentation.settings.translation)
+      break
+    case 'caption':
+      presentation.settings.title = sanitizerHtml(presentation.settings.title)
+      presentation.settings.text = sanitizerHtml(presentation.settings.text)
+      break
+    case 'scripture':
+      presentation.settings.title = sanitizerHtml(presentation.settings.title)
+      presentation.settings.text = sanitizerHtml(presentation.settings.text)
+      presentation.settings.bible = sanitizerHtml(presentation.settings.bible)
+      presentation.settings.chapter = presentation.settings.chapter ? parseInt(presentation.settings.chapter) : presentation.settings.chapter
+      presentation.settings.verseFrom = presentation.settings.verseFrom ? parseInt(presentation.settings.verseFrom) : presentation.settings.verseFrom
+      presentation.settings.verseTo = presentation.settings.verseTo ? parseInt(presentation.settings.verseTo) : presentation.settings.verseTo
+      break
+    case 'image':
+    case 'video':
+        presentation.settings.title = sanitizerHtml(presentation.settings.title)
+        break
+    case 'countdown':
+      break
+    default:
+  }
+
+  return presentation
+}
+
+
+export function sanitizerHtmlService (service) {
+  if (!service) return service
+  // clean for xxs attack in v-html
+  service.presentations.forEach(presentation => {
+    // eslint-disable-next-line no-unused-vars
+    presentation = sanitizerHtmlPresentation(presentation)
+  })
+
+  return service
+}
