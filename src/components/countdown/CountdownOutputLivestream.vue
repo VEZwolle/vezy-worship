@@ -21,7 +21,6 @@ export default defineComponent({
       const style = {}
 
       if (this.settings.position) {
-        console.log(this.settings.position)
         switch (this.settings.position) {
           case 'RO': // RO
             style.transform = 'scale(-1, -1)'

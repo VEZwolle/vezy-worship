@@ -58,11 +58,7 @@ export default defineComponent({
                 })
             }
             break
-          } else {
-            console.log('geen vezy bestand')
           }
-        } else {
-          console.log(`Directory: ${handle.name}`)
         }
       }
     }
