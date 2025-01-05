@@ -643,7 +643,7 @@ export default {
                   title: this.planItems[id].title,
                   collection: '',
                   number: '',
-                  text: `${this.planItems[id].html_details}`,
+                  text: `${this.planItems[id].html_details}`.replace(/&nbsp;/g, ' '),
                   translation: '',
                   noSplitLines: false,
                   bgOpacity: 0,
