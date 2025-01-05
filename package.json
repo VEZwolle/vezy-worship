@@ -35,7 +35,7 @@
     "nanoid": "^5.0.9",
     "pinia": "^2.3.0",
     "pinia-shared-state": "^0.5.1",
-    "quasar": "^2.17.5",
+    "quasar": "^2.17.6",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue-three-shortkey": "^4.0.1",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@quasar/app-vite": "^2.0.4",
+    "@quasar/app-vite": "^2.0.5",
     "autoprefixer": "^10.4.20",
     "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
