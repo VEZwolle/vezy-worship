@@ -1,5 +1,8 @@
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'BaseOutputStage',
   props: {
     presentation: Object,
     preview: Boolean
@@ -15,5 +18,5 @@ export default {
       return !this.preview ? 'text-white' : ''
     }
   }
-}
+})
 </script>

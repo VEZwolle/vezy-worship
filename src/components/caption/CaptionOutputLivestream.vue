@@ -9,10 +9,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 import CaptionLivestream from './CaptionLivestream.vue'
 
-export default {
+export default defineComponent({
+  name: 'CaptionOutputLivestream',
   components: { CaptionLivestream },
   extends: BaseOutput,
   computed: {
@@ -32,7 +34,7 @@ export default {
       return '-default'
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -5,10 +5,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 import TextSlidesOutput from '../common/TextSlidesOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'TextSlidesOutputStage',
   components: { TextSlidesOutput },
   extends: BaseOutputStage,
   mounted () {
@@ -17,7 +19,7 @@ export default {
       window.scrollTo({ behavior: 'smooth', top: 0 })
     }
   }
-}
+})
 </script>
 
 <style scoped>

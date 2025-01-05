@@ -1,11 +1,16 @@
 import { app, BrowserWindow, screen, ipcMain, shell } from 'electron'
 import Store from 'electron-store'
-import { autoUpdater } from 'electron-updater'
+import ElectronUpdater from 'electron-updater'
+const { autoUpdater } = ElectronUpdater // ivm CommonJS module
 import path from 'node:path'
 import os from 'node:os'
+import { fileURLToPath } from 'node:url'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
+
+const currentDir = fileURLToPath(new URL('.', import.meta.url))
+
 let autoUpdaterDownloaded = false
 
 let mainWindow
@@ -118,7 +123,7 @@ app.whenReady().then(() => {
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
-            icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+            icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
             title: 'VezyWorship | Planning Center Online',
             autoHideMenuBar: true,
             width: 750,
@@ -132,7 +137,7 @@ app.whenReady().then(() => {
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
-            icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+            icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
             autoHideMenuBar: true
           }
         }
@@ -185,7 +190,7 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
   const { x, y } = display.bounds
 
   const window = new BrowserWindow({
-    icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
+    icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
     width,
     height,
     frame,
@@ -194,8 +199,11 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
-      // More info: /quasar-cli/developing-electron-apps/electron-preload-script
-      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD)
+      // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
+      preload: path.resolve(
+        currentDir,
+        path.join(process.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
+      )
     }
   })
 
@@ -207,7 +215,11 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     window.setSkipTaskbar(true)
   }
 
-  window.loadURL(process.env.APP_URL + '#' + url)
+  if (process.env.DEV) {
+    window.loadURL(process.env.APP_URL + '#' + url)
+  } else {
+    window.loadFile('index.html', { hash: url })
+  }
 
   return window
 }
@@ -222,7 +234,7 @@ autoUpdater.on('checking-for-update', () => {
   mainWindow.webContents.send('autoUpdate', 0, 0, 'Controle op app updates...')
 })
 
-autoUpdater.on('update-not-available', (info) => {
+autoUpdater.on('update-not-available', () => {
   mainWindow.webContents.send('autoUpdate', 1, 0, 'Geen updates beschikbaar')
 })
 

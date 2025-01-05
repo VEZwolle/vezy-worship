@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       Sneltoetsen
     </div>
     <div class="q-pa-md">
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
+
 const columns = [
   {
     name: 'shortkey',
@@ -51,12 +53,13 @@ const rows = [
   { shortkey: '(F5 of esc)', function: 'Play/Stop van film' }
 ]
 
-export default {
+export default defineComponent({
+  name: 'HelpShortkey',
   setup () {
     return {
       columns,
       rows
     }
   }
-}
+})
 </script>

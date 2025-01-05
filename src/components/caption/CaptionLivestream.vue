@@ -6,7 +6,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'CaptionLivestream',
   props: {
     title: String,
     showtext: Boolean,
@@ -17,7 +19,7 @@ export default {
     },
     alpha: Boolean
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

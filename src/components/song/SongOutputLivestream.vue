@@ -12,9 +12,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'SongOutputLivestream',
   extends: BaseOutput,
   computed: {
     lines () {
@@ -26,7 +28,7 @@ export default {
       return section?.slides?.[this.control.selectedSlideIndex] || []
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

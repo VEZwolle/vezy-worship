@@ -83,9 +83,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import SongLyricsView from './SongLyricsView.vue'
 
-export default {
+export default defineComponent({
+  name: 'SongLyricsViews',
   components: { SongLyricsView },
   props: {
     newTitle: String,
@@ -109,5 +111,5 @@ export default {
       lyricsTab: this.tab || 'diff'
     }
   }
-}
+})
 </script>

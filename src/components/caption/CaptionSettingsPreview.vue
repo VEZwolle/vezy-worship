@@ -47,13 +47,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import CaptionOutputLivestream from './CaptionOutputLivestream.vue'
 import CaptionOutputBeamer from './CaptionOutputBeamer.vue'
 import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 import { debounce } from 'quasar'
 
-export default {
+export default defineComponent({
+  name: 'CaptionSettingsPreview',
   components: { OutputPreview },
   props: {
     settings: {
@@ -102,22 +104,22 @@ export default {
     }
   },
   watch: {
-    'settings.text' (val) {
+    'settings.text' () {
       this.updated = false
       this.splitSlidesDebounce()
     },
-    'settings.title' (val) {
+    'settings.title' () {
       this.beamerTitleDebounce()
     },
-    'settings.formatBeamer' (val) {
+    'settings.formatBeamer' () {
       this.beamerTitleDebounce()
       this.splitSlidesDebounce()
     },
-    'settings.maxLivestreamChar' (val) {
+    'settings.maxLivestreamChar' () {
       this.updated = false
       this.splitSlidesDebounce()
     },
-    'savedPos' (val) {
+    'savedPos' () {
       if (this.updated) this.setActiveSlide()
     }
   },
@@ -186,7 +188,7 @@ export default {
       this.control.selectedSlideIndex = this.sectionsCount[this.sectionsCount.length - 1].slide
     }
   }
-}
+})
 </script>
 
 <style scoped>

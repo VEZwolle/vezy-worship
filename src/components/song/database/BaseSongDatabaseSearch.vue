@@ -1,7 +1,9 @@
 <script>
+import { defineComponent } from 'vue'
 import { getAlgoliaSearch, getAlgoliaCollections, ApiKeyEdit, algoliaIndexNames } from './algolia.js'
 
-export default {
+export default defineComponent({
+  name: 'BaseSongDatabaseSearch',
   data () {
     return {
       searchInput: this.title || '',
@@ -143,5 +145,5 @@ export default {
       this.$store.dbCollections = await getAlgoliaCollections(this.$store.algoliaIndexId)
     }
   }
-}
+})
 </script>

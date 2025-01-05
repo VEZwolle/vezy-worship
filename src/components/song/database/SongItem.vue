@@ -6,7 +6,7 @@
 
     <q-item-section>
       <q-item-label class="title row">
-        <div :class="todoTextClass" class="q-pr-md" v-html="title" />
+        <div :class="todoTextClass" class="q-pr-md" v-text="title" />
         <q-badge v-if="collectionNumber" :color="todoLabelColor">
           {{ collectionNumber }}
         </q-badge>
@@ -62,9 +62,11 @@
 </template>
 
 <script>
-import presentationTypes from '../../presentation-types'
+import { defineComponent } from 'vue'
+import presentationTypes from '../../presentation-types.js'
 
-export default {
+export default defineComponent({
+  name: 'SongItem',
   props: {
     newSong: { type: Object, required: true },
     songTodoIndex: Number,
@@ -110,7 +112,7 @@ export default {
       return ''
     }
   }
-}
+})
 </script>
 
 <style scoped>

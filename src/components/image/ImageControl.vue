@@ -38,12 +38,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutputBeamer from './ImageOutputBeamer.vue'
 import ImageOutputLivestream from './ImageOutputLivestream.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageControl',
   components: { OutputPreview },
   extends: BaseControl,
   setup () {
@@ -59,5 +61,5 @@ export default {
       this.presentation.tab = 'both'
     }
   }
-}
+})
 </script>

@@ -82,7 +82,10 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'SongItemDatabase',
   props: {
     songDatabases: Object,
     songDiffs: Object,
@@ -165,7 +168,7 @@ export default {
       return `${this.songDiffs[index]?.text.factor100.toFixed(0)}% | ${this.songDiffs[index]?.translation.factor100.toFixed(0)}%`
     }
   }
-}
+})
 </script>
 
 <style scoped>

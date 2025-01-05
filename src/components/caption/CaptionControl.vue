@@ -17,11 +17,13 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
 import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 
-export default {
+export default defineComponent({
+  name: 'CaptionControl',
   components: { TextSlidesControl },
   extends: BaseControl,
 
@@ -34,7 +36,7 @@ export default {
       this.presentation.control.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 500)
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

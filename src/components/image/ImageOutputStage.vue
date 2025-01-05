@@ -14,12 +14,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutputBeamer from './ImageOutputBeamer.vue'
 import ImageOutputLivestream from './ImageOutputLivestream.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageOutputStage',
   components: { OutputPreview },
   extends: BaseOutputStage,
   setup () {
@@ -40,7 +42,7 @@ export default {
   mounted () {
     if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-}
+})
 </script>
 
 <style scoped>

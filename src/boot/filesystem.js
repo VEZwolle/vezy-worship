@@ -1,5 +1,7 @@
+import { defineBoot } from '#q-app/wrappers'
 import * as zip from '@zip.js/zip.js'
 import useServiceStore from 'stores/service'
+import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
 import { Notify } from 'quasar'
 
 const filePickerOptions = {
@@ -9,18 +11,36 @@ const filePickerOptions = {
       'application/vez': '.vez'
     }
   }],
-  excludeAcceptAllOption: true
+  excludeAcceptAllOption: true,
+  startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
 }
 
 const fs = {
   fileHandle: null,
 
-  async open (add = false) {
-    if (!('showOpenFilePicker' in window)) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+  async getLastLocation () {
+    filePickerOptions.startIn = 'documents' // when something is not right, reset to 'documents' folder
     try {
-      const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
+      const fileHandleLastUsed = await get('VezyLastUsedLocation') // get from IndexedDB
+      if (fileHandleLastUsed && fileHandleLastUsed.name ) {
+        filePickerOptions.startIn = fileHandleLastUsed // when folder does not exist it defaults to the 'documents' folder
+        return true
+      }
+      return false
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  },
+
+  async open (add = false, openHandle = null) {
+    if (!('showOpenFilePicker' in window) && !openHandle) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+    try {
+      await this.getLastLocation()
+      const [fileHandle] = openHandle ? [openHandle] : await window.showOpenFilePicker(filePickerOptions)
       if (!add) {
         fs.fileHandle = fileHandle
+        await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
       }
 
       const file = await fileHandle.getFile()
@@ -82,7 +102,9 @@ const fs = {
     if (showPicker || !fs.fileHandle) {
       if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
         try {
+          await this.getLastLocation()
           fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
+          await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
         } catch (error) {
           if (error.name === 'AbortError') return Notify.create({ type: 'negative', message: 'Opslaan is geannuleerd' }) // user abort or files too sensitive or dangerous
           console.error(error) // unknown error --> download file via catch by emty filehandle
@@ -113,7 +135,7 @@ const fs = {
 
         // Add file to zip (by its id, which includes the file extension)
         await zipWriter.add(fileId, reader)
-      } catch (error) {
+      } catch {
         // zoek item in setlist waar gebruikt
         let notify = false
         Object.values(store.service.presentations).forEach(presentation => {
@@ -192,7 +214,7 @@ const fs = {
 
           // Add file to zip (by its id, which includes the file extension)
           await zipWriter.add(fileId, reader)
-        } catch (error) {
+        } catch {
           // zoek item in setlist waar gebruikt
           let notify = false
           Object.values(store.service.presentations).forEach(presentation => {
@@ -243,9 +265,9 @@ const fs = {
   }
 }
 
-export default ({ app }) => {
+export default defineBoot(({ app }) => {
   // Allows to use this.$fs inside Vue components.
   app.config.globalProperties.$fs = fs
-}
+})
 
 export { fs }

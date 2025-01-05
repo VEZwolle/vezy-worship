@@ -6,7 +6,7 @@
           <Transition name="q-transition--fade">
             <OutputPreview
               :id="view.id"
-              :component="Output"
+              :component="OutputView"
               muted
               :preview="preview"
               :alpha="view.alpha"
@@ -59,10 +59,12 @@
 </template>
 
 <script>
-import Output from './Output.vue'
+import { defineComponent } from 'vue'
+import OutputView from './OutputView.vue'
 import OutputPreview from './OutputPreview.vue'
 
-export default {
+export default defineComponent({
+  name: 'OutputBoxes',
   components: { OutputPreview },
   props: {
     preview: Boolean,
@@ -70,7 +72,7 @@ export default {
     livestream: Boolean
   },
   setup () {
-    return { Output }
+    return { OutputView }
   },
   data () {
     return {
@@ -116,7 +118,7 @@ export default {
       return this.views.filter(v => v.isActive)
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

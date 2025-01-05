@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       (Aftel)klok toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
@@ -16,6 +16,8 @@
       Vul de tijd in tot wanneer de klok moet aftellen (HH:mm) uitgaande van 24uurs klok.<br>
       Selecteer of de klok moet aftellen tot 0:00 of dat er een tijd in beeld moet staan.<br>
       De (aftel)klok wordt alleen op de livestream getoond, en loopt tot de ingestelde tijd.<br>
+      Er kan ingesteld worden in welke hoek van het scherm hij weergegeven wordt.<br>
+      Op het stage scherm wordt wanneer de countdown live is geen preview van het volgende item weergegeven. Dit omdat het scherm ook in de zaal zichtbaar is bij binnenkomst.<br>
       opm.: de tijd wordt alleen getoond wanneer hij in de toekomst van dezelfde dag ligt.
     </p>
     <div class="text-h6 q-mb-md">
@@ -49,3 +51,11 @@
     </p>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'HelpCountdown',
+})
+</script>

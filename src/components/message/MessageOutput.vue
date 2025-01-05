@@ -7,13 +7,16 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'MessageOutput',
   computed: {
     message () {
       return this.$store.message
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

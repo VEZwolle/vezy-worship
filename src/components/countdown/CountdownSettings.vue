@@ -43,10 +43,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 
-export default {
+export default defineComponent({
+  name: 'CountdownSettings',
   components: { BackgroundSetting },
   extends: BaseSettings,
   data () {
@@ -92,5 +94,5 @@ export default {
       this.settings.type = 0
     }
   }
-}
+})
 </script>

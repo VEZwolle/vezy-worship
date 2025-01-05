@@ -2,10 +2,10 @@
   <div class="lyricsview">
     <div>
       <q-item-label :class="`text-h6 ${classDiff}`" :lines="1">
-        <div v-html="title" />
+        <div v-html="sanitizerHtml(title)" />
       </q-item-label>
       <q-item-label :class="`text-subtitle2 overflow-hidden${classDiff}`" :lines="1">
-        <div v-html="collectionNumber" />
+        <div v-html="sanitizerHtml(collectionNumber)" />
       </q-item-label>
     </div>
     <q-separator />
@@ -14,21 +14,25 @@
         <div class="text-primary">
           Tekst:
         </div>
-        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="lyrics" />
+        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="sanitizerHtml(lyrics)" />
       </div>
       <q-separator vertical class="q-mx-xs" />
       <div class="col-auto" style="max-width: 49%;">
         <div class="text-primary">
           Vertaling:
         </div>
-        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="lyricsTranslation" />
+        <div :class="`lyrics${classDiff}`" :style="`height: ${lyricsHeight}vh;`" v-html="sanitizerHtml(lyricsTranslation)" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+import { sanitizerHtml } from '../../common/CleanText.js'
+
+export default defineComponent({
+  name: 'SongLyricsView',
   props: {
     title: String,
     collectionNumber: String,
@@ -41,8 +45,13 @@ export default {
     classDiff () {
       return this.showDiff ? ' diff' : ''
     }
+  },
+  methods: {
+    sanitizerHtml (contect) {
+      return sanitizerHtml(contect)
+    }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

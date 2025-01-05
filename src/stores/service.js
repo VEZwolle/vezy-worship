@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
-import presentationPresets from '../components/presentation-presets'
-import { versionUpdate } from './versionUpdate'
+import presentationPresets from '../components/presentation-presets.js'
+import { versionUpdate } from './versionUpdate.js'
+import { sanitizerHtmlService } from '../components/common/CleanText.js'
 import { getDefaultURL } from '../components/presets-settings.js'
 
 let clearLastShortKey
@@ -36,21 +37,29 @@ export default defineStore('service', {
       this.serviceSaved = JSON.stringify(this.service)
     },
     loadService (data) {
-      this.service = cloneDeep(data)
+      // first update en check
+      let serviceOpen = cloneDeep(data)
+      if (serviceOpen.version !== PACKAGE.version) {
+        serviceOpen = versionUpdate(serviceOpen)
+        serviceOpen.version = PACKAGE.version
+      }
+      serviceOpen = sanitizerHtmlService(serviceOpen)
+      // add to store/render
+      this.service = cloneDeep(serviceOpen)
       this.previewPresentation = null
       this.livePresentation = null
-      if (this.service.version !== PACKAGE.version) {
-        this.service = versionUpdate(this.service)
-        this.service.version = PACKAGE.version
-      }
       this.serviceSaved = JSON.stringify(this.service)
     },
     addService (data) {
-      if (data.version !== PACKAGE.version) {
-        data = versionUpdate(data)
-        data.version = PACKAGE.version
+      // first update en check
+      let serviceAdd = cloneDeep(data)
+      if (serviceAdd.version !== PACKAGE.version) {
+        serviceAdd = versionUpdate(serviceAdd)
+        serviceAdd.version = PACKAGE.version
       }
-      data.presentations.forEach(presentation => {
+      serviceAdd = sanitizerHtmlService(serviceAdd)
+      // add to store/render
+      serviceAdd.presentations.forEach(presentation => {
         const existing = this.service.presentations.find(p => p.id === presentation.id)
         if (existing) presentation.id = nanoid()
         this.addPresentation(presentation)
