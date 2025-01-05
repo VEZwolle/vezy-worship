@@ -44,10 +44,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import OutputBoxes from '../output/OutputBoxes.vue'
 
-export default {
+export default defineComponent({
+  name: 'LiveControl',
   components: { OutputBoxes },
   computed: {
     presentation () {
@@ -80,5 +82,5 @@ export default {
       return this.arrowKeyActive ? 'arrowKeyActive' : ''
     }
   }
-}
+})
 </script>

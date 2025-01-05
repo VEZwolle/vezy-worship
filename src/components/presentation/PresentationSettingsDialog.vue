@@ -23,11 +23,13 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import cloneDeep from 'lodash/cloneDeep'
 import { sanitizerHtmlPresentation } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'PresentationSettingsDialog',
   emits: ['save'],
   data () {
     return {
@@ -97,7 +99,7 @@ export default {
       this.hide()
     }
   }
-}
+})
 </script>
 
 <style scoped>

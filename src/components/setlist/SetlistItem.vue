@@ -56,9 +56,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 
-export default {
+export default defineComponent({
+  name: 'SetlistItem',
   props: {
     presentation: Object,
     active: Boolean
@@ -98,7 +100,7 @@ export default {
       el.scrollIntoView({ behavior: 'smooth', block: 'center', scrollMode: 'if-needed' }) // if-needed scrollmode in futher specs probably
     }
   }
-}
+})
 </script>
 
 <style scoped>

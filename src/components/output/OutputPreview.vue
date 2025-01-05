@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { createApp } from 'vue'
 import { debounce } from 'quasar'
 import { replaceBackgroundUrl } from '../presets-settings.js'
@@ -13,7 +14,8 @@ import BgPng from '../../assets/bg.png'
 import ViewbeamerPng from '../../assets/viewbeamer.png'
 import ViewlivestreamPng from '../../assets/viewlivestream.png'
 
-export default {
+export default defineComponent({
+  name: 'OutputPreview',
   props: {
     component: Object,
     visualView: {
@@ -95,7 +97,7 @@ export default {
       this.show = true
     }
   }
-}
+})
 </script>
 
 <style scoped>

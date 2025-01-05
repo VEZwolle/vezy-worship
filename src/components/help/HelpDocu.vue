@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import HelpMain from './HelpMain.vue'
 import HelpLive from './HelpLive.vue'
 import HelpMainSetlist from './HelpMainSetlist.vue'
@@ -99,7 +100,8 @@ import HelpCountdown from './HelpCountdown.vue'
 import HelpShortkey from './HelpShortkey.vue'
 import HelpAbout from './HelpAbout.vue'
 
-export default {
+export default defineComponent({
+  name: 'HelpDocu',
   components: {
     HelpMain,
     HelpLive,
@@ -124,5 +126,5 @@ export default {
       window.close()
     }
   }
-}
+})
 </script>

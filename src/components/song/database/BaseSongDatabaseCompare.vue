@@ -1,10 +1,12 @@
 <script>
+import { defineComponent } from 'vue'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
 import { splitSong } from '../SongControl.vue'
 import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase, algoliaIndexNames } from './algolia.js'
 import { sanitizerHtmlPresentation } from '../../common/CleanText.js';
 
-export default {
+export default defineComponent({
+  name: 'BaseSongDatabaseCompare',
   data () {
     return {
       userName: '',
@@ -378,5 +380,5 @@ export default {
       }
     }
   }
-}
+})
 </script>

@@ -1,3 +1,4 @@
+import { defineBoot } from '#q-app/wrappers'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import nl from 'dayjs/locale/nl'
@@ -17,7 +18,7 @@ export function date (value, format) {
   return date.format('dddd D MMMM YYYY')
 }
 
-export default ({ app }) => {
+export default defineBoot(({ app }) => {
   // Allows to use this.$date inside Vue components.
   app.config.globalProperties.$date = date
-}
+})

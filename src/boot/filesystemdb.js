@@ -1,3 +1,4 @@
+import { defineBoot } from '#q-app/wrappers'
 import * as zip from '@zip.js/zip.js'
 import { Notify } from 'quasar'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
@@ -223,9 +224,9 @@ const fsdb = {
   }
 }
 
-export default ({ app }) => {
+export default defineBoot(({ app }) => {
   // Allows to use this.$fsdb inside Vue components.
   app.config.globalProperties.$fsdb = fsdb
-}
+})
 
 export { fsdb }

@@ -202,6 +202,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import AppSettingsDialog from './AppSettingsDialog.vue'
 import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompareDialog.vue'
@@ -211,7 +212,8 @@ import MessageControl from '../message/MessageControl.vue'
 import { ApiKeyEdit } from '../song/database/algolia.js'
 import { getPresentationsPresetsSettings } from '../presets-settings.js'
 
-export default {
+export default defineComponent({
+  name: 'ToolbarTop',
   components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
   setup () {
     return { icon, version: PACKAGE.version }
@@ -386,7 +388,7 @@ export default {
       return { serviceTypeId, planId }
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

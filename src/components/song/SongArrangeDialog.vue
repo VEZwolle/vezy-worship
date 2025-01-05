@@ -184,9 +184,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import labels, { isLabel } from './labels.js'
 
-export default {
+export default defineComponent({
+  name: 'SongArrangeDialog',
   props: {
     text: String,
     translation: String
@@ -497,7 +499,7 @@ export default {
       }
     }
   }
-}
+})
 
 function splitToLines (text, outputNr = 1) {
   if (!text) return []

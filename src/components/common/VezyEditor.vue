@@ -28,10 +28,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { CleanText } from './CleanText.js'
 import { debounce } from 'quasar'
 
-export default {
+export default defineComponent({
+  name: 'VezyEditor',
   props: {
     modelValue: {
       type: String,
@@ -134,5 +136,5 @@ export default {
       this.$emit('update:savedPos', this.$refs.editor.caret.savedPos)
     }
   }
-}
+})
 </script>

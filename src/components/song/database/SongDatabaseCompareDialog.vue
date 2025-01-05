@@ -74,10 +74,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
 import { sanitizerHtml } from '../../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'SongDatabaseCompareDialog',
   extends: BaseSongDatabaseCompare,
   data () {
     return {
@@ -144,7 +146,7 @@ export default {
       this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -32,12 +32,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import CaptionSettingsPreview from './CaptionSettingsPreview.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditor from '../common/VezyEditor.vue'
 
-export default {
+export default defineComponent({
+  name: 'CaptionSettings',
   components: { CaptionSettingsPreview, BackgroundSetting, VezyEditor },
   extends: BaseSettings,
   data () {
@@ -46,7 +48,7 @@ export default {
       savedPos: 0
     }
   }
-}
+})
 </script>
 
 <style scoped>

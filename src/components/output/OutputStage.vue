@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types'
 
-export default {
+export default defineComponent({
+  name: 'OutputStage',
   computed: {
     outputComponentLive () {
       return this.presentationType(this.$store.livePresentation)?.outputs?.stage
@@ -41,7 +43,7 @@ export default {
       return presentationTypes.find(t => t.id === presentation?.type)
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

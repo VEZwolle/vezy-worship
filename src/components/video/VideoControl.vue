@@ -62,9 +62,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 
-export default {
+export default defineComponent({
+  name: 'VideoControl',
   extends: BaseControl,
   data () {
     return {
@@ -207,7 +209,7 @@ export default {
       this.pause()
     }
   }
-}
+})
 
 function timeFormat (totalSeconds) {
   if (typeof totalSeconds !== 'number') return ''

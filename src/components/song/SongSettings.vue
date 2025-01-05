@@ -258,6 +258,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
@@ -268,7 +269,8 @@ import { getAlgoliaCollections } from './database/algolia.js'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
-export default {
+export default defineComponent({
+  name: 'SongSettings',
   components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
   extends: SongSettingsTools,
   data () {
@@ -444,7 +446,7 @@ export default {
       textareaEl.selectionEnd = currentPos + 1
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

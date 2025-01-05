@@ -92,10 +92,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 import PcoImport from './PcoImport.vue'
 
-export default {
+export default defineComponent({
+  name: 'ServiceSettingsDialog',
   components: { PcoImport },
   data () {
     return {
@@ -177,7 +179,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

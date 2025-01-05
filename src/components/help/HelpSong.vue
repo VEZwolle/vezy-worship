@@ -231,13 +231,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import labels from '../song/labels.js'
 
-export default {
+export default defineComponent({
+  name: 'HelpSong',
   setup () {
     return {
       labels
     }
   }
-}
+})
 </script>

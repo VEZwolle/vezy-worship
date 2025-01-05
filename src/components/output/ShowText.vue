@@ -5,9 +5,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 // used for show display nr in electron
-export default {
-}
+export default defineComponent({
+  name: 'ShowText',
+})
 </script>
 
 <style scoped lang="scss">

@@ -190,11 +190,13 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import { GetAlgoliaDatabase } from './algolia.js'
 
-export default {
+export default defineComponent({
+  name: 'SetlistDatabaseCompareDialog',
   extends: BaseSongDatabaseCompare,
   data () {
     return {
@@ -297,7 +299,7 @@ export default {
       this.isSavingDatabase = false
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
