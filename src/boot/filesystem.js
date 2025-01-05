@@ -1,3 +1,4 @@
+import { defineBoot } from '#q-app/wrappers'
 import * as zip from '@zip.js/zip.js'
 import useServiceStore from 'stores/service'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
@@ -264,9 +265,9 @@ const fs = {
   }
 }
 
-export default ({ app }) => {
+export default defineBoot(({ app }) => {
   // Allows to use this.$fs inside Vue components.
   app.config.globalProperties.$fs = fs
-}
+})
 
 export { fs }
