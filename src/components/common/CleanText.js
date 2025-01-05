@@ -45,8 +45,8 @@ export function sanitizerHtmlPresentation (presentation) {
       presentation.settings.title = sanitizerHtml(presentation.settings.title)
       presentation.settings.collection = sanitizerHtml(presentation.settings.collection)
       presentation.settings.number = sanitizerHtml(presentation.settings.number)
-      presentation.settings.text = sanitizerHtml(presentation.settings.text)
-      presentation.settings.translation = sanitizerHtml(presentation.settings.translation)
+      presentation.settings.text = sanitizerHtml(presentation.settings.text).replace(/&nbsp;/g, ' ')
+      presentation.settings.translation = sanitizerHtml(presentation.settings.translation).replace(/&nbsp;/g, ' ')
       break
     case 'caption':
       presentation.settings.title = sanitizerHtml(presentation.settings.title)
