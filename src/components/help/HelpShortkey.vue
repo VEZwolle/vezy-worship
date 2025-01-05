@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
+
 const columns = [
   {
     name: 'shortkey',
@@ -51,12 +53,13 @@ const rows = [
   { shortkey: '(F5 of esc)', function: 'Play/Stop van film' }
 ]
 
-export default {
+export default defineComponent({
+  name: 'HelpShortkey',
   setup () {
     return {
       columns,
       rows
     }
   }
-}
+})
 </script>

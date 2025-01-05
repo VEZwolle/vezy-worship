@@ -1,5 +1,8 @@
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'BaseControl',
   props: {
     presentation: Object,
     preview: Boolean
@@ -51,5 +54,5 @@ export default {
       this.$store.arrowKeyLocation = this.preview
     }
   }
-}
+})
 </script>

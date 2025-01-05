@@ -7,11 +7,13 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'CountdownOutputBeamer',
   extends: BaseOutput
-}
+})
 </script>
 
 <style scoped>

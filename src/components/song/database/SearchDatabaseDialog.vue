@@ -192,13 +192,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import cloneDeep from 'lodash/cloneDeep'
 import presentationTypes from '../../presentation-types.js'
 import { ConvertToAlgoliaRecord, AddToAlgoliaDatabase, RemoveFromAlgoliaDatabase } from './algolia.js'
 import { sanitizerHtml, sanitizerHtmlPresentation} from '../../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'SearchDatabaseDialog',
   extends: BaseSongDatabaseSearch,
   props: {
     title: String,
@@ -398,8 +400,7 @@ export default {
       this.searchResults()
     }
   }
-}
-
+})
 </script>
 
 <style scoped lang="scss">

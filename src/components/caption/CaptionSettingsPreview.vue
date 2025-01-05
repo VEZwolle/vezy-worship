@@ -47,13 +47,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import CaptionOutputLivestream from './CaptionOutputLivestream.vue'
 import CaptionOutputBeamer from './CaptionOutputBeamer.vue'
 import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 import { debounce } from 'quasar'
 
-export default {
+export default defineComponent({
+  name: 'CaptionSettingsPreview',
   components: { OutputPreview },
   props: {
     settings: {
@@ -186,7 +188,7 @@ export default {
       this.control.selectedSlideIndex = this.sectionsCount[this.sectionsCount.length - 1].slide
     }
   }
-}
+})
 </script>
 
 <style scoped>

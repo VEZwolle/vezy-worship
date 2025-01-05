@@ -6,14 +6,16 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 
-export default {
+export default defineComponent({
+  name: 'CountdownOutputStage',
   extends: BaseOutputStage,
   mounted () {
     if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

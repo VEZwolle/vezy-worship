@@ -104,9 +104,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import bibles from '../scripture/bibles.js'
 
-export default {
+export default defineComponent({
+  name: 'HelpScripture',
   computed: {
     bibleOptions () {
       return bibles.map(b => ({
@@ -115,5 +117,5 @@ export default {
       }))
     }
   }
-}
+})
 </script>

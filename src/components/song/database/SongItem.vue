@@ -62,9 +62,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../../presentation-types.js'
 
-export default {
+export default defineComponent({
+  name: 'SongItem',
   props: {
     newSong: { type: Object, required: true },
     songTodoIndex: Number,
@@ -110,7 +112,7 @@ export default {
       return ''
     }
   }
-}
+})
 </script>
 
 <style scoped>

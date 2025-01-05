@@ -44,10 +44,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { replaceBackgroundUrl } from '../presets-settings.js'
 import BgPng from '../../assets/bg.png'
 
-export default {
+export default defineComponent({
+  name: 'BackgroundSetting',
   props: {
     bgFileId: String,
     bgOpacity: {
@@ -114,8 +116,7 @@ export default {
       this.background = null
     }
   }
-}
-
+})
 </script>
 
 <style scoped>

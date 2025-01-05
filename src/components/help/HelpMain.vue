@@ -127,7 +127,10 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'HelpMain',
   data () {
     return {
       apiFunctions: [
@@ -150,5 +153,5 @@ export default {
       ]
     }
   }
-}
+})
 </script>

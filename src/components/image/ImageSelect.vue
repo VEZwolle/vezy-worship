@@ -118,7 +118,10 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'ImageSelect',
   props: {
     label: String,
     settings: Object
@@ -226,7 +229,7 @@ export default {
       this.imageSettings.x = bounds[x]
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

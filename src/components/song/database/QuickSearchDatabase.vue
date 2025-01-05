@@ -158,12 +158,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import presentationTypes from '../../presentation-types.js'
 import { sanitizerHtmlPresentation } from '../../common/CleanText.js'
 import cloneDeep from 'lodash/cloneDeep'
 
-export default {
+export default defineComponent({
+  name: 'QuickSearchDatabase',
   components: { },
   extends: BaseSongDatabaseSearch,
   data () {
@@ -219,7 +221,7 @@ export default {
       return presentation
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -13,12 +13,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import MessageOutput from '../message/MessageOutput.vue'
 import { replaceBackgroundUrl } from '../presets-settings.js'
 import BgPng from '../../assets/bg.png'
 
-export default {
+export default defineComponent({
+  name: 'OutputView',
   components: { MessageOutput },
   props: {
     id: String,
@@ -98,7 +100,7 @@ export default {
       this.lastItemBG = false
     }
   }
-}
+})
 </script>
 
 <style>

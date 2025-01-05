@@ -42,9 +42,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 
-export default {
+export default defineComponent({
+  name: 'TextSlidesControl',
   extends: BaseControl,
 
   created () {
@@ -148,7 +150,7 @@ export default {
         selectedIndex < nextLabelIndex
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

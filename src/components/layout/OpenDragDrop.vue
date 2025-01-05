@@ -15,8 +15,10 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
+  name: 'OpenDragDrop',
   data () {
     return {
       isLoading: false,
@@ -65,7 +67,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -168,9 +168,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { CleanText } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'PcoImport',
   props: {
     pcoId: String,
     theme: String,
@@ -705,7 +707,7 @@ export default {
       window.removeEventListener('message', this.pcoInlogEvent, false)
     }
   }
-}
+})
 </script>
 
 <style scoped>

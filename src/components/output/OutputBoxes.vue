@@ -59,10 +59,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import OutputView from './OutputView.vue'
 import OutputPreview from './OutputPreview.vue'
 
-export default {
+export default defineComponent({
+  name: 'OutputBoxes',
   components: { OutputPreview },
   props: {
     preview: Boolean,
@@ -116,7 +118,7 @@ export default {
       return this.views.filter(v => v.isActive)
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

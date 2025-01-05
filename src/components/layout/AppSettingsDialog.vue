@@ -256,10 +256,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '../song/database/algolia.js'
 import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsSettings, setPresentationPresetsSettings } from '../presets-settings.js'
 
-export default {
+export default defineComponent({
+  name: 'AppSettingsDialog',
   data () {
     return {
       showDisplayNr: false,
@@ -452,7 +454,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

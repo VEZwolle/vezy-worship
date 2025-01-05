@@ -30,9 +30,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 
-export default {
+export default defineComponent({
+  name: 'TextSlidesOutput',
   extends: BaseOutputStage,
   watch: {
     'control.selectedSectionIndex' () {
@@ -86,7 +88,7 @@ export default {
         selectedIndex < nextLabelIndex
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

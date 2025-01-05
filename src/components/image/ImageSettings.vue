@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import ImageSelect from './ImageSelect.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
@@ -62,7 +63,8 @@ import ImageOutputBeamer from './ImageOutputBeamer.vue'
 import ImageOutputLivestream from './ImageOutputLivestream.vue'
 import presentationPresets from '../presentation-presets.js'
 
-export default {
+export default defineComponent({
+  name: 'ImageSettings',
   components: { OutputPreview, ImageSelect, BackgroundSetting },
   extends: BaseSettings,
   setup () {
@@ -111,7 +113,7 @@ export default {
       this.settings.title = preset.settings.title
     }
   }
-}
+})
 </script>
 
 <style scoped>

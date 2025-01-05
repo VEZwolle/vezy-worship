@@ -59,7 +59,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
+  name: 'CaptionBeamer',
   props: {
     titleLines: Object,
     textLines: Object,
@@ -163,7 +165,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -28,8 +28,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { sanitizerHtml } from '../../common/CleanText.js'
-export default {
+
+export default defineComponent({
+  name: 'SongLyricsView',
   props: {
     title: String,
     collectionNumber: String,
@@ -48,7 +51,7 @@ export default {
       return sanitizerHtml(contect)
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
