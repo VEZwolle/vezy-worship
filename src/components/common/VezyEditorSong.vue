@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { CleanText } from './CleanText.js'
 import { debounce, scroll } from 'quasar'
 import { splitSong } from '../song/SongControl.vue'
@@ -34,7 +35,8 @@ import { getCaretLine, setCaretLine } from './Caret.js'
 import labels from '../song/labels.js'
 const { getScrollTarget, getVerticalScrollPosition, setVerticalScrollPosition } = scroll
 
-export default {
+export default defineComponent({
+  name: 'VezyEditorSong',
   props: {
     modelValue: {
       type: String,
@@ -129,7 +131,7 @@ export default {
       if (cursorPosition) {
         // nexttick ivm caret without newline position of q-editor
         this.$nextTick(() => {
-          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
+          if (this.$refs.editor) setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.end)
         })
       }
     },
@@ -197,12 +199,12 @@ export default {
         cursorPosition.start.lineOffset = 0
         // nexttick ivm caret without newline position of q-editor
         this.$nextTick(() => {
-          setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.start)
+          if (this.$refs.editor) setCaretLine(this.$refs.editor.getContentEl(), cursorPosition.start, cursorPosition.start)
         })
       }
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

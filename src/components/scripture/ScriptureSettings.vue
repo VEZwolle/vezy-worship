@@ -123,15 +123,17 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import CaptionSettingsPreview from '../caption/CaptionSettingsPreview.vue'
-import bibles from './bibles'
-import books from './books'
+import bibles from './bibles.js'
+import books from './books.js'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 import VezyEditor from '../common/VezyEditor.vue'
 import { CleanText } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'ScriptureSettings',
   components: { CaptionSettingsPreview, BackgroundSetting, VezyEditor },
   extends: BaseSettings,
   data () {
@@ -222,7 +224,7 @@ export default {
       return val > 0 || 'Minimaal 1'
     }
   }
-}
+})
 </script>
 
 <style scoped>

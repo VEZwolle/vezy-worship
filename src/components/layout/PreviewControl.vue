@@ -41,11 +41,13 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
-import presentationPresets from '../presentation-presets'
-import OutputBoxes from '../output/OutputBoxes'
+import { defineComponent } from 'vue'
+import presentationTypes from '../presentation-types.js'
+import presentationPresets from '../presentation-presets.js'
+import OutputBoxes from '../output/OutputBoxes.vue'
 
-export default {
+export default defineComponent({
+  name: 'PreviewControl',
   components: { OutputBoxes },
   setup () {
     return { presentationPresets }
@@ -78,7 +80,7 @@ export default {
       return this.arrowKeyActive ? 'arrowKeyActive' : ''
     }
   }
-}
+})
 </script>
 
 <style scoped>

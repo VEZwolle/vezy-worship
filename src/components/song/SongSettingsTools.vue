@@ -1,8 +1,10 @@
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
-import labels, { isLabel } from './labels'
+import labels, { isLabel } from './labels.js'
 
-export default {
+export default defineComponent({
+  name: 'SongSettingsTools',
   extends: BaseSettings,
   data () {
     return {
@@ -102,5 +104,5 @@ export default {
       }
     }
   }
-}
+})
 </script>

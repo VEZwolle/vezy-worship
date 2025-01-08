@@ -5,9 +5,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutputStage from '../output/BaseOutputStage.vue'
 
-export default {
+export default defineComponent({
+  name: 'VideoOutputStage',
   extends: BaseOutputStage,
 
   computed: {
@@ -18,7 +20,7 @@ export default {
   mounted () {
     if (!this.preview) this.$refs.outputStage.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
-}
+})
 </script>
 
 <style scoped>

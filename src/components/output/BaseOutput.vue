@@ -1,7 +1,9 @@
 <script>
+import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types'
 
-export default {
+export default defineComponent({
+  name: 'BaseOutput',
   props: {
     presentation: Object,
     alpha: Boolean,
@@ -42,7 +44,7 @@ export default {
       return style
     }
   }
-}
+})
 </script>
 
 <style>

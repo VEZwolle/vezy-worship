@@ -192,12 +192,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
 import cloneDeep from 'lodash/cloneDeep'
-import presentationTypes from '../../presentation-types'
+import presentationTypes from '../../presentation-types.js'
 import { ConvertToAlgoliaRecord, AddToAlgoliaDatabase, RemoveFromAlgoliaDatabase } from './algolia.js'
+import { sanitizerHtml, sanitizerHtmlPresentation} from '../../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'SearchDatabaseDialog',
   extends: BaseSongDatabaseSearch,
   props: {
     title: String,
@@ -235,10 +238,10 @@ export default {
   },
   computed: {
     selectedLyrics () {
-      return this.selected[0]?.lyrics.replaceAll('\n', '<br>')
+      return sanitizerHtml(this.selected[0]?.lyrics.replaceAll('\n', '<br>'))
     },
     selectedLyricsTranslation () {
-      return this.selected[0]?.lyricstranslate.replaceAll('\n', '<br>')
+      return sanitizerHtml(this.selected[0]?.lyricstranslate.replaceAll('\n', '<br>'))
     },
     selectedTitle () {
       return this.selected[0]?.title || ''
@@ -284,11 +287,11 @@ export default {
       }
     },
     submitSong () {
-      this.$emit('update:title', this.selected[0]?.title)
-      this.$emit('update:collection', this.selected[0]?.collection ? this.selected[0]?.collection : '')
-      this.$emit('update:number', this.selected[0]?.number ? this.selected[0]?.number : '')
-      this.$emit('update:text', this.selected[0]?.lyrics)
-      this.$emit('update:translation', this.selected[0]?.lyricstranslate)
+      this.$emit('update:title', sanitizerHtml(this.selected[0]?.title))
+      this.$emit('update:collection', this.selected[0]?.collection ? sanitizerHtml(this.selected[0]?.collection) : '')
+      this.$emit('update:number', this.selected[0]?.number ? sanitizerHtml(this.selected[0]?.number) : '')
+      this.$emit('update:text', sanitizerHtml(this.selected[0]?.lyrics))
+      this.$emit('update:translation', sanitizerHtml(this.selected[0]?.lyricstranslate))
       if (this.userName) localStorage.setItem('database.userName', this.userName || '')
       this.hide()
     },
@@ -370,6 +373,7 @@ export default {
         this.editPresentation.settings.number = props.number || ''
         this.editPresentation.settings.text = props.lyrics || ''
         this.editPresentation.settings.translation = props.lyricstranslate || ''
+        this.editPresentation = sanitizerHtmlPresentation(this.editPresentation)
         // edit presentation
         this.$refs.presentationSettingsDialog.edit(this.editPresentation)
         // Return with emit save --> saveEditSong
@@ -396,8 +400,7 @@ export default {
       this.searchResults()
     }
   }
-}
-
+})
 </script>
 
 <style scoped lang="scss">

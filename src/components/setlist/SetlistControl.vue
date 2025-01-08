@@ -85,13 +85,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import SetlistItem from './SetlistItem.vue'
-import presentationTypes from '../presentation-types'
+import presentationTypes from '../presentation-types.js'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
 import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'
 
-export default {
+export default defineComponent({
+  name: 'SetlistControl',
   components: { SetlistItem, ServiceSettingsDialog, Draggable, QuickSearchDatabase },
   setup () {
     return {
@@ -123,7 +125,7 @@ export default {
       this.$store.setlistScroll = false
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -44,9 +44,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { replaceBackgroundUrl } from '../presets-settings.js'
+import BgPng from '../../assets/bg.png'
 
-export default {
+export default defineComponent({
+  name: 'BackgroundSetting',
   props: {
     bgFileId: String,
     bgOpacity: {
@@ -77,7 +80,7 @@ export default {
       if (this.backgroundColorBeamer && !this.backgroundUrl) {
         style.backgroundColor = this.backgroundColorBeamer || '#000'
       } else {
-        const image = this.backgroundUrl || replaceBackgroundUrl || require('../../assets/bg.png')
+        const image = this.backgroundUrl || replaceBackgroundUrl || BgPng
         style.backgroundImage = `url(${image})`
       }
 
@@ -113,8 +116,7 @@ export default {
       this.background = null
     }
   }
-}
-
+})
 </script>
 
 <style scoped>

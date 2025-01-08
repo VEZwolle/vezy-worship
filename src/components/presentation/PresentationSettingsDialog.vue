@@ -7,7 +7,7 @@
           <span v-if="presentation.id">{{ presentationType.name }} aanpassen</span>
           <span v-else>{{ presentationType.name }} toevoegen</span>
         </q-toolbar-title>
-        <q-btn v-close-popup flat round dense icon="close" />
+        <q-btn flat round dense icon="close" @click="close"/>
       </q-toolbar>
 
       <component :is="settingsComponent" v-if="settingsComponent" :presentation="presentation" />
@@ -23,10 +23,13 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
+import { defineComponent } from 'vue'
+import presentationTypes from '../presentation-types.js'
 import cloneDeep from 'lodash/cloneDeep'
+import { sanitizerHtmlPresentation } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'PresentationSettingsDialog',
   emits: ['save'],
   data () {
     return {
@@ -78,6 +81,7 @@ export default {
       this.show()
     },
     save () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
       if (!this.presentation.id) {
         this.$store.addPresentation(this.presentation)
       }
@@ -86,11 +90,16 @@ export default {
       this.hide()
     },
     saveEmit () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
       this.$emit('save')
+      this.hide()
+    },
+    close () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
       this.hide()
     }
   }
-}
+})
 </script>
 
 <style scoped>

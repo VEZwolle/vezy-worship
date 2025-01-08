@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       Titels/teksten toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
@@ -35,59 +35,59 @@
     <p>
       <b><u>Opmaak</u></b><br>
       <i><u>Opties Beamer:</u></i>
-      <ul>
-        <li>
-          <b>Standaard</b><br>
-          Titel boven aan en tekst hier onder weergegeven.
-        </li>
-        <li>
-          <b>Bijbeltekst</b><br>
-          Titel rechts onder, op rand zichtgebied van de zaal en tekst vanaf boven weergegeven.
-        </li>
-        <li>
-          <b>Alleen tekst</b><br>
-          Alleen de tekst wordt weergegeven, de titel niet.
-        </li>
-        <li>
-          <b>Thema</b><br>
-          De titel komt onder de tekst thema te staan en de tekst onderin het zichtbare gebied.
-        </li>
-        <li>
-          <b>Geen</b><br>
-          Er niets weergegeven.
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        <b>Standaard</b><br>
+        Titel boven aan en tekst hier onder weergegeven.
+      </li>
+      <li>
+        <b>Bijbeltekst</b><br>
+        Titel rechts onder, op rand zichtgebied van de zaal en tekst vanaf boven weergegeven.
+      </li>
+      <li>
+        <b>Alleen tekst</b><br>
+        Alleen de tekst wordt weergegeven, de titel niet.
+      </li>
+      <li>
+        <b>Thema</b><br>
+        De titel komt onder de tekst thema te staan en de tekst onderin het zichtbare gebied.
+      </li>
+      <li>
+        <b>Geen</b><br>
+        Er niets weergegeven.
+      </li>
+    </ul>
     <p>
       <i><u>Opties Livestream:</u></i>
-      <ul>
-        <li>
-          <b>Standaard</b><br>
-          De grootte van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.
-        </li>
-        <li>
-          <b>Breed</b><br>
-          Het onderdeel vak wordt over de hele breedte weergeven.
-        </li>
-        <li>
-          <b>Geen</b><br>
-          Er niets weergegeven.
-        </li>
-        <li>
-          <b>Max tekens</b><br>
-          Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
-          Splitsen van regels gebeurt met de volgende voorwaarden:<br>
-          <sup>
-            Zoek eerst of minder dan 'Max tekens' tekens<br>
-            Dan naar een regeleinde<br>
-            Dan naar [.?!]+['"’]<br>
-            Dan naar [.?!]<br>
-            Dan naar [,:; spatie]<br>
-            Dan naar iets binnen 'Max tekens'.
-          </sup>
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        <b>Standaard</b><br>
+        De grootte van het onderdeelvak wordt aangepast afhankelijk van de hoeveelheid tekst die er in staat.
+      </li>
+      <li>
+        <b>Breed</b><br>
+        Het onderdeel vak wordt over de hele breedte weergeven.
+      </li>
+      <li>
+        <b>Geen</b><br>
+        Er niets weergegeven.
+      </li>
+      <li>
+        <b>Max tekens</b><br>
+        Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
+        Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+        <sup>
+          Zoek eerst of minder dan 'Max tekens' tekens<br>
+          Dan naar een regeleinde<br>
+          Dan naar [.?!]+['"’]<br>
+          Dan naar [.?!]<br>
+          Dan naar [,:; spatie]<br>
+          Dan naar iets binnen 'Max tekens'.
+        </sup>
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Afwijkende achtergrond
     </div>
@@ -121,3 +121,11 @@
     </p>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'HelpCaption',
+})
+</script>

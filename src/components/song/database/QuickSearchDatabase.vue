@@ -158,11 +158,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseSearch from './BaseSongDatabaseSearch.vue'
-import presentationTypes from '../../presentation-types'
+import presentationTypes from '../../presentation-types.js'
+import { sanitizerHtmlPresentation } from '../../common/CleanText.js'
 import cloneDeep from 'lodash/cloneDeep'
 
-export default {
+export default defineComponent({
+  name: 'QuickSearchDatabase',
   components: { },
   extends: BaseSongDatabaseSearch,
   data () {
@@ -199,10 +202,10 @@ export default {
       this.toSetlist(this.selected[0])
     },
     toSetlist (props) {
-      this.$store.addPresentation(this.propsToPresentation(props))
+      this.$store.addPresentation(sanitizerHtmlPresentation(this.propsToPresentation(props)))
     },
     toPreview (props) {
-      this.$store.preview(this.propsToPresentation(props))
+      this.$store.preview(sanitizerHtmlPresentation(this.propsToPresentation(props)))
     },
     propsToPresentation (props) {
       const type = presentationTypes.find(t => t.id === 'song')
@@ -218,7 +221,7 @@ export default {
       return presentation
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

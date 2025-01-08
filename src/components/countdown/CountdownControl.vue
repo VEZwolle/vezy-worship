@@ -30,10 +30,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import dayjs from 'dayjs'
 
-export default {
+export default defineComponent({
+  name: 'CountdownControl',
   extends: BaseControl,
   computed: {
     description () {
@@ -77,7 +79,7 @@ export default {
       this.presentation.control.remaining = `${minutes}:${seconds}`
     }
   }
-}
+})
 </script>
 
 <style scoped>

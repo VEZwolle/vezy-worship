@@ -5,9 +5,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import VideoOutput from './VideoOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'VideoOutputLivestream',
   components: { VideoOutput }
-}
+})
 </script>

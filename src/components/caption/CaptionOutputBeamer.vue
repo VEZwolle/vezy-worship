@@ -11,10 +11,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 import CaptionBeamer from './CaptionBeamer.vue'
 
-export default {
+export default defineComponent({
+  name: 'CaptionOutputBeamer',
   components: { CaptionBeamer },
   extends: BaseOutput,
   computed: {
@@ -26,7 +28,7 @@ export default {
       return this.control.beamerTitleLines || []
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

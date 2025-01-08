@@ -74,9 +74,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSongDatabaseCompare from './BaseSongDatabaseCompare.vue'
+import { sanitizerHtml } from '../../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'SongDatabaseCompareDialog',
   extends: BaseSongDatabaseCompare,
   data () {
     return {
@@ -131,11 +134,11 @@ export default {
     },
     useDatabase () {
       if (this.presentation.settings) {
-        this.presentation.settings.title = this.selectedDatabase.title || ''
-        this.presentation.settings.collection = this.selectedDatabase.collection || ''
-        this.presentation.settings.number = this.selectedDatabase.number || ''
-        this.presentation.settings.text = this.selectedDatabase.lyrics || ''
-        this.presentation.settings.translation = this.selectedDatabase.lyricstranslate || ''
+        this.presentation.settings.title = sanitizerHtml(this.selectedDatabase.title) || ''
+        this.presentation.settings.collection = sanitizerHtml(this.selectedDatabase.collection) || ''
+        this.presentation.settings.number = sanitizerHtml(this.selectedDatabase.number) || ''
+        this.presentation.settings.text = sanitizerHtml(this.selectedDatabase.lyrics) || ''
+        this.presentation.settings.translation = sanitizerHtml(this.selectedDatabase.lyricstranslate) || ''
         this.hide()
       }
     },
@@ -143,7 +146,7 @@ export default {
       this.SongItemDatabaseWidth = this.$refs.listDiff?.clientWidth * 0.5 || 400
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

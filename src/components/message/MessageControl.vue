@@ -33,13 +33,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'MessageControl',
   data () {
     return {
       messageText: '',
       time: 0,
       timeDefault: 15,
       messageList: [
+        '... (baby\'s)',
         'Gevraagd: extra BHV (melden bij kosters)',
         'Spoed: verplaatsen i.v.m. nooduitgang hulpdiensten!',
         'Gevraagd: 2 tieners voor de Baby\'s',
@@ -103,7 +107,7 @@ export default {
       this.time = this.timeDefault
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

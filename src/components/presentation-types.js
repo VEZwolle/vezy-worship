@@ -1,4 +1,29 @@
-import books from './scripture/books'
+import books from './scripture/books.js'
+import TextSlidesOutputStage from './common/TextSlidesOutputStage.vue'
+import SongSettings from './song/SongSettings.vue'
+import SongControl from './song/SongControl.vue'
+import SongOutputBeamer from './song/SongOutputBeamer.vue'
+import SongOutputLivestream from './song/SongOutputLivestream.vue'
+import CaptionSettings from './caption/CaptionSettings.vue'
+import CaptionControl from './caption/CaptionControl.vue'
+import CaptionOutputBeamer from './caption/CaptionOutputBeamer.vue'
+import CaptionOutputLivestream from './caption/CaptionOutputLivestream.vue'
+import ScriptureSettings from './scripture/ScriptureSettings.vue'
+import ImageSettings from './image/ImageSettings.vue'
+import ImageControl from './image/ImageControl.vue'
+import ImageOutputStage from './image/ImageOutputStage.vue'
+import ImageOutputBeamer from './image/ImageOutputBeamer.vue'
+import ImageOutputLivestream from './image/ImageOutputLivestream.vue'
+import VideoSettings from './video/VideoSettings.vue'
+import VideoControl from './video/VideoControl.vue'
+import VideoOutputStage from './video/VideoOutputStage.vue'
+import VideoOutputBeamer from './video/VideoOutputBeamer.vue'
+import VideoOutputLivestream from './video/VideoOutputLivestream.vue'
+import CountdownSettings from './countdown/CountdownSettings.vue'
+import CountdownControl from './countdown/CountdownControl.vue'
+import CountdownOutputStage from './countdown/CountdownOutputStage.vue'
+import CountdownOutputBeamer from './countdown/CountdownOutputBeamer.vue'
+import CountdownOutputLivestream from './countdown/CountdownOutputLivestream.vue'
 
 export default [
   {
@@ -26,13 +51,13 @@ export default [
       return settings.text
     },
     components: {
-      settings: require('./song/SongSettings.vue').default,
-      control: require('./song/SongControl.vue').default
+      settings: SongSettings,
+      control: SongControl
     },
     outputs: {
-      stage: require('./common/TextSlidesOutputStage.vue').default,
-      beamer: require('./song/SongOutputBeamer.vue').default,
-      livestream: require('./song/SongOutputLivestream.vue').default
+      stage: TextSlidesOutputStage,
+      beamer: SongOutputBeamer,
+      livestream: SongOutputLivestream
     }
   },
   {
@@ -53,13 +78,13 @@ export default [
       return settings.text
     },
     components: {
-      settings: require('./caption/CaptionSettings.vue').default,
-      control: require('./caption/CaptionControl.vue').default
+      settings: CaptionSettings,
+      control: CaptionControl
     },
     outputs: {
-      stage: require('./common/TextSlidesOutputStage.vue').default,
-      beamer: require('./caption/CaptionOutputBeamer.vue').default,
-      livestream: require('./caption/CaptionOutputLivestream.vue').default
+      stage: TextSlidesOutputStage,
+      beamer: CaptionOutputBeamer,
+      livestream: CaptionOutputLivestream
     }
   },
   {
@@ -91,13 +116,13 @@ export default [
       }
     },
     components: {
-      settings: require('./image/ImageSettings.vue').default,
-      control: require('./image/ImageControl.vue').default
+      settings: ImageSettings,
+      control: ImageControl
     },
     outputs: {
-      stage: require('./image/ImageOutputStage.vue').default,
-      beamer: require('./image/ImageOutputBeamer.vue').default,
-      livestream: require('./image/ImageOutputLivestream.vue').default
+      stage: ImageOutputStage,
+      beamer: ImageOutputBeamer,
+      livestream: ImageOutputLivestream
     }
   },
   {
@@ -117,13 +142,13 @@ export default [
       noLivestream: false
     },
     components: {
-      settings: require('./video/VideoSettings.vue').default,
-      control: require('./video/VideoControl.vue').default
+      settings: VideoSettings,
+      control: VideoControl
     },
     outputs: {
-      stage: require('./video/VideoOutputStage.vue').default,
-      beamer: require('./video/VideoOutputBeamer.vue').default,
-      livestream: require('./video/VideoOutputLivestream.vue').default
+      stage: VideoOutputStage,
+      beamer: VideoOutputBeamer,
+      livestream: VideoOutputLivestream
     }
   },
   {
@@ -145,13 +170,13 @@ export default [
       return `Aftellen tot ${settings.time}`
     },
     components: {
-      settings: require('./countdown/CountdownSettings.vue').default,
-      control: require('./countdown/CountdownControl.vue').default
+      settings: CountdownSettings,
+      control: CountdownControl
     },
     outputs: {
-      stage: require('./countdown/CountdownOutputStage.vue').default,
-      beamer: require('./countdown/CountdownOutputBeamer.vue').default,
-      livestream: require('./countdown/CountdownOutputLivestream.vue').default
+      stage: CountdownOutputStage,
+      beamer: CountdownOutputBeamer,
+      livestream: CountdownOutputLivestream
     }
   },
   {
@@ -188,13 +213,13 @@ export default [
       return settings.text
     },
     components: {
-      settings: require('./scripture/ScriptureSettings.vue').default,
-      control: require('./caption/CaptionControl.vue').default
+      settings: ScriptureSettings,
+      control: CaptionControl
     },
     outputs: {
-      stage: require('./common/TextSlidesOutputStage.vue').default,
-      beamer: require('./caption/CaptionOutputBeamer.vue').default,
-      livestream: require('./caption/CaptionOutputLivestream.vue').default
+      stage: TextSlidesOutputStage,
+      beamer: CaptionOutputBeamer,
+      livestream: CaptionOutputLivestream
     }
   }
 ]

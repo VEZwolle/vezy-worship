@@ -66,8 +66,8 @@
           </q-card-section>
         </div>
         <div v-show="pcoDialog" class="col">
-          <Pco
-            ref="pco"
+          <PcoImport
+            ref="pcoimport"
             v-model:pcoId="service.pcoId"
             v-model:theme="service.theme"
             v-model:host="service.host"
@@ -92,11 +92,13 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
-import Pco from './Pco.vue'
+import PcoImport from './PcoImport.vue'
 
-export default {
-  components: { Pco },
+export default defineComponent({
+  name: 'ServiceSettingsDialog',
+  components: { PcoImport },
   data () {
     return {
       service: null,
@@ -165,19 +167,19 @@ export default {
         this.$store.cleanMedia(this.service.backgroundImageId, false)
       }
       this.$store.fillService(this.service)
-      this.$refs.pco.addItems()
+      this.$refs.pcoimport.addItems()
       this.hide()
     },
     pco (load) {
       if (load) {
         this.pcoDialog = true
-        this.$refs.pco.pco()
+        this.$refs.pcoimport.pco()
       } else {
-        this.$refs.pco.pcoLogout()
+        this.$refs.pcoimport.pcoLogout()
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

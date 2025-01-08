@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       Film toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
@@ -79,3 +79,11 @@
     </p>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'HelpVideo',
+})
+</script>

@@ -8,9 +8,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'VideoOutput',
   extends: BaseOutput,
   props: {
     muted: Boolean,
@@ -40,7 +42,7 @@ export default {
       this.player.currentTime = val
     }
   }
-}
+})
 </script>
 
 <style scoped>

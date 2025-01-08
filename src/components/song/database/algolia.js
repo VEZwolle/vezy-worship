@@ -1,8 +1,8 @@
 import { Notify } from 'quasar'
 import dayjs from 'dayjs'
 import { nanoid } from 'nanoid'
-import { api } from '../../../boot/api'
-import { fsdb } from '../../../boot/filesystemdb'
+import { api } from 'boot/api.js'
+import { fsdb } from 'boot/filesystemdb.js'
 
 export const algoliaIndexNames = [
   { value: 0, label: 'VEZ projectie', apiKeyEdit: 'database.apiKeyEdit' },
@@ -79,7 +79,7 @@ export async function GetAlgoliaDatabase (indexId = 0) {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
     }
-  } catch (error) {
+  } catch {
     Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   }
@@ -138,14 +138,14 @@ export async function AddToAlgoliaDatabase (indexId = 0, records, partUpdate = f
       records,
       partUpdate
     })
-    if (result.objectIDs || result.objectID) {
+    if (result[0]?.objectIDs?.length || result.objectID) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens aangepast: Het duurt vaak even voor dit zichtbaar is.' })
-      return result.objectIDs || result.objectID
+      return result[0]?.objectIDs || result.objectID
     } else {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.message}` })
       return false
     }
-  } catch (error) {
+  } catch {
     Notify.create({ type: 'negative', message: 'Netwerk error naar cloud database' })
     return false
   } finally {
@@ -165,9 +165,9 @@ export async function RemoveFromAlgoliaDatabase (indexId = 0, objectIDs) {
       apiKeyEdit,
       objectIDs
     })
-    if (result.objectIDs || result.objectID || result.taskID) {
+    if (result[0]?.objectIDs.length || result.objectID || result.taskID) {
       Notify.create({ type: 'positive', message: 'Algolia gegevens verwijderd: Het duurt vaak even voor dit zichtbaar is.' })
-      return result.objectIDs || result.objectID || result.taskID
+      return result[0]?.objectIDs || result.objectID || result.taskID
     } else {
       if (result.status && result.message) Notify.create({ type: 'negative', message: `Algolia error: ${result.status}<br>${result.message}` })
       return false

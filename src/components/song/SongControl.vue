@@ -9,12 +9,14 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
-import { isLabel } from './labels'
+import { isLabel } from './labels.js'
 import chunk from 'lodash/chunk'
 
-export default {
+export default defineComponent({
+  name: 'SongControl',
   components: { TextSlidesControl },
   extends: BaseControl,
   computed: {
@@ -34,7 +36,7 @@ export default {
       this.presentation.control.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
     }
   }
-}
+})
 
 export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0, minOneSlide = true) {
   if (!text) return []

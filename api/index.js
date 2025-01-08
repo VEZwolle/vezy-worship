@@ -1,8 +1,9 @@
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
-const express = require('express')
-const axios = require('axios')
-const cors = require('cors')
+import functions from 'firebase-functions/v1'
+import admin from 'firebase-admin'
+import express from 'express'
+import axios from 'axios'
+import cors from 'cors'
+import { algoliasearch } from 'algoliasearch'
 
 // Initialization
 admin.initializeApp()
@@ -346,53 +347,66 @@ app.post('/api/database/search', async (req, res) => {
 
   algoliaCheckMaxCallsWait()
 
-  const algoliasearch = require('algoliasearch')
   // Start the API client
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
-  // Search the index for...
-  // https://www.algolia.com/doc/api-reference/api-methods/search/
+  // Search for...
+  // https://www.algolia.com/doc/libraries/javascript/v5/methods/search/
   try {
     let result = null
     switch (true) {
       case getCollections:
-        result = await algoliaIndex.searchForFacetValues('collection')
+        result = await client.searchForFacetValues({ indexName: algoliaIndexName(indexId), facetName: 'collection' })
         break
       case !textSearch && collection !== '':
-        result = await algoliaIndex.search(query, {
-          hitsPerPage: 100,
-          restrictSearchableAttributes: [
-            'title',
-            'collection',
-            'number'
-          ],
-          filters: `collection:${collection}`
+        result = await client.searchSingleIndex({
+          indexName: algoliaIndexName(indexId),
+          searchParams: {
+            query, // query: query
+            hitsPerPage: 100,
+            restrictSearchableAttributes: [
+              'title',
+              'collection',
+              'number'
+            ],
+            filters: `collection:${collection}`
+          }
         })
         break
       case !textSearch:
-        result = await algoliaIndex.search(query, {
-          hitsPerPage: 100,
-          restrictSearchableAttributes: [
-            'title',
-            'collection',
-            'number'
-          ]
+        result = await client.searchSingleIndex({
+          indexName: algoliaIndexName(indexId),
+          searchParams: {
+            query, // query: query
+            hitsPerPage: 100,
+            restrictSearchableAttributes: [
+              'title',
+              'collection',
+              'number'
+            ]
+          }
         })
         break
       case collection !== '':
-        result = await algoliaIndex.search(query, {
-          hitsPerPage: 100,
-          filters: `collection:${collection}`
+        result = await client.searchSingleIndex({
+          indexName: algoliaIndexName(indexId),
+          searchParams: {
+            query, // query: query
+            hitsPerPage: 100,
+            filters: `collection:${collection}`
+          }
         })
         break
       default: // search in 'title', 'collection', 'number', 'lyrics'
-        result = await algoliaIndex.search(query, {
-          hitsPerPage: 100
+        result = await client.searchSingleIndex({
+          indexName: algoliaIndexName(indexId),
+          searchParams: {
+            query, // query: query
+            hitsPerPage: 100
+          }
         })
     }
 
@@ -409,24 +423,24 @@ app.post('/api/database/search', async (req, res) => {
 
 app.post('/api/database/backup', async (req, res) => {
   const indexId = req.body.indexId || 0
-  const algoliasearch = require('algoliasearch')
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_API_KEY_SEARCH, {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Download all records for the index...
-  // https://www.algolia.com/doc/api-reference/api-methods/browse/
+  // https://www.algolia.com/doc/libraries/javascript/v5/methods/search/browse/
 
   algoliaCheckMaxCallsWait()
 
   let result = []
-  algoliaIndex.browseObjects({
-    batch: batch => {
-      result = result.concat(batch)
+  client.browseObjects({
+    indexName: algoliaIndexName(indexId),
+    aggregator: response => {
+      result = result.concat(response.hits)
     }
   }).then(() => {
+    console.log(result)
     res.json(result) // all data records
   }).catch(() => res.json({ status: 500, message: '500: Algolia error' }))
 })
@@ -440,36 +454,41 @@ app.post('/api/database/edit', async (req, res) => {
   const partUpdate = req.body.partUpdate || false // array of full reccords
   if (records?.length === 0) return res.json({ status: 204, message: 'Geen wijzigingsdata ontvangen' })
 
-  const algoliasearch = require('algoliasearch')
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, algoliaApiKeyEdit(indexId), {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
   // Add or Edit (if exist) by objectID
-  // https://www.algolia.com/doc/api-reference/api-methods/save-objects/
+  // https://www.algolia.com/doc/libraries/javascript/v5/methods/search/add-or-update-object/
   try {
     let result
     switch (true) {
       case partUpdate && records.length === 1:
-        result = await algoliaIndex.partialUpdateObject(records[0], {
+        result = await client.partialUpdateObject({
+          indexName: algoliaIndexName(indexId),
+          objectID: records[0].objectID,
+          attributesToUpdate: records[0],
           createIfNotExists: true
         })
         break
       case partUpdate:
-        result = await algoliaIndex.partialUpdateObjects(records, {
+        result = await client.partialUpdateObjects({
+          indexName: algoliaIndexName(indexId),
+          objects: records,
           createIfNotExists: true
         })
         break
       case records.length === 1:
-        result = await algoliaIndex.saveObject(records[0], {
-          autoGenerateObjectIDIfNotExist: true
+        result = await client.saveObject({
+          indexName: algoliaIndexName(indexId),
+          body: records[0]
         })
         break
       default: // add or full replace
-        result = await algoliaIndex.saveObjects(records, {
-          autoGenerateObjectIDIfNotExist: true
+        result = await client.saveObjects({
+          indexName: algoliaIndexName(indexId),
+          objects: records
         })
     }
 
@@ -480,7 +499,7 @@ app.post('/api/database/edit', async (req, res) => {
       "status":404
     } */
   } catch {
-    res.json({ status: 500, message: '500: Algolia error' })
+    res.json({ status: 500, message: '500: Algolia Error' })
   }
 })
 
@@ -492,23 +511,27 @@ app.post('/api/database/delete', async (req, res) => {
   const objectIDs = req.body.objectIDs // array of objectID
   if (objectIDs?.length === 0) return res.json({ status: 204, message: 'Geen wijzigingsdata ontvangen' })
 
-  const algoliasearch = require('algoliasearch')
   const client = algoliasearch(process.env.ALGOLIA_APP_ID, algoliaApiKeyEdit(indexId), {
     headers: {
       'X-Algolia-UserToken': process.env.ALGOLIA_USER
     }
   })
-  const algoliaIndex = client.initIndex(algoliaIndexName(indexId))
-  // Add or Edit  by objectID
-  // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/
+  // Delete by objectID
+  // https://www.algolia.com/doc/libraries/javascript/v5/helpers/#delete-records
   try {
     let result
     switch (true) {
       case objectIDs.length === 1:
-        result = await algoliaIndex.deleteObject(objectIDs[0])
+        result = await client.deleteObject({
+          indexName: algoliaIndexName(indexId),
+          objectID: objectIDs[0]
+        })
         break
       default: // add or full replace
-        result = await algoliaIndex.deleteObjects(objectIDs)
+        result = await client.deleteObjects({
+          indexName: algoliaIndexName(indexId),
+          objectIDs // objectIDs: objectIDs
+        })
     }
 
     res.json(result) // data onder 'objectIDs' --> array of saved objectID
@@ -529,7 +552,7 @@ const secrets = [
   'VEZY_API_TOKEN_EDIT'
 ]
 
-exports.api = functions
+export const api = functions
   .region('europe-west1')
   .runWith({ secrets })
   .https.onRequest(app)

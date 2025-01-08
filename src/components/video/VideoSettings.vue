@@ -80,10 +80,12 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
 
-export default {
+export default defineComponent({
+  name: 'VideoSettings',
   components: { BackgroundSetting },
   extends: BaseSettings,
   data () {
@@ -165,7 +167,7 @@ export default {
       this.$refs.player.play()
     }
   }
-}
+})
 
 function timeFormat (totalSeconds) {
   if (typeof totalSeconds !== 'number') return ''

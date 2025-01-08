@@ -1,7 +1,9 @@
 <script>
+import { defineComponent } from 'vue'
 import ImageOutput from './ImageOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageOutputBeamer',
   extends: ImageOutput,
   data () {
     return {
@@ -13,5 +15,5 @@ export default {
       return this.presentation.settings.beamer
     }
   }
-}
+})
 </script>

@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'SongOutputBeamer',
   extends: BaseOutput,
   computed: {
     lines () {
@@ -55,7 +57,7 @@ export default {
       return style
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

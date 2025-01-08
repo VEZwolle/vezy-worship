@@ -168,9 +168,11 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { CleanText } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'PcoImport',
   props: {
     pcoId: String,
     theme: String,
@@ -643,7 +645,7 @@ export default {
                   title: this.planItems[id].title,
                   collection: '',
                   number: '',
-                  text: `${this.planItems[id].html_details}`,
+                  text: `${this.planItems[id].html_details}`.replace(/&nbsp;/g, ' '),
                   translation: '',
                   noSplitLines: false,
                   bgOpacity: 0,
@@ -705,7 +707,7 @@ export default {
       window.removeEventListener('message', this.pcoInlogEvent, false)
     }
   }
-}
+})
 </script>
 
 <style scoped>
