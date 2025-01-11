@@ -48,6 +48,14 @@ export default defineComponent({
     'presentation' () {
       console.log('watch presentation')
       console.log(this.presentation)
+    },
+    '$store.goLiveKey' () {
+      console.log('watch $store.goLiveKey')
+      console.log(this.presentation)
+    },
+    '$store.livePresentation' () {
+      console.log('watch $store.livePresentation')
+      console.log(this.presentation)
     }
   },
   computed: {

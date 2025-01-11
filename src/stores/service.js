@@ -30,6 +30,7 @@ export default defineStore('service', {
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: '',
     lastShortKey: '',
+    goLiveKey: '',
     setlistScroll: false
   }),
   actions: {
@@ -186,6 +187,7 @@ export default defineStore('service', {
       this.livePresentation = cloneDeep(presentation)
       this.arrowKeyLocation = false // active arrow keys naar live
       this.isOnlyLivestreamClear = false
+      this.goLiveKey = presentation.id
     },
     goLiveNext () {
       this.startEnd = false
