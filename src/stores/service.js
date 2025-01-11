@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
@@ -9,7 +9,7 @@ import { getDefaultURL } from '../components/presets-settings.js'
 
 let clearLastShortKey
 
-export default defineStore('service', {
+export const useServiceStore = defineStore('service', {
   state: () => ({
     service: null,
     serviceSaved: null,
@@ -175,19 +175,19 @@ export default defineStore('service', {
     goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
-      if (previewNextPresentation) {
-        const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-        const nextPresentation = this.service.presentations[i + 1]
-        if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
-          this.previewPresentation = cloneDeep(nextPresentation)
-          this.setlistScroll = true
-        }
-      }
-
       this.livePresentation = cloneDeep(presentation)
       this.arrowKeyLocation = false // active arrow keys naar live
       this.isOnlyLivestreamClear = false
       this.goLiveKey = presentation.id
+
+      if (previewNextPresentation) {
+        const i = this.service.presentations.findIndex(s => s.id === presentation.id)
+        const nextPresentation = this.service.presentations[i + 1]
+        if (nextPresentation && nextPresentation.id !== this.previewPresentation?.id) {
+          this.previewPresentation = cloneDeep(nextPresentation)
+          this.setlistScroll = true
+        }
+      }
     },
     goLiveNext () {
       this.startEnd = false
@@ -306,3 +306,7 @@ export default defineStore('service', {
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useServiceStore, import.meta.hot))
+}
