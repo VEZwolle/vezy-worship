@@ -41,12 +41,16 @@ export default defineComponent({
     }
   },
   watch: {
+    'presentation' () {
+      // console.log('watch presentation')
+      // console.log(this.presentation)
+    },
     'presentation.id' () {
       console.log('watch presentationId')
       console.log(this.presentation)
     },
-    'presentation' () {
-      console.log('watch presentation')
+    '$store' () {
+      console.log('watch $store')
       console.log(this.presentation)
     },
     '$store.goLiveKey' () {
@@ -55,6 +59,10 @@ export default defineComponent({
     },
     '$store.livePresentation' () {
       console.log('watch $store.livePresentation')
+      console.log(this.presentation)
+    },
+    '$store.livePresentation.control' () {
+      console.log('watch $store.livePresentation.control')
       console.log(this.presentation)
     }
   },
@@ -65,9 +73,11 @@ export default defineComponent({
         : this.$store.livePresentation
     },
     presentationId () {
-      console.log('presentationId')
-      console.log(this.presentation)
-      return this.presentation.id
+      // console.log('presentationId')
+      // console.log(this.presentation)
+      return this.preview
+        ? this.presentation.id
+        : this.$store.goLiveKey
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
@@ -113,8 +123,8 @@ export default defineComponent({
   },
   methods: {
     onBeforeEnter () {
-      console.log('onBeforeEnter')
-      console.log(this.presentation)
+      // console.log('onBeforeEnter')
+      // console.log(this.presentation)
     },
     setLastBg () {
       console.log('onAfterEnter')

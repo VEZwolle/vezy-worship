@@ -68,6 +68,7 @@ export default defineComponent({
   },
   mounted () {
     this.select(this.presentation.control.selectedSectionIndex, this.presentation.control.selectedSlideIndex, true)
+    this.$store.goLiveKey = this.$store.goLiveKey + 'mounted'
   },
   methods: {
     select (sectionIndex, slideIndex, scroll = false) {
