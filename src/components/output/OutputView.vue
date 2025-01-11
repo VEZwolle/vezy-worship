@@ -3,9 +3,10 @@
     <Transition
       :name="lastItemBG ? 'vezy-fadeinout' : 'q-transition--fade'"
       appear
+      @before-enter="onBeforeEnter"
       @after-enter="setLastBg"
     >
-      <component :is="outputComponent" v-if="outputComponent" :key="presentation.id" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
+      <component :is="outputComponent" v-if="outputComponent" :key="presentationId" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
     </Transition>
   </div>
 
@@ -39,11 +40,26 @@ export default defineComponent({
       lastItemBG: false
     }
   },
+  watch: {
+    'presentation.id' () {
+      console.log('watch presentationId')
+      console.log(this.presentation)
+    },
+    'presentation' () {
+      console.log('watch presentation')
+      console.log(this.presentation)
+    }
+  },
   computed: {
     presentation () {
       return this.preview
         ? this.$store.previewPresentation
         : this.$store.livePresentation
+    },
+    presentationId () {
+      console.log('presentationId')
+      console.log(this.presentation)
+      return this.presentation.id
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
@@ -88,7 +104,13 @@ export default defineComponent({
     this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
   },
   methods: {
+    onBeforeEnter () {
+      console.log('onBeforeEnter')
+      console.log(this.presentation)
+    },
     setLastBg () {
+      console.log('onAfterEnter')
+      console.log(this.presentation)
       if (this.showBackground) {
         if (this.presentation.settings?.bgFileId) {
           if (!this.backgroundColor.beamer) {
