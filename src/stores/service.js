@@ -176,7 +176,10 @@ export const useServiceStore = defineStore('service', {
       if (!presentation) return
 
       this.livePresentation = cloneDeep(presentation)
-      this.arrowKeyLocation = false // active arrow keys naar live
+      // reactivity op output schermen gebeurd bij dubbelklik pas nadat iets is aangeklikt of gewijzigd
+      // voor nu toestgebruik tijdelijk naar preview en volgende cycle weer in live om reactivity te triggeren op andere schermen.
+      this.arrowKeyLocation = true // active arrow keys tijdelijk naar preview om live daarna te activeren.
+      setTimeout(() => { this.arrowKeyLocation = false }, 0) // active arrow keys naar live // run in the next event cycle.
       this.isOnlyLivestreamClear = false
       this.goLiveKey = presentation.id
 
