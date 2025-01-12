@@ -33,6 +33,12 @@ export const useServiceStore = defineStore('service', {
     goLiveKey: '',
     setlistScroll: false
   }),
+  getters: {
+    previewPresentationId: (state) => state.previewPresentation?.id,
+    previewPresentationControl: (state) => state.previewPresentation?.control,
+    livePresentationId: (state) => state.livePresentation?.id,
+    livePresentationControl: (state) => state.livePresentation?.control
+  },
   actions: {
     setServiceSaved () {
       this.serviceSaved = JSON.stringify(this.service)
@@ -175,22 +181,24 @@ export const useServiceStore = defineStore('service', {
     goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
-      this.livePresentation = cloneDeep(presentation)
-      // reactivity op output schermen gebeurd bij dubbelklik pas nadat iets is aangeklikt of gewijzigd
-      // voor nu toestgebruik tijdelijk naar preview en na 1 millisec terug  reactivity te triggeren op andere schermen.
-      this.arrowKeyLocation = true // active arrow keys tijdelijk naar preview om live daarna te activeren.
-      setTimeout(() => { this.arrowKeyLocation = false }, 1) // active arrow keys naar live // run after 1milisec
-      this.isOnlyLivestreamClear = false
-      this.goLiveKey = presentation.id
-
       if (previewNextPresentation) {
         const i = this.service.presentations.findIndex(s => s.id === presentation.id)
         const nextPresentation = this.service.presentations[i + 1]
         if (nextPresentation && nextPresentation.id !== this.previewPresentation?.id) {
-          this.previewPresentation = cloneDeep(nextPresentation)
+          this.preview(nextPresentation) //this.previewPresentation = cloneDeep(nextPresentation)
           this.setlistScroll = true
         }
       }
+
+      this.livePresentation = cloneDeep(presentation)
+      // reactivity op output schermen gebeurd bij dubbelklik pas nadat iets is aangeklikt of gewijzigd
+      // voor nu toestgebruik tijdelijk naar preview en na 1 millisec terug  reactivity te triggeren op andere schermen.
+      // this.arrowKeyLocation = true // active arrow keys tijdelijk naar preview om live daarna te activeren.
+      // setTimeout(() => { this.arrowKeyLocation = false }, 1) // active arrow keys naar live // run after 1milisec
+      this.arrowKeyLocation = false // active arrow keys naar live
+      this.isOnlyLivestreamClear = false
+      // this.goLiveKey = presentation.id
+
     },
     goLiveNext () {
       this.startEnd = false

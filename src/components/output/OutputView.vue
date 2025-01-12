@@ -3,7 +3,6 @@
     <Transition
       :name="lastItemBG ? 'vezy-fadeinout' : 'q-transition--fade'"
       appear
-      @before-enter="onBeforeEnter"
       @after-enter="setLastBg"
     >
       <component :is="outputComponent" v-if="outputComponent" :key="presentationId" :clear="isClear" :alpha="alpha" :presentation="presentation" :muted="muted" />
@@ -42,28 +41,30 @@ export default defineComponent({
   },
   watch: {
     'presentation' () {
-      // console.log('watch presentation')
-      // console.log(this.presentation)
+      if (!this.preview) {
+        console.log('watch presentation')
+        console.log(this.presentation)
+      }
     },
     'presentation.id' () {
-      console.log('watch presentationId')
-      console.log(this.presentation)
+      if (!this.preview) {
+        console.log('watch presentationId')
+        console.log(this.presentation)
+      }
     },
-    '$store' () {
-      console.log('watch $store')
-      console.log(this.presentation)
+    '$store.livePresentationId' () {
+      if (!this.preview) {
+        console.log('watch $store.livePresentationId')
+        console.log(this.$store.livePresentationId)
+        console.log(this.presentation)
+      }
     },
-    '$store.goLiveKey' () {
-      console.log('watch $store.goLiveKey')
-      console.log(this.presentation)
-    },
-    '$store.livePresentation' () {
-      console.log('watch $store.livePresentation')
-      console.log(this.presentation)
-    },
-    '$store.livePresentation.control' () {
-      console.log('watch $store.livePresentation.control')
-      console.log(this.presentation)
+    '$store.livePresentationControl' () {
+      if (!this.preview) {
+        console.log('watch $store.livePresentationControl')
+        console.log(this.$store.livePresentationControl)
+        console.log(this.presentation)
+      }
     }
   },
   computed: {
@@ -73,11 +74,9 @@ export default defineComponent({
         : this.$store.livePresentation
     },
     presentationId () {
-      // console.log('presentationId')
-      // console.log(this.presentation)
       return this.preview
-        ? this.presentation.id
-        : this.$store.goLiveKey
+        ? this.$store.previewPresentationId // this.presentation.id
+        : this.$store.livePresentationId
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
@@ -122,13 +121,7 @@ export default defineComponent({
     this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''
   },
   methods: {
-    onBeforeEnter () {
-      // console.log('onBeforeEnter')
-      // console.log(this.presentation)
-    },
     setLastBg () {
-      console.log('onAfterEnter')
-      console.log(this.presentation)
       if (this.showBackground) {
         if (this.presentation.settings?.bgFileId) {
           if (!this.backgroundColor.beamer) {

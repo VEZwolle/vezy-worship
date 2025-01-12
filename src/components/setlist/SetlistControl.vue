@@ -50,9 +50,8 @@
                 :ref="`setlistItem_${presentation.id}`"
                 :presentation="presentation"
                 :active="$store.previewPresentation?.id === presentation.id"
-                @click="$store.preview(presentation)"
+                @click="itemClickUseDebounce(presentation)"
                 @preview="$store.preview(presentation)"
-                @dblclick="$store.goLive(presentation)"
                 @go-live="$store.goLive(presentation)"
                 @edit="edit(presentation)"
                 @remove="$store.removePresentation(presentation)"
@@ -91,6 +90,7 @@ import presentationTypes from '../presentation-types.js'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
 import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'
+import { debounce } from 'quasar'
 
 export default defineComponent({
   name: 'SetlistControl',
@@ -98,6 +98,12 @@ export default defineComponent({
   setup () {
     return {
       presentationTypes: presentationTypes.reverse()
+    }
+  },
+  data () {
+    return {
+      // lastClickTimer: null,
+      lastClickItem: ''
     }
   },
   computed: {
@@ -110,7 +116,57 @@ export default defineComponent({
       if (val) this.scrollActive()
     }
   },
+  created () {
+    this.resetLastClickItem = debounce(this.resetLastClickItem, 500)
+  },
+  beforeUnmount () {
+    // clearTimeout(this.lastClickTimer)
+  },
   methods: {
+    itemClickUseDebounce(presentation) {
+      // bij snel dubbel klikken geen update, bj iets rustiger wel geupdate...
+      if (!presentation) return
+      // 1x click effent, 2x dbl click
+      console.log(`lastClickItem: ${this.lastClickItem}`)
+      // do not start by @dblclick voor second click, 
+      // because otherwise $store (pinia) does not reactive update in other screen
+      if (this.lastClickItem === presentation?.id) {
+        console.log('itemClick 2e')
+        // run @dblclick
+        this.$store.goLive(presentation)
+        this.lastClickItem = ''
+        return
+      }
+      console.log('itemClick 1e')
+      this.lastClickItem = presentation?.id
+      // run @click
+      this.$store.preview(presentation)
+      this.resetLastClickItem()
+    },
+    // itemClickUseSetTimeout(presentation) {
+    // if (!presentation) return
+    //  console.log(`lastClickItem: ${this.lastClickItem}`)
+    //  // do not start by @dblclick voor second click, 
+    //  // because otherwise $store (pinia) does not reactive update in other screen
+    //  if (this.lastClickItem === presentation?.id) {
+    //    console.log('itemClick 2e')
+    //    clearTimeout(this.lastClickTimer)
+    //    // run @dblclick
+    //    this.$store.goLive(presentation)
+    //    this.lastClickItem = ''
+    //    return
+    //  }
+    //  console.log('itemClick 1e')
+    //  this.lastClickItem = presentation.id
+    //  this.lastClickTimer = setTimeout( () => {
+    //    // run @click
+    //    this.$store.preview(presentation)
+    //    this.lastClickItem = ''
+    //  }, 250)
+    // },
+    resetLastClickItem () {
+      this.lastClickItem = ''
+    },
     add (typeId) {
       this.$refs.presentationSettingsDialog.new(typeId)
     },
