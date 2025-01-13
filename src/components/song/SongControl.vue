@@ -1,5 +1,5 @@
 <template>
-  <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
+  <TextSlidesControl v-if="presentation.settings.text  && controlLoad" :presentation="presentation" :preview="preview" />
   <div
     v-else
     v-shortkey="shortkeysNextBack"
@@ -19,6 +19,13 @@ export default defineComponent({
   name: 'SongControl',
   components: { TextSlidesControl },
   extends: BaseControl,
+
+  data () {
+    return {
+      controlLoad: false
+    }
+  },
+
   computed: {
     splitLines () {
       return this.presentation.settings.noSplitLines ? 0 : this.$store.splitSongLines
@@ -26,15 +33,32 @@ export default defineComponent({
   },
   created () {
     const split = this.$store.noLivestream ? 100 : 1
-    if (!this.presentation.control) this.presentation.control = {}
-    if (this.presentation.settings.translation) {
-      // Use 1 line per slide
-      this.presentation.control.sections = splitSong(this.presentation.settings.text, 1 * split, Math.floor(this.splitLines / 2))
-      this.presentation.control.translationSections = splitSong(this.presentation.settings.translation, 1 * split, Math.floor(this.splitLines / 2))
-    } else {
-      // Use 2 lines per slide
-      this.presentation.control.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
-    }
+    setTimeout(() => { 
+      if (!this.presentation.control) this.presentation.control = {}
+      if (!this.presentation.control.selectedSectionIndex) {
+        this.presentation.control.selectedSectionIndex = 0
+      }
+      if (!this.presentation.control.selectedSlideIndex) {
+        this.presentation.control.selectedSlideIndex = 0
+      }
+      // check if back from last item --> start at end
+      if (!this.preview && this.$store.startEnd) {
+        this.$store.startEnd = false // reset
+        if (this.presentation.control.sections) {
+          this.presentation.control.selectedSectionIndex = this.presentation.control.sections.length - 1
+          this.presentation.control.selectedSlideIndex = this.presentation.control.sections[this.presentation.control.selectedSectionIndex].slides?.length - 1 || 0
+        }
+      }
+      if (this.presentation.settings.translation) {
+        // Use 1 line per slide
+        this.presentation.control.sections = splitSong(this.presentation.settings.text, 1 * split, Math.floor(this.splitLines / 2))
+        this.presentation.control.translationSections = splitSong(this.presentation.settings.translation, 1 * split, Math.floor(this.splitLines / 2))
+      } else {
+        // Use 2 lines per slide
+        this.presentation.control.sections = splitSong(this.presentation.settings.text, 2 * split, this.splitLines)
+      }
+      this.controlLoad = true
+    }, this.preview ? 0 : 20)
   }
 })
 
