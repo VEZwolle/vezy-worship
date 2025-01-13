@@ -39,34 +39,6 @@ export default defineComponent({
       lastItemBG: false
     }
   },
-  watch: {
-    'presentation' () {
-      if (!this.preview) {
-        console.log('watch presentation')
-        console.log(this.presentation)
-      }
-    },
-    'presentation.id' () {
-      if (!this.preview) {
-        console.log('watch presentationId')
-        console.log(this.presentation)
-      }
-    },
-    '$store.livePresentationId' () {
-      if (!this.preview) {
-        console.log('watch $store.livePresentationId')
-        console.log(this.$store.livePresentationId)
-        console.log(this.presentation)
-      }
-    },
-    '$store.livePresentationControl' () {
-      if (!this.preview) {
-        console.log('watch $store.livePresentationControl')
-        console.log(this.$store.livePresentationControl)
-        console.log(this.presentation)
-      }
-    }
-  },
   computed: {
     presentation () {
       return this.preview
