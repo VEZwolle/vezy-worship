@@ -34,10 +34,18 @@ export const useServiceStore = defineStore('service', {
     setlistScroll: false
   }),
   getters: {
-    previewPresentationId: (state) => state.previewPresentation?.id,
-    previewPresentationControl: (state) => state.previewPresentation?.control,
-    livePresentationId: (state) => state.livePresentation?.id,
-    livePresentationControl: (state) => state.livePresentation?.control
+    previewPresentationId(state) {
+      return state.previewPresentation?.id
+    },
+    previewPresentationControl(state) {
+      return  state.previewPresentation?.control
+    },
+    livePresentationId(state) {
+      return state.livePresentation?.id
+    },
+    livePresentationControl(state) {
+      return state.livePresentation?.control
+    }
   },
   actions: {
     setServiceSaved () {
