@@ -88,6 +88,13 @@ export default defineComponent({
       return style
     }
   },
+  created () {
+    this.$store.$subscribe((mutation, state) => {
+      const subTime = Date.now()
+      console.log(`${subTime} | MutationType: "${mutation.type}" | Store: ${mutation.storeId}`)
+      console.log(state)
+    })
+  },
   mounted () {
     this.backgroundColor.beamer = localStorage.getItem('backgroundColor.beamer') || ''
     this.backgroundColor.livestream = localStorage.getItem('backgroundColor.livestream') || ''

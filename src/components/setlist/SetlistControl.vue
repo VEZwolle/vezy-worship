@@ -131,18 +131,18 @@ export default defineComponent({
         // a shared variable for this specific action call
         const startTime = Date.now()
         // this will trigger before an action on `store` is executed
-        console.log(`Start "${name}" with params [${args.join(', ')}]. Store: "${store}" `)
+        console.log(`${startTime} | Start "${name}" with params [${args.join(', ')}]. Store: "${store}" `)
 
         // this will trigger if the action succeeds and after it has fully run.
         // it waits for any returned promised
         after((result) => {
+          const endTime = Date.now()
           console.log(
-            `Finished "${name}" after ${
-              Date.now() - startTime
+            `${endTime} | Finished "${name}" after ${
+              endTime - startTime
             }ms.\nResult: ${result}.`
           )
         })
-
         // this will trigger if the action throws or returns a promise that rejects
         onError((error) => {
           console.warn(
@@ -151,6 +151,12 @@ export default defineComponent({
         })
       }
     )
+
+    this.$store.$subscribe((mutation, state) => {
+      const subTime = Date.now()
+      console.log(`${subTime} | MutationType: "${mutation.type}" | Store: ${mutation.storeId}`)
+      console.log(state)
+    })
 
   },
   beforeUnmount () {
