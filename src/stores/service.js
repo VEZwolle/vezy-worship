@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
@@ -9,7 +9,7 @@ import { getDefaultURL } from '../components/presets-settings.js'
 
 let clearLastShortKey
 
-export default defineStore('service', {
+export const useServiceStore = defineStore('service', {
   state: () => ({
     service: null,
     serviceSaved: null,
@@ -304,3 +304,7 @@ export default defineStore('service', {
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useServiceStore, import.meta.hot))
+}
