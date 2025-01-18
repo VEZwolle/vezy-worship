@@ -6,7 +6,7 @@ import presentationPresets from '../components/presentation-presets.js'
 import { versionUpdate } from './versionUpdate.js'
 import { sanitizerHtmlService } from '../components/common/CleanText.js'
 import { getDefaultURL } from '../components/presets-settings.js'
-import { addControlCloneDeep } from '../components/presets-control-create.js'
+import { addControlCloneDeep } from '../components/presentation-control-create.js'
 
 let clearLastShortKey
 

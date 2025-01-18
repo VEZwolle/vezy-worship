@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep'
-import { splitSong } from '../components/song/SongSplit.js'
-import { splitTextCaption, titleLines } from '../components/caption/CaptionSplit.js'
+import { splitSong } from './song/SongSplit.js'
+import { splitTextCaption, titleLines } from './caption/CaptionSplit.js'
 
 export function addControlCloneDeep (presentation, noLivestream, splitSongLines, preview, startEnd) {
   if (!presentation) return cloneDeep(presentation)
