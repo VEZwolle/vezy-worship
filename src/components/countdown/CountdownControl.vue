@@ -48,7 +48,7 @@ export default defineComponent({
     }
   },
   created () {
-    if (!this.presentation.control) this.presentation.control = { isFinished: true, remaining: '' }
+    // create .control via store: preview/golive
     this.ticker = setInterval(this.tick, 1000)
     this.tick()
   },

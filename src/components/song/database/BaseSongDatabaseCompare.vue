@@ -1,7 +1,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { HtmlDiff, CountDiff } from '../../common/HtmlDiff.js'
-import { splitSong } from '../SongControl.vue'
+import { splitSong } from '../SongSplit.js'
 import { getAlgoliaSearch, ApiKeyEdit, ConvertToAlgoliaRecord, AddToAlgoliaDatabase, algoliaIndexNames } from './algolia.js'
 import { sanitizerHtmlPresentation } from '../../common/CleanText.js';
 

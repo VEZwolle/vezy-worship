@@ -14,7 +14,7 @@ export default defineComponent({
       return this.presentation.settings
     },
     control () {
-      return this.presentation.control || {}
+      return this.presentation.control
     },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
