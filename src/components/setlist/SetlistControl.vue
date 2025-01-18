@@ -49,7 +49,7 @@
               <SetlistItem
                 :ref="`setlistItem_${presentation.id}`"
                 :presentation="presentation"
-                :active="$store.previewPresentation?.id === presentation.id"
+                :active="$store.previewPresentationId === presentation.id"
                 @click="itemClick(presentation)"
                 @preview="$store.preview(presentation)"
                 @go-live="$store.goLive(presentation)"
@@ -147,7 +147,7 @@ export default defineComponent({
       this.$refs.serviceSettingsDialog.show(this.$store.service)
     },
     scrollActive () {
-      this.$refs[`setlistItem_${this.$store.previewPresentation?.id}`].scrollToCenter()
+      this.$refs[`setlistItem_${this.$store.previewPresentationId}`].scrollToCenter()
       this.$store.setlistScroll = false
     }
   }

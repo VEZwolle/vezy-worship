@@ -6,6 +6,7 @@ import presentationPresets from '../components/presentation-presets.js'
 import { versionUpdate } from './versionUpdate.js'
 import { sanitizerHtmlService } from '../components/common/CleanText.js'
 import { getDefaultURL } from '../components/presets-settings.js'
+import { addControlCloneDeep } from '../components/presets-control-create.js'
 
 let clearLastShortKey
 
@@ -32,6 +33,14 @@ export const useServiceStore = defineStore('service', {
     lastShortKey: '',
     setlistScroll: false
   }),
+  getters: {
+    previewPresentationId(state) {
+      return state.previewPresentation?.id
+    },
+    livePresentationId(state) {
+      return state.livePresentation?.id
+    }
+  },
   actions: {
     setServiceSaved () {
       this.serviceSaved = JSON.stringify(this.service)
@@ -170,9 +179,7 @@ export const useServiceStore = defineStore('service', {
 
     preview (presentation) {
       if (!presentation) return
-      this.$patch({
-        previewPresentation: cloneDeep(presentation)
-      })
+      this.previewPresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, true, false)
     },
     goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
@@ -180,21 +187,24 @@ export const useServiceStore = defineStore('service', {
       if (previewNextPresentation) {
         const i = this.service.presentations.findIndex(s => s.id === presentation.id)
         const nextPresentation = this.service.presentations[i + 1]
-        if (nextPresentation && nextPresentation.id !== this.previewPresentation?.id) {
-          this.$patch({
-            previewPresentation: cloneDeep(nextPresentation),
+        if (nextPresentation && nextPresentation?.id !== this.previewPresentationId) {
+          // update live & preview
+          this.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+          this.previewPresentation = addControlCloneDeep(nextPresentation, this.noLivestream, this.splitSongLines, true, false)          
+          this.$patch({ // only works front fitting values, do not delete which are no longer in collection
             setlistScroll: true,
-            // same as below without preview update
-            livePresentation: cloneDeep(presentation),
+            startEnd: false,
             arrowKeyLocation: false, // active arrow keys naar live
             isOnlyLivestreamClear: false
           })
           return
         }
       }
+
       // no preview update
-      this.$patch({
-        livePresentation: cloneDeep(presentation),
+      this.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+      this.$patch({ // only works front fitting values, do not delete which are no longer in collection
+        startEnd: false,
         arrowKeyLocation: false, // active arrow keys naar live
         isOnlyLivestreamClear: false
       })
@@ -205,8 +215,8 @@ export const useServiceStore = defineStore('service', {
       this.goLive(this.previewPresentation, true)
     },
     goLiveBack () {
-      if (!this.livePresentation) return
-      const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
+      if (!this.livePresentationId) return
+      const i = this.service.presentations.findIndex(s => s.id === this.livePresentationId)
       if (i === 0) return
       const backPresentation = this.service.presentations[i + -1]
       if (backPresentation) {

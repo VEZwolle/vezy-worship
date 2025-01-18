@@ -30,7 +30,7 @@
 import { defineComponent } from 'vue'
 import { CleanText } from './CleanText.js'
 import { debounce, scroll } from 'quasar'
-import { splitSong } from '../song/SongControl.vue'
+import { splitSong } from '../song/SongSplit.js'
 import { getCaretLine, setCaretLine } from './Caret.js'
 import labels from '../song/labels.js'
 const { getScrollTarget, getVerticalScrollPosition, setVerticalScrollPosition } = scroll
