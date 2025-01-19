@@ -54,10 +54,10 @@ export const useServiceStore = defineStore('service', {
       }
       serviceOpen = sanitizerHtmlService(serviceOpen)
       // add to store/render
-      this.$patch({
-        service: cloneDeep(serviceOpen),
-        previewPresentation: null,
-        livePresentation: null
+      this.$patch((state) => {
+        state.service = cloneDeep(serviceOpen)
+        state.previewPresentation = null
+        state.livePresentation = null
       })
       this.serviceSaved = JSON.stringify(this.service)
     },
