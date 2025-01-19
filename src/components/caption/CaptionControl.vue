@@ -1,4 +1,15 @@
 <template>
+  <div v-if="noOutput" class="bg-primary text-white">
+    <q-list class="q-py-sm">
+      <q-item>
+        <q-item-section>
+          <div class="section-line">
+            Weergave op beamer & livestream = Geen
+          </div>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
   <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
   <div
     v-else
@@ -28,6 +39,11 @@ export default defineComponent({
 
   created () {
     // create .control via store: preview/golive
+  },
+  computed: {
+    noOutput () {
+      return (this.settings?.formatBeamer === 'Geen' || this.settings?.formatBeamer === undefined ) && (this.settings?.formatLivestream === 'Geen' || this.settings?.formatLivestream === undefined)
+    }
   }
 })
 </script>
