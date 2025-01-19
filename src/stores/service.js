@@ -186,8 +186,8 @@ export const useServiceStore = defineStore('service', {
 
       if (previewNextPresentation) {
         const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-        const nextPresentation = this.service.presentations[i + 1]
-        if (nextPresentation && nextPresentation?.id !== this.previewPresentationId) {
+        const nextPresentation = this.service.presentations[i + 1] || null
+        if (nextPresentation === null || nextPresentation?.id !== this.previewPresentationId) {
           // update live & preview
           this.$patch((state) => {
             // preview update
