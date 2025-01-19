@@ -189,24 +189,26 @@ export const useServiceStore = defineStore('service', {
         const nextPresentation = this.service.presentations[i + 1]
         if (nextPresentation && nextPresentation?.id !== this.previewPresentationId) {
           // update live & preview
-          this.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
-          this.previewPresentation = addControlCloneDeep(nextPresentation, this.noLivestream, this.splitSongLines, true, false)          
-          this.$patch({ // only works front fitting values, do not delete which are no longer in collection
-            setlistScroll: true,
-            startEnd: false,
-            arrowKeyLocation: false, // active arrow keys naar live
-            isOnlyLivestreamClear: false
+          this.$patch((state) => {
+            // preview update
+            state.previewPresentation = addControlCloneDeep(nextPresentation, this.noLivestream, this.splitSongLines, true, false)          
+            state.setlistScroll = true
+            // live update
+            state.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+            state.startEnd = false
+            state.arrowKeyLocation = false // active arrow keys naar live
+            state.isOnlyLivestreamClear = false
           })
           return
         }
       }
 
       // no preview update
-      this.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
-      this.$patch({ // only works front fitting values, do not delete which are no longer in collection
-        startEnd: false,
-        arrowKeyLocation: false, // active arrow keys naar live
-        isOnlyLivestreamClear: false
+      this.$patch((state) => {
+        state.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+        state.startEnd = false
+        state.arrowKeyLocation = false // active arrow keys naar live
+        state.isOnlyLivestreamClear = false
       })
     },
     goLiveNext () {
