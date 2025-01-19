@@ -147,7 +147,7 @@ export default defineComponent({
       this.$refs.serviceSettingsDialog.show(this.$store.service)
     },
     scrollActive () {
-      this.$refs[`setlistItem_${this.$store.previewPresentationId}`].scrollToCenter()
+      if (this.$store.previewPresentationId) this.$refs[`setlistItem_${this.$store.previewPresentationId}`].scrollToCenter()
       this.$store.setlistScroll = false
     }
   }
