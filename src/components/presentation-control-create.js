@@ -70,6 +70,7 @@ export function addControlCloneDeep (presentation, noLivestream, splitSongLines,
     case 'video':
       if (!resultPresentation.control) resultPresentation.control = {}
       resultPresentation.control.readyStateFirst = false
+      resultPresentation.control.readyStateAll = false
       break
     default:
   }

@@ -77,7 +77,8 @@ export default defineComponent({
       movePlayState: false,
       markerLabels: [],
       setTimeoutIdPlay: null,
-      setTimeoutIdPauze: null
+      setTimeoutIdPauze: null,
+      setTimeoutReadyStateAll: null
     }
   },
   computed: {
@@ -132,6 +133,16 @@ export default defineComponent({
 
       if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze) // no dubble
       this.setTimeoutIdPauze = setTimeout(() => this.pause(), 300)
+    },
+    'presentation.control.readyStateFirst' (val) {
+      if (!val) {
+        // reset time to wait
+        if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
+        this.presentation.control.readyStateAll = false
+      } else {
+        if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 50)
+      }
     }
   },
   mounted () {
@@ -142,8 +153,18 @@ export default defineComponent({
   unmouted () {
     if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay)
     if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze)
+    if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
   },
   methods: {
+    allLoaded () {
+      // set starttime to start for all to same control
+      if (this.settings.time < (this.settings.startTime || 0)) {
+        this.settings.time = (this.settings.startTime || 0) + 0.0001 * (Math.random() + 0.0001)
+      } else { // always different starting point from previous movie to reset to that point
+        this.settings.time += 0.0001 * (Math.random() + 0.0001)
+      }
+      this.presentation.control.readyStateAll = true
+    },
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
       if (this.settings.play) {
@@ -165,7 +186,7 @@ export default defineComponent({
       this.settings.time = this.currentTime
     },
     play () {
-      if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateFirst) {
+      if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateAll || !this.presentation.control.readyStateFirst) {
         if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
         this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)
         return
@@ -204,6 +225,7 @@ export default defineComponent({
         }
         this.readyStateFirst = 4
         this.presentation.control.readyStateFirst = true
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 50)
       }
     },
     end () {

@@ -1,8 +1,8 @@
 <template>
   <div class="bg-output" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <div v-if="alpha" v-show="!clear && show" class="alpha" :style="styleOpacityBeamer" />
-      <video v-else v-show="!clear && show" ref="player" :muted="muted" :src="fileUrl" class="video" @canplaythrough="canplaythrough" />
+      <div v-if="alpha" v-show="!clear && show && control.readyStateAll" class="alpha" :style="styleOpacityBeamer" />
+      <video v-else v-show="!clear && show && control.readyStateAll" ref="player" :muted="muted" :src="fileUrl" class="video" @canplaythrough="canplaythrough" />
     </Transition>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default defineComponent({
       this.player.currentTime = val
     },
     'control.readyStateFirst' (val) {
-      if (this.readyStateFirst === 4) return
+      if (!val || this.alpha || this.readyStateFirst === 4 || (this.player && this.player?.readyState === 4)) return
       if (val) this.control.readyStateFirst = false
     }
   },
