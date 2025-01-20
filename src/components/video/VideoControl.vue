@@ -165,7 +165,7 @@ export default defineComponent({
       this.settings.time = this.currentTime
     },
     play () {
-      if (!this.player || this.player.readyState < 4) {
+      if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateFirst) {
         if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
         this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)
         return
@@ -200,9 +200,10 @@ export default defineComponent({
     canplaythrough (e) {
       if (this.readyStateFirst < 4 && e.target.readyState === 4) {
         if (!this.clear && !this.preview) {
-          this.play()
+          this.play() // first time wacht 50milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
         }
         this.readyStateFirst = 4
+        this.presentation.control.readyStateFirst = true
       }
     },
     end () {
