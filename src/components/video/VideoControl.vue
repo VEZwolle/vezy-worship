@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="!readyStateAll" style="margin: auto;">
+    <q-spinner color="primary" size="3em" />
+  </div>
+  <div v-show="readyStateAll">
     <div
       v-shortkey="shortkeysNextBack"
       class="q-pa-md"
@@ -102,6 +105,9 @@ export default defineComponent({
     },
     shortkeysPlay () {
       return this.storeArrowKeyLocation === this.preview ? this.storeShortkeysPlay : {}
+    },
+    readyStateAll () {
+      return this.presentation?.control?.readyStateAll
     }
   },
   watch: {
@@ -141,7 +147,7 @@ export default defineComponent({
         this.presentation.control.readyStateAll = false
       } else {
         if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
-        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 50)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 100)
       }
     }
   },
@@ -225,7 +231,7 @@ export default defineComponent({
         }
         this.readyStateFirst = 4
         this.presentation.control.readyStateFirst = true
-        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 50)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 100)
       }
     },
     end () {
