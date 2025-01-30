@@ -2,14 +2,17 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
 import { logger } from 'firebase-functions'
 
-import admin from 'firebase-admin'
+// import admin from 'firebase-admin'
 import axios from 'axios'
 
 // Initialization
-admin.initializeApp()
+// admin.initializeApp()
 
 // '00 01 10,25 * *' elke 10e en 25e van de maand om 01:00
-export const algoliaPing = onSchedule('00 01 10,25 * *', async () => {
+export const algoliaPing = onSchedule({
+  schedule: '00 01 10,25 * *',
+  region: 'europe-west1'
+}, async () => {
   const search = 'Jesus'
 
   try {
