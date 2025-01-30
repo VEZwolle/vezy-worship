@@ -195,6 +195,7 @@
       <q-tooltip>Helpinformatie</q-tooltip>
     </q-btn>
   </q-toolbar>
+  <CheckNrTabsOpen />
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
@@ -211,10 +212,11 @@ import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl.vue'
 import { ApiKeyEdit } from '../song/database/algolia.js'
 import { getPresentationsPresetsSettings } from '../presets-settings.js'
+import CheckNrTabsOpen from './CheckNrTabsOpen.vue'
 
 export default defineComponent({
   name: 'ToolbarTop',
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog },
+  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog, CheckNrTabsOpen },
   setup () {
     return { icon, version: PACKAGE.version }
   },
