@@ -33,6 +33,9 @@
     "firestore": {
       "port": 5002
     },
+    "pubsub": {
+      "port": 5003
+    },
     "ui": {
       "enabled": true
     }
