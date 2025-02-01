@@ -1,6 +1,6 @@
 <template>
   <q-banner v-if="countTabs > 1" dense inline-actions class="text-white bg-red">
-    Meerdere tabs {{ this.countTabs }} met Vezy-Worship open; dit kan de werking verminderen en fouten geven.
+    Meerdere tabs met Vezy-Worship open! dit kan fouten geven.
     <template v-slot:action>
       <q-btn flat round color="white" icon="close" @click="reCountTabs" />
     </template>
@@ -26,34 +26,36 @@ export default defineComponent({
   watch: {
     'countTabs' () {
       if (!this.externalUpdate) {
+        // send update to other tabs (not self)
         this.lastTimeStamp = Date.now()
-        bc.postMessage(`${this.countTabs}|${this.lastTimeStamp}`)
+        bc.postMessage({
+          countTabs: this.countTabs, 
+          lastTimeStamp: this.lastTimeStamp
+        })
       }
       this.externalUpdate = false
     }
   },
   created () {
     bc.onmessage = (message) => {
-      console.log(message)
       if (message === undefined) {
-        this.bc.postMessage(`${this.countTabs}`)
+        bc.postMessage({
+          countTabs: this.countTabs, 
+          lastTimeStamp: this.lastTimeStamp
+        })
         return
       }
-      const data = message.data.split('|')
-      if (data.length < 2) return 
-      const messageData = parseInt(data[0])
-      const messageTimeStamp = parseInt(data[1])
 
-      if (messageData === 0) {
+      if (message.data.lastTimeStamp <= this.lastTimeStamp) return
+
+      if (message.data.countTabs === 0) {
         this.MeCounted = false // restart count
         this.setTimeoutReCount = setTimeout(() => this.countThisTab(), 100)
       }
-      console.log(`[ ${messageTimeStamp} ] [ ${this.lastTimeStamp} ] ${messageData} | ${this.MeCounted}`)
-      if (messageTimeStamp <= this.lastTimeStamp) return
 
       this.externalUpdate = true
-      this.lastTimeStamp = messageTimeStamp
-      this.countTabs = messageData
+      this.lastTimeStamp = message.data.lastTimeStamp
+      this.countTabs = message.data.countTabs
     }
   },
   mounted () {
@@ -71,6 +73,7 @@ export default defineComponent({
       }
     },
     reCountTabs () {
+      this.externalUpdate = false
       this.countTabs = 0
       if (this.setTimeoutReCount) clearTimeout(this.setTimeoutReCount) // no dubble
       this.setTimeoutReCount = setTimeout(() => this.reCountTabsNext(), 200)
