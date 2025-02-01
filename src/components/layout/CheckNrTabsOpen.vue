@@ -1,10 +1,19 @@
 <template>
-  <q-banner v-if="countTabs > 1" dense inline-actions class="text-white bg-red">
-    Meerdere tabs met Vezy-Worship open! dit kan fouten geven.
-    <template v-slot:action>
-      <q-btn flat round color="white" icon="close" @click="reCountTabs" />
-    </template>
-  </q-banner>
+  <q-btn
+    v-if="countTabs > 1"
+    dense
+    color="red"
+    text-color="white"
+    class="q-mr-sm"
+    label="Open in meerdere tabs !"
+    @click="reCountTabs"
+  >
+    <q-tooltip>
+      Meerdere tabs met Vezy-Worship open!<br>
+      Dit kan fouten & sync problemen geven.<br>
+      Aanklikken na sluiten andere tabs om deze melding weg te laten gaan.
+    </q-tooltip>
+  </q-btn>
 </template>
 
 <script>

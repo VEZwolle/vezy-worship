@@ -87,8 +87,9 @@
     <q-space />
 
     <div v-if="!$q.platform.is.electron">
-      Open output:
+      <CheckNrTabsOpen />
 
+      Open output:
       <q-btn
         flat
         icon="videocam"
@@ -100,7 +101,6 @@
           Beamer
         </q-tooltip>
       </q-btn>
-
       <q-btn
         flat
         icon="smart_display"
@@ -112,7 +112,6 @@
           Livestream
         </q-tooltip>
       </q-btn>
-
       <q-btn
         flat
         icon="dvr"
@@ -195,7 +194,6 @@
       <q-tooltip>Helpinformatie</q-tooltip>
     </q-btn>
   </q-toolbar>
-  <CheckNrTabsOpen />
 
   <ServiceSettingsDialog ref="serviceSettingsDialog" />
   <AppSettingsDialog ref="appSettingsDialog" />
@@ -203,7 +201,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import AppSettingsDialog from './AppSettingsDialog.vue'
 import SetlistDatabaseCompareDialog from '../song/database/SetlistDatabaseCompareDialog.vue'
@@ -212,11 +210,17 @@ import PACKAGE from '../../../package.json'
 import MessageControl from '../message/MessageControl.vue'
 import { ApiKeyEdit } from '../song/database/algolia.js'
 import { getPresentationsPresetsSettings } from '../presets-settings.js'
-import CheckNrTabsOpen from './CheckNrTabsOpen.vue'
 
 export default defineComponent({
   name: 'ToolbarTop',
-  components: { ServiceSettingsDialog, AppSettingsDialog, MessageControl, SetlistDatabaseCompareDialog, CheckNrTabsOpen },
+  components: {
+    ServiceSettingsDialog,
+    AppSettingsDialog,
+    MessageControl,
+    SetlistDatabaseCompareDialog,
+    // CheckNrTabsOpen
+    CheckNrTabsOpen: defineAsyncComponent(() => import('./CheckNrTabsOpen.vue'))
+  },
   setup () {
     return { icon, version: PACKAGE.version }
   },
