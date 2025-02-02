@@ -141,7 +141,8 @@ export default defineComponent({
       this.setTimeoutIdPauze = setTimeout(() => this.pause(), 300)
     },
     'presentation.control.readyStateFirst' (val) {
-      if (!val) {
+      if (!val || (val && this.readyStateFirst < 4)) {
+        if (this.readyStateFirst < 4) this.presentation.control.readyStateFirst = false
         // reset time to wait
         if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
         this.presentation.control.readyStateAll = false
@@ -187,7 +188,11 @@ export default defineComponent({
         this.moveSlider = true
       } else {
         this.moveSlider = false
-        this.settings.play = this.movePlayState
+        this.settings.time = this.currentTime
+        if (this.movePlayState) {
+          if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+          this.setTimeoutIdPlay = setTimeout(() => this.play(), 50) // start play after 50ms to sync time before
+        }
       }
       this.settings.time = this.currentTime
     },
@@ -227,7 +232,8 @@ export default defineComponent({
     canplaythrough (e) {
       if (this.readyStateFirst < 4 && e.target.readyState === 4) {
         if (!this.clear && !this.preview) {
-          this.play() // first time wacht 50milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
+          if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+          this.setTimeoutIdPlay = setTimeout(() => this.play(), 50) // first time wacht 50milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
         }
         this.readyStateFirst = 4
         this.presentation.control.readyStateFirst = true
