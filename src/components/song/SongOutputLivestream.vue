@@ -1,7 +1,7 @@
 <template>
   <div class="bg-output">
     <Transition name="q-transition--fade">
-      <svg v-show="!clear" class="song-output-livestream" :class="{ alpha }">
+      <svg v-show="!clear" v-if="control" class="song-output-livestream" :class="{ alpha }">
         <text y="1.6vw">
           <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw">{{ line }}</tspan>
           <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.2vw" class="translation">{{ line }}</tspan>
@@ -20,10 +20,12 @@ export default defineComponent({
   extends: BaseOutput,
   computed: {
     lines () {
+      if (!this.control) return []
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.slides?.[this.control.selectedSlideIndex] || []
     },
     translatedLines () {
+      if (!this.control) return []
       const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides?.[this.control.selectedSlideIndex] || []
     }

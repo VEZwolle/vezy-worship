@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="!readyStateAll" style="margin: auto;">
+    <q-spinner color="primary" size="3em" />
+  </div>
+  <div v-show="readyStateAll">
     <div
       v-shortkey="shortkeysNextBack"
       class="q-pa-md"
@@ -77,7 +80,8 @@ export default defineComponent({
       movePlayState: false,
       markerLabels: [],
       setTimeoutIdPlay: null,
-      setTimeoutIdPauze: null
+      setTimeoutIdPauze: null,
+      setTimeoutReadyStateAll: null
     }
   },
   computed: {
@@ -101,6 +105,9 @@ export default defineComponent({
     },
     shortkeysPlay () {
       return this.storeArrowKeyLocation === this.preview ? this.storeShortkeysPlay : {}
+    },
+    readyStateAll () {
+      return this.presentation?.control?.readyStateAll
     }
   },
   watch: {
@@ -132,6 +139,17 @@ export default defineComponent({
 
       if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze) // no dubble
       this.setTimeoutIdPauze = setTimeout(() => this.pause(), 300)
+    },
+    'presentation.control.readyStateFirst' (val) {
+      if (!val || (val && this.readyStateFirst < 4)) {
+        if (this.readyStateFirst < 4) this.presentation.control.readyStateFirst = false
+        // reset time to wait
+        if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
+        this.presentation.control.readyStateAll = false
+      } else {
+        if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 150)
+      }
     }
   },
   mounted () {
@@ -142,8 +160,22 @@ export default defineComponent({
   unmouted () {
     if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay)
     if (this.setTimeoutIdPauze) clearTimeout(this.setTimeoutIdPauze)
+    if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
   },
   methods: {
+    allLoaded () {
+      // set starttime to start for all to same control
+      if (this.settings.time < (this.settings.startTime || 0)) {
+        this.settings.time = (this.settings.startTime || 0) + 0.0001 * (Math.random() + 0.0001)
+      } else { // always different starting point from previous movie to reset to that point
+        this.settings.time += 0.0001 * (Math.random() + 0.0001)
+      }
+      this.presentation.control.readyStateAll = true
+      if (!this.clear && !this.preview) {
+        if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+        this.setTimeoutIdPlay = setTimeout(() => this.play(), 150) // first time wacht 150milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
+      }
+    },
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
       if (this.settings.play) {
@@ -160,12 +192,16 @@ export default defineComponent({
         this.moveSlider = true
       } else {
         this.moveSlider = false
-        this.settings.play = this.movePlayState
+        this.settings.time = this.currentTime
+        if (this.movePlayState) {
+          if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+          this.setTimeoutIdPlay = setTimeout(() => this.play(), 50) // start play after 50ms to sync time before
+        }
       }
       this.settings.time = this.currentTime
     },
     play () {
-      if (!this.player || this.player.readyState < 4) {
+      if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateAll || !this.presentation.control.readyStateFirst) {
         if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
         this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)
         return
@@ -199,10 +235,9 @@ export default defineComponent({
     },
     canplaythrough (e) {
       if (this.readyStateFirst < 4 && e.target.readyState === 4) {
-        if (!this.clear && !this.preview) {
-          this.play()
-        }
         this.readyStateFirst = 4
+        this.presentation.control.readyStateFirst = true
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 150)
       }
     },
     end () {

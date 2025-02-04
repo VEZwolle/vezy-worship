@@ -85,6 +85,15 @@ in terminal:
 - Koppel / ontkoppel firebase project vezy-worship
   - `firebase use vezy-worship`
   - `firebase use --clear`
+- Test functions via firebase emulator
+  - `npm run api:serve-data` of `npm run api:serve`
+  - om onSchedule functies te testen, handmatig een freqentie instellen in emulator --> pubsub kan dit nog niet in emulator
+  - `firebase login`
+  - NOTE: Please ensure you are running the firebase emulator locally, or the shell may call the functions in Production !!
+  - `firebase functions:shell` (bij starten kan je zien of emulator of productie gebruikt)
+  - firebase > `setInterval(() => yourScheduledFunc(), 60000)`
+  - Logout: cntr+C cntr+C
+  - `firebase logout`
 
 - Stel secrets in in firebase en controleer ze (kan ook in google cloud via security manager)
   - `firebase functions:secrets:set API_URL`

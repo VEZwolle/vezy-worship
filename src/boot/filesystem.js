@@ -1,6 +1,6 @@
 import { defineBoot } from '#q-app/wrappers'
 import * as zip from '@zip.js/zip.js'
-import useServiceStore from 'stores/service'
+import { useServiceStore } from 'stores/service.js'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
 import { Notify } from 'quasar'
 

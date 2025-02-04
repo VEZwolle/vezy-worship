@@ -1,4 +1,15 @@
 <template>
+  <div v-if="noOutput" class="bg-primary text-white">
+    <q-list class="q-py-sm">
+      <q-item>
+        <q-item-section>
+          <div class="section-line">
+            Weergave op beamer & livestream = Geen
+          </div>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
   <TextSlidesControl v-if="presentation.settings.text" :presentation="presentation" :preview="preview" />
   <div
     v-else
@@ -20,7 +31,6 @@
 import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import TextSlidesControl from '../common/TextSlidesControl.vue'
-import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
 
 export default defineComponent({
   name: 'CaptionControl',
@@ -28,12 +38,11 @@ export default defineComponent({
   extends: BaseControl,
 
   created () {
-    if (!this.presentation.control) this.presentation.control = {}
-    this.presentation.control.beamerTitleLines = this.presentation.settings.formatBeamer === 'Geen' ? [] : titleLines(this.presentation.settings.title, this.presentation.settings.formatBeamer)
-    if (this.$store.noLivestream || this.presentation.settings.formatLivestream === 'Geen') {
-      this.presentation.control.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, 10000)
-    } else {
-      this.presentation.control.sections = splitTextCaption(this.presentation.settings.text, this.presentation.settings.formatBeamer, this.presentation.settings.maxLivestreamChar || 500)
+    // create .control via store: preview/golive
+  },
+  computed: {
+    noOutput () {
+      return (this.settings?.formatBeamer === 'Geen' || this.settings?.formatBeamer === undefined ) && (this.settings?.formatLivestream === 'Geen' || this.settings?.formatLivestream === undefined)
     }
   }
 })

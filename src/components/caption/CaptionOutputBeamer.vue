@@ -3,7 +3,7 @@
     <Transition name="q-transition--fade">
       <div v-if="settings.formatBeamer !== 'Geen' && settings.formatBeamer !== undefined" v-show="!clear" class="full" :style="styleOpacityBeamer">
         <div class="caption-output">
-          <CaptionBeamer :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" :alpha="alpha" />
+          <CaptionBeamer v-if="control" :title-lines="titleLines" :text-lines="textLines" :format="settings.formatBeamer" :alpha="alpha" />
         </div>
       </div>
     </Transition>
@@ -21,10 +21,12 @@ export default defineComponent({
   extends: BaseOutput,
   computed: {
     textLines () {
+      if (!this.control) return []
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.beamerLines || []
     },
     titleLines () {
+      if (!this.control) return []
       return this.control.beamerTitleLines || []
     }
   }

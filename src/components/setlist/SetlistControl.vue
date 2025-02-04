@@ -49,10 +49,9 @@
               <SetlistItem
                 :ref="`setlistItem_${presentation.id}`"
                 :presentation="presentation"
-                :active="$store.previewPresentation?.id === presentation.id"
-                @click="$store.preview(presentation)"
+                :active="$store.previewPresentationId === presentation.id"
+                @click="itemClick(presentation)"
                 @preview="$store.preview(presentation)"
-                @dblclick="$store.goLive(presentation)"
                 @go-live="$store.goLive(presentation)"
                 @edit="edit(presentation)"
                 @remove="$store.removePresentation(presentation)"
@@ -91,6 +90,7 @@ import presentationTypes from '../presentation-types.js'
 import ServiceSettingsDialog from '../service/ServiceSettingsDialog.vue'
 import Draggable from 'vuedraggable'
 import QuickSearchDatabase from '../song/database/QuickSearchDatabase.vue'
+import { debounce } from 'quasar'
 
 export default defineComponent({
   name: 'SetlistControl',
@@ -98,6 +98,11 @@ export default defineComponent({
   setup () {
     return {
       presentationTypes: presentationTypes.reverse()
+    }
+  },
+  data () {
+    return {
+      lastClickItem: ''
     }
   },
   computed: {
@@ -110,7 +115,28 @@ export default defineComponent({
       if (val) this.scrollActive()
     }
   },
+  created () {
+    this.resetLastClickItem = debounce(this.resetLastClickItem, 500)
+  },
   methods: {
+    itemClick(presentation) {
+      // 2nd click apply double-click instead of click + double-click
+      if (!presentation) return
+      // 1x click effent, 2x dbl click
+      if (this.lastClickItem === presentation?.id) {
+        // run @dblclick
+        this.$store.goLive(presentation)
+        this.lastClickItem = ''
+        return
+      }
+      this.lastClickItem = presentation?.id
+      // run @click
+      this.$store.preview(presentation)
+      this.resetLastClickItem()
+    },
+    resetLastClickItem () {
+      this.lastClickItem = ''
+    },
     add (typeId) {
       this.$refs.presentationSettingsDialog.new(typeId)
     },
@@ -121,7 +147,7 @@ export default defineComponent({
       this.$refs.serviceSettingsDialog.show(this.$store.service)
     },
     scrollActive () {
-      this.$refs[`setlistItem_${this.$store.previewPresentation?.id}`].scrollToCenter()
+      if (this.$store.previewPresentationId) this.$refs[`setlistItem_${this.$store.previewPresentationId}`].scrollToCenter()
       this.$store.setlistScroll = false
     }
   }

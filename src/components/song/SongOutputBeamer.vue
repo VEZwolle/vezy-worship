@@ -1,7 +1,7 @@
 <template>
   <div class="bg-output song-output-beamer" :style="styleBgBeamer">
     <Transition name="q-transition--fade">
-      <div v-show="!clear" :style="offsetServiceType">
+      <div v-show="!clear" v-if="control" :style="offsetServiceType">
         <svg :style="styleOpacityBeamer" :class="{ alpha }">
           <text y="6.6vw">
             <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw" :style="styleServiceType">{{ line }}</tspan>
@@ -23,10 +23,12 @@ export default defineComponent({
   extends: BaseOutput,
   computed: {
     lines () {
+      if (!this.control) return []
       const section = this.control.sections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },
     translatedLines () {
+      if (!this.control) return []
       const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
     },

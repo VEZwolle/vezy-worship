@@ -3,12 +3,12 @@
     <template v-if="$store.service">
       <div v-if="outputComponentLive" class="output title row q-px-md q-mt-md" v-html="titleLive" />
       <div class="output row q-px-md">
-        <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentation?.id" :presentation="$store.livePresentation" :preview="false" />
+        <component :is="outputComponentLive" v-if="outputComponentLive" :key="$store.livePresentationId" :presentation="$store.livePresentation" :preview="false" />
       </div>
       <q-separator size="1vh" color="primary" class="q-mt-md" />
       <div v-if="showPreview && outputComponentPreview" class="output title row q-px-md" v-html="titlePreview" />
       <div class="output row q-px-md">
-        <component :is="outputComponentPreview" v-if="showPreview && outputComponentPreview" :key="$store.previewPresentation?.id" :presentation="$store.previewPresentation" :preview="true" />
+        <component :is="outputComponentPreview" v-if="showPreview && outputComponentPreview" :key="$store.previewPresentationId" :presentation="$store.previewPresentation" :preview="true" />
       </div>
     </template>
   </div>
@@ -25,7 +25,7 @@ export default defineComponent({
       return this.presentationType(this.$store.livePresentation)?.outputs?.stage
     },
     outputComponentPreview () {
-      if (this.$store.livePresentation?.id === this.$store.previewPresentation?.id) return false
+      if (this.$store.livePresentationId === this.$store.previewPresentationId) return false
       return this.presentationType(this.$store.previewPresentation)?.outputs?.stage
     },
     titleLive () {

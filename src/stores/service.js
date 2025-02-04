@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
@@ -6,10 +6,11 @@ import presentationPresets from '../components/presentation-presets.js'
 import { versionUpdate } from './versionUpdate.js'
 import { sanitizerHtmlService } from '../components/common/CleanText.js'
 import { getDefaultURL } from '../components/presets-settings.js'
+import { addControlCloneDeep } from '../components/presentation-control-create.js'
 
 let clearLastShortKey
 
-export default defineStore('service', {
+export const useServiceStore = defineStore('service', {
   state: () => ({
     service: null,
     serviceSaved: null,
@@ -32,6 +33,14 @@ export default defineStore('service', {
     lastShortKey: '',
     setlistScroll: false
   }),
+  getters: {
+    previewPresentationId(state) {
+      return state.previewPresentation?.id
+    },
+    livePresentationId(state) {
+      return state.livePresentation?.id
+    }
+  },
   actions: {
     setServiceSaved () {
       this.serviceSaved = JSON.stringify(this.service)
@@ -45,9 +54,11 @@ export default defineStore('service', {
       }
       serviceOpen = sanitizerHtmlService(serviceOpen)
       // add to store/render
-      this.service = cloneDeep(serviceOpen)
-      this.previewPresentation = null
-      this.livePresentation = null
+      this.$patch((state) => {
+        state.service = cloneDeep(serviceOpen)
+        state.previewPresentation = null
+        state.livePresentation = null
+      })
       this.serviceSaved = JSON.stringify(this.service)
     },
     addService (data) {
@@ -168,24 +179,37 @@ export default defineStore('service', {
 
     preview (presentation) {
       if (!presentation) return
-
-      this.previewPresentation = cloneDeep(presentation)
+      this.previewPresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, true, false)
     },
     goLive (presentation, previewNextPresentation = true) {
       if (!presentation) return
 
       if (previewNextPresentation) {
         const i = this.service.presentations.findIndex(s => s.id === presentation.id)
-        const nextPresentation = this.service.presentations[i + 1]
-        if (nextPresentation && nextPresentation.id !== this.previewPresentation.id) {
-          this.previewPresentation = cloneDeep(nextPresentation)
-          this.setlistScroll = true
+        const nextPresentation = this.service.presentations[i + 1] || null
+        if (nextPresentation === null || nextPresentation?.id !== this.previewPresentationId) {
+          // update live & preview
+          this.$patch((state) => {
+            // preview update
+            state.previewPresentation = addControlCloneDeep(nextPresentation, this.noLivestream, this.splitSongLines, true, false)          
+            state.setlistScroll = true
+            // live update
+            state.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+            state.startEnd = false
+            state.arrowKeyLocation = false // active arrow keys naar live
+            state.isOnlyLivestreamClear = false
+          })
+          return
         }
       }
 
-      this.livePresentation = cloneDeep(presentation)
-      this.arrowKeyLocation = false // active arrow keys naar live
-      this.isOnlyLivestreamClear = false
+      // no preview update
+      this.$patch((state) => {
+        state.livePresentation = addControlCloneDeep(presentation, this.noLivestream, this.splitSongLines, false, this.startEnd)
+        state.startEnd = false
+        state.arrowKeyLocation = false // active arrow keys naar live
+        state.isOnlyLivestreamClear = false
+      })
     },
     goLiveNext () {
       this.startEnd = false
@@ -193,8 +217,8 @@ export default defineStore('service', {
       this.goLive(this.previewPresentation, true)
     },
     goLiveBack () {
-      if (!this.livePresentation) return
-      const i = this.service.presentations.findIndex(s => s.id === this.livePresentation.id)
+      if (!this.livePresentationId) return
+      const i = this.service.presentations.findIndex(s => s.id === this.livePresentationId)
       if (i === 0) return
       const backPresentation = this.service.presentations[i + -1]
       if (backPresentation) {
@@ -304,3 +328,7 @@ export default defineStore('service', {
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useServiceStore, import.meta.hot))
+}
