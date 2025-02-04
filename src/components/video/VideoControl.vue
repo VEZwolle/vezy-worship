@@ -148,7 +148,7 @@ export default defineComponent({
         this.presentation.control.readyStateAll = false
       } else {
         if (this.setTimeoutReadyStateAll) clearTimeout(this.setTimeoutReadyStateAll)
-        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 100)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 150)
       }
     }
   },
@@ -171,6 +171,10 @@ export default defineComponent({
         this.settings.time += 0.0001 * (Math.random() + 0.0001)
       }
       this.presentation.control.readyStateAll = true
+      if (!this.clear && !this.preview) {
+        if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
+        this.setTimeoutIdPlay = setTimeout(() => this.play(), 150) // first time wacht 150milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
+      }
     },
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
@@ -231,13 +235,9 @@ export default defineComponent({
     },
     canplaythrough (e) {
       if (this.readyStateFirst < 4 && e.target.readyState === 4) {
-        if (!this.clear && !this.preview) {
-          if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
-          this.setTimeoutIdPlay = setTimeout(() => this.play(), 50) // first time wacht 50milisec voor run toe sync pinia-shared-state with tabs; update readyStateFirst after first run play
-        }
         this.readyStateFirst = 4
         this.presentation.control.readyStateFirst = true
-        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 100)
+        this.setTimeoutReadyStateAll = setTimeout(() => this.allLoaded(), 150)
       }
     },
     end () {
