@@ -45,14 +45,16 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, defineAsyncComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import OutputBoxes from '../output/OutputBoxes.vue'
-import OutputOsc from '../output/OutputOsc.vue'
 
 export default defineComponent({
   name: 'LiveControl',
-  components: { OutputBoxes, OutputOsc },
+  components: { 
+    OutputBoxes,
+    OutputOsc: defineAsyncComponent(() => import('../output/OutputOsc.vue'))
+  },
   computed: {
     presentation () {
       return this.$store.livePresentation
