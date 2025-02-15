@@ -5,6 +5,9 @@ const { autoUpdater } = ElectronUpdater // ivm CommonJS module
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
+import dgram from "node:dgram"
+
+const udp = dgram.createSocket("udp4")
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -58,6 +61,12 @@ ipcMain.on('closeApp', () => {
   }
   mainWindow = null
   app.quit()
+})
+ipcMain.handle('oscSend', (e, outAddress, outPort, buffer) => {
+  // https://nodejs.org/api/dgram.html#socketsendmsg-offset-length-port-address-callback
+  // socket.send(msg[, offset, length][, port][, address][, callback])
+  udp.send(buffer, 0, buffer.byteLength, outPort, outAddress)
+  return `sending OSC messages to http://${outAddress}:${outPort}`
 })
 
 // Needed to use FileSystem API

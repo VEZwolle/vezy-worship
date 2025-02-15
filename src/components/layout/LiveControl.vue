@@ -39,6 +39,7 @@
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
     </div>
 
+    <OutputOsc v-if="$q.platform.is.electron && presentation" :presentation :presentationTypeId = "presentationType?.id" :title :isClear="$store.isClear" />
     <OutputBoxes :beamer="true" :livestream="true" />
   </div>
 </template>
@@ -47,10 +48,11 @@
 import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import OutputBoxes from '../output/OutputBoxes.vue'
+import OutputOsc from '../output/OutputOsc.vue'
 
 export default defineComponent({
   name: 'LiveControl',
-  components: { OutputBoxes },
+  components: { OutputBoxes, OutputOsc },
   computed: {
     presentation () {
       return this.$store.livePresentation
