@@ -90,7 +90,7 @@ export default defineComponent({
   methods: {
     setLastBg () {
       if (this.showBackground) {
-        if (this.presentation.settings?.bgFileId) {
+        if (this.presentation?.settings?.bgFileId) {
           if (!this.backgroundColor.beamer) {
             this.lastItemBG = true
             return

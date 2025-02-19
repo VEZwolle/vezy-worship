@@ -41,7 +41,7 @@
 
     <OutputBoxes :beamer="true" :livestream="true" >
       <template #footer>
-        <OutputOsc v-if="$q.platform.is.electron && $store.osc.enabled && presentation" :presentation :presentationTypeId = "presentationType?.id" :title :isClear="$store.isClear" />
+        <OutputOsc v-if="$q.platform.is.electron && $store.osc.enabled" :presentation :presentationTypeId = "presentationType?.id" :title :isClear="$store.isClear" />
       </template>
     </OutputBoxes>
   </div>
@@ -69,15 +69,15 @@ export default defineComponent({
       return this.presentationType?.components?.control
     },
     title () {
-      if (this.presentation.settings.title) {
+      if (this.presentation?.settings.title) {
         return this.presentation.settings.title
       }
 
-      if (this.presentationType.title) {
+      if (this.presentationType?.title) {
         return this.presentationType.title(this.presentation.settings)
       }
 
-      return this.presentationType.name
+      return this.presentationType?.name || ''
     },
     shortkeysClear () {
       return this.$store.shortkeysClear()
