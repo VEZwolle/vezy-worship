@@ -113,7 +113,7 @@ export default defineComponent({
       let elements = []
       if (this.isClear) elements.push({ address: this.oscOut.clear })
 
-      if (!this.presentation) return this.oscSendMsg(elements)
+      if (!this.presentation) return this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
 
       switch (this.presentationTypeId) {
         case 'song':
@@ -228,18 +228,16 @@ export default defineComponent({
         default:
       }
 
-      this.oscSendMsg(elements)
+      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
     },
 
     async oscSendMsg (elements) {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
-      // console.log(elements)
-      const oscElements = elements.filter(element => element.address !== '' && element.address !== undefined)
-      if (oscElements.length < 1) return
+      if (elements.length < 1) return
 
       const buffer = osc.toBuffer({
         timetag: new Date(new Date().getTime() + 0),
-        oscElements
+        elements
       })
 
       await this.$electron.oscSend(this.$store.osc.outAddress, this.$store.osc.outPort, buffer)
