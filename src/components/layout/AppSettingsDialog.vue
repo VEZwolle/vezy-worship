@@ -143,6 +143,8 @@
             </q-item>
           </q-list>
           <q-btn label="Bestemmingen terug naar standaard" @click="oscReset" />
+          <q-btn label="Exporteer" @click="oscExportOutput" />
+          <q-btn label="Importeer" @click="oscImportOutput" />
         </q-tab-panel>
 
 
@@ -454,7 +456,10 @@ export default defineComponent({
         message: 'Een deel van de wijzigingen worden pas van kracht zodra je de applicatie opnieuw opstart.'
       })
 
-      // add ... close dialog
+      // close dialog
+      this.hide()
+      this.$refs.dialog.hide() // --> v-close-popup
+      // v-close-popup
     },
     async loadSongDatabase () {
       await this.$fsdb.openSongDatabase(true)
@@ -514,7 +519,23 @@ export default defineComponent({
     },
     oscReset () {
       this.osc.output = cloneDeep(oscOutput)
-    }
+    },
+    oscExportOutput () {
+      this.$fs.exportOscConfig(this.osc.output)
+    },
+    async oscImportOutput () {
+      let oscOutputImport = await this.$fs.importOscConfig()
+      if (!oscOutputImport) return
+      // check if all settings are there
+      for (var key in oscOutput) {
+        if (!Object.prototype.hasOwnProperty.call(oscOutputImport, key)) {
+          oscOutputImport[key] = oscOutput[key]
+        }
+      }
+      // load into ui
+      this.osc.output = cloneDeep(oscOutputImport)
+    },
+
   }
 })
 </script>
