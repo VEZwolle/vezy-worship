@@ -29,6 +29,8 @@
         <q-tooltip>Toon zichtbaar gebied vanuit zaal op beamer & voor livestream bij tv randen</q-tooltip>
       </q-checkbox>
       <q-space />
+      <slot name="footer" />
+      <q-space />
       <template v-for="(view, index) in views" :key="view.id">
         <q-checkbox
           v-if="!view.alpha"

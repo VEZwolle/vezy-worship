@@ -66,7 +66,6 @@ ipcMain.handle('oscSend', (e, outAddress, outPort, buffer) => {
   // https://nodejs.org/api/dgram.html#socketsendmsg-offset-length-port-address-callback
   // socket.send(msg[, offset, length][, port][, address][, callback])
   udp.send(buffer, 0, buffer.byteLength, outPort, outAddress)
-  return `sending OSC messages to http://${outAddress}:${outPort}`
 })
 
 // Needed to use FileSystem API

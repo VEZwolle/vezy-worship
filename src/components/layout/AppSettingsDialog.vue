@@ -11,6 +11,7 @@
         <q-tab name="api" label="api-key's" />
         <q-tab name="database" label="Zoeken/database" />
         <q-tab v-if="$q.platform.is.electron" name="displays" label="Output monitoren" />
+        <q-tab v-if="$q.platform.is.electron" name="osc" label="OSC" />
         <q-tab v-if="$q.platform.is.electron" name="images" label="Standaard media" />
         <q-tab v-if="$q.platform.is.electron" name="autoupdate" label="Update" />
       </q-tabs>
@@ -106,6 +107,44 @@
             </template>
           </q-input>
         </q-tab-panel>
+
+        <q-tab-panel name="osc">
+          <q-checkbox v-model="osc.enabled" label="Output: OSC (Open Sound Control)" />
+          <div>
+            De data die via het OSC-protocol wordt verzonden is alleen platte teksten (zonder opmaak).<br>
+            Er worden geen plaatjes of films verzonden. (zie de help voor meer infromatie.)
+          </div>
+          <div class="row">
+            <q-input v-model="osc.outAddress" dense outlined class="col" label="OSC ontvanger adres (IP of DNS):">
+              <q-tooltip>Bij gelijke computer: localhost<br> v.b.: 192.168.0.10</q-tooltip>
+              <template #append>
+                <q-icon v-if="osc.outAddress" name="cancel" class="cursor-pointer" @click="osc.outAddress = 'localhost'" />
+              </template>
+            </q-input>
+            <q-input v-model="osc.outPort" dense outlined type="number" class="col2" label="OSC ontvanger poort:">
+              <q-tooltip>Bij gelijke computer: localhost<br> v.b.: 192.168.0.10</q-tooltip>
+              <template #append>
+                <q-icon v-if="osc.outPort" name="cancel" class="cursor-pointer" @click="osc.outPort = 7000" />
+              </template>
+            </q-input>
+          </div>
+          <q-separator color="secondary" class="q-my-md" />
+          <q-list dense bordered padding>
+            <q-item-label header>Standaard bestemmingen</q-item-label>
+
+            <q-item v-for="(value, name) in osc.output" :key="name" clickable v-ripple>
+              <q-item-section>
+                <q-input v-model="osc.output[name]" :label="name" label-color="secondary" stack-label dense>
+                  <template #append>
+                    <q-icon v-if="value" name="cancel" class="cursor-pointer" @click="osc.output[name] = ''" />
+                  </template>
+                </q-input>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-btn label="Bestemmingen terug naar standaard" @click="oscReset" />
+        </q-tab-panel>
+
 
         <q-tab-panel name="database">
           <div class="text-h6">
@@ -257,8 +296,10 @@
 
 <script>
 import { defineComponent } from 'vue'
+import cloneDeep from 'lodash/cloneDeep'
 import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '../song/database/algolia.js'
 import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsSettings, setPresentationPresetsSettings } from '../presets-settings.js'
+import oscOutput from '../osc-output-settings.js'
 
 export default defineComponent({
   name: 'AppSettingsDialog',
@@ -306,7 +347,13 @@ export default defineComponent({
       ],
       algoliaTab: 0,
       algoliaIndexId: 0,
-      imageFiles
+      imageFiles,
+      osc: {
+        enabled: true,
+        outAddress: 'localhost',
+        outPort: 7000,
+        output: {}
+      }
     }
   },
   computed: {
@@ -371,6 +418,10 @@ export default defineComponent({
       this.$store.splitSongLines = localStorage.getItem('splitSongLines') ? parseInt(localStorage.getItem('splitSongLines')) : 4
       this.$store.serviceType = localStorage.getItem('serviceType') || 'standaard'
       this.darkMode = localStorage.getItem('darkMode') === 'true'
+      this.osc.enabled = localStorage.getItem('oscEnabled') === 'true'
+      this.osc.outAddress = localStorage.getItem('oscOutAddress') || 'localhost'
+      this.osc.outPort = parseInt(localStorage.getItem('oscOutPort')) || 7000
+      this.osc.output = JSON.parse(localStorage.getItem('oscOutput')) || cloneDeep(oscOutput)
     },
     async save () {
       if (this.$q.platform.is.electron) {
@@ -392,10 +443,18 @@ export default defineComponent({
       localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
       localStorage.setItem('darkMode', this.$q.dark.isActive)
 
+      localStorage.setItem('oscEnabled', this.osc.enabled )
+      localStorage.setItem('oscOutAddress', this.osc.outAddress)
+      localStorage.setItem('oscOutPort', this.osc.outPort)
+      localStorage.setItem('oscOutput', JSON.stringify(this.osc.output))
+      this.$store.$patch({ osc: this.osc })
+
       this.$q.dialog({
         title: '✅ Wijzigingen opgeslagen',
-        message: 'De wijzigingen worden van kracht zodra je de applicatie opnieuw opstart.'
+        message: 'Een deel van de wijzigingen worden pas van kracht zodra je de applicatie opnieuw opstart.'
       })
+
+      // add ... close dialog
     },
     async loadSongDatabase () {
       await this.$fsdb.openSongDatabase(true)
@@ -452,6 +511,9 @@ export default defineComponent({
       if (this.$q.platform.is.electron) {
         this.showDisplayNr = await this.$electron.showDisplaysNr(this.showDisplayNr)
       }
+    },
+    oscReset () {
+      this.osc.output = cloneDeep(oscOutput)
     }
   }
 })

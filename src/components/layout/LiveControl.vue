@@ -39,8 +39,11 @@
       <component :is="controlComponent" v-if="controlComponent" :key="presentation" :presentation="presentation" />
     </div>
 
-    <OutputOsc v-if="$q.platform.is.electron && presentation" :presentation :presentationTypeId = "presentationType?.id" :title :isClear="$store.isClear" />
-    <OutputBoxes :beamer="true" :livestream="true" />
+    <OutputBoxes :beamer="true" :livestream="true" >
+      <template #footer>
+        <OutputOsc v-if="$q.platform.is.electron && $store.osc.enabled && presentation" :presentation :presentationTypeId = "presentationType?.id" :title :isClear="$store.isClear" />
+      </template>
+    </OutputBoxes>
   </div>
 </template>
 

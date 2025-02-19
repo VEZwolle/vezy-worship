@@ -1,10 +1,18 @@
 <template>
-  <div />
+  <div>
+    OSC: {{ $store.osc.enabled ? 'aan' : 'uit' }}
+    <q-tooltip>
+      Output teksten via het OSC-protocol naar:<br>
+      {{ $store.osc.outAddress }} : {{ $store.osc.outPort }}
+    </q-tooltip>
+  </div>
 </template>
 
 <script>
+// v-if="$store.osc.enabled"
 import { defineComponent } from 'vue'
 import * as osc from "osc-min"
+import oscOutput from '../osc-output-settings.js'
 
 export default defineComponent({
   name: 'OscSend',
@@ -16,54 +24,36 @@ export default defineComponent({
   },
   data () {
     return {
-      osc: {
-        outAddress: 'localhost',
-        outPort: 7000,
-        clear: '/composition/layers/3/clear', // none
-        song: '/composition/layers/3/clips/1/connect', // int 0 or 1
-        songText: '/composition/layers/3/clips/1/video/source/blocktextgenerator/text/params/lines', // string
-        songTranslation: '/composition/layers/3/clips/1/video/effects/textblock/effect/text/params/lines', // string
-        captionScripture: '/composition/layers/3/clips/2/connect', // int 0 or 1
-        captionScriptureText: '/composition/layers/3/clips/2/video/source/blocktextgenerator/text/params/lines', // string
-        captionScriptureTitle: '/composition/layers/3/clips/2/video/effects/textblock/effect/text/params/lines', // string
-        captionDefault: '/composition/layers/3/clips/3/connect', // int 0 or 1
-        captionDefaultText: '/composition/layers/3/clips/3/video/source/blocktextgenerator/text/params/lines', // string
-        captionDefaultTitle: '/composition/layers/3/clips/3/video/effects/textblock/effect/text/params/lines', // string
-        captionTitle: '/composition/layers/3/clips/4/connect', // int 0 or 1
-        captionTitleText: '/composition/layers/3/clips/4/video/source/blocktextgenerator/text/params/lines', // string
-        captionTitleTitle: '/composition/layers/3/clips/4/video/effects/textblock/effect/text/params/lines', // string
-        captionOnlytext: '/composition/layers/3/clips/2/connect', // int 0 or 1
-        captionOnlytextText: '/composition/layers/3/clips/2/video/source/blocktextgenerator/text/params/lines', // string
-        captionThema: '/composition/layers/3/clips/5/connect', // int 0 or 1
-        captionThemaText: '/composition/layers/3/clips/5/video/source/blocktextgenerator/text/params/lines', // string
-        captionThemaTitle: '/composition/layers/3/clips/5/video/effects/textblock/effect/text/params/lines', // string
-        countdown: '/composition/layers/3/clips/6/connect', // int 0 or 1
-        countdownText: '/composition/layers/3/clips/6/video/effects/texteffect/effect/text/params/lines', // string
-        imageOffering: '/composition/layers/3/clips/7/connect', // int 0 or 1
-        imageMinistry: '/composition/layers/3/clips/8/connect', // int 0 or 1
-        imageEnd: '/composition/layers/3/clips/9/connect', // int 0 or 1
-      },
-      oscLog: ''
     }
   },
 
   computed: {
     id () {
-      return this.presentation.id
+      return this.presentation?.id
     },
     settings () {
-      return this.presentation.settings
+      return this.presentation?.settings
     },
     control () {
-      return this.presentation.control
+      return this.presentation?.control
+    },
+    oscOut () {
+      return this.$store.osc.output
     },
     // song/caption selection
     selectedSectionIndex () {
       return this.control?.selectedSectionIndex ? this.control.selectedSectionIndex : 0
     },
+    // song/caption text update?
+    settingsText () {
+      return this.settings?.text ? this.settings.text : ''
+    },
     // countdown
     remaining () {
       return this.control?.remaining ? this.control.remaining : ''
+    },
+    isFinished () {
+      return this.control?.isFinished ? this.control.isFinished : false
     },
     // song, caption, scripture
     lines () {
@@ -76,8 +66,7 @@ export default defineComponent({
       if (!this.control) return []
       const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
-    },
-
+    }
   },
 
   watch: {
@@ -90,6 +79,12 @@ export default defineComponent({
     'title' () {
       this.oscSendMsgTotal()
     },
+    'isFinished' () {
+      this.oscSendMsgTotal()
+    },
+    'settingsText' () {
+      this.oscSendMsgData()
+    },
     'selectedSectionIndex' () {
       this.oscSendMsgData()
     },
@@ -97,63 +92,83 @@ export default defineComponent({
       this.oscSendMsgData()
     }
   },
+  created () {
+    console.log('OutputOsc created')
+    // check $store.output is completely
+    this.$store.$patch((state) => {
+      for (var key in oscOutput) {
+        if (!Object.prototype.hasOwnProperty.call(this.$store.osc.output, key)) {
+          state.osc.output[key] = oscOutput[key]
+        }
+      }
+    })
+  },
+  mounted () {
+    this.$nextTick(() => { this.oscSendMsgTotal() })
+  },
   methods: {
     oscSendMsgTotal () {
+      if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
+
       let elements = []
-      if (this.isClear) elements.push({ address: this.osc.clear })
+      if (this.isClear) elements.push({ address: this.oscOut.clear })
+
+      if (!this.presentation) return this.oscSendMsg(elements)
 
       switch (this.presentationTypeId) {
         case 'song':
-          if (!this.isClear) elements.push({ address: this.osc.song, args: 1 })
+          if (!this.isClear) elements.push({ address: this.oscOut.song, args: 1 })
           break
         case 'caption':
         case 'scripture':
           if (!this.isClear) {
             switch (this.settings?.formatBeamer) {
               case 'Standaard':
-                elements.push({ address: this.osc.captionDefault, args: 1 })
+                elements.push({ address: this.oscOut.captionDefault, args: 1 })
                 break
               case 'Bijbeltekst':
               case 'Alleen tekst':
-                elements.push({ address: this.osc.captionScripture, args: 1 })
+                elements.push({ address: this.oscOut.captionScripture, args: 1 })
                 break
               case 'Titel':
-                elements.push({ address: this.osc.captionTitle, args: 1 })
+                elements.push({ address: this.oscOut.captionTitle, args: 1 })
                 break
               case 'Thema':
-                elements.push({ address: this.osc.captionThema, args: 1 })
+                elements.push({ address: this.oscOut.captionThema, args: 1 })
                 break
               case 'Geen':
-                elements.push({ address: this.osc.clear })
+                elements.push({ address: this.oscOut.clear })
                 break
               default:
             }
           }
           break
         case 'countdown':
-          if (!this.control.isFinished) { // niet actief zetten wanneer finished
-            if (!this.isClear ) elements.push({ address: this.osc.countdown, args: 1 })
+          if (!this.control?.isFinished) { // niet actief zetten wanneer finished
+            if (!this.isClear ) elements.push({ address: this.oscOut.countdown, args: 1 })
+          } else {
+            elements.push({ address: this.oscOut.clear })
           }
           break
         case 'image':
           if (!this.isClear) {
             switch (this.id) {
               case 'offering':
-                elements.push({ address: this.osc.imageOffering, args: 1 })
+                elements.push({ address: this.oscOut.imageOffering, args: 1 })
                 break
               case 'ministry':
-                elements.push({ address: this.osc.imageMinistry, args: 1 })
+                elements.push({ address: this.oscOut.imageMinistry, args: 1 })
                 break
               case 'end':
-                elements.push({ address: this.osc.imageEnd, args: 1 })
+                elements.push({ address: this.oscOut.imageEnd, args: 1 })
                 break
               default:
-                elements.push({ address: this.osc.clear })
+                elements.push({ address: this.oscOut.clear })
             }  
           }
           break
         case 'video':
-          elements.push({ address: this.osc.clear })
+          elements.push({ address: this.oscOut.clear })
           break
         default:
       }
@@ -162,35 +177,37 @@ export default defineComponent({
     },
 
     oscSendMsgData (elements = []) {
+      if (!this.$store.osc.enabled || !this.$q.platform.is.electron || !this.presentation) return
+
       let addressText
       let addressTitle
 
       switch (this.presentationTypeId) {
         case 'song':
-          elements.push({ address: this.osc.songText, args: this.lines.join('\n') })
-          elements.push({ address: this.osc.songTranslation, args: this.translatedLines.join('\n') })
+          elements.push({ address: this.oscOut.songText, args: this.lines.join('\n') })
+          elements.push({ address: this.oscOut.songTranslation, args: this.translatedLines.join('\n') })
           break
         case 'caption':
         case 'scripture': // remove HTML code of line.
           switch (this.settings?.formatBeamer) {
             case 'Standaard':
-              addressText = this.osc.captionDefaultText
-              addressTitle = this.osc.captionDefaultTitle
+              addressText = this.oscOut.captionDefaultText
+              addressTitle = this.oscOut.captionDefaultTitle
               break
             case 'Bijbeltekst':
-              addressText = this.osc.captionScriptureText
-              addressTitle = this.osc.captionScriptureTitle
+              addressText = this.oscOut.captionScriptureText
+              addressTitle = this.oscOut.captionScriptureTitle
               break
             case 'Titel':
-              addressText = this.osc.captionTitleText
-              addressTitle = this.osc.captionTitleTitle
+              addressText = this.oscOut.captionTitleText
+              addressTitle = this.oscOut.captionTitleTitle
               break
             case 'Alleen tekst':
-              addressText = this.osc.captionOnlytextText
+              addressText = this.oscOut.captionOnlytextText
               break
             case 'Thema':
-              addressText = this.osc.captionThemaText
-              addressTitle = this.osc.captionThemaTitle
+              addressText = this.oscOut.captionThemaText
+              addressTitle = this.oscOut.captionThemaTitle
               break
             case 'Geen':
             default:
@@ -200,9 +217,9 @@ export default defineComponent({
           break
         case 'countdown':
           if (!this.control.isFinished) {
-            if (this.control?.remaining) elements.push({ address: this.osc.countdownText, args: this.control.remaining })
+            if (this.control?.remaining) elements.push({ address: this.oscOut.countdownText, args: this.control.remaining })
           } else {
-            elements.push({ address: this.osc.countdownText, args: '' })
+            elements.push({ address: this.oscOut.countdownText, args: '' })
           }
           break
         case 'image':
@@ -215,14 +232,16 @@ export default defineComponent({
     },
 
     async oscSendMsg (elements) {
+      if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
+      // console.log(elements)
+      if (elements.length < 1) return
+
       const buffer = osc.toBuffer({
         timetag: new Date(new Date().getTime() + 0),
         elements
       })
 
-      if (this.$q.platform.is.electron) {
-        this.oscLog = await this.$electron.oscSend(this.osc.outAddress, this.osc.outPort, buffer)
-      }
+      await this.$electron.oscSend(this.$store.osc.outAddress, this.$store.osc.outPort, buffer)
     }
   }
 })
