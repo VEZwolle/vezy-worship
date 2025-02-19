@@ -234,11 +234,12 @@ export default defineComponent({
     async oscSendMsg (elements) {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
       // console.log(elements)
-      if (elements.length < 1) return
+      const oscElements = elements.filter(element => element.address !== '' && element.address !== undefined)
+      if (oscElements.length < 1) return
 
       const buffer = osc.toBuffer({
         timetag: new Date(new Date().getTime() + 0),
-        elements
+        oscElements
       })
 
       await this.$electron.oscSend(this.$store.osc.outAddress, this.$store.osc.outPort, buffer)
