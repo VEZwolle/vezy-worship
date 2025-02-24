@@ -40,6 +40,9 @@ export default defineComponent({
     oscOut () {
       return this.$store.osc.output
     },
+    settingsOsc () {
+      return this.settings?.osc ? this.settings.osc : {}
+    },
     // song/caption selection
     selectedSectionIndex () {
       return this.control?.selectedSectionIndex ? this.control.selectedSectionIndex : 0
@@ -115,62 +118,66 @@ export default defineComponent({
 
       if (!this.presentation) return this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
 
-      switch (this.presentationTypeId) {
-        case 'song':
-          if (!this.isClear) elements.push({ address: this.oscOut.song, args: 1 })
-          break
-        case 'caption':
-        case 'scripture':
-          if (!this.isClear) {
-            switch (this.settings?.formatBeamer) {
-              case 'Standaard':
-                elements.push({ address: this.oscOut.captionDefault, args: 1 })
-                break
-              case 'Bijbeltekst':
-              case 'Alleen tekst':
-                elements.push({ address: this.oscOut.captionScripture, args: 1 })
-                break
-              case 'Titel':
-                elements.push({ address: this.oscOut.captionTitle, args: 1 })
-                break
-              case 'Thema':
-                elements.push({ address: this.oscOut.captionThema, args: 1 })
-                break
-              case 'Geen':
-                elements.push({ address: this.oscOut.clear })
-                break
-              default:
+      if (this.settingsOsc?.clip) {
+        if (!this.isClear) elements.push({ address: this.settingsOsc.clip, args: 1 })
+      } else {
+        switch (this.presentationTypeId) {
+          case 'song':
+            if (!this.isClear) elements.push({ address: this.oscOut.song, args: 1 })
+            break
+          case 'caption':
+          case 'scripture':
+            if (!this.isClear) {
+              switch (this.settings?.formatBeamer) {
+                case 'Standaard':
+                  elements.push({ address: this.oscOut.captionDefault, args: 1 })
+                  break
+                case 'Bijbeltekst':
+                case 'Alleen tekst':
+                  elements.push({ address: this.oscOut.captionScripture, args: 1 })
+                  break
+                case 'Titel':
+                  elements.push({ address: this.oscOut.captionTitle, args: 1 })
+                  break
+                case 'Thema':
+                  elements.push({ address: this.oscOut.captionThema, args: 1 })
+                  break
+                case 'Geen':
+                  elements.push({ address: this.oscOut.clear })
+                  break
+                default:
+              }
             }
-          }
-          break
-        case 'countdown':
-          if (!this.control?.isFinished) { // niet actief zetten wanneer finished
-            if (!this.isClear ) elements.push({ address: this.oscOut.countdown, args: 1 })
-          } else {
+            break
+          case 'countdown':
+            if (!this.control?.isFinished) { // niet actief zetten wanneer finished
+              if (!this.isClear ) elements.push({ address: this.oscOut.countdown, args: 1 })
+            } else {
+              elements.push({ address: this.oscOut.clear })
+            }
+            break
+          case 'image':
+            if (!this.isClear) {
+              switch (this.id) {
+                case 'offering':
+                  elements.push({ address: this.oscOut.imageOffering, args: 1 })
+                  break
+                case 'ministry':
+                  elements.push({ address: this.oscOut.imageMinistry, args: 1 })
+                  break
+                case 'end':
+                  elements.push({ address: this.oscOut.imageEnd, args: 1 })
+                  break
+                default:
+                  elements.push({ address: this.oscOut.clear })
+              }  
+            }
+            break
+          case 'video':
             elements.push({ address: this.oscOut.clear })
-          }
-          break
-        case 'image':
-          if (!this.isClear) {
-            switch (this.id) {
-              case 'offering':
-                elements.push({ address: this.oscOut.imageOffering, args: 1 })
-                break
-              case 'ministry':
-                elements.push({ address: this.oscOut.imageMinistry, args: 1 })
-                break
-              case 'end':
-                elements.push({ address: this.oscOut.imageEnd, args: 1 })
-                break
-              default:
-                elements.push({ address: this.oscOut.clear })
-            }  
-          }
-          break
-        case 'video':
-          elements.push({ address: this.oscOut.clear })
-          break
-        default:
+            break
+          default:
+        }
       }
       // add data
       this.oscSendMsgData(elements)
@@ -184,8 +191,8 @@ export default defineComponent({
 
       switch (this.presentationTypeId) {
         case 'song':
-          elements.push({ address: this.oscOut.songText, args: this.lines.join('\n') })
-          elements.push({ address: this.oscOut.songTranslation, args: this.translatedLines.join('\n') })
+          elements.push({ address: this.settingsOsc?.text ? this.settingsOsc.text : this.oscOut.songText, args: this.lines.join('\n') })
+          elements.push({ address: this.settingsOsc?.translation ? this.settingsOsc.translation : this.oscOut.songTranslation, args: this.translatedLines.join('\n') })
           break
         case 'caption':
         case 'scripture': // remove HTML code of line.
@@ -212,14 +219,17 @@ export default defineComponent({
             case 'Geen':
             default:
           }
+          if (this.settingsOsc?.text) addressText = this.settingsOsc.text
+          if (this.settingsOsc?.title) addressTitle = this.settingsOsc.title
+
           if (addressText) elements.push({ address: addressText, args: this.lines.join('\n').replace(/<br>/gi, '\n').replace(/<(.*?)>/gi, '').replace(/&nbsp;/gi, ' ') }) // .replace(/<(.*?)>/gi, '')
           if (addressTitle) elements.push({ address: addressTitle, args: this.title.replace(/<(.*?)>/gi, '') })
           break
         case 'countdown':
           if (!this.control.isFinished) {
-            if (this.control?.remaining) elements.push({ address: this.oscOut.countdownText, args: this.control.remaining })
+            if (this.control?.remaining) elements.push({ address: this.settingsOsc?.text ? this.settingsOsc.text : this.oscOut.countdownText, args: this.control.remaining })
           } else {
-            elements.push({ address: this.oscOut.countdownText, args: '' })
+            elements.push({ address: this.settingsOsc?.text ? this.settingsOsc.text : this.oscOut.countdownText, args: '' })
           }
           break
         case 'image':

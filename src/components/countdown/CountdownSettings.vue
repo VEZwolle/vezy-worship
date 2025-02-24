@@ -3,6 +3,7 @@
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="countdown" label="Aftelklok" />
       <q-tab name="background" label="Achtergrond" />
+      <q-tab v-if="$store.osc.enabled" name="osc" label="OSC" />
     </q-tabs>
 
     <q-separator />
@@ -38,6 +39,9 @@
       <q-tab-panel name="background">
         <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
+      <q-tab-panel name="osc">
+        <OscSetting v-model:osc="settings.osc" />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
@@ -46,10 +50,11 @@
 import { defineComponent } from 'vue'
 import BaseSettings from '../presentation/BaseSettings.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import OscSetting from '../presentation/OscSetting.vue'
 
 export default defineComponent({
   name: 'CountdownSettings',
-  components: { BackgroundSetting },
+  components: { BackgroundSetting, OscSetting },
   extends: BaseSettings,
   data () {
     return {

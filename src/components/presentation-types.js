@@ -39,7 +39,12 @@ export default [
       translation: '', // text
       noSplitLines: false,
       bgOpacity: 0,
-      bgFileId: null
+      bgFileId: null,
+      osc: {
+        clip: null,
+        text: null,
+        translation: null,
+      }
     },
     title (settings) {
       let collectionNumber = settings.collection ? ` ${settings.collection}` : ''
@@ -72,7 +77,12 @@ export default [
       bgFileId: null,
       formatBeamer: 'Geen',
       formatLivestream: 'Standaard',
-      maxLivestreamChar: 500
+      maxLivestreamChar: 500,
+      osc: {
+        clip: null,
+        text: null,
+        title: null
+      }
     },
     description (settings) {
       return settings.text
@@ -113,6 +123,9 @@ export default [
         x: 0,
         y: 0,
         rotate: 0
+      },
+      osc: {
+        clip: null
       }
     },
     components: {
@@ -139,7 +152,10 @@ export default [
       time: 0,
       startTime: 0,
       endTime: -1,
-      noLivestream: false
+      noLivestream: false,
+      osc: {
+        clip: null
+      }
     },
     components: {
       settings: VideoSettings,
@@ -161,7 +177,11 @@ export default [
       type: 0,
       position: 'RO',
       bgOpacity: 0,
-      bgFileId: null
+      bgFileId: null,
+      osc: {
+        clip: null,
+        text: null
+      }
     },
     description (settings) {
       if (settings.type === 1) {
@@ -196,7 +216,12 @@ export default [
       bgFileId: null,
       formatBeamer: 'Bijbeltekst',
       formatLivestream: 'Breed',
-      maxLivestreamChar: 350
+      maxLivestreamChar: 350,
+      osc: {
+        clip: null,
+        text: null,
+        title: null
+      }
     },
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
