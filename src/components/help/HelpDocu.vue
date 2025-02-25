@@ -31,6 +31,7 @@
               <q-tab name="image" icon="image" label="Afbeeldingen" />
               <q-tab name="video" icon="smart_display" label="Film" />
               <q-tab name="countdown" icon="alarm" label="Countdown" />
+              <q-tab name="osc" icon="output" label="OSC" />
               <q-tab name="shortkey" icon="key" label="Sneltoetsen" />
               <q-tab name="about" icon="build" label="Over" />
             </q-tabs>
@@ -72,6 +73,9 @@
               <q-tab-panel name="countdown">
                 <HelpCountdown />
               </q-tab-panel>
+              <q-tab-panel name="osc">
+                <HelpOsc />
+              </q-tab-panel>
               <q-tab-panel name="shortkey">
                 <HelpShortkey />
               </q-tab-panel>
@@ -87,33 +91,23 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import HelpMain from './HelpMain.vue'
-import HelpLive from './HelpLive.vue'
-import HelpMainSetlist from './HelpMainSetlist.vue'
-import HelpSong from './HelpSong.vue'
-import HelpCaption from './HelpCaption.vue'
-import HelpScripture from './HelpScripture.vue'
-import HelpImage from './HelpImage.vue'
-import HelpVideo from './HelpVideo.vue'
-import HelpCountdown from './HelpCountdown.vue'
-import HelpShortkey from './HelpShortkey.vue'
-import HelpAbout from './HelpAbout.vue'
+import { defineComponent, defineAsyncComponent } from 'vue'
 
 export default defineComponent({
   name: 'HelpDocu',
   components: {
-    HelpMain,
-    HelpLive,
-    HelpMainSetlist,
-    HelpSong,
-    HelpCaption,
-    HelpScripture,
-    HelpImage,
-    HelpVideo,
-    HelpCountdown,
-    HelpShortkey,
-    HelpAbout
+    HelpMain: defineAsyncComponent(() => import('./HelpMain.vue')),
+    HelpLive: defineAsyncComponent(() => import('./HelpLive.vue')),
+    HelpMainSetlist: defineAsyncComponent(() => import('./HelpMainSetlist.vue')),
+    HelpSong: defineAsyncComponent(() => import('./HelpSong.vue')),
+    HelpCaption: defineAsyncComponent(() => import('./HelpCaption.vue')),
+    HelpScripture: defineAsyncComponent(() => import('./HelpScripture.vue')),
+    HelpImage: defineAsyncComponent(() => import('./HelpImage.vue')),
+    HelpVideo: defineAsyncComponent(() => import('./HelpVideo.vue')),
+    HelpCountdown: defineAsyncComponent(() => import('./HelpCountdown.vue')),
+    HelpOsc: defineAsyncComponent(() => import('./HelpOsc.vue')),
+    HelpShortkey: defineAsyncComponent(() => import('./HelpShortkey.vue')),
+    HelpAbout: defineAsyncComponent(() => import('./HelpAbout.vue'))
   },
   data () {
     return {
