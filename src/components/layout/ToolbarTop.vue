@@ -239,6 +239,10 @@ export default defineComponent({
     saved () {
       return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
     },
+    suggestedName () {
+      let date = this.$store.service.date
+      return date ? `vezy_${date.replace(/\//g,'-')}.vez` : 'setlist.vez'
+    },
     apiKeyEditExist () {
       return ApiKeyEdit(this.$store.algoliaIndexId)
     }
@@ -315,7 +319,7 @@ export default defineComponent({
     },
     save (showPicker) {
       this.isSaving = true
-      this.$fs.save(showPicker)
+      this.$fs.save(showPicker, this.suggestedName)
         .then((ready) => {
           if (!ready) this.$q.notify({ type: 'negative', message: 'Fout tijdens opslaan' })
         })
