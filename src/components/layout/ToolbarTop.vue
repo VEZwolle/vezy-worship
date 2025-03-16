@@ -239,6 +239,10 @@ export default defineComponent({
     saved () {
       return (JSON.stringify(this.$store.service) === this.$store.serviceSaved) || !this.$store.service
     },
+    suggestedName () {
+      let date = this.$store.service.date
+      return date ? `vezy_${date.replace(/\//g,'-')}.vez` : 'setlist.vez'
+    },
     apiKeyEditExist () {
       return ApiKeyEdit(this.$store.algoliaIndexId)
     }
@@ -293,15 +297,18 @@ export default defineComponent({
     }
   },
   mounted () {
-    if (this.$q.platform.is.electron) {
-      getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; electron always
-    }
   },
   methods: {
     create () {
+      if (this.$q.platform.is.electron) {
+        getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
+      }
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) this.$refs.serviceSettingsDialog.show()
     },
     open (add) {
+      if (this.$q.platform.is.electron) {
+        getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
+      }
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
         this.isLoading = true
         this.$fs.open(add)
@@ -312,7 +319,7 @@ export default defineComponent({
     },
     save (showPicker) {
       this.isSaving = true
-      this.$fs.save(showPicker)
+      this.$fs.save(showPicker, this.suggestedName)
         .then((ready) => {
           if (!ready) this.$q.notify({ type: 'negative', message: 'Fout tijdens opslaan' })
         })
@@ -335,6 +342,9 @@ export default defineComponent({
       window.open(`/#/output/${id}`, `output${id}`, 'popup,width=960,height=540')
     },
     openAppSettings () {
+      if (this.$q.platform.is.electron) {
+        getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
+      }
       this.$refs.appSettingsDialog.show()
     },
     openHelp () {

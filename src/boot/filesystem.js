@@ -11,6 +11,7 @@ const filePickerOptions = {
       'application/vez': '.vez'
     }
   }],
+  suggestedName:'setlist.vez',
   excludeAcceptAllOption: true,
   startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
 }
@@ -99,7 +100,7 @@ const fs = {
     }
   },
 
-  async save (showPicker = false) {
+  async save (showPicker = false, suggestedName = '') {
     if (!showPicker && fs.fileHandle) {
       // verifyPermission: 'granted', 'denied' or 'prompt'
       const options = {}
@@ -113,6 +114,7 @@ const fs = {
       if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
         try {
           await this.getLastLocation()
+          filePickerOptions.suggestedName = suggestedName ? suggestedName : 'setlist.vez'
           fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
           await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
         } catch (error) {
