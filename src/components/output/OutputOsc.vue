@@ -253,7 +253,7 @@ export default defineComponent({
           if ((this.settingsOsc?.resolumePlayPauzeSync && this.settingsOsc?.resolumePlayPauzeSync !== '0' && this.settingsOsc?.resolumePlayPauzeSync !== 'false' ) && this.settingsOsc?.clip) {
             const adress = this.settingsOsc.clip.slice(0, -8) // remove /connect
             if (this.control.oscTimeFactor || this.control.oscTimeFactor === 0 ) {
-                elements.push({ address: `${adress}/transport/position/`, args: this.control.oscTimeFactor }) // 0-1
+                elements.push({ address: `${adress}/transport/position`, args: this.control.oscTimeFactor }) // 0-1
             }
             elements.push({ address: `${adress}/transport/position/behaviour/playmode`, args: 4 })
             elements.push({ address: `${adress}/transport/position/behaviour/playmodeaway`, args: 2 })
