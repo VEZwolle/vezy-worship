@@ -47,6 +47,33 @@
           </li>
         </ul>
       </li>
+      <li>
+        <b>Video</b><br>
+        bij het item optie 'resolumePlayPauzeSync' op 1 (0=uit)<br>
+        - clipadres = clipadres min '/connect'<br>
+        <ul>
+          <li>
+            Positie
+            - adres = <i>clipadres</i>/transport/position<br>
+            - waarde: 0 tot 1 (factor positie in de film)
+          </li>
+          <li>
+            Play / Pauze
+            - adres = <i>clipadres</i>/transport/position/behaviour/playdirection<br>
+            - waarde: 1 / 0.5
+          </li>
+          <li>
+            'Play Once en Hold'
+            - adres = <i>clipadres</i>/transport/position/behaviour/playmode<br>
+            - waarde: 4
+          </li>
+          <li>
+            'Relative'
+            - adres = <i>clipadres</i>/transport/position/behaviour/playmodeaway<br>
+            - waarde: 2
+          </li>
+        </ul>
+      </li>
     </ul>
     <p>
       Instellingen kunnen algemeen gemaakt worden, maar ook per item, overrullend, in de setlist ingesteld worden.<br>
@@ -87,6 +114,7 @@
       Afhankelijk item type zijn er 1 of meerdere instellingen mogelijk.<br><br>
       clip: te activeren item<br>
       text, title, translation: bestemming waar de tekst heen gestuurd word.<br>
+      resolumePlayPauzeSync: [0=uit of 1=aan] Video: Play/Pauze + Positie + 'Play Once en Hold' + 'Relative'<br>
       <img src="../../assets/help/oscsetttingsitem.png">
     </p>
     <p class="text-h6 q-mb-md">
