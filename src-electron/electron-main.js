@@ -5,9 +5,6 @@ const { autoUpdater } = ElectronUpdater // ivm CommonJS module
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
-import dgram from "node:dgram"
-
-const udp = dgram.createSocket("udp4")
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -21,6 +18,10 @@ let pcoLiveWindow
 const displayWindowsNr = []
 
 const config = new Store()
+
+// used for OSC, start socket if used.
+let udp
+if (config.get('oscEnabled')) createSocketUdp()
 
 // Expose methods to the renderer thread
 ipcMain.handle('getConfig', (e, key) => {
@@ -61,6 +62,9 @@ ipcMain.on('closeApp', () => {
   }
   mainWindow = null
   app.quit()
+})
+ipcMain.handle('udp', () => {
+  if (!udp) createSocketUdp()
 })
 ipcMain.handle('oscSend', (e, outAddress, outPort, buffer) => {
   // https://nodejs.org/api/dgram.html#socketsendmsg-offset-length-port-address-callback
@@ -230,6 +234,11 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
   }
 
   return window
+}
+
+async function createSocketUdp() {
+  const dgram = await import("node:dgram")
+  udp = dgram.createSocket("udp4")
 }
 
 /* New Update Available */

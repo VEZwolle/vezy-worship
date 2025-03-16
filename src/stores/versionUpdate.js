@@ -109,7 +109,7 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
-      case version < 2.0102 :
+      case version < 2.0103 :
       service.presentations.forEach(presentation => {
         if (!presentation.settings.osc) presentation.settings.osc = {}
         if (!presentation.settings.osc.clip) presentation.settings.osc.clip = null
@@ -128,6 +128,7 @@ export function versionUpdate (service) {
             break
           case 'image':
           case 'video':
+            if (!presentation.settings.osc.resolumePlayPauzeSync) presentation.settings.osc.resolumePlayPauzeSync = '0'
             break
           default:
         }

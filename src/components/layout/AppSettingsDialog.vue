@@ -351,7 +351,7 @@ export default defineComponent({
       algoliaIndexId: 0,
       imageFiles,
       osc: {
-        enabled: true,
+        enabled: false,
         outAddress: 'localhost',
         outPort: 7000,
         output: {}
@@ -429,6 +429,8 @@ export default defineComponent({
       if (this.$q.platform.is.electron) {
         await this.$electron.setConfig('displays', { ...this.displays })
         await this.$electron.setConfig('autoupdate', this.autoupdate)
+        await this.$electron.setConfig('oscEnabled', this.osc.enabled) // --> also set in localStorage, this one only for direct start udp at start app.
+        if (this.osc.enabled) await this.$electron.udp()
         setPresentationPresetsSettings() // save image handle's or empty
       }
       localStorage.setItem('backgroundColor.beamer', this.backgroundColor.beamer || '')
@@ -445,7 +447,7 @@ export default defineComponent({
       localStorage.setItem('serviceType', this.$store.serviceType || 'standaard')
       localStorage.setItem('darkMode', this.$q.dark.isActive)
 
-      localStorage.setItem('oscEnabled', this.osc.enabled )
+      localStorage.setItem('oscEnabled', this.osc.enabled)
       localStorage.setItem('oscOutAddress', this.osc.outAddress)
       localStorage.setItem('oscOutPort', this.osc.outPort)
       localStorage.setItem('oscOutput', JSON.stringify(this.osc.output))

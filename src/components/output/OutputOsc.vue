@@ -69,6 +69,14 @@ export default defineComponent({
       if (!this.control) return []
       const section = this.control.translationSections?.[this.control.selectedSectionIndex]
       return section?.slides.flat() || []
+    },
+    // only video
+    settingsPlay () {
+      return this.settings?.play ? true : false
+    },
+    contolTimeFactor () {
+      if (!this.control) return false
+      return this.control.oscTimeFactor
     }
   },
 
@@ -93,10 +101,17 @@ export default defineComponent({
     },
     'remaining' () {
       this.oscSendMsgData()
+    },
+    'settingsPlay' () {
+      this.oscSendMsgData()
+    },
+    'contolTimeFactor' () {
+      this.oscSendMsgData()
     }
   },
   created () {
-    console.log('OutputOsc created')
+    // (check) start upd socket 
+    this.udpOn()
     // check $store.output is completely
     this.$store.$patch((state) => {
       for (var key in oscOutput) {
@@ -233,7 +248,17 @@ export default defineComponent({
           }
           break
         case 'image':
+          break
         case 'video':
+          if ((this.settingsOsc?.resolumePlayPauzeSync && this.settingsOsc?.resolumePlayPauzeSync !== '0' && this.settingsOsc?.resolumePlayPauzeSync !== 'false' ) && this.settingsOsc?.clip) {
+            const adress = this.settingsOsc.clip.slice(0, -8) // remove /connect
+            if (this.control.oscTimeFactor || this.control.oscTimeFactor === 0 ) {
+                elements.push({ address: `${adress}/transport/position/`, args: this.control.oscTimeFactor }) // 0-1
+            }
+            elements.push({ address: `${adress}/transport/position/behaviour/playmode`, args: 4 })
+            elements.push({ address: `${adress}/transport/position/behaviour/playmodeaway`, args: 2 })
+            elements.push({ address: `${adress}/transport/position/behaviour/playdirection`, args: this.settingsPlay ? 1 : 0.5 }) // 0=backplay, 0.5 = pauze, 1=play
+          }
           break
         default:
       }
@@ -241,6 +266,9 @@ export default defineComponent({
       this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
     },
 
+    async udpOn () {
+      if (this.$q.platform.is.electron) await this.$electron.udp()
+    },
     async oscSendMsg (elements) {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
       if (elements.length < 1) return

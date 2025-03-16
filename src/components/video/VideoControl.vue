@@ -178,6 +178,7 @@ export default defineComponent({
     },
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.currentTime / this.duration
       if (this.settings.play) {
         this.settings.play = false
         this.settings.time = this.currentTime
@@ -199,8 +200,10 @@ export default defineComponent({
         }
       }
       this.settings.time = this.currentTime
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.settings.time / this.duration
     },
     play () {
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.settings.time / this.duration
       if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateAll || !this.presentation.control.readyStateFirst) {
         if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
         this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)

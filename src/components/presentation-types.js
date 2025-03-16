@@ -154,7 +154,8 @@ export default [
       endTime: -1,
       noLivestream: false,
       osc: {
-        clip: null
+        clip: null,
+        resolumePlayPauzeSync: '0'
       }
     },
     components: {
