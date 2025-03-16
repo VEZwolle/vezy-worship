@@ -7,6 +7,7 @@ import { versionUpdate } from './versionUpdate.js'
 import { sanitizerHtmlService } from '../components/common/CleanText.js'
 import { getDefaultURL } from '../components/presets-settings.js'
 import { addControlCloneDeep } from '../components/presentation-control-create.js'
+import oscOutput from '../components/osc-output-settings.js'
 
 let clearLastShortKey
 
@@ -31,7 +32,13 @@ export const useServiceStore = defineStore('service', {
     dbCollections: [''], // start with 1 empty string so showpopup works to load rest
     message: '',
     lastShortKey: '',
-    setlistScroll: false
+    setlistScroll: false,
+    osc: {
+      enabled: localStorage.getItem('oscEnabled') === 'true' || false,
+      outAddress: localStorage.getItem('oscOutAddress') || 'localhost',
+      outPort: localStorage.getItem('oscOutPort') || 7000,
+      output: JSON.parse(localStorage.getItem('oscOutput')) || cloneDeep(oscOutput)
+    }
   }),
   getters: {
     previewPresentationId(state) {
