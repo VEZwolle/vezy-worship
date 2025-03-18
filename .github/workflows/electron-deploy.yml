@@ -27,6 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x # use the latest LTS version of Node
+      - name: update npm to latest
+        run: npm i -g npm@latest
       - name: Install dependencies
         run: npm ci
       - name: Build app
