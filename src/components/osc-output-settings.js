@@ -22,4 +22,7 @@ export default {
   imageOffering: '/composition/layers/3/clips/7/connect', // int 0 or 1
   imageMinistry: '/composition/layers/3/clips/8/connect', // int 0 or 1
   imageEnd: '/composition/layers/3/clips/9/connect', // int 0 or 1
+  message: '/composition/layers/4/clips/1/connect', // int 0 or 1
+  messageClear: '/composition/layers/4/clear', //none
+  messageText: '/composition/layers/4/clips/1/video/effects/texteffect/effect/text/params/lines', // string
 }

@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// v-if="$store.osc.enabled"
 import { defineComponent } from 'vue'
 import * as osc from "osc-min"
 import oscOutput from '../osc-output-settings.js'
@@ -28,6 +27,9 @@ export default defineComponent({
   },
 
   computed: {
+    message () {
+      return this.$store.message
+    },
     id () {
       return this.presentation?.id
     },
@@ -81,6 +83,9 @@ export default defineComponent({
   },
 
   watch: {
+    'message' () { // mededeling
+      this.oscMessage()
+    },
     'id' () { // nieuwe presentation
       this.oscSendMsgTotal()
     },
@@ -125,6 +130,22 @@ export default defineComponent({
     this.$nextTick(() => { this.oscSendMsgTotal() })
   },
   methods: {
+    oscMessage () {
+      if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
+      let elements = []
+
+      if (this.message) {
+        // Start message
+        elements.push({ address: this.oscOut.messageText, args: this.message })
+        elements.push({ address: this.oscOut.message, args: 1 })
+      } else {
+      // stop message
+        elements.push({ address: this.oscOut.messageClear })
+        elements.push({ address: this.oscOut.messageText, args: '' })
+      }
+
+      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
+    },
     oscSendMsgTotal () {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
 
