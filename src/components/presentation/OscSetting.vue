@@ -36,10 +36,6 @@ export default defineComponent({
     return {
       settingsOsc: this.osc
     }
-  },
-  computed: {
-  },
-  methods: {
   }
 })
 </script>
