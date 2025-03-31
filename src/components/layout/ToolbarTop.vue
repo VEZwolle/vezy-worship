@@ -299,16 +299,19 @@ export default defineComponent({
   mounted () {
   },
   methods: {
-    create () {
+    async getPresentationsPresetsSettings () {
       if (this.$q.platform.is.electron) {
-        getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
+        const [ replaceDefaultsImages, replaceBackgroundUrl ] = await getPresentationsPresetsSettings()
+        this.$store.replaceBackgroundUrl = replaceBackgroundUrl
+        this.$store.replaceDefaultsImages = replaceDefaultsImages
       }
+    },
+    create () {
+      this.getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) this.$refs.serviceSettingsDialog.show()
     },
     open (add) {
-      if (this.$q.platform.is.electron) {
-        getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
-      }
+      this.getPresentationsPresetsSettings() // check once load default images set by settings -> werkt pas na user input by webapp; >=30 electron; <= v29 always
       if (this.saved || confirm('Aangebrachte wijzigingen worden niet opgeslagen.')) {
         this.isLoading = true
         this.$fs.open(add)
