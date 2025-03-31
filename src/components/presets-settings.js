@@ -92,9 +92,7 @@ export const imageFiles = [
 ]
 
 const replaceDefaults = []
-// used in output / outputpreview / beckgroundsettings
-
-export let replaceBackgroundUrl
+let replaceBackgroundUrl
 
 let firstRunGet = true
 // run once after first user klik; new/open/appsettings
@@ -129,6 +127,8 @@ export async function getPresentationsPresetsSettings () {
     const index = imageFiles.findIndex(t => t.name === 'background')
     imageFiles[index].beamer.baseFileId = BgPng
     if (imageFiles[index]?.beamer.URL) replaceBackgroundUrl = imageFiles[index].beamer.URL
+    // return replaceMedia
+    return [ replaceDefaults, replaceBackgroundUrl ]
   }
 }
 
@@ -185,9 +185,3 @@ export function removePresentationPresetsSettings (imageFileOutput) {
   imageFileOutput.handle = null
 }
 
-// used in service(store)
-export function getDefaultURL (fileId) {
-  const replaceDefault = replaceDefaults.find(t => t.fileId === fileId)
-  if (replaceDefault?.url) return replaceDefault.url
-  return false
-}

@@ -227,10 +227,19 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     window.setSkipTaskbar(true)
   }
 
-  if (process.env.DEV) {
-    window.loadURL(process.env.APP_URL + '#' + url)
+  if (url !== 'about:blank') {
+    if (process.env.DEV) {
+      window.loadURL(process.env.APP_URL + '#' + url)
+    } else {
+      window.loadFile('index.html', { hash: url })
+    }
   } else {
-    window.loadFile('index.html', { hash: url })
+    window.loadURL(url)
+  }
+
+  if (process.env.DEBUGGING) {
+    // if on DEV or Production with debug enabled
+    window.webContents.openDevTools()
   }
 
   return window

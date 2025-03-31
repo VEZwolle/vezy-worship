@@ -9,7 +9,6 @@
 import { defineComponent } from 'vue'
 import { createApp } from 'vue'
 import { debounce } from 'quasar'
-import { replaceBackgroundUrl } from '../presets-settings.js'
 import BgPng from '../../assets/bg.png'
 import ViewbeamerPng from '../../assets/viewbeamer.png'
 import ViewlivestreamPng from '../../assets/viewlivestream.png'
@@ -60,7 +59,7 @@ export default defineComponent({
         if (this.backgroundColor && !this.backgroundImageUrl) {
           return ` background-color: ${this.backgroundColor};`
         } else {
-          const image = this.backgroundImageUrl || replaceBackgroundUrl || BgPng
+          const image = this.backgroundImageUrl || this.$store.replaceBackgroundUrl || BgPng
           return ` background-image: url(${image}); background-size: cover; background-position: center;`
         }
       }

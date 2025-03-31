@@ -5,7 +5,6 @@ import PACKAGE from '../../package.json'
 import presentationPresets from '../components/presentation-presets.js'
 import { versionUpdate } from './versionUpdate.js'
 import { sanitizerHtmlService } from '../components/common/CleanText.js'
-import { getDefaultURL } from '../components/presets-settings.js'
 import { addControlCloneDeep } from '../components/presentation-control-create.js'
 import oscOutput from '../components/osc-output-settings.js'
 
@@ -16,6 +15,8 @@ export const useServiceStore = defineStore('service', {
     service: null,
     serviceSaved: null,
     media: {},
+    replaceBackgroundUrl: null,
+    replaceDefaultsImages: null,
     outputRatio: 16 / 9,
     previewPresentation: null,
     livePresentation: null,
@@ -311,8 +312,10 @@ export const useServiceStore = defineStore('service', {
 
       // Media from `/public` folder
       if (id.startsWith('/')) {
-        const UrlSettings = getDefaultURL(id) // check if public/image is replaced by settings
-        if (UrlSettings) return UrlSettings
+        // check if public/image is replaced by settings
+        const replaceDefault = this.replaceDefaultsImages?.find(t => t.fileId === id)
+        if (replaceDefault?.url) return replaceDefault.url
+        // use default
         return id.substring(1) // Remove leading slash to make it work on Electron
       }
 

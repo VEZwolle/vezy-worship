@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.17",
-    "@zip.js/zip.js": "^2.7.58",
+    "@zip.js/zip.js": "^2.7.60",
     "axios": "^1.8.4",
     "core-js": "^3.41.0",
     "dayjs": "^1.11.13",
