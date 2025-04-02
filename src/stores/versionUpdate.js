@@ -91,7 +91,7 @@ export function versionUpdate (service) {
             presentation.settings.text = CleanText(presentation.settings.text)
             presentation.settings.formatBeamer = 'Bijbeltekst'
             presentation.settings.formatLivestream = 'Breed'
-            presentation.settings.maxLivestreamChar = 350
+            presentation.settings.maxLivestreamChar = 500
             break
           }
           default:

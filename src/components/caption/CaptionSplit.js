@@ -2,7 +2,7 @@ import { wrapTextLinesFormat } from '../common/WrapText.js'
 
 const beamerFont = 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
 
-export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 350) {
+export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 500) {
   if (!text) {
     const slides = [['']]
     const beamerLines = [['']]

@@ -217,7 +217,7 @@ export default [
       bgFileId: null,
       formatBeamer: 'Bijbeltekst',
       formatLivestream: 'Breed',
-      maxLivestreamChar: 350,
+      maxLivestreamChar: 500,
       osc: {
         clip: null,
         text: null,
