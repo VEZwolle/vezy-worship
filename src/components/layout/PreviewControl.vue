@@ -63,15 +63,15 @@ export default defineComponent({
       return this.presentationType?.components?.control
     },
     title () {
-      if (this.presentation.settings.title) {
+      if (this.presentation?.settings.title) {
         return this.presentation.settings.title
       }
 
-      if (this.presentationType.title) {
+      if (this.presentationType?.title) {
         return this.presentationType.title(this.presentation.settings)
       }
 
-      return this.presentationType.name
+      return this.presentationType?.name || ''
     },
     arrowKeyActive () {
       return this.$store.arrowKeyLocation

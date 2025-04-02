@@ -16,7 +16,6 @@
 import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import MessageOutput from '../message/MessageOutput.vue'
-import { replaceBackgroundUrl } from '../presets-settings.js'
 import BgPng from '../../assets/bg.png'
 
 export default defineComponent({
@@ -70,7 +69,7 @@ export default defineComponent({
             style.backgroundColor = this.backgroundColor.beamer || '#000'
           }
         } else {
-          const image = this.backgroundImageUrl || replaceBackgroundUrl || BgPng
+          const image = this.backgroundImageUrl || this.$store.replaceBackgroundUrl || BgPng
           style.backgroundImage = `url(${image})`
           if (this.alpha) {
             style.filter = 'brightness(0) invert(1)'
@@ -90,7 +89,7 @@ export default defineComponent({
   methods: {
     setLastBg () {
       if (this.showBackground) {
-        if (this.presentation.settings?.bgFileId) {
+        if (this.presentation?.settings?.bgFileId) {
           if (!this.backgroundColor.beamer) {
             this.lastItemBG = true
             return

@@ -45,7 +45,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { replaceBackgroundUrl } from '../presets-settings.js'
 import BgPng from '../../assets/bg.png'
 
 export default defineComponent({
@@ -80,7 +79,7 @@ export default defineComponent({
       if (this.backgroundColorBeamer && !this.backgroundUrl) {
         style.backgroundColor = this.backgroundColorBeamer || '#000'
       } else {
-        const image = this.backgroundUrl || replaceBackgroundUrl || BgPng
+        const image = this.backgroundUrl || this.$store.replaceBackgroundUrl || BgPng
         style.backgroundImage = `url(${image})`
       }
 

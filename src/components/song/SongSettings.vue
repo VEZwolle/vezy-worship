@@ -4,6 +4,7 @@
       <q-tab name="text" label="Liedtekst" />
       <q-tab v-if="!editEmit" name="settings" label="Instellingen" />
       <q-tab v-if="!editEmit" name="background" label="Achtergrond" />
+      <q-tab v-if="!editEmit && $store.osc.enabled" name="osc" label="OSC" />
     </q-tabs>
 
     <q-separator />
@@ -238,6 +239,9 @@
       <q-tab-panel name="background">
         <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
+      <q-tab-panel name="osc">
+        <OscSetting v-model:osc="settings.osc" />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 
@@ -263,6 +267,7 @@ import SongSettingsTools from './SongSettingsTools.vue'
 import SongArrangeDialog from './SongArrangeDialog.vue'
 import SongDatabaseCompareDialog from './database/SongDatabaseCompareDialog.vue'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import OscSetting from '../presentation/OscSetting.vue'
 import VezyEditorSong from '../common/VezyEditorSong.vue'
 import { splitSong } from '../song/SongSplit.js'
 import { getAlgoliaCollections } from './database/algolia.js'
@@ -271,7 +276,7 @@ import set from 'lodash/set'
 
 export default defineComponent({
   name: 'SongSettings',
-  components: { BackgroundSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
+  components: { BackgroundSetting, OscSetting, SongArrangeDialog, SongDatabaseCompareDialog, VezyEditorSong },
   extends: SongSettingsTools,
   data () {
     return {

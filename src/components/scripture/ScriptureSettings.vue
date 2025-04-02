@@ -3,6 +3,7 @@
     <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="text" label="Bijbeltekst" />
       <q-tab name="background" label="Achtergrond" />
+      <q-tab v-if="$store.osc.enabled" name="osc" label="OSC" />
     </q-tabs>
 
     <q-separator />
@@ -118,6 +119,9 @@
       <q-tab-panel name="background">
         <BackgroundSetting v-model:bgFileId="settings.bgFileId" v-model:bgOpacity="settings.bgOpacity" />
       </q-tab-panel>
+      <q-tab-panel name="osc">
+        <OscSetting v-model:osc="settings.osc" />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
@@ -129,12 +133,13 @@ import CaptionSettingsPreview from '../caption/CaptionSettingsPreview.vue'
 import bibles from './bibles.js'
 import books from './books.js'
 import BackgroundSetting from '../presentation/BackgroundSetting.vue'
+import OscSetting from '../presentation/OscSetting.vue'
 import VezyEditor from '../common/VezyEditor.vue'
 import { CleanText } from '../common/CleanText.js'
 
 export default defineComponent({
   name: 'ScriptureSettings',
-  components: { CaptionSettingsPreview, BackgroundSetting, VezyEditor },
+  components: { CaptionSettingsPreview, BackgroundSetting, OscSetting, VezyEditor },
   extends: BaseSettings,
   data () {
     return {

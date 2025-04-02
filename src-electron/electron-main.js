@@ -19,6 +19,10 @@ const displayWindowsNr = []
 
 const config = new Store()
 
+// used for OSC, start socket if used.
+let udp
+if (config.get('oscEnabled')) createSocketUdp()
+
 // Expose methods to the renderer thread
 ipcMain.handle('getConfig', (e, key) => {
   return config.get(key)
@@ -58,6 +62,14 @@ ipcMain.on('closeApp', () => {
   }
   mainWindow = null
   app.quit()
+})
+ipcMain.handle('udp', () => {
+  if (!udp) createSocketUdp()
+})
+ipcMain.handle('oscSend', (e, outAddress, outPort, buffer) => {
+  // https://nodejs.org/api/dgram.html#socketsendmsg-offset-length-port-address-callback
+  // socket.send(msg[, offset, length][, port][, address][, callback])
+  udp.send(buffer, 0, buffer.byteLength, outPort, outAddress)
 })
 
 // Needed to use FileSystem API
@@ -215,13 +227,27 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     window.setSkipTaskbar(true)
   }
 
-  if (process.env.DEV) {
-    window.loadURL(process.env.APP_URL + '#' + url)
+  if (url !== 'about:blank') {
+    if (process.env.DEV) {
+      window.loadURL(process.env.APP_URL + '#' + url)
+    } else {
+      window.loadFile('index.html', { hash: url })
+    }
   } else {
-    window.loadFile('index.html', { hash: url })
+    window.loadURL(url)
+  }
+
+  if (process.env.DEBUGGING) {
+    // if on DEV or Production with debug enabled
+    window.webContents.openDevTools()
   }
 
   return window
+}
+
+async function createSocketUdp() {
+  const dgram = await import("node:dgram")
+  udp = dgram.createSocket("udp4")
 }
 
 /* New Update Available */

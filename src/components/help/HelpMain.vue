@@ -7,7 +7,7 @@
     <p>
       Presentatiesoftware voor beamer én livestream met afzonderlijke weergave voor beamer en livestream.<br>
       De beamer & livestream uitvoer zijn tevens voorzien van het alpha channel (en kan ook voor chroma key worden gebruikt).<br>
-      Tevens is er een stage & PCO live weergave aanwezig mogelijk.
+      Tevens is er een stage & PCO live weergave aanwezig mogelijk. En kunnen de teksten via OSC verstuurd worden.
     </p>
     <p>De dienst is thuis voor te bereiden via de web app. En in de kerk te openen op de desktop met uitvoer naar de verschillende schermen.</p>
     <p>Tijdens de dienst kunnen er mededelingen/oproepen boven in het scherm weergeven worden.</p>
@@ -76,7 +76,8 @@
   <ul>
     <li>
       Bij de desktop app kan je instellen naar welk scherm welke uitvoer toe moet.<br>
-      Onderin kan je de scherm nummers op de monitors tonen zoals VezyWorship deze hanteerd. (Dit kan anders zijn dan windows.) Bij wijzigen fysieke monitoren/aansluitingen kan het nodig zijn deze opnieuw in te stellen.
+      Onderin kan je de scherm nummers op de monitors tonen zoals VezyWorship deze hanteerd. (Dit kan anders zijn dan windows.) Bij wijzigen fysieke monitoren/aansluitingen kan het nodig zijn deze opnieuw in te stellen.<br>
+      Daarnaast kan je ook instellen of de OSC output aan moet staan.
     </li>
     <li>
       Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.

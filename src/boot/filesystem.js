@@ -11,6 +11,17 @@ const filePickerOptions = {
       'application/vez': '.vez'
     }
   }],
+  suggestedName:'setlist.vez',
+  excludeAcceptAllOption: true,
+  startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
+}
+const filePickerOptionsOsc = {
+  types: [{
+    description: 'VezyWorship OSC instellingen bestand',
+    accept: {
+      'application/vezosc': '.vezosc'
+    }
+  }],
   excludeAcceptAllOption: true,
   startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
 }
@@ -89,7 +100,7 @@ const fs = {
     }
   },
 
-  async save (showPicker = false) {
+  async save (showPicker = false, suggestedName = '') {
     if (!showPicker && fs.fileHandle) {
       // verifyPermission: 'granted', 'denied' or 'prompt'
       const options = {}
@@ -103,6 +114,7 @@ const fs = {
       if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
         try {
           await this.getLastLocation()
+          filePickerOptions.suggestedName = suggestedName ? suggestedName : 'setlist.vez'
           fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
           await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
         } catch (error) {
@@ -262,7 +274,93 @@ const fs = {
         actions: [{ icon: 'close', color: 'white' }]
       })
     }
+  },
+
+  async importOscConfig () {
+    if (!('showOpenFilePicker' in window)) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+    let oscFileHandle
+    try {
+      await this.getLastLocation()
+      const [fileHandle] = await window.showOpenFilePicker(filePickerOptionsOsc)
+      oscFileHandle = fileHandle
+      await set('VezyLastUsedLocation', oscFileHandle) // save to IndexedDB
+
+      const file = await fileHandle.getFile()
+
+      // Read file list from zip
+      const zipReader = new zip.ZipReader(new zip.BlobReader(file))
+      const entries = await zipReader.getEntries()
+
+      // Load osc output instellingen
+      let oscOutput = entries.find(e => e.filename === 'oscoutput.json')
+      if (!oscOutput) {
+        Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship OSC instellingen bestand' })
+        await zipReader.close()
+        return false
+      }
+
+      oscOutput = await oscOutput.getData(new zip.TextWriter())
+      oscOutput = JSON.parse(oscOutput)
+
+      await zipReader.close()
+
+      return oscOutput
+
+    } catch (error) {
+      if (error.name === 'AbortError') return // user abort or files too sensitive or dangerous
+      console.error(error)
+      Notify.create({ type: 'negative', message: 'Fout bij openen VezyWorship OSC instellingen bestand' })
+      return false
+    }
+  },
+
+  async exportOscConfig (oscOutput) {
+    let oscFileHandle
+    // Show SaveFilePicker on first save
+    if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
+      try {
+        await this.getLastLocation()
+        oscFileHandle = await window.showSaveFilePicker(filePickerOptionsOsc)
+        await set('VezyLastUsedLocation', oscFileHandle) // save to IndexedDB
+      } catch (error) {
+        if (error.name === 'AbortError') return Notify.create({ type: 'negative', message: 'Exporteren is geannuleerd' }) // user abort or files too sensitive or dangerous
+        console.error(error) // unknown error --> download file via catch by emty filehandle
+      }
+    }
+  
+    const blobWriter = new zip.BlobWriter('application/zip')
+    const zipWriter = new zip.ZipWriter(blobWriter)
+
+    // Add oscOutput data to zip
+    const jsonfile = JSON.stringify(oscOutput)
+    await zipWriter.add('oscoutput.json', new zip.TextReader(jsonfile))
+
+    const blob = await zipWriter.close()
+
+    // Write zip file to disk
+    try {
+      const writable = await oscFileHandle.createWritable()
+      await writable.write(blob)
+      await writable.close()
+
+      Notify.create({ type: 'positive', message: `OSC output instellingen opgeslagen als ${oscFileHandle.name}`, position: 'top' })
+      return true
+    } catch {
+      Notify.create({
+        type: 'negative',
+        message: 'OSC output instellingen kon niet worden opgeslagen. --> Downloaden... gelukt?',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'oscoutput.vezosc'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
+    }
   }
+
 }
 
 export default defineBoot(({ app }) => {

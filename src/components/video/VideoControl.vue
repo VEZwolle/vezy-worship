@@ -1,66 +1,71 @@
 <template>
-  <div v-if="!readyStateAll" style="margin: auto;">
-    <q-spinner color="primary" size="3em" />
-  </div>
-  <div v-show="readyStateAll">
-    <div
-      v-shortkey="shortkeysNextBack"
-      class="q-pa-md"
-      @shortkey="baseHandleArrow"
-      @click="setHandleArrowLocation"
-    >
-      <video
-        ref="player"
-        :src="fileUrl"
-        preload="auto"
-        muted
-        class="full-width"
-        playsinline
-        disablePictureInPicture
-        controlsList="nodownload noremoteplayback noplaybackrate"
-        x-webkit-airplay="deny"
-        @timeupdate="timeupdate"
-        @loadedmetadata="loadedmetadata"
-        @canplaythrough="canplaythrough"
-      />
+  <div v-if="fileUrl">
+    <div v-if="!readyStateAll" style="margin: auto;">
+      <q-spinner color="primary" size="3em" />
     </div>
-    <div v-if="duration" class="q-px-md row">
-      <div class="q-pa-md col2">
-        <q-btn
-          v-shortkey="shortkeysPlay"
-          round
-          color="primary"
-          :icon="iconPlayPause"
-          @click="togglePlayPause"
-          @shortkey="togglePlayPause"
-        >
-          <q-tooltip>Start/Pause</q-tooltip>
-        </q-btn>
-      </div>
-      <div class="q-px-md col">
-        <q-badge color="secondary">
-          {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
-        </q-badge>
-        <q-slider
-          v-model="currentTime"
-          track-size="1vh"
-          color="primary"
-          inner-track-color="secondary"
-          :min="0"
-          :max="duration"
-          :inner-min="settings.startTime"
-          :inner-max="settings.endTime"
-          label
-          :label-value="currentTimeF"
-          :marker-labels="markerLabels"
-          @pan="moveTime"
-          @click="moveTime"
+    <div v-show="readyStateAll">
+      <div
+        v-shortkey="shortkeysNextBack"
+        class="q-pa-md"
+        @shortkey="baseHandleArrow"
+        @click="setHandleArrowLocation"
+      >
+        <video
+          ref="player"
+          :src="fileUrl"
+          preload="auto"
+          muted
+          class="full-width"
+          playsinline
+          disablePictureInPicture
+          controlsList="nodownload noremoteplayback noplaybackrate"
+          x-webkit-airplay="deny"
+          @timeupdate="timeupdate"
+          @loadedmetadata="loadedmetadata"
+          @canplaythrough="canplaythrough"
         />
       </div>
-      <div class="q-px-md col2">
-        <h6>{{ remainingF }}</h6>
+      <div v-if="duration" class="q-px-md row">
+        <div class="q-pa-md col2">
+          <q-btn
+            v-shortkey="shortkeysPlay"
+            round
+            color="primary"
+            :icon="iconPlayPause"
+            @click="togglePlayPause"
+            @shortkey="togglePlayPause"
+          >
+            <q-tooltip>Start/Pause</q-tooltip>
+          </q-btn>
+        </div>
+        <div class="q-px-md col">
+          <q-badge color="secondary">
+            {{ `${currentTimeF} (${settings.play ? 'Bezig met afspelen' : 'gestopt'})` }}
+          </q-badge>
+          <q-slider
+            v-model="currentTime"
+            track-size="1vh"
+            color="primary"
+            inner-track-color="secondary"
+            :min="0"
+            :max="duration"
+            :inner-min="settings.startTime"
+            :inner-max="settings.endTime"
+            label
+            :label-value="currentTimeF"
+            :marker-labels="markerLabels"
+            @pan="moveTime"
+            @click="moveTime"
+          />
+        </div>
+        <div class="q-px-md col2">
+          <h6>{{ remainingF }}</h6>
+        </div>
       </div>
     </div>
+  </div>
+  <div v-else>
+    Geen video bestand gevonden.
   </div>
 </template>
 
@@ -178,6 +183,7 @@ export default defineComponent({
     },
     togglePlayPause () {
       if (!this.settings.play && this.currentTime >= this.settings.endTime) return
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.currentTime / this.duration
       if (this.settings.play) {
         this.settings.play = false
         this.settings.time = this.currentTime
@@ -199,8 +205,10 @@ export default defineComponent({
         }
       }
       this.settings.time = this.currentTime
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.settings.time / this.duration
     },
     play () {
+      if (this.duration > 0) this.presentation.control.oscTimeFactor = this.settings.time / this.duration
       if (!this.player || this.player.readyState < 4 || !this.presentation.control || !this.presentation.control.readyStateAll || !this.presentation.control.readyStateFirst) {
         if (this.setTimeoutIdPlay) clearTimeout(this.setTimeoutIdPlay) // no dubble
         this.setTimeoutIdPlay = setTimeout(() => this.play(), 50)

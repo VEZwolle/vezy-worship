@@ -91,7 +91,7 @@ export function versionUpdate (service) {
             presentation.settings.text = CleanText(presentation.settings.text)
             presentation.settings.formatBeamer = 'Bijbeltekst'
             presentation.settings.formatLivestream = 'Breed'
-            presentation.settings.maxLivestreamChar = 350
+            presentation.settings.maxLivestreamChar = 500
             break
           }
           default:
@@ -105,6 +105,31 @@ export function versionUpdate (service) {
             presentation.settings.position = 'RO'
             break
           }
+          default:
+        }
+      })
+      // eslint-disable-next-line
+      case version < 2.0103 :
+      service.presentations.forEach(presentation => {
+        if (!presentation.settings.osc) presentation.settings.osc = {}
+        if (!presentation.settings.osc.clip) presentation.settings.osc.clip = null
+        switch (presentation.type) {
+          case 'song':
+            if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+              if (!presentation.settings.osc.translation) presentation.settings.osc.translation = null
+            break
+          case 'caption':
+          case 'scripture':
+            if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+              if (!presentation.settings.osc.title) presentation.settings.osc.title = null
+            break
+          case 'countdown':
+            if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+            break
+          case 'image':
+          case 'video':
+            if (!presentation.settings.osc.resolumePlayPauzeSync) presentation.settings.osc.resolumePlayPauzeSync = '0'
+            break
           default:
         }
       })
