@@ -116,4 +116,19 @@ export default defineComponent({
 .q-item:hover .setlist-actions {
   opacity: 1;
 }
+
+.sortable-ghost {
+  opacity: 0.5;
+  background: #c21515;
+  border: 1px dashed #150227;
+}
+.sortable-drag {
+  background: #4913e0;
+}
+.sortable-selected {
+  background: #7ce01e;
+}
+.sortable-chosen  {
+  background: #356905;
+}
 </style>

@@ -37,6 +37,7 @@
     "pinia": "^3.0.1",
     "pinia-shared-state": "1.0.1",
     "quasar": "^2.18.1",
+    "sortablejs": "^1.15.6",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue-three-shortkey": "^4.0.1",
