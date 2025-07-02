@@ -16,6 +16,7 @@
       Vul op de 2e regel de <i>Bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
       Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database, via het dropdown menu kan je de tekst ook toevoegen.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
+      Opm.: wanneer er geen verse vanaf wordt gekozen wordt het hele hoofdstuk ingeladen.<br>
       <img src="../../assets/help/addscripturedialog.png">
     </p>
     <p>
