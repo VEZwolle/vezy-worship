@@ -140,8 +140,8 @@ function splitToSectionsN (allLines, maxLineCount = 10000) {
   let lineCount = 0
   let sections = []
   let beamerLines = []
-  let htmlText = '<div>'
-    
+  let htmlText = ''
+  
   allLines.forEach(allLine => {
     let htmlFormat = ''
     if (allLine.newLine ) { // volgende regel starten
@@ -166,9 +166,7 @@ function splitToSectionsN (allLines, maxLineCount = 10000) {
         htmlText = ''
         beamerLines = []
       }
-      if (lineCount === 1) {
-        htmlFormat += '<div>'
-      }
+      if (lineCount === 1) htmlText += '<div>'
       if (allLine.line > activeUserLine ) { // = niewe regel door gebruiker, laten bestaan.
         // sluit alle formats, en voeg dan regeleinde toe.
         if (activeClassCount) {
@@ -182,9 +180,10 @@ function splitToSectionsN (allLines, maxLineCount = 10000) {
           }
           activeClassCount = 0
         }
-        htmlFormat += `</div><div>`
+        htmlText += `${htmlFormat}</div><div>`
+        htmlFormat = ''
       } else {
-        htmlText += ' ' // spatie toevoegen voor gewrapte nieuwe regel.
+        htmlText += ' ' // spatie toevoegen voor gewrapte nieuwe regel. //nog check dat niet aan begin regel komt.
       }
     }
     beamerLines.push(allLine)
