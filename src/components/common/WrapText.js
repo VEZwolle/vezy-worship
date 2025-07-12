@@ -180,7 +180,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
 
     // empty lines add
     if (lineRFS.length === 0) { // || (lineRFS.length === 1 && lineRFS[0]?.text === ' ')) {
-      allLines.push({ text: '  ', class: null, newLine: true })
+      allLines.push({ text: '  ', class: null, newLine: true, line: i })
       continue // for lines[n]
     }
 
@@ -216,13 +216,13 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
               default:
                 remainingWidth = remainingWidth - pieceWidth
             }
-            allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: firstlinePiece })
+            allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: firstlinePiece, line: i })
             break
           case (j + 1 === wrapLineRFS.length):
             remainingWidth = maxWidth - getTextWidth(wrapLineRFS[j], lineRFS[n].font, lineRFS[n].letterSpacing)
             // eslint-disable-next-line
           default:
-            allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: true })
+            allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: true, line: i })
         }
       }
 
