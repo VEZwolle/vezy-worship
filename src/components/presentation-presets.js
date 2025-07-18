@@ -27,13 +27,13 @@ export default [
     id: 'ministry',
     type: 'image',
     settings: {
-      title: 'Nazorg',
+      title: 'Gebed en gesprek',
       beamer: {
-        fileId: '/images/nazorgbeamer.png',
+        fileId: '/images/ministrybeamer.png',
         ...imageDefaults
       },
       livestream: {
-        fileId: '/images/nazorglivestream.png',
+        fileId: '/images/ministrylivestream.png',
         ...imageDefaults
       }
     }

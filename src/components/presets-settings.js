@@ -71,7 +71,7 @@ export const imageFiles = [
   },
   {
     name: 'ministry',
-    label: 'Nazorg',
+    label: 'Gebed en gesprek',
     beamer: {
       ...fileDefaults
     },

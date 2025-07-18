@@ -43,7 +43,7 @@
         Onderstaande onderdelen worden standaard toegevoegd aan de dienst.
         <ul>
           <li>Collecte</li>
-          <li>Nazorg</li>
+          <li>Gebed en gesprek</li>
           <li>Einde dienst / gezegende zondag</li>
         </ul>
       </li>
