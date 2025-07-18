@@ -27,7 +27,7 @@ export default [
     id: 'ministry',
     type: 'image',
     settings: {
-      title: 'Gebed en gesprek',
+      title: 'Gesprek en gebed',
       beamer: {
         fileId: '/images/ministrybeamer.png',
         ...imageDefaults
