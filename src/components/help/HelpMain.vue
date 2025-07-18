@@ -38,7 +38,7 @@
           <li>Er kunnen verschillende afbeeldingen voor beamer & livestream worden gebruikt.</li>
           <li>Bij PNG bestanden wordt de transparantie uit de afbeelding meegenomen.</li>
           <li>Via de geavanceerde opties kan de afbeelding verschaald, gedraaid & verplaatst worden.</li>
-          <li>Standaard zijn de sheets voor de collecte, gebed en gesprek en einde dienst aanwezig.</li>
+          <li>Standaard zijn de sheets voor de collecte, gesprek en gebed en einde dienst aanwezig.</li>
         </ul>
       </li>
       <li>
@@ -83,7 +83,7 @@
       Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
     </li>
     <li>
-      In de desktop app kan je een eigen standaard achtergrond & standaard collecte/gebed en gesprek en einde dienst afbeeldingen instellen.
+      In de desktop app kan je een eigen standaard achtergrond & standaard collecte/gesprek en gebed en einde dienst afbeeldingen instellen.
     </li>
     <li>
       De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
