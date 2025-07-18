@@ -1258,10 +1258,10 @@ Host              : Oudjaarsavond Host"/>
 		<Clip name="Clip" uniqueId="1739402815364" layerIndex="1" columnIndex="7"/>
 		<Clip name="Clip" uniqueId="1739643630585" layerIndex="2" columnIndex="7">
 			<PreloadData>
-				<VideoFile value="C:\Users\Jeroen Faber\Documents\VS-Code\vezy-worship\public\images\nazorgbeamer.png"/>
+				<VideoFile value="C:\Users\Jeroen Faber\Documents\VS-Code\vezy-worship\public\images\ministrybeamer.png"/>
 			</PreloadData>
 			<Params name="Params">
-				<Param name="Name" T="STRING" default="nazorgbeamer" value="nazorgbeamer"/>
+				<Param name="Name" T="STRING" default="ministrybeamer" value="ministrybeamer"/>
 				<ParamChoice name="TransportType" default="0" value="0" storeChoices="0"/>
 			</Params>
 			<Transport name="Transport">
@@ -1305,7 +1305,7 @@ Host              : Oudjaarsavond Host"/>
 				<PrimarySource>
 					<VideoSource name="VideoSource" width="1920" height="1080" type="VideoFormatReaderSource">
 						<RenderPass name="RenderPassChain" type="RenderPassChain" uniqueTypeId="RenderPassChain" uniqueId="1743283480024" baseType="RenderPassChain"/>
-						<VideoFormatReaderSource fileName="C:\Users\Jeroen Faber\Documents\VS-Code\vezy-worship\public\images\nazorgbeamer.png" LoadingThread="TTM_THREADED"/>
+						<VideoFormatReaderSource fileName="C:\Users\Jeroen Faber\Documents\VS-Code\vezy-worship\public\images\ministrybeamer.png" LoadingThread="TTM_THREADED"/>
 					</VideoSource>
 				</PrimarySource>
 			</VideoTrack>

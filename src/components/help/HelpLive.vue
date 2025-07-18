@@ -68,7 +68,7 @@
       In de preview kolom kan je door de verschillende pagina's heen klikken (of na 1x aan klikken met de pijltjes toetsen doorlopen). Om zo onder in het scherm het voorbeeld te bekijken.<br>
       De geselecteerde pagina in de preview wordt na op de knop <img src="../../assets/help/golive.png"> klikken direct live gezet; Dit kan ook door te dubbelklikken op deze pagina/tekst. Wanneer er niets is geselecteerd wordt de 1e pagina van dat onderdeel live gezet na het klikken op de knop "Go Live".<br>
       Nadat een onderdeel naar live is verplaatst wordt automatisch het volgende onderdeel uit de setlist in de preview geplaatst.<br>
-      Door met de rechter muisknop op "Go Live" te klikken verschijnt er een Quick Live menu; <img src="../../assets/help/quickliverightkey.png"> hierin staat een aantal vaste onderdelen uit de dienst die je direct live kan zetten zoals de nazorg pagina en de collecte pagina.
+      Door met de rechter muisknop op "Go Live" te klikken verschijnt er een Quick Live menu; <img src="../../assets/help/quickliverightkey.png"> hierin staat een aantal vaste onderdelen uit de dienst die je direct live kan zetten zoals de gebed en gesprek pagina en de collecte pagina.
     </p>
     <div class="text-h6 q-mb-md">
       Rechter kolom: live
