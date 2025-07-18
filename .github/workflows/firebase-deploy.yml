@@ -27,7 +27,7 @@ jobs:
           cd api
           echo "${{ secrets.FIREBASE_FUNCTIONS_ENV_FILE }}" > .env
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+        uses: w9jds/firebase-action@v14.10.1
         with:
           args: deploy --only hosting,functions
         env:
