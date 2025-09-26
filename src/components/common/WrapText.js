@@ -49,7 +49,8 @@ export function wrapTextLines (lines, maxWidth, font, letterSpacing) {
   return allLines
 }
 
-export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, fontSizeSmall, fontBold, letterSpacing) {
+export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, fontSizeSmall, fontBold, letterSpacing, maxLineCount = 10000) {
+  // console.log('wrapTextLinesFormat maxLineCount:', maxLineCount)
   /*
   * lines[] = array van verschillende alinea's/regels
   *      Hierin zit geen <div><br> meer in (regeleinden), alleen nog opmaak: <b><i><u><sup><small>
@@ -90,8 +91,19 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
   *
   * Na alle lines[] gehad te hebben geef allLines[] retour
   */
-  const allLines = []
+  const allBeamerSections = []
+  let allLines = []
 
+  // opsplitsen: uitgaande van plain text & \n
+  // - voor regelstart voor max tekens '\n' --> bij 1e in en toets op single line zodat niet bij elke regeleinde gesplitst wordt
+  // - voor sentenceEndChars1 voor max tekens '\n.?!’”\'";'
+  // - voor sentenceEndChars2 voor max tekens ',:'
+  // - voor willekeurig teken voor max tekens .
+  // const regex = new RegExp(`.{1,}[\n.?!’”\'";]|.{1,}[,:]|.{1,}.`, 'gs')
+  const sentenceEndChars1 = '\n.?!’”\'";)'
+  const sentenceEndChars2 = ',:'
+  const regexB = new RegExp(`.{1,}[${sentenceEndChars1}]|.{1,}[${sentenceEndChars2}]|.{1,}.`, 'gs')
+  
   // start format
   let bold = false
   let italic = false
@@ -102,7 +114,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
   for (let i = 0; i < lines.length; i++) {
     // split main line into different formatting pieces
     const linePieces = lines[i].trimEnd().split(/<(?=b>|\/b>|i>|\/i>|u>|\/u>|sup>|\/sup>|small>|\/small>)/) // /<(?=([biuspmal/]*?)>)/) // '<')
-    const lineRFS = [] // line pieces Result Format Segments
+    let lineRFS = [] // line pieces Result Format Segments
     // get format change
     linePieces.forEach(linePiece => {
       let linePieceText = ''
@@ -191,20 +203,23 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
     for (let n = 0; n < lineRFS.length; n++) {
       // check last word complete or with section in other style
       let lastWordAddLength = 0
-      if (!lineRFS[n].lastCharSpace) {
+      if (!lineRFS[n].lastCharSpace) { //geen spatie aan het einde laatste woord vorige opmaak, mogelijk loopt woord verder met andere opmaak,
         for (let m = n + 1; m < lineRFS.length; m++) {
-          if (lineRFS[m].firstCharSpace) break
-          const remainingWords = lineRFS[m].text.split(' ')
-          lastWordAddLength += getTextWidth(remainingWords[0], lineRFS[m].font, lineRFS[m].letterSpacing)
-          if (remainingWords[0].length !== lineRFS[m].text.length) break
+          if (lineRFS[m].firstCharSpace) break // spatie aan begin --> is nieuw woord
+          const remainingWords = lineRFS[m].text.split(' ') // verschillende woorden opsplitsen
+          lastWordAddLength += getTextWidth(remainingWords[0], lineRFS[m].font, lineRFS[m].letterSpacing) // voeg lengte tekens aan woord toe
+          if (remainingWords[0].length !== lineRFS[m].text.length) break // wanneer 1e woord niet gelijk lengte totale opmaak regel --> meerdere woorden --> stop
         }
       }
 
+      // splits opmaak regel naar meerdere regels, rekening houdend met beschikbare lengte op 1 regel en extra lengte voor laatste woord.
       const wrapLineRFS = wrapText(lineRFS[n].text, remainingWidth, maxWidth, lastWordAddLength, lineRFS[n].font, lineRFS[n].letterSpacing)
 
+      // voeg regels toe aan totaal
       for (let j = 0; j < wrapLineRFS.length; j++) {
         switch (true) {
           case (j === 0):
+            // voor eerste regel check of nog bij heidige bij bast of op nieuwe regel begint.
             // eslint-disable-next-line
             const pieceWidth = getTextWidth(wrapLineRFS[j], lineRFS[n].font, lineRFS[n].letterSpacing)
             switch (true) {
@@ -218,8 +233,10 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
             }
             allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: firstlinePiece, line: i })
             break
+            // voor laatste regel, bepaal resterende lengte op de regels.
           case (j + 1 === wrapLineRFS.length):
             remainingWidth = maxWidth - getTextWidth(wrapLineRFS[j], lineRFS[n].font, lineRFS[n].letterSpacing)
+            // voor alle andere regels voeg regels dan 1e toe als nieuwe regel.
             // eslint-disable-next-line
           default:
             allLines.push({ text: wrapLineRFS[j], class: lineRFS[n].class, newLine: true, line: i })
@@ -227,7 +244,125 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
       }
 
       firstlinePiece = false
+
+      // check if count allLines.newLine > maximaal op pagina --> dan netjes opsplitsen
+      let countNewLines = allLines.reduce((count, allLine) => count + (allLine.newLine === true), 0) // count
+      while (countNewLines > maxLineCount) { // er moet opgesplitst worden.
+        // voor nu hier geen reset opmaak gedaan, als het goed is staan deze al allemaal op false aan einde van de line:i
+        // nog wel checken
+        let plainText = ''
+        let countLines = 0
+        let index = 0
+        let iLine = allLines[0].line
+        // get plaintext of lines
+        while (countLines <= maxLineCount) {
+          if (allLines[index].newLine) {
+            // extra spatie als begin niet heeft en einde vorige ook niet
+            // nog toevoegen ook verder op.
+            countLines++
+            if (countLines > maxLineCount) break
+          }
+          if (allLines[index].line !== iLine) {
+            plainText += '\n'
+            iLine = allLines[index].line
+          }
+          plainText += allLines[index].text
+          index++
+        }
+        // zoek een net einde.
+        let allLineSections = plainText.match(regexB)
+        if (allLineSections[0] === plainText) {
+          // huidige einde blijft gelijk.
+          allBeamerSections.push({ formats: allLines.splice(0, index), plainText: allLineSections[0] }) // voeg index opjecten toe aan push en verwijder uit array.
+          countNewLines -= maxLineCount
+          continue
+        }
+        // ander dan huidig einde;
+        const allLinesTemp = []
+        iLine = allLines[0].line
+        let plainTextLeftLenght = allLineSections[0].length
+        let k = 0
+        while (plainTextLeftLenght > 0) {
+          if (allLines[k].line !== iLine) { // nieuwe user inputline
+            plainTextLeftLenght -= '\n'.length
+            iLine = allLines[k].line
+          }
+          if (allLines[k].text.length < plainTextLeftLenght) {
+            // past geheel
+            allLinesTemp.push(allLines[k])
+            plainTextLeftLenght -= allLines[k].text.length
+            k++
+          } else {
+            // past niet geheel meer
+            allLinesTemp.push({ text: allLines[k].text.slice(0, plainTextLeftLenght), class: allLines[k].class, newLine: allLines[k].newLine, line: allLines[k].line })
+            allLines[k].text = allLines[k].text.slice(plainTextLeftLenght)
+            if (!allLines[k].text.length) k++ // wanneer leeg regel negeren verder;
+            if (allLines[k].text === ' ') k++ // wanneer spatie negeren verder; volgende is toch nieuwe section (geen combinatie met volgende regel in livestream door ander section).
+            allLines.splice(0, k)
+            plainTextLeftLenght = 0
+            allBeamerSections.push({ formats: allLinesTemp, plainText: allLineSections[0] })
+            // rest allLines heeft geen juiste regeleinden meer... zet terug naar lineRFS
+            remainingWidth = maxWidth
+            firstlinePiece = true
+            const lineRFStemp = []
+            if (allLines[0].line !== i) { // niet afgebroken in laatste line.
+              // <--> kan dit wel voorkomen? nieuwe line i gebeurt alleen bij regeleinde <br> en dat kan nooit meer dan 1 i verder zijn en die blijft dan geheel voor volgende sheet of een deel.
+              i = allLines[0].line // 'start opnieuw na i, resterend van i nog laten lopen
+              allLines = allLines.filter((allLine) => allLine.line === i)
+              lineRFS = []
+              const iClassEnd = allLines[length-1]?.class
+              bold = iClassEnd?.includes('bold') ? true : false
+              italic = iClassEnd?.includes('italic') ? true : false
+              underline = iClassEnd?.includes('underline') ? true : false
+              sup = iClassEnd?.includes('sup') ? true : false
+              small = iClassEnd?.includes('small') ? true : false
+              // <-->
+            } else {
+              lineRFS.splice(0, n + 1) // verwijder gereed zijde pagina (deel) van huidige line
+            }
+            allLines.forEach(allLine => {
+              // getTextWidth font & space
+              let font = allLine.class?.includes('italic') ? 'italic ' : ''
+              font += allLine.class?.includes('bold') ? 'bold ' : fontBold ? `${fontBold} ` : ''
+              font += allLine.class?.includes('sup') ? `${fontSizeSup} ` : allLine.class?.includes('small') ? `${fontSizeSmall} ` : `${fontSize} `
+              font += fonttype
+              //allLine to lineRFS
+              lineRFStemp.push({
+                text: allLine.text,
+                class: allLine.class,
+                font,
+                letterSpacing,
+                firstCharSpace: allLine.text.startsWith(' '),
+                lastCharSpace: allLine.text.endsWith(' ')
+              })
+            })
+            allLines = []
+            countNewLines = 0
+            lineRFS = lineRFStemp.concat(lineRFS)
+            n = -1
+          }
+          // backup voor loop... > 50 sections (temp/test) nog verwijderen
+          // if (allBeamerSections.length > 50) {
+          //  plainTextLeftLenght = 0 // get out while 1
+          //  countNewLines = 0    
+          // }
+        }
+      }
     }
   }
-  return allLines
+
+  if (allLines.length) {
+    let plainText = ''
+    let iLine = allLines[0].line
+    allLines.forEach(allLine => {
+      if (allLine.line !== iLine) {
+        plainText += '\n'
+        iLine = allLine.line
+      }
+      plainText += allLine.text
+    })
+    allBeamerSections.push({ formats: allLines, plainText: plainText })
+  }
+  console.log('E: allBeamerSections return:', allBeamerSections )
+  return allBeamerSections
 }

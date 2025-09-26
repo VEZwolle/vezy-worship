@@ -20,37 +20,19 @@ export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 500) {
     // beamer = sections[].beamerLines | livestream = sections[].slides[]
   
   const outputSections = []
-  // opsplisten naar livestream (sommatie hiervan = beamer section in control)
-  // opsplitsen: bij tellijng wordt <...> html ook meegeteld
-  // - minder maximaal aantal tekens
-  // - voor regelstart voor max tekens '<div>'
-  // - voor sentenceEndChars1 voor max tekens '.?!’”\'";'
-  // - voor sentenceEndChars2 voor max tekens ',:'
-  // - voor spatie voor max tekens ' '
-  // - voor willekeurig teken voor max tekens .
-  // const regex = new RegExp(`.{1,500}$|.{1,500}<div>|.{1,500}[.?!’”\'";]|.{1,500}[,:]|.{1,500} |.{1,500}.`, 'g')
-  const sentenceEndChars1 = '.?!’”\'";'
-  const sentenceEndChars2 = ',:'
-  const minMaxChars = `.{1,${maxCharsPerSlide}}`
-  const regex = new RegExp(`${minMaxChars}$|${minMaxChars}<div>|${minMaxChars}[${sentenceEndChars1}]|${minMaxChars}[${sentenceEndChars2}]|${minMaxChars} |${minMaxChars}.`, 'g')
-
+  
   inputSections.forEach(inputSection => {
       if (!inputSection) {
         const slides = [['']]
         const beamerLines = [['']]
         outputSections.push( { slides, beamerLines } )
       }
-      // beamer regels & opsplitsen naar ..regels vanuit inputsecton 
-      const htmlTextBeamerLinesS = splitToSectionsN(textLines(inputSection, beamerFormat, beamerFont), 7)
-      htmlTextBeamerLinesS.forEach(htmlTextBeamerLines => {
-        const beamerLines = htmlTextBeamerLines.beamerLines 
-        // opsplisten naar livestream (sommatie hiervan = beamer section in control)
-        let slides = htmlTextBeamerLines.htmlText
-          .match(regex)
+      // beamer regels & opsplitsen naar ..regels & slides met maximaal ...char vanuit inputsecton 
+      const textLinesTemp = textLines(inputSection, beamerFormat, beamerFont, 7)
+      textLinesTemp.forEach(textLineTemp => {
+        const beamerLines = textLineTemp.formats
+        const slides = splitSectionToSlides(textLineTemp, maxCharsPerSlide) // opsplisten naar livestream (sommatie hiervan = beamer section in control)
           .map(line => [line])
-
-        if (!slides.length) { slides = [['']] }
-
         outputSections.push( { slides, beamerLines } )
       })
   })
@@ -70,8 +52,9 @@ function textToLines (text) {
     .split('<br>')
 }
 
-function textLines (text, format, font) {
+function textLines (text, format, font, maxLineCount = 10000) {
   // for measurement text wrap (same as css)
+  // and split to beamer sections
   let maxWidth = 1000 // fictive width
   const letterSpacing = '0'
   let fontSize = 34 // px = 3.4vw /100*1000
@@ -90,7 +73,8 @@ function textLines (text, format, font) {
       maxWidth *= 0.92
   }
 
-  return wrapTextLinesFormat(textToLines(text), maxWidth, font, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing)
+  return wrapTextLinesFormat(textToLines(text), maxWidth, font, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing, maxLineCount)
+  // output beamer sections [{formats:[{beamerlines}], plainText:string]]
 }
 
 export function titleLines (title, format) {
@@ -119,134 +103,115 @@ export function titleLines (title, format) {
       maxWidth *= 0.92
   }
 
-  return wrapTextLinesFormat(textToLines(title), maxWidth, beamerFont, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing)
+  const titleLinesTemp = wrapTextLinesFormat(textToLines(title), maxWidth, beamerFont, `${fontSize}px`, `${0.7 * fontSize}px`, `${0.7 * fontSize}px`, fontBold, letterSpacing)
+  // titel zit altijd op 1 pagina, geen splitsing (fictief op 10000 regels bepaald)
+  return titleLinesTemp[0] ? titleLinesTemp[0].formats : []
+  // output beamer section: [{beamerlines}]
 }
 
 // split wrap text to N beamer lines en livestream chars
-function splitToSectionsN (allLines, maxLineCount = 10000) {
-  // wat moet bij regeleinden en aan beging/einde section staan. --> start met <div> einig met </div>
-  // start format
-  const activeClass = [
-    { format: 'bold', html: 'b', active: 0 },
-    { format: 'italic', html: 'i', active: 0 },
-    { format: 'underline', html: 'u', active: 0 },
-    { format: 'sup', html: 'sup', active: 0 },
-    { format: 'small', html: 'small', active: 0 }
-  ]
-  let activeClassCount = 0
+function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
+  const formatBeamerLines = section.formats
+  const plainText = section.plainText
+  const slides = []
 
-  // var
-  let activeUserLine = 0
-  let lineCount = 0
-  let sections = []
-  let beamerLines = []
-  let htmlText = ''
-  
-  allLines.forEach(allLine => {
-    let htmlFormat = ''
-    if (allLine.newLine ) { // volgende regel starten
-      lineCount++
-      if (lineCount > maxLineCount) {
-        // sluit alle format en voeg toe aan sections
-        if (activeClassCount) {
-          // start bij hoogste nummer.
-          for (let j = activeClassCount; j > 0; j--) {
-            const formatNr = activeClass.findIndex(t => t.active === j)
-            if (formatNr >= 0) {
-              htmlText += `</${activeClass[formatNr]?.html}>`
-              activeClass[formatNr].active = 0
-            }
+  // opsplisten naar livestream
+  // opsplitsen: uitgaande van plain text & \n
+  // - minder maximaal aantal tekens
+  // - voor regelstart voor max tekens '\n' (gelijk met sentenceEndChars1)
+  // - voor sentenceEndChars1 voor max tekens '.?!’”\'";'
+  // - voor sentenceEndChars2 voor max tekens ',:'
+  // - voor spatie voor max tekens ' '
+  // - voor willekeurig teken voor max tekens .
+  // const regex = new RegExp(`.{1,500}$|.{1,500}[\n.?!’”\'";]|.{1,500}[,:]|.{1,500} |.{1,500}.`, 'gs')
+  const sentenceEndChars1 = '\n.?!’”\'";'
+  const sentenceEndChars2 = ',:'
+  const minMaxChars = `.{1,${livestreamMaxCharCount}}`
+  const regex = new RegExp(`${minMaxChars}$|${minMaxChars}[${sentenceEndChars1}]|${minMaxChars}[${sentenceEndChars2}]|${minMaxChars} |${minMaxChars}.`, 'gs')
+
+  const plainTextSlides = plainText.match(regex)
+  console.log('plainTextSlides', plainTextSlides)
+  // splits beamer format naar zelfde delen toe.
+  const slidesFormatBeamerLines = []
+  if (plainTextSlides.length <= 1) { // alles op 1e slide livestream
+    slidesFormatBeamerLines.push(formatBeamerLines)
+  } else { // naar slides opdelen
+    let tempFormatBeamerLines = []
+    let n = 0
+    let lengthCount = plainTextSlides[n].replaceAll('\n', '').length
+    for (let i=0; i < formatBeamerLines.length; i++) {
+      // { text: string, class: string, newLine: boolean, line: int }
+      if (formatBeamerLines[i].text.length <= lengthCount) {
+        tempFormatBeamerLines.push(formatBeamerLines[i])
+        lengthCount -= formatBeamerLines[i].text.length
+        continue
+      }
+      let nextLineText = ''
+      if (lengthCount) {
+        tempFormatBeamerLines.push({ text: formatBeamerLines[i].text.slice(0, lengthCount), class: formatBeamerLines[i].class, newLine: formatBeamerLines[i].newLine, line: formatBeamerLines[i].line })
+        nextLineText = formatBeamerLines[i].text.slice(lengthCount)
+      }
+      slidesFormatBeamerLines.push(tempFormatBeamerLines)
+      tempFormatBeamerLines = []
+      n++
+      if (n >= plainTextSlides.length) {
+        lengthCount = 0
+        break
+      }
+      lengthCount = plainTextSlides[n].replaceAll('\n', '').length
+      while (nextLineText.length > 0) { // mocht er een lang stuk tekst staan dat vaker opgedeld moet worden, loop tot text op is.
+        if (nextLineText.length <= lengthCount) {
+          tempFormatBeamerLines.push({ text: nextLineText, class: formatBeamerLines[i].class, newLine: formatBeamerLines[i].newLine, line: formatBeamerLines[i].line })
+          lengthCount -= nextLineText.length
+          nextLineText = ''
+          continue
+        } else {
+          tempFormatBeamerLines.push({ text: nextLineText.slice(0, lengthCount), class: formatBeamerLines[i].class, newLine: formatBeamerLines[i].newLine, line: formatBeamerLines[i].line })
+          nextLineText = nextLineText.slice(lengthCount)
+          slidesFormatBeamerLines.push(tempFormatBeamerLines)
+          tempFormatBeamerLines = []
+          n++
+          if (n >= plainTextSlides.length) {
+            lengthCount = 0
+            break
           }
-          activeClassCount = 0
+          lengthCount = plainTextSlides[n].replaceAll('\n', '').length    
         }
-        htmlText += '</div>'
-        sections.push({ htmlText, beamerLines })
-        lineCount = 1
-        activeUserLine = allLine.line
-        htmlText = ''
-        beamerLines = []
       }
-      if (lineCount === 1) htmlText += '<div>'
-      if (allLine.line > activeUserLine ) { // = niewe regel door gebruiker, laten bestaan.
-        // sluit alle formats, en voeg dan regeleinde toe.
-        if (activeClassCount) {
-          // start bij hoogste nummer.
-          for (let j = activeClassCount; j > 0; j--) {
-            const formatNr = activeClass.findIndex(t => t.active === j)
-            if (formatNr >= 0) {
-              htmlFormat += `</${activeClass[formatNr].html}>`
-              activeClass[formatNr].active = 0
-            }
-          }
-          activeClassCount = 0
-        }
-        htmlText += `${htmlFormat}</div><div>`
-        htmlFormat = ''
-      } else {
-        htmlText += ' ' // spatie toevoegen voor gewrapte nieuwe regel. //nog check dat niet aan begin regel komt.
-      }
+      
     }
-    beamerLines.push(allLine)
-    const formats = allLine.class?.split(' ') || []
-    // close format's if not used
-    if (activeClassCount) {
-      // zoek eerst hoogste nummer, die kan gelijk sluiten, anders eerst andere sluiten en daarna (icm nieuwe weer openen).
-      for (let activeClassNr = activeClassCount; activeClassNr > 0; activeClassNr--) {
-        const lastFormat = activeClass.findIndex(t => t.active === activeClassNr)
-        if (lastFormat >= 0) {
-          if (!formats.includes(activeClass[lastFormat].format)) {
-            if (activeClassNr !== activeClassCount) { // latere moeten eerst gesloten worden
-              for (let j = activeClassCount; j > activeClassNr; j--) {
-                const formatNr = activeClass.findIndex(t => t.active === j)
-                if (formatNr >= 0) {
-                  htmlFormat += `</${activeClass[formatNr].html}>`
-                  activeClass[formatNr].active = 0
-                }
-                activeClassCount--
-              }
-            }
-            htmlFormat += `</${activeClass[lastFormat].html}>`
-            activeClass[lastFormat].active = 0
-            activeClassCount--
-          }
-        }
-      }
-    }
-    // add new format's & removed formats
-    formats.forEach(format => {
-      const formatNr = activeClass.findIndex(t => t.format === format)
-      if (formatNr >= 0) {
-        if (!activeClass[formatNr].active) {
-          activeClassCount++
-          activeClass[formatNr].active = activeClassCount
-          htmlFormat += `<${activeClass[formatNr].html}>`
-        }
-      }
-    })
-    // voeg (lokale) opmaak toe aan section tekst
-    htmlText += htmlFormat
-    // voeg text toe + speciale HTML tekens terug
-    htmlText += allLine.text
-      .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;') // html-entities
-      .replace(/ {2}/g, '&nbsp;&nbsp;') // dubbele SPATIE vervangen, enkele laten staan
-  })
-  // laatste section nog toevoegen, wanneer er nog wat in staat.
-  if (htmlText) {
-    // sluit alle format en voeg toe aan sections
-    if (activeClassCount) {
-      // start bij hoogste nummer.
-      for (let j = activeClassCount; j > 0; j--) {
-        const formatNr = activeClass.findIndex(t => t.active === j)
-        if (formatNr >= 0) {
-          htmlText += `</${activeClass[formatNr].html}>`
-          activeClass[formatNr].active = 0
-        }
-      }
-      activeClassCount = 0
-    }
-    sections.push({ htmlText, beamerLines })
-    lineCount = 0
-    htmlText = ''
+    if (tempFormatBeamerLines.length) slidesFormatBeamerLines.push(tempFormatBeamerLines)
   }
-  return sections
+  // per slide staan de beamer reagels in slidesFormatBeamerLines
+   const classHTML = [
+    { format: 'bold', html: 'b' },
+    { format: 'italic', html: 'i' },
+    { format: 'underline', html: 'u' },
+    { format: 'sup', html: 'sup' },
+    { format: 'small', html: 'small' }
+  ]
+
+  slidesFormatBeamerLines.forEach(slideFBL => {
+    let htmlText = '<div>'
+    let currentLine = slideFBL[0].line
+    slideFBL.forEach(formatText =>{
+      if (formatText.newLine && formatText.line > currentLine) {
+        htmlText += '</div><div>'
+        currentLine = formatText.line
+      }
+      let htmlformat = ''
+      const formats = formatText.class?.split(' ') || []
+      if (formats.length) {
+        formats.forEach(format => {
+          const html = classHTML.find(t => t.format === format)?.html
+          if (html) htmlformat += `<${html}>`
+        })
+      }
+      htmlText += htmlformat + formatText.text + htmlformat.replace('<','</')
+    })
+    htmlText += '</div>'
+    slides.push(htmlText)
+  })
+  console.log('slides', slides)
+  return slides
 }
