@@ -130,7 +130,6 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
   const regex = new RegExp(`${minMaxChars}$|${minMaxChars}[${sentenceEndChars1}]|${minMaxChars}[${sentenceEndChars2}]|${minMaxChars} |${minMaxChars}.`, 'gs')
 
   const plainTextSlides = plainText.match(regex)
-  console.log('plainTextSlides', plainTextSlides)
   // splits beamer format naar zelfde delen toe.
   const slidesFormatBeamerLines = []
   if (plainTextSlides.length <= 1) { // alles op 1e slide livestream
@@ -207,11 +206,12 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
           if (html) htmlformat += `<${html}>`
         })
       }
-      htmlText += htmlformat + formatText.text + htmlformat.replace('<','</')
+      
+      htmlText += htmlformat + formatText.text.replace(/ {2}/g, '&nbsp;&nbsp;').replace(/^ /g, '&nbsp;').replace(/ $/g, '&nbsp;') + htmlformat.replace('<','</')
     })
     htmlText += '</div>'
     slides.push(htmlText)
   })
-  console.log('slides', slides)
+
   return slides
 }

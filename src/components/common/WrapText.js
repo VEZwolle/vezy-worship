@@ -50,7 +50,9 @@ export function wrapTextLines (lines, maxWidth, font, letterSpacing) {
 }
 
 export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSizeSup, fontSizeSmall, fontBold, letterSpacing, maxLineCount = 10000) {
-  // console.log('wrapTextLinesFormat maxLineCount:', maxLineCount)
+  // lineRFS.push({text: string, class: string, font, letterSpacing, firstCharSpace: boolean, lastCharSpace: boolean })
+  // allLines.push({ text: string, class: sting, newLine: boolean, line: integer })
+
   /*
   * lines[] = array van verschillende alinea's/regels
   *      Hierin zit geen <div><br> meer in (regeleinden), alleen nog opmaak: <b><i><u><sup><small>
@@ -219,7 +221,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
       for (let j = 0; j < wrapLineRFS.length; j++) {
         switch (true) {
           case (j === 0):
-            // voor eerste regel check of nog bij heidige bij bast of op nieuwe regel begint.
+            // voor eerste regel check of nog bij huidige bij bast of op nieuwe regel begint.
             // eslint-disable-next-line
             const pieceWidth = getTextWidth(wrapLineRFS[j], lineRFS[n].font, lineRFS[n].letterSpacing)
             switch (true) {
@@ -258,7 +260,12 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
         while (countLines <= maxLineCount) {
           if (allLines[index].newLine) {
             // extra spatie als begin niet heeft en einde vorige ook niet
-            // nog toevoegen ook verder op.
+            if (index) {
+              if (!allLines[index].text.startsWith(' ') && !allLines[index - 1].text.endsWith(' ')) {
+                allLines[index - 1].text += ' '
+                plainText += ' '
+              }
+            }
             countLines++
             if (countLines > maxLineCount) break
           }
@@ -273,7 +280,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
         let allLineSections = plainText.match(regexB)
         if (allLineSections[0] === plainText) {
           // huidige einde blijft gelijk.
-          allBeamerSections.push({ formats: allLines.splice(0, index), plainText: allLineSections[0] }) // voeg index opjecten toe aan push en verwijder uit array.
+          allBeamerSections.push({ formats: allLines.splice(0, index), plainText: allLineSections[0] }) // voeg index objecten toe aan push en verwijder uit array.
           countNewLines -= maxLineCount
           continue
         }
@@ -305,9 +312,11 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
             remainingWidth = maxWidth
             firstlinePiece = true
             const lineRFStemp = []
+            let endSpace = false
             if (allLines[0].line !== i) { // niet afgebroken in laatste line.
               // <--> kan dit wel voorkomen? nieuwe line i gebeurt alleen bij regeleinde <br> en dat kan nooit meer dan 1 i verder zijn en die blijft dan geheel voor volgende sheet of een deel.
               i = allLines[0].line // 'start opnieuw na i, resterend van i nog laten lopen
+              endSpace = !(allLines.filter((allLine) => allLine.line === i+1)[1]?.startsWith(' '))
               allLines = allLines.filter((allLine) => allLine.line === i)
               lineRFS = []
               const iClassEnd = allLines[length-1]?.class
@@ -318,34 +327,47 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
               small = iClassEnd?.includes('small') ? true : false
               // <-->
             } else {
+              endSpace = lineRFS[n].endSpace
               lineRFS.splice(0, n + 1) // verwijder gereed zijde pagina (deel) van huidige line
             }
-            allLines.forEach(allLine => {
+            // hier nog spaties toeveoegen, 1e geen op nieuwe pagina, laatste 'endSpace'
+            for (let i = 0; i < allLines.length; i++) {
               // getTextWidth font & space
-              let font = allLine.class?.includes('italic') ? 'italic ' : ''
-              font += allLine.class?.includes('bold') ? 'bold ' : fontBold ? `${fontBold} ` : ''
-              font += allLine.class?.includes('sup') ? `${fontSizeSup} ` : allLine.class?.includes('small') ? `${fontSizeSmall} ` : `${fontSize} `
+              let font = allLines[i].class?.includes('italic') ? 'italic ' : ''
+              font += allLines[i].class?.includes('bold') ? 'bold ' : fontBold ? `${fontBold} ` : ''
+              font += allLines[i].class?.includes('sup') ? `${fontSizeSup} ` : allLines[i].class?.includes('small') ? `${fontSizeSmall} ` : `${fontSize} `
               font += fonttype
-              //allLine to lineRFS
+              if (i === 0) { // start spatie op nieuwe extra pagina verwijderen.
+                allLines[i].text = allLines[i].text.replace(/^ /g, '')
+              }
+              // add spaces
+              if (i === allLines.length - 1) {
+                if ( !allLines[i].text.endsWith(' ') && endSpace) {
+                  allLines[i].text += ' '
+                }
+              } else {
+                if (allLines[i+1].newLine) {
+                // extra spatie als begin niet heeft en einde vorige ook niet
+                  if (!allLines[i+1].text.startsWith(' ') && !allLines[i].text.endsWith(' ')) {
+                    allLines[i].text += ' '
+                  }
+                }
+              }
+              //allLines[i] to lineRFS
               lineRFStemp.push({
-                text: allLine.text,
-                class: allLine.class,
+                text: allLines[i].text,
+                class: allLines[i].class,
                 font,
                 letterSpacing,
-                firstCharSpace: allLine.text.startsWith(' '),
-                lastCharSpace: allLine.text.endsWith(' ')
+                firstCharSpace: allLines[i].text.startsWith(' '),
+                lastCharSpace: allLines[i].text.endsWith(' ')
               })
-            })
+            }
             allLines = []
             countNewLines = 0
             lineRFS = lineRFStemp.concat(lineRFS)
             n = -1
           }
-          // backup voor loop... > 50 sections (temp/test) nog verwijderen
-          // if (allBeamerSections.length > 50) {
-          //  plainTextLeftLenght = 0 // get out while 1
-          //  countNewLines = 0    
-          // }
         }
       }
     }
@@ -363,6 +385,6 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
     })
     allBeamerSections.push({ formats: allLines, plainText: plainText })
   }
-  console.log('E: allBeamerSections return:', allBeamerSections )
+
   return allBeamerSections
 }
