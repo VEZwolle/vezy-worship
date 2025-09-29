@@ -2,7 +2,7 @@ import { wrapTextLinesFormat } from '../common/WrapText.js'
 
 const beamerFont = 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
 
-export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 500) {
+export function splitTextCaption (text, beamerFormat, maxBeamerLinePerSection = 7, maxCharsPerSlide = 500) {
   if (!text) {
     const slides = [['']]
     const beamerLines = [['']]
@@ -28,7 +28,7 @@ export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 500) {
         outputSections.push( { slides, beamerLines } )
       }
       // beamer regels & opsplitsen naar ..regels & slides met maximaal ...char vanuit inputsecton 
-      const textLinesTemp = textLines(inputSection, beamerFormat, beamerFont, 7)
+      const textLinesTemp = textLines(inputSection, beamerFormat, beamerFont, maxBeamerLinePerSection)
       textLinesTemp.forEach(textLineTemp => {
         const beamerLines = textLineTemp.formats
         const slides = splitSectionToSlides(textLineTemp, maxCharsPerSlide) // opsplisten naar livestream (sommatie hiervan = beamer section in control)
@@ -36,7 +36,7 @@ export function splitTextCaption (text, beamerFormat, maxCharsPerSlide = 500) {
         outputSections.push( { slides, beamerLines } )
       })
   })
-
+  console.log('outputSections', outputSections)
   return outputSections  
 }
 
@@ -207,7 +207,16 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
         })
       }
       
-      htmlText += htmlformat + formatText.text.replace(/ {2}/g, '&nbsp;&nbsp;').replace(/^ /g, '&nbsp;').replace(/ $/g, '&nbsp;') + htmlformat.replace('<','</')
+      htmlText +=
+        htmlformat
+        + formatText.text
+          .replace(/&/g, '&amp;') // first & // html-entities
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/ {2}/g, '&nbsp;&nbsp;')
+          .replace(/^ /g, '&nbsp;')
+          .replace(/ $/g, '&nbsp;')
+        + htmlformat.replace('<','</')
     })
     htmlText += '</div>'
     slides.push(htmlText)

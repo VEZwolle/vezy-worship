@@ -19,6 +19,7 @@
           <CaptionSettingsPreview
             v-model:formatBeamer="settings.formatBeamer"
             v-model:formatLivestream="settings.formatLivestream"
+            v-model:maxBeamerLine="settings.maxBeamerLine"
             v-model:maxLivestreamChar="settings.maxLivestreamChar"
             :settings="settings"
             :saved-pos="savedPos"

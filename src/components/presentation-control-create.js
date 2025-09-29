@@ -44,9 +44,9 @@ export function addControlCloneDeep (presentation, noLivestream, splitSongLines,
         }
         resultPresentation.control.beamerTitleLines = resultPresentation.settings.formatBeamer === 'Geen' ? [] : titleLines(resultPresentation.settings.title, resultPresentation.settings.formatBeamer)
         if (noLivestream || resultPresentation.settings.formatLivestream === 'Geen') {
-          resultPresentation.control.sections = splitTextCaption(resultPresentation.settings.text, resultPresentation.settings.formatBeamer, 10000)
+          resultPresentation.control.sections = splitTextCaption(resultPresentation.settings.text, resultPresentation.settings.formatBeamer, resultPresentation.settings.maxBeamerLine || 7, 10000)
         } else {
-          resultPresentation.control.sections = splitTextCaption(resultPresentation.settings.text, resultPresentation.settings.formatBeamer, resultPresentation.settings.maxLivestreamChar || 500)
+          resultPresentation.control.sections = splitTextCaption(resultPresentation.settings.text, resultPresentation.settings.formatBeamer, resultPresentation.settings.maxBeamerLine || 7, resultPresentation.settings.maxLivestreamChar || 500)
         }
         if (!preview && startEnd) {
           // this.$store.startEnd = false // reset --> bijgolive
