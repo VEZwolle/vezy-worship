@@ -254,33 +254,33 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
         // nog wel checken
         let plainText = ''
         let countLines = 0
-        let index = 0
+        let indexW = 0
         let iLine = allLines[0].line
         // get plaintext of lines
         while (countLines <= maxLineCount) {
-          if (allLines[index].newLine) {
+          if (allLines[indexW].newLine) {
             // extra spatie als begin niet heeft en einde vorige ook niet
-            if (index) {
-              if (!allLines[index].text.startsWith(' ') && !allLines[index - 1].text.endsWith(' ')) {
-                allLines[index - 1].text += ' '
+            if (indexW) {
+              if (!allLines[indexW].text.startsWith(' ') && !allLines[indexW - 1].text.endsWith(' ')) {
+                allLines[indexW - 1].text += ' '
                 plainText += ' '
               }
             }
             countLines++
             if (countLines > maxLineCount) break
           }
-          if (allLines[index].line !== iLine) {
+          if (allLines[indexW].line !== iLine) {
             plainText += '\n'
-            iLine = allLines[index].line
+            iLine = allLines[indexW].line
           }
-          plainText += allLines[index].text
-          index++
+          plainText += allLines[indexW].text
+          indexW++
         }
         // zoek een net einde.
         let allLineSections = plainText.match(regexB)
         if (allLineSections[0] === plainText) {
           // huidige einde blijft gelijk.
-          allBeamerSections.push({ formats: allLines.splice(0, index), plainText: allLineSections[0] }) // voeg index objecten toe aan push en verwijder uit array.
+          allBeamerSections.push({ formats: allLines.splice(0, indexW), plainText: allLineSections[0] }) // voeg indexW objecten toe aan push en verwijder uit array.
           countNewLines -= maxLineCount
           continue
         }
@@ -331,36 +331,36 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
               lineRFS.splice(0, n + 1) // verwijder gereed zijde pagina (deel) van huidige line
             }
             // hier nog spaties toeveoegen, 1e geen op nieuwe pagina, laatste 'endSpace'
-            for (let i = 0; i < allLines.length; i++) {
+            for (let indexF = 0; indexF < allLines.length; indexF++) {
               // getTextWidth font & space
-              let font = allLines[i].class?.includes('italic') ? 'italic ' : ''
-              font += allLines[i].class?.includes('bold') ? 'bold ' : fontBold ? `${fontBold} ` : ''
-              font += allLines[i].class?.includes('sup') ? `${fontSizeSup} ` : allLines[i].class?.includes('small') ? `${fontSizeSmall} ` : `${fontSize} `
+              let font = allLines[indexF].class?.includes('italic') ? 'italic ' : ''
+              font += allLines[indexF].class?.includes('bold') ? 'bold ' : fontBold ? `${fontBold} ` : ''
+              font += allLines[indexF].class?.includes('sup') ? `${fontSizeSup} ` : allLines[indexF].class?.includes('small') ? `${fontSizeSmall} ` : `${fontSize} `
               font += fonttype
-              if (i === 0) { // start spatie op nieuwe extra pagina verwijderen.
-                allLines[i].text = allLines[i].text.replace(/^ /g, '')
+              if (indexF === 0) { // start spatie op nieuwe extra pagina verwijderen.
+                allLines[indexF].text = allLines[indexF].text.replace(/^ /g, '')
               }
               // add spaces
-              if (i === allLines.length - 1) {
-                if ( !allLines[i].text.endsWith(' ') && endSpace) {
-                  allLines[i].text += ' '
+              if (indexF === allLines.length - 1) {
+                if ( !allLines[indexF].text.endsWith(' ') && endSpace) {
+                  allLines[indexF].text += ' '
                 }
               } else {
-                if (allLines[i+1].newLine) {
+                if (allLines[indexF+1].newLine) {
                 // extra spatie als begin niet heeft en einde vorige ook niet
-                  if (!allLines[i+1].text.startsWith(' ') && !allLines[i].text.endsWith(' ')) {
-                    allLines[i].text += ' '
+                  if (!allLines[indexF+1].text.startsWith(' ') && !allLines[indexF].text.endsWith(' ')) {
+                    allLines[indexF].text += ' '
                   }
                 }
               }
               //allLines[i] to lineRFS
               lineRFStemp.push({
-                text: allLines[i].text,
-                class: allLines[i].class,
+                text: allLines[indexF].text,
+                class: allLines[indexF].class,
                 font,
                 letterSpacing,
-                firstCharSpace: allLines[i].text.startsWith(' '),
-                lastCharSpace: allLines[i].text.endsWith(' ')
+                firstCharSpace: allLines[indexF].text.startsWith(' '),
+                lastCharSpace: allLines[indexF].text.endsWith(' ')
               })
             }
             allLines = []
@@ -376,15 +376,22 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
   if (allLines.length) {
     let plainText = ''
     let iLine = allLines[0].line
-    allLines.forEach(allLine => {
-      if (allLine.line !== iLine) {
-        plainText += '\n'
-        iLine = allLine.line
+    for (let indexE = 0; indexE < allLines.length; indexE++) {
+      if (indexE && allLines[indexE].newLine) {
+        // extra spatie als begin niet heeft en einde vorige ook niet
+        if (!allLines[indexE].text.startsWith(' ') && !allLines[indexE - 1].text.endsWith(' ')) {
+          allLines[indexE - 1].text += ' '
+          plainText += ' '
+        }
       }
-      plainText += allLine.text
-    })
+      if (allLines[indexE].line !== iLine) {
+        plainText += '\n'
+        iLine = allLines[indexE].line
+      }
+      plainText += allLines[indexE].text
+    }
     allBeamerSections.push({ formats: allLines, plainText: plainText })
   }
-
+  
   return allBeamerSections
 }
