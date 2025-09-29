@@ -36,7 +36,7 @@ export function splitTextCaption (text, beamerFormat, maxBeamerLinePerSection = 
         outputSections.push( { slides, beamerLines } )
       })
   })
-  console.log('outputSections', outputSections)
+
   return outputSections  
 }
 
