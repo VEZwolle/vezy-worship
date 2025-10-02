@@ -133,6 +133,21 @@ export function versionUpdate (service) {
           default:
         }
       })
+        // eslint-disable-next-line
+      case version <= 2.0105:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'caption': {
+            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
+            break
+          }
+          case 'scripture': {
+            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
+            break
+          }
+          default:
+        }
+      })
       // eslint-disable-next-line
     default: // no changes
       // console.log(`version file: ${version}`)

@@ -55,16 +55,25 @@
         Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
       </li>
       <li>
+        <b>Max regels</b><br>
+        Hier kan je invoeren regels de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de invoer.<br>
+        Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+        <sup>
+          Zoek eerst of minder dan 'Max regels' regels<br>
+          Dan naar een regeleinde of [.?!'"’]<br>
+          Dan naar [,:; spatie]<br>
+          Dan naar iets binnen 'Max regels'.
+        </sup>
+      </li>
+      <li>
         <b>Max tekens</b><br>
         Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
         Splitsen van regels gebeurt met de volgende voorwaarden:<br>
         <sup>
-          Zoek eerst of minder dan ingestelde aantal tekens<br>
-          Dan naar een regeleinde<br>
-          Dan naar [.?!]+['"’]<br>
-          Dan naar [.?!]<br>
+          Zoek eerst of minder dan 'Max tekens' tekens<br>
+          Dan naar een regeleinde of [.?!'"’]<br>
           Dan naar [,:; spatie]<br>
-          Dan naar iets binnen ingestelde aantal tekens.
+          Dan naar iets binnen 'Max tekens'.
         </sup>
       </li>
     </ul>

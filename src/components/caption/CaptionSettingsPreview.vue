@@ -1,14 +1,29 @@
 <template>
   <div class="row q-gutter-md">
     <div class="col">
-      <q-select
-        v-model="settingsFormatBeamer"
-        :options="listFormatBeamer"
-        fill-input
-        outlined
-        label="Opmaak type"
-        @update:model-value="$emit('update:formatBeamer', settingsFormatBeamer)"
-      />
+      <div class="row">
+        <q-select
+          v-model="settingsFormatBeamer"
+          :options="listFormatBeamer"
+          fill-input
+          class="col q-pb-none"
+          outlined
+          label="Opmaak type"
+          @update:model-value="$emit('update:formatBeamer', settingsFormatBeamer)"
+        />
+        <q-input
+          v-model.number="settingsMaxBeamerLine"
+          type="number"
+          outlined
+          stack-label
+          class="col2 q-pl-md q-pb-none"
+          min="1"
+          step="1"
+          label="max regels"
+          :rules="[min1]"
+          @update:model-value="$emit('update:maxBeamerLine', settingsMaxBeamerLine)"
+        />
+      </div>
       <label class="label">Voorbeeld Beamer</label>
       <div>
         <OutputPreview :component="CaptionOutputBeamer" :presentation="{ settings, control }" bg-show="beamer" />
@@ -31,10 +46,10 @@
           outlined
           stack-label
           class="col2 q-pl-md q-pb-none"
-          min="100"
+          min="50"
           step="50"
           label="max tekens"
-          :rules="[min100]"
+          :rules="[min50]"
           @update:model-value="$emit('update:maxLivestreamChar', settingsMaxLivestreamChar)"
         />
       </div>
@@ -64,12 +79,14 @@ export default defineComponent({
     },
     formatBeamer: String,
     formatLivestream: String,
+    maxBeamerLine: Number,
     maxLivestreamChar: Number,
     savedPos: Number
   },
   emits: [
     'update:formatBeamer',
     'update:formatLivestream',
+    'update:maxBeamerLine',
     'update:maxLivestreamChar'
   ],
   setup () {
@@ -79,6 +96,7 @@ export default defineComponent({
     return {
       settingsFormatBeamer: this.settings.formatBeamer,
       settingsFormatLivestream: this.settings.formatLivestream,
+      settingsMaxBeamerLine: this.settings.maxBeamerLine,
       settingsMaxLivestreamChar: this.settings.maxLivestreamChar,
       listFormatLivestream: [
         'Standaard',
@@ -115,6 +133,10 @@ export default defineComponent({
       this.beamerTitleDebounce()
       this.splitSlidesDebounce()
     },
+    'settings.maxBeamerLine' () {
+      this.updated = false
+      this.splitSlidesDebounce()
+    },
     'settings.maxLivestreamChar' () {
       this.updated = false
       this.splitSlidesDebounce()
@@ -130,11 +152,17 @@ export default defineComponent({
     this.splitSlidesDebounce = debounce(this.splitSlidesDebounce, 500)
   },
   methods: {
-    min100 (val) {
+    min1 (val) {
       if (typeof val !== 'number') {
         return
       }
-      return val >= 100 || 'Minimaal 100'
+      return val >= 1 || 'Minimaal 1'
+    },
+    min50 (val) {
+      if (typeof val !== 'number') {
+        return
+      }
+      return val >= 50 || 'Minimaal 50'
     },
     beamerTitle () {
       // title beamer
@@ -145,7 +173,7 @@ export default defineComponent({
     },
     splitSlides () {
       // slides livestream & beamer
-      this.control.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer, this.settings.maxLivestreamChar || 500)
+      this.control.sections = splitTextCaption(this.settings.text, this.settings.formatBeamer,  this.settings.maxBeamerLine || 7, this.settings.maxLivestreamChar || 500)
       this.countCharSections()
     },
     splitSlidesDebounce () {
