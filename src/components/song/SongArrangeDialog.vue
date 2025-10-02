@@ -57,7 +57,6 @@
                         :contenteditable="lineEditText"
                         @dblclick="toggleLineEdit(lyricsIndex)"
                         @blur="updateLyricsLine(lyricsIndex)"
-                        @input="updateLyricsLine(lyricsIndex)"
                         @keydown.enter="updateLyricsLine(lyricsIndex, true)"
                         v-text="lyricsLine.text"
                       />
