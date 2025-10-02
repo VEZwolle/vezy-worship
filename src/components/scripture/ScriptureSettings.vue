@@ -64,7 +64,7 @@
               stack-label
               min="1"
               label="Vers van"
-              :rules="[required, min1]"
+              :rules="[min1]"
             />
           </div>
 
@@ -89,8 +89,8 @@
               label="Tekst inladen"
               icon="download"
               class="full-width"
-              :disable-main-btn="!settings.chapter || !settings.verseFrom"
-              :disable-dropdown="!settings.chapter || !settings.verseFrom || !settings.text"
+              :disable-main-btn="!settings.chapter"
+              :disable-dropdown="!settings.chapter || !settings.text"
               :loading="isLoadingScripture"
               @click="loadScripture(true)"
             >
@@ -153,11 +153,14 @@ export default defineComponent({
   computed: {
     title () {
       const bookDefinition = books.find(b => b.id === this.settings.book)
-      let title = `${bookDefinition.name} ${this.settings.chapter}:${this.settings.verseFrom}`
-      if (this.settings.verseTo) {
-        title += `-${this.settings.verseTo}`
+      let title = `${bookDefinition.name} ${this.settings.chapter}`
+      if (this.settings.verseFrom) {
+        title += `:${this.settings.verseFrom}`
+        if (this.settings.verseTo) {
+          title += `-${this.settings.verseTo}`
+        }
       }
-      return `${title}`
+    return `${title}`
     },
     bibleOptions () {
       return bibles.map(b => ({
