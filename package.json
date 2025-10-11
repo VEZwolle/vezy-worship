@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "2.1.5",
+  "version": "2.2.0",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans jpkleemans@gmail.com & Jeroen Faber",
@@ -23,44 +23,46 @@
     "api:update-data": "powershell ./dev/emulator-update-data.ps1"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.17",
-    "@zip.js/zip.js": "^2.7.60",
-    "axios": "^1.8.4",
-    "core-js": "^3.41.0",
-    "dayjs": "^1.11.13",
-    "electron-store": "10.0.1",
-    "electron-updater": "^6.6.2",
-    "idb-keyval": "^6.2.1",
+    "@quasar/extras": "^1.17.0",
+    "@zip.js/zip.js": "^2.8.7",
+    "axios": "^1.12.2",
+    "core-js": "^3.46.0",
+    "dayjs": "^1.11.18",
+    "electron-store": "11.0.2",
+    "electron-updater": "^6.7.0",
+    "idb-keyval": "^6.2.2",
     "lodash": "^4.17.21",
-    "nanoid": "^5.1.5",
+    "nanoid": "^5.1.6",
     "osc-min": "^2.1.2",
-    "pinia": "^3.0.1",
+    "pinia": "^3.0.3",
     "pinia-shared-state": "1.0.1",
-    "quasar": "^2.18.1",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
+    "quasar": "^2.18.5",
+    "vue": "^3.5.20",
+    "vue-router": "^4.5.1",
     "vue-three-shortkey": "^4.0.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.23.0",
-    "@quasar/app-vite": "^2.2.0",
+    "@eslint/js": "^9.37.0",
+    "@quasar/app-vite": "^2.4.0",
     "autoprefixer": "^10.4.21",
-    "electron": "^35.1.2",
-    "electron-builder": "^26.0.12",
-    "eslint": "^9.23.0",
+    "electron": "^38.2.2",
+    "electron-builder": "^26.1.0",
+    "eslint": "^9.37.0",
     "eslint-plugin-vue": "^9.33.0",
-    "globals": "^16.0.0",
-    "postcss": "^8.5.3",
-    "vite-plugin-checker": "^0.9.1"
+    "globals": "^16.4.0",
+    "postcss": "^8.5.6",
+    "vite-plugin-checker": "^0.11.0"
   },
   "overrides": {
     "broadcast-channel": {
       "@babel/runtime": "^7.26.10"
-    }
+    },
+    "glob": "^9.0.0",
+    "rimraf": "^4.0.0"
   },
   "engines": {
-    "node": "^28 || ^26 || ^24 || ^22 || ^20 || ^18",
+    "node": "^28 || ^26 || ^24 || ^22",
     "npm": ">= 11.2.0",
     "yarn": ">= 1.21.1"
   }

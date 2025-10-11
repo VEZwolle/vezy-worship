@@ -77,6 +77,7 @@ export default [
       bgFileId: null,
       formatBeamer: 'Geen',
       formatLivestream: 'Standaard',
+      maxBeamerLine: 7,
       maxLivestreamChar: 500,
       osc: {
         clip: null,
@@ -217,6 +218,7 @@ export default [
       bgFileId: null,
       formatBeamer: 'Bijbeltekst',
       formatLivestream: 'Breed',
+      maxBeamerLine: 7,
       maxLivestreamChar: 500,
       osc: {
         clip: null,
@@ -227,12 +229,14 @@ export default [
     title ({ bible, book, chapter, verseFrom, verseTo }) {
       const bookDefinition = books.find(b => b.id === book)
 
-      let title = `${bookDefinition.name} ${chapter}:${verseFrom}`
-
-      if (verseTo) {
-        title += `-${verseTo}`
+      let title = `${bookDefinition.name} ${chapter}`
+      if (verseFrom) {
+        title += `:${verseFrom}`
+        if (verseTo) {
+          title += `-${verseTo}`
+        }
       }
-
+      
       return `${title} <small>(${bible})</small>`
     },
     description (settings) {

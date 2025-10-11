@@ -36,11 +36,18 @@ app.use((req, res, next) => {
 app.post('/api/scripture', async (req, res) => {
   const { bible, book, chapter, verseFrom, verseTo } = req.body
 
-  const query = db.collection(bible)
-    .where('book', '==', book)
-    .where('chapter', '==', chapter)
-    .where('verse', '>=', verseFrom)
-    .where('verse', '<=', verseTo || verseFrom)
+  let query 
+  if (verseFrom) {
+    query = db.collection(bible)
+      .where('book', '==', book)
+      .where('chapter', '==', chapter)
+      .where('verse', '>=', verseFrom)
+      .where('verse', '<=', verseTo || verseFrom)
+  } else {
+    query = db.collection(bible)
+      .where('book', '==', book)
+      .where('chapter', '==', chapter)
+  }
 
   const result = await query.get()
 

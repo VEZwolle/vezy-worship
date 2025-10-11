@@ -57,7 +57,6 @@
                         :contenteditable="lineEditText"
                         @dblclick="toggleLineEdit(lyricsIndex)"
                         @blur="updateLyricsLine(lyricsIndex)"
-                        @input="updateLyricsLine(lyricsIndex)"
                         @keydown.enter="updateLyricsLine(lyricsIndex, true)"
                         v-text="lyricsLine.text"
                       />
@@ -186,6 +185,7 @@
 <script>
 import { defineComponent } from 'vue'
 import labels, { isLabel } from './labels.js'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default defineComponent({
   name: 'SongArrangeDialog',
@@ -364,7 +364,7 @@ export default defineComponent({
       if (!withLabel && this.copyLyrics[0].label) { startIndex = 1 }
       if (withLabel && !this.copyLyrics[this.copyLyrics.length - 1].empty) { this.insertLine(index + 1, 3) }
       for (let i = this.copyLyrics.length - 1; i >= startIndex; i--) {
-        this.lyricsLines.splice(index + 1, 0, this.copyLyrics[i])
+        this.lyricsLines.splice(index + 1, 0, cloneDeep(this.copyLyrics[i]))
       }
       if (withLabel && !this.copyLyrics[0].empty) { this.insertLine(index + 1, 3) }
       this.isLoading = false
