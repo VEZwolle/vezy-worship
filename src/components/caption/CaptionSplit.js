@@ -6,7 +6,8 @@ export function splitTextCaption (text, beamerFormat, maxBeamerLinePerSection = 
   if (!text) {
     const slides = [['']]
     const beamerLines = [['']]
-    return [{ slides, beamerLines }]
+    const oscText = [['']]
+    return [{ slides, beamerLines, oscText }]
   }
 
   const lineBreaks = [
@@ -25,7 +26,8 @@ export function splitTextCaption (text, beamerFormat, maxBeamerLinePerSection = 
       if (!inputSection) {
         const slides = [['']]
         const beamerLines = [['']]
-        outputSections.push( { slides, beamerLines } )
+        const oscText = [['']]
+        outputSections.push( { slides, beamerLines, oscText } )
       }
       // beamer regels & opsplitsen naar ..regels & slides met maximaal ...char vanuit inputsecton 
       const textLinesTemp = textLines(inputSection, beamerFormat, beamerFont, maxBeamerLinePerSection)
@@ -33,7 +35,7 @@ export function splitTextCaption (text, beamerFormat, maxBeamerLinePerSection = 
         const beamerLines = textLineTemp.formats
         const slides = splitSectionToSlides(textLineTemp, maxCharsPerSlide) // opsplisten naar livestream (sommatie hiervan = beamer section in control)
           .map(line => [line])
-        outputSections.push( { slides, beamerLines } )
+        outputSections.push( { slides, beamerLines, oscText: textLineTemp?.plainText ? textLineTemp?.plainText : '' } )
       })
   })
 
