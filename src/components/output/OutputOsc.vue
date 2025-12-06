@@ -60,7 +60,13 @@ export default defineComponent({
     isFinished () {
       return this.control?.isFinished ? this.control.isFinished : false
     },
-    // song, caption, scripture
+    // caption, scripture
+    oscText () {
+      if (!this.control) return []
+      const section = this.control.sections?.[this.control.selectedSectionIndex]
+      return section?.oscText || ''
+    },
+    // song
     lines () {
       if (!this.control) return []
       const section = this.control.sections?.[this.control.selectedSectionIndex]
@@ -133,6 +139,7 @@ export default defineComponent({
     oscMessage () {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
       let elements = []
+      let elementsC = []
 
       if (this.message) {
         // Start message
@@ -140,22 +147,43 @@ export default defineComponent({
         elements.push({ address: this.oscOut.message, args: 1 })
       } else {
       // stop message
-        elements.push({ address: this.oscOut.messageClear })
+        elements.push({ address: this.oscOut.messageClear, args: 1 })
+        elementsC.push({ address: this.oscOut.messageClear, args: 0 })
         elements.push({ address: this.oscOut.messageText, args: '' })
       }
 
-      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
+      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined), elementsC.filter(element => element.address !== '' && element.address !== undefined))
     },
     oscSendMsgTotal () {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
 
       let elements = []
-      if (this.isClear) elements.push({ address: this.oscOut.clear })
+      let elementsC = []
+      if (this.isClear) {
+        elements.push({ address: this.oscOut.clear, args: 1 })
+        elementsC.push({ address: this.oscOut.clear, args: 0 })
+      }
 
-      if (!this.presentation) return this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
+      if (!this.presentation) return this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined), elementsC.filter(element => element.address !== '' && element.address !== undefined))
 
       if (this.settingsOsc?.clip) {
-        if (!this.isClear) elements.push({ address: this.settingsOsc.clip, args: 1 })
+        // afwijkend bestemmingsadres in item
+        if (!this.isClear) {
+          elements.push({ address: this.settingsOsc.clip, args: 1 })
+          switch (this.presentationTypeId) {
+            case 'song':
+            case 'countdown':
+            case 'image':  
+            case 'caption':
+            case 'scripture':
+              break
+            case 'video':
+              elements.push({ address: this.oscOut.clear, args: 1 })
+              elementsC.push({ address: this.oscOut.clear, args: 0 })
+              break
+            default:
+          }
+        }
       } else {
         switch (this.presentationTypeId) {
           case 'song':
@@ -179,9 +207,9 @@ export default defineComponent({
                   elements.push({ address: this.oscOut.captionThema, args: 1 })
                   break
                 case 'Geen':
-                  elements.push({ address: this.oscOut.clear })
-                  break
                 default:
+                  elements.push({ address: this.oscOut.clear, args: 1 })
+                  elementsC.push({ address: this.oscOut.clear, args: 0 })
               }
             }
             break
@@ -189,7 +217,8 @@ export default defineComponent({
             if (!this.control?.isFinished) { // niet actief zetten wanneer finished
               if (!this.isClear ) elements.push({ address: this.oscOut.countdown, args: 1 })
             } else {
-              elements.push({ address: this.oscOut.clear })
+              elements.push({ address: this.oscOut.clear, args: 1 })
+              elementsC.push({ address: this.oscOut.clear, args: 0 })
             }
             break
           case 'image':
@@ -205,21 +234,23 @@ export default defineComponent({
                   elements.push({ address: this.oscOut.imageEnd, args: 1 })
                   break
                 default:
-                  elements.push({ address: this.oscOut.clear })
+                  elements.push({ address: this.oscOut.clear, args: 1 })
+                  elementsC.push({ address: this.oscOut.clear, args: 0 })
               }  
             }
             break
           case 'video':
-            elements.push({ address: this.oscOut.clear })
+            elements.push({ address: this.oscOut.clear, args: 1 })
+            elementsC.push({ address: this.oscOut.clear, args: 0 })
             break
           default:
         }
       }
       // add data
-      this.oscSendMsgData(elements)
+      this.oscSendMsgData(elements, elementsC)
     },
 
-    oscSendMsgData (elements = []) {
+    oscSendMsgData (elements = [], elementsC = []) {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron || !this.presentation) return
 
       let addressText
@@ -257,8 +288,7 @@ export default defineComponent({
           }
           if (this.settingsOsc?.text) addressText = this.settingsOsc.text
           if (this.settingsOsc?.title) addressTitle = this.settingsOsc.title
-
-          if (addressText) elements.push({ address: addressText, args: this.lines.join('\n').replace(/<br>/gi, '\n').replace(/<(.*?)>/gi, '').replace(/&nbsp;/gi, ' ') }) // .replace(/<(.*?)>/gi, '')
+          if (addressText) elements.push({ address: addressText, args: this.oscText.replace(/ *(?=\\n)/g, '') })
           if (addressTitle) elements.push({ address: addressTitle, args: this.title.replace(/<(.*?)>/gi, '') })
           break
         case 'countdown':
@@ -284,22 +314,28 @@ export default defineComponent({
         default:
       }
 
-      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined))
+      this.oscSendMsg(elements.filter(element => element.address !== '' && element.address !== undefined), elementsC.filter(element => element.address !== '' && element.address !== undefined))
     },
 
     async udpOn () {
       if (this.$q.platform.is.electron) await this.$electron.udp()
     },
-    async oscSendMsg (elements) {
+    async oscSendMsg (elements, elementsC) {
       if (!this.$store.osc.enabled || !this.$q.platform.is.electron) return
+      // send commands
       if (elements.length < 1) return
-
       const buffer = osc.toBuffer({
         timetag: new Date(new Date().getTime() + 0),
         elements
       })
-
       await this.$electron.oscSend(this.$store.osc.outAddress, this.$store.osc.outPort, buffer)
+      // remove select clear.
+      if (elementsC.length < 1) return
+      const bufferC = osc.toBuffer({
+        timetag: new Date(new Date().getTime() + 0),
+        elements: elementsC
+      })
+      await this.$electron.oscSend(this.$store.osc.outAddress, this.$store.osc.outPort, bufferC)
     }
   }
 })
