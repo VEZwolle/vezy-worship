@@ -9,7 +9,7 @@
     </div>
     <p>
       VezyWorship kan OSC commando's & platte teksten uitsturen naar een andere computer.<br>
-      Getest is het gebruik icm Resolume Avenue v7.13.<br>
+      Getest is het gebruik icm Resolume Arena v7.23.<br>
       <i>OSC werkt alleen in de desktop (electron) versie, en dient in de instellingen aangezet te worden.</i>
     </p>
     <p>
@@ -24,7 +24,7 @@
       <li>
         <b>Clear (leeg halen scherm)</b><br>
         - adres<br>
-        - geen waarde
+        - 1 (en daarna 0 om te deselecteren)
       </li>
       <li>
         <b>Go-Live (Activeren item)</b><br>
@@ -77,6 +77,7 @@
     </ul>
     <p>
       Instellingen kunnen algemeen gemaakt worden, maar ook per item, overrullend, in de setlist ingesteld worden.<br>
+      Voor de standaard afbeeldingen en countdown kan niet een waarde overrullend worden ingevoerd.<br>
     </p>
     <p class="text-h6 q-mb-md">
       Algemene instellingen:
