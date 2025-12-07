@@ -8,7 +8,7 @@
 	</CompositionInfo>
 	<Params name="Params">
 		<Param name="Name" T="STRING" default="" value="VezyResolumeOSC"/>
-		<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999979349852">
+		<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999974187315">
 			<PhaseSourceStatic name="PhaseSourceStatic"/>
 		</ParamRange>
 		<Param name="GlobalTransportTimelineControl" altName="Control Timelines" T="BOOL" default="1" value="0"/>
@@ -221,7 +221,7 @@
 				<VideoMixerStateID uniqueId="1765027234338"/>
 				<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739402816075" baseType="Mixer">
 					<Params name="Params">
-						<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.99283748865127563477">
+						<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.9455115199089050293">
 							<PhaseSourceStatic name="PhaseSourceStatic"/>
 						</ParamRange>
 					</Params>
@@ -297,7 +297,7 @@
 		</VideoTrack>
 	</CrossFader>
 	<TempoController name="TempoController"/>
-	<Deck name="Deck" uniqueId="1739402814930" closed="0" numLayersWithContent="4" numColumnsWithContent="10" numLayers="4" numColumns="13" deckIndex="0">
+	<Deck name="Deck" uniqueId="1739402814930" closed="0" numLayersWithContent="4" numColumnsWithContent="12" numLayers="4" numColumns="13" deckIndex="0">
 		<Params name="Params">
 			<Param name="Name" T="STRING" default="empty" value="Vezy"/>
 		</Params>
@@ -371,7 +371,6 @@
 				<FoldParams name="FoldParams">
 					<FoldState component="/groupedcomponent/gradient/color1/paramcolorcomponent/" folded="0"/>
 					<FoldState component="/groupedcomponent/gradient/color2/paramcolorcomponent/" folded="0"/>
-					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="0"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -462,9 +461,9 @@
 				<Params name="Params">
 					<ParamRange name="Position" T="DOUBLE" default="0" value="1798.7647056579592117">
 						<DurationSource name="DurationSource" defaultDuration="8.0000000000000017764s"/>
-						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0.22484558820724487305" defaultMillisecondsDuration="8000.0000000000009095" defaultBeatsDuration="16">
+						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0.22484558820724487305" defaultMillisecondsDuration="8000.000000000001819" defaultBeatsDuration="16">
 							<Params name="Params">
-								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="2" value="2">
+								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="8.0000000000000017764" value="2">
 									<PhaseSourceStatic name="PhaseSourceStatic"/>
 								</ParamRange>
 								<ParamChoice name="PlayDirection" T="INT32" default="2" value="1" storeChoices="0"/>
@@ -543,8 +542,6 @@
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/color/paramcolorcomponent/" folded="0"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/tracksettingscomponent/" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -567,9 +564,9 @@
 					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1739569170286" baseType="DryWetEffect">
 						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1739569170262" baseType="Effect" dwType="Effect">
 							<Params name="Params">
-								<ParamText name="Text" T="STRING" default="Resolume" value="">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Vertaling">
 									<Params name="Params">
-										<Param name="Lines" T="STRING" default="Resolume" value=""/>
+										<Param name="Lines" T="STRING" default="Resolume" value="Vertaling"/>
 									</Params>
 								</ParamText>
 								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
@@ -617,6 +614,25 @@
 							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739569170292" baseType="Mixer"/>
 						</ChoosableMixer>
 					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245573" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245557" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Distance" T="DOUBLE" default="10" value="10.359712230215828654">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+									<ValueRange name="minMax" min="0" max="480"/>
+								</ParamRange>
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45.323741007194229269">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245578"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245580" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
 				</RenderPass>
 				<ChoosableMixer name="Blend">
 					<VideoMixerStateID uniqueId="1765027234837"/>
@@ -625,15 +641,9 @@
 					<VideoSource storage="0" name="VideoSource" width="1920" height="1080" type="GeneratorVideoSource">
 						<RenderPass name="BlockTextGenerator" type="BlockTextGenerator" uniqueTypeId="3600113141201236715" uniqueId="1739402816093" baseType="Generator">
 							<Params name="Params">
-								<ParamText name="Text" T="STRING" default="Resolume" value="brsgro'gn[
-regnerg
-erg
-mner">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Liedtekst">
 									<Params name="Params">
-										<Param name="Lines" T="STRING" default="Resolume" value="brsgro'gn[
-regnerg
-erg
-mner"/>
+										<Param name="Lines" T="STRING" default="Resolume" value="Liedtekst"/>
 									</Params>
 								</ParamText>
 								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
@@ -677,9 +687,9 @@ mner"/>
 			</Params>
 			<Transport name="Transport">
 				<Params name="Params">
-					<ParamRange name="Position" T="DOUBLE" default="0" value="4113.9616999959171153">
+					<ParamRange name="Position" T="DOUBLE" default="0" value="0">
 						<DurationSource name="DurationSource"/>
-						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0.82279233999918344189" defaultBeatsDuration="8">
+						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0" defaultBeatsDuration="8">
 							<Params name="Params">
 								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="5" value="2">
 									<PhaseSourceStatic name="PhaseSourceStatic"/>
@@ -849,11 +859,12 @@ mner"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/transform/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/tracksettingscomponent/" folded="1"/>
+					<FoldState component="/groupedcomponentrenderpasschaincomponentdropshadow" folded="0"/>
+					<FoldState component="/groupedcomponentrenderpasschaincomponenttextblock" folded="1"/>
 					<FoldState component="/groupedcomponentrenderpasschaincomponenttextblockoutlinecolorparamcolorcomponent" folded="0"/>
 					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="1"/>
+					<FoldState component="/groupedcomponenttextblock" folded="1"/>
 					<FoldState component="/groupedcomponenttextblockoutlinecolorparamcolorcomponent" folded="0"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -874,6 +885,7 @@ mner"/>
 						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
 					</RenderPass>
 					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1739643631090" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
 						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1739643631092" baseType="Effect" dwType="Effect">
 							<Params name="Params">
 								<ParamText name="Text" T="STRING" default="Resolume" value="Titel">
@@ -912,6 +924,20 @@ mner"/>
 						<ChoosableMixer name="Mixer">
 							<VideoMixerStateID uniqueId="1765027235607"/>
 							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739643631095" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245608" baseType="DryWetEffect">
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245592" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245613"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245615" baseType="Mixer"/>
 						</ChoosableMixer>
 					</RenderPass>
 				</RenderPass>
@@ -1000,9 +1026,7 @@ mner"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1" folded="0"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1color/paramcolorcomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1view/groupedcomponent/" folded="0"/>
-					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
+					<FoldState component="/groupedcomponenttextblock" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -1023,6 +1047,7 @@ mner"/>
 						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
 					</RenderPass>
 					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1739569170745" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
 						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1739569170721" baseType="Effect" dwType="Effect">
 							<Params name="Params">
 								<ParamText name="Text" T="STRING" default="Resolume" value="Titel">
@@ -1077,6 +1102,20 @@ mner"/>
 						<ChoosableMixer name="Mixer">
 							<VideoMixerStateID uniqueId="1765027235602"/>
 							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739569170751" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245639" baseType="DryWetEffect">
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245623" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245644"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245646" baseType="Mixer"/>
 						</ChoosableMixer>
 					</RenderPass>
 				</RenderPass>
@@ -1142,7 +1181,7 @@ mner"/>
 						<DurationSource name="DurationSource"/>
 						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0" defaultBeatsDuration="8">
 							<Params name="Params">
-								<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999994837463">
+								<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999984512389">
 									<PhaseSourceStatic name="PhaseSourceStatic"/>
 								</ParamRange>
 								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="5" value="2">
@@ -1168,6 +1207,7 @@ mner"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1" folded="0"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1color/paramcolorcomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/1view/groupedcomponent/" folded="0"/>
+					<FoldState component="/groupedcomponenttextblock" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -1186,6 +1226,20 @@ mner"/>
 				<RenderPass name="RenderPassChain">
 					<RenderPass storage="0" name="Transform" type="TransformEffect" uniqueTypeId="17122039101699797593" uniqueId="1765027246487" baseType="Effect">
 						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245670" baseType="DryWetEffect">
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245654" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245675"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245677" baseType="Mixer"/>
+						</ChoosableMixer>
 					</RenderPass>
 				</RenderPass>
 				<ChoosableMixer name="Blend">
@@ -1276,11 +1330,9 @@ mner"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/transform/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/tracksettingscomponent/" folded="1"/>
+					<FoldState component="/groupedcomponentrenderpasschaincomponenttextblock" folded="0"/>
 					<FoldState component="/groupedcomponentrenderpasschaincomponenttextblockoutlinecolorparamcolorcomponent" folded="0"/>
-					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="1"/>
 					<FoldState component="/groupedcomponenttextblockoutlinecolorparamcolorcomponent" folded="0"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -1303,9 +1355,9 @@ mner"/>
 					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1739643631327" baseType="DryWetEffect">
 						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1739643631329" baseType="Effect" dwType="Effect">
 							<Params name="Params">
-								<ParamText name="Text" T="STRING" default="Resolume" value="Host">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Vrede">
 									<Params name="Params">
-										<Param name="Lines" T="STRING" default="Resolume" value="Host"/>
+										<Param name="Lines" T="STRING" default="Resolume" value="Vrede"/>
 									</Params>
 								</ParamText>
 								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
@@ -1340,6 +1392,20 @@ mner"/>
 							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739643631332" baseType="Mixer"/>
 						</ChoosableMixer>
 					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245701" baseType="DryWetEffect">
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245685" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245706"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245708" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
 				</RenderPass>
 				<ChoosableMixer name="Blend">
 					<VideoMixerStateID uniqueId="1765027235801"/>
@@ -1348,9 +1414,9 @@ mner"/>
 					<VideoSource storage="0" name="VideoSource" width="1920" height="1080" type="GeneratorVideoSource">
 						<RenderPass name="BlockTextGenerator" type="BlockTextGenerator" uniqueTypeId="3600113141201236715" uniqueId="1739643631337" baseType="Generator">
 							<Params name="Params">
-								<ParamText name="Text" T="STRING" default="Resolume" value="Oudjaarsavond Host">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Advent">
 									<Params name="Params">
-										<Param name="Lines" T="STRING" default="Resolume" value="Oudjaarsavond Host"/>
+										<Param name="Lines" T="STRING" default="Resolume" value="Advent"/>
 									</Params>
 								</ParamText>
 								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
@@ -1428,9 +1494,7 @@ mner"/>
 					<FoldState component="/groupedcomponent/renderpasschaincomponent/transform/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/" folded="1"/>
 					<FoldState component="/groupedcomponent/videotrackinfocomponent/tracksettingscomponent/" folded="1"/>
-					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
+					<FoldState component="/groupedcomponenttextblock" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack">
@@ -1451,6 +1515,7 @@ mner"/>
 						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
 					</RenderPass>
 					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1739643631564" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
 						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1739643631566" baseType="Effect" dwType="Effect">
 							<Params name="Params">
 								<ParamText name="Text" T="STRING" default="Resolume" value="Vrede">
@@ -1489,6 +1554,20 @@ mner"/>
 						<ChoosableMixer name="Mixer">
 							<VideoMixerStateID uniqueId="1765027235971"/>
 							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1739643631569" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245732" baseType="DryWetEffect">
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245716" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245737"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245739" baseType="Mixer"/>
 						</ChoosableMixer>
 					</RenderPass>
 				</RenderPass>
@@ -1554,10 +1633,13 @@ Host              : Levi Host"/>
 			</Params>
 			<Transport name="Transport">
 				<Params name="Params">
-					<ParamRange name="Position" T="DOUBLE" default="0" value="0">
+					<ParamRange name="Position" T="DOUBLE" default="0" value="2746.8688999891933236">
 						<DurationSource name="DurationSource" defaultDuration="5.4999999999999982236s"/>
-						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0" defaultMillisecondsDuration="5499.999999999998181" defaultBeatsDuration="8">
+						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0.49943070908894438009" defaultMillisecondsDuration="5499.999999999998181" defaultBeatsDuration="8">
 							<Params name="Params">
+								<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999989674926">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
 								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="5.4999999999999982236" value="2">
 									<PhaseSourceStatic name="PhaseSourceStatic"/>
 								</ParamRange>
@@ -1573,11 +1655,12 @@ Host              : Levi Host"/>
 			</Transport>
 			<ClipView name="ClipView">
 				<FoldParams name="FoldParams">
+					<FoldState component="/groupedcomponentrenderpasschaincomponenttextanimator" folded="0"/>
 					<FoldState component="/groupedcomponentrenderpasschaincomponenttextanimatoranimate" folded="0"/>
 					<FoldState component="/groupedcomponentrenderpasschaincomponenttextanimatoroutlinecolorparamcolorcomponent" folded="0"/>
-					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="0"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="0"/>
-					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="0"/>
+					<FoldState component="/groupedcomponentrenderpasschaincomponenttransform" folded="1"/>
+					<FoldState component="/groupedcomponentvideotrackinfocomponent" folded="1"/>
+					<FoldState component="/groupedcomponentvideotrackinfocomponenttracksettingscomponent" folded="1"/>
 				</FoldParams>
 			</ClipView>
 			<VideoTrack name="VideoTrack" manualDuration="5499.999999999998181">
@@ -1597,9 +1680,9 @@ Host              : Levi Host"/>
 					<RenderPass storage="0" name="TextEffect" type="DryWetEffect" uniqueTypeId="742517306102898930" uniqueId="1739643630858" baseType="DryWetEffect">
 						<RenderPass name="TextEffect" type="TextEffect" uniqueTypeId="742517306102898930" uniqueId="1739643630860" baseType="Effect" dwType="Effect">
 							<Params name="Params">
-								<ParamText name="Text" T="STRING" default="Resolume" value="">
+								<ParamText name="Text" T="STRING" default="Resolume" value="00:00">
 									<Params name="Params">
-										<Param name="Lines" T="STRING" default="Resolume" value=""/>
+										<Param name="Lines" T="STRING" default="Resolume" value="00:00"/>
 									</Params>
 								</ParamText>
 								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
@@ -1639,7 +1722,22 @@ Host              : Levi Host"/>
 						</ChoosableMixer>
 					</RenderPass>
 					<RenderPass storage="0" name="Transform" type="TransformEffect" uniqueTypeId="17122039101699797593" uniqueId="1739643630865" baseType="Effect">
-						<View name="View" bCanBeDisabled="0" bCanBeRemoved="0"/>
+						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245763" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245747" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-45">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245768"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245770" baseType="Mixer"/>
+						</ChoosableMixer>
 					</RenderPass>
 				</RenderPass>
 				<ChoosableMixer name="Blend">
@@ -1852,7 +1950,399 @@ Host              : Levi Host"/>
 		<Clip name="Clip" uniqueId="1765027237220" layerIndex="3" columnIndex="10"/>
 		<Clip name="Clip" uniqueId="1765027237335" layerIndex="0" columnIndex="11"/>
 		<Clip name="Clip" uniqueId="1765027237304" layerIndex="1" columnIndex="11"/>
-		<Clip name="Clip" uniqueId="1765027237366" layerIndex="2" columnIndex="11"/>
+		<Clip name="Clip" uniqueId="1765111245085" layerIndex="2" columnIndex="11">
+			<Params name="Params">
+				<Param name="Name" T="STRING" default="Text Block" value="Song - effect"/>
+				<ParamChoice name="TransportType" default="0" value="0" storeChoices="0"/>
+			</Params>
+			<Transport name="Transport">
+				<Params name="Params">
+					<ParamRange name="Position" T="DOUBLE" default="0" value="0">
+						<DurationSource name="DurationSource"/>
+						<PhaseSourceTransportTimeline name="PhaseSourceTransportTimeline" phase="0" defaultBeatsDuration="8">
+							<Params name="Params">
+								<ParamRange name="Speed" T="DOUBLE" default="1" value="0.99999999999989674926">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="5" value="2">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamRange name="BPM" T="DOUBLE" default="120" value="120">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+							</Params>
+							<Beats_double name="Beats_double" numManualBeats="8" detectedTempo="-1"/>
+						</PhaseSourceTransportTimeline>
+						<ValueRange name="minMax" min="0" max="5000"/>
+					</ParamRange>
+				</Params>
+			</Transport>
+			<ClipView name="ClipView">
+				<FoldParams name="FoldParams">
+					<FoldState component="/groupedcomponent/renderpasschaincomponent/textblock/color/paramcolorcomponent/" folded="0"/>
+					<FoldState component="/groupedcomponent/videotrackinfocomponent/" folded="1"/>
+					<FoldState component="/groupedcomponent/videotrackinfocomponent/tracksettingscomponent/" folded="1"/>
+					<FoldState component="/groupedcomponentrenderpasschaincomponentedgedetectionusecolor" folded="0"/>
+					<FoldState component="/groupedcomponenttextblock" folded="1"/>
+				</FoldParams>
+			</ClipView>
+			<VideoTrack name="VideoTrack">
+				<Params name="Params">
+					<ParamRange name="Width" T="DOUBLE" default="1920" value="1920">
+						<PhaseSourceStatic name="PhaseSourceStatic"/>
+					</ParamRange>
+					<ParamRange name="Height" T="DOUBLE" default="1080" value="1080">
+						<PhaseSourceStatic name="PhaseSourceStatic"/>
+					</ParamRange>
+					<Param name="RScale" T="BOOL" default="1" value="1"/>
+					<Param name="GScale" T="BOOL" default="1" value="1"/>
+					<Param name="BScale" T="BOOL" default="1" value="1"/>
+					<Param name="AScale" T="BOOL" default="1" value="1"/>
+				</Params>
+				<RenderPass name="RenderPassChain">
+					<RenderPass storage="0" name="Transform" type="TransformEffect" uniqueTypeId="17122039101699797593" uniqueId="1765111245087" baseType="Effect">
+						<View name="View" folded="1" bCanBeDisabled="0" bCanBeRemoved="0"/>
+					</RenderPass>
+					<RenderPass storage="0" name="TextBlock" type="DryWetEffect" uniqueTypeId="920556808353999712" uniqueId="1765111245089" baseType="DryWetEffect">
+						<View name="View" folded="1"/>
+						<RenderPass name="TextBlock" type="TextBlock" uniqueTypeId="920556808353999712" uniqueId="1765111245091" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Vertaling test tekst
+...">
+									<Params name="Params">
+										<Param name="Lines" T="STRING" default="Resolume" value="Vertaling test tekst
+..."/>
+									</Params>
+								</ParamText>
+								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
+								<ParamChoice name="Style" T="STRING" default="Bold" value="Italic" storeChoices="0"/>
+								<ParamColor name="Color" T="COLOR" default="4294967295" value="4291348680" channelmode="0" paletteEnabled="1" color="4291348680" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Red" T="DOUBLE" default="1" value="0.78625953197479248047">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Green" T="DOUBLE" default="1" value="0.78625953197479248047">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Blue" T="DOUBLE" default="1" value="0.78625953197479248047">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Brightness" T="DOUBLE" default="1" value="0.78625954198473280155">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+								<ParamRange name="Size" T="DOUBLE" default="1" value="0.5">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamChoice name="AlignmentVertically" altName="Align Vert." T="UINT8" default="1" value="0" storeChoices="0"/>
+								<ParamRange name="Position Y" T="DOUBLE" default="0" value="360">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Outline Color" T="COLOR" default="4278190335" value="4278190080" channelmode="2" paletteEnabled="1" color="4278190080" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Red" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Saturation" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Brightness" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245093"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245094" baseType="Mixer"/>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245332" baseType="DryWetEffect">
+						<Params name="Params">
+							<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.55263157894736847364">
+								<PhaseSourceStatic name="PhaseSourceStatic"/>
+							</ParamRange>
+						</Params>
+						<View name="View" folded="1"/>
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245316" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Distance" T="DOUBLE" default="10" value="0">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+									<ValueRange name="minMax" min="0" max="480"/>
+								</ParamRange>
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-33.834586466165433194">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278190080" channelmode="2" paletteEnabled="0" color="4278190080" interpolated="0"/>
+								<ParamRange name="Spread" T="DOUBLE" default="0.001250000000000000026" value="0.0008082706766917292741">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamRange name="Strength" T="DOUBLE" default="8" value="18.015037593984963848">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<Params name="Params">
+								<ParamChoice name="Blend Mode" T="UINT64" default="67464115" value="67464114" storeChoices="0"/>
+							</Params>
+							<VideoMixerStateID uniqueId="1765111245337"/>
+							<RenderPass name="Add" type="Add" uniqueTypeId="A005" uniqueId="1765111245345" baseType="Mixer">
+								<Params name="Params">
+									<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.55263157894736847364">
+										<PhaseSourceStatic name="PhaseSourceStatic"/>
+									</ParamRange>
+								</Params>
+							</RenderPass>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="EdgeDetection" type="DryWetEffect" uniqueTypeId="MEDG" uniqueId="1765111245303" baseType="DryWetEffect">
+						<Params name="Params">
+							<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.95112781954887215541">
+								<PhaseSourceStatic name="PhaseSourceStatic"/>
+							</ParamRange>
+						</Params>
+						<View name="View" folded="1"/>
+						<RenderPass name="EdgeDetection" type="EdgeDetection" uniqueTypeId="MEDG" uniqueId="1765111245287" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Multiplier" T="DOUBLE" default="0.2000000000000000111" value="1">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<Param name="Use Color" T="BOOL" default="0" value="1"/>
+								<ParamColor name="Color" T="COLOR" default="4294967295" value="4278255615" channelmode="2" paletteEnabled="0" color="4278255615" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Blue" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Hue" T="DOUBLE" default="0" value="0.16666667163372039795">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Saturation" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+								<ParamRange name="Amount" T="DOUBLE" default="1" value="0.7014388489208632782">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245308"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245310" baseType="Mixer">
+								<Params name="Params">
+									<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.95112781954887215541">
+										<PhaseSourceStatic name="PhaseSourceStatic"/>
+									</ParamRange>
+								</Params>
+							</RenderPass>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245367" baseType="DryWetEffect">
+						<Params name="Params">
+							<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.57913669064748196647">
+								<PhaseSourceStatic name="PhaseSourceStatic"/>
+							</ParamRange>
+						</Params>
+						<View name="View" folded="1"/>
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245351" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Distance" T="DOUBLE" default="10" value="0">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+									<ValueRange name="minMax" min="0" max="480"/>
+								</ParamRange>
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="-138.56115107913669249">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278255615" channelmode="2" paletteEnabled="0" color="4278255615" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Red" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Green" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Hue" T="DOUBLE" default="0" value="0.16666667163372039795">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Saturation" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Brightness" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+								<ParamRange name="Spread" T="DOUBLE" default="0.001250000000000000026" value="0.0021582733812949639676">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamRange name="Strength" T="DOUBLE" default="8" value="13.82374100719424348">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<VideoMixerStateID uniqueId="1765111245372"/>
+							<RenderPass name="Alpha" type="Alpha" uniqueTypeId="A006" uniqueId="1765111245392" baseType="Mixer">
+								<Params name="Params">
+									<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.57913669064748196647">
+										<PhaseSourceStatic name="PhaseSourceStatic"/>
+									</ParamRange>
+								</Params>
+							</RenderPass>
+						</ChoosableMixer>
+					</RenderPass>
+					<RenderPass storage="0" name="DropShadow" type="DryWetEffect" uniqueTypeId="372541077550622327" uniqueId="1765111245414" baseType="DryWetEffect">
+						<Params name="Params">
+							<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.62171276462439917232">
+								<DurationSource name="DurationSource"/>
+								<PhaseSourceTimeline name="PhaseSourceTimeline" phase="0" hardSynced="0">
+									<Params name="Params">
+										<ParamRange name="Max Distance" altName="Distance" T="DOUBLE" default="5" value="2">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+									<Beats_double name="Beats_double" numManualBeats="4" detectedTempo="-1"/>
+								</PhaseSourceTimeline>
+								<BehaviourDouble name="BehaviourDouble">
+									<Modifier>
+										<ModifierEnvelope name="ModifierEnvelope" altName="Envelope" uniqueId="1765111262875">
+											<points>
+												<point x="0" y="0" curve="33"/>
+												<point x="0.022598870056497147307" y="0.65546218487394958263" curve="1"/>
+												<point x="0.045197740112994336248" y="0.26890756302521012788" curve="1"/>
+												<point x="0.084745762711864389138" y="0.73949579831932765739" curve="1"/>
+												<point x="0.11581920903954802393" y="0.22689075630252106275" curve="1"/>
+												<point x="0.17796610169491522413" y="0.80672268907563027263" curve="1"/>
+												<point x="0.17796610169491522413" y="0.1848739495798319421" curve="1"/>
+												<point x="0.26271186440677962715" y="0.8151260504201680579" curve="1"/>
+												<point x="0.31355932203389830226" y="0.8571428571428572063" curve="1"/>
+												<point x="0.36723163841807904273" y="0.72268907563025208685" curve="1"/>
+												<point x="0.41525423728813554147" y="0.86554621848739499157" curve="1"/>
+												<point x="0.45762711864406779849" y="0.78991596638655459106" curve="1"/>
+												<point x="0.45762711864406779849" y="0.20168067226890751265" curve="1"/>
+												<point x="0.50564971751412424172" y="0.62184873949579833052" curve="1"/>
+												<point x="0.52542372881355925429" y="0.20168067226890762367" curve="1"/>
+												<point x="0.56779661016949156682" y="0.85714285714285709528" curve="1"/>
+												<point x="0.58474576271186440302" y="0.3361344537815126321" curve="1"/>
+												<point x="0.63841807909604519899" y="0.94957983193277317735" curve="1"/>
+												<point x="0.63841807909604519899" y="0.52941176470588235947" curve="1"/>
+												<point x="0.71751412429378524926" y="0.82352941176470595419" curve="1"/>
+												<point x="0.76836158192090386887" y="0.22689075630252100724" curve="1"/>
+												<point x="0.82203389830508477587" y="0.94957983193277317735" curve="1"/>
+												<point x="0.89548022598870058442" y="0.33613445378151268761" curve="1"/>
+												<point x="0.92937853107344636783" y="0.99159663865546221473" curve="1"/>
+												<point x="1" y="0.12605042016806722316" curve="1"/>
+											</points>
+										</ModifierEnvelope>
+									</Modifier>
+								</BehaviourDouble>
+							</ParamRange>
+						</Params>
+						<AnimationSettings name="AnimationSettings" uniqueId="1765111245415">
+							<Setting name="Opacity" flags="9223372036854775809"/>
+						</AnimationSettings>
+						<View name="View" folded="1"/>
+						<RenderPass name="DropShadow" type="DropShadow" uniqueTypeId="372541077550622327" uniqueId="1765111245398" baseType="Effect" dwType="Effect">
+							<Params name="Params">
+								<ParamRange name="Distance" T="DOUBLE" default="10" value="0">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+									<ValueRange name="minMax" min="0" max="480"/>
+								</ParamRange>
+								<ParamRange name="Angle" T="DOUBLE" default="45" value="0">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Color" T="COLOR" default="4278190080" value="4278255615" channelmode="2" paletteEnabled="1" color="4278255615" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Red" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Green" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Hue" T="DOUBLE" default="0" value="0.16666667163372039795">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Saturation" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Brightness" T="DOUBLE" default="0" value="1">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+								<ParamRange name="Spread" T="DOUBLE" default="0.001250000000000000026" value="0.0034398496240601508095">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamRange name="Strength" T="DOUBLE" default="8" value="22.793233082706766623">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+							</Params>
+						</RenderPass>
+						<ChoosableMixer name="Mixer">
+							<Params name="Params">
+								<ParamChoice name="Blend Mode" T="UINT64" default="67464115" value="67464114" storeChoices="0"/>
+							</Params>
+							<VideoMixerStateID uniqueId="1765111245419"/>
+							<RenderPass name="Add" type="Add" uniqueTypeId="A005" uniqueId="1765111245427" baseType="Mixer">
+								<Params name="Params">
+									<ParamRange name="Opacity" T="DOUBLE" default="1" value="0.62171276462439917232">
+										<PhaseSourceStatic name="PhaseSourceStatic"/>
+									</ParamRange>
+								</Params>
+							</RenderPass>
+						</ChoosableMixer>
+					</RenderPass>
+				</RenderPass>
+				<ChoosableMixer name="Blend">
+					<VideoMixerStateID uniqueId="1765111245096"/>
+				</ChoosableMixer>
+				<PrimarySource>
+					<VideoSource storage="0" name="VideoSource" width="1920" height="1080" type="GeneratorVideoSource">
+						<RenderPass name="BlockTextGenerator" type="BlockTextGenerator" uniqueTypeId="3600113141201236715" uniqueId="1765111245097" baseType="Generator">
+							<Params name="Params">
+								<ParamText name="Text" T="STRING" default="Resolume" value="Liedtekst Test tekst
+regel 2
+">
+									<Params name="Params">
+										<Param name="Lines" T="STRING" default="Resolume" value="Liedtekst Test tekst
+regel 2
+"/>
+									</Params>
+								</ParamText>
+								<ParamChoice name="Font" T="STRING" default="Arial" value="Ubuntu" storeChoices="0"/>
+								<ParamColor name="Color" T="COLOR" default="4294967295" value="4294967295" channelmode="2" paletteEnabled="0" color="4294967295" interpolated="0"/>
+								<ParamRange name="Size" T="DOUBLE" default="1" value="0.53571428571428569843">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamChoice name="AlignmentVertically" altName="Align Vert." T="UINT8" default="1" value="0" storeChoices="0"/>
+								<ParamRange name="Position Y" T="DOUBLE" default="0" value="150">
+									<PhaseSourceStatic name="PhaseSourceStatic"/>
+								</ParamRange>
+								<ParamColor name="Outline Color" T="COLOR" default="4278190335" value="4278190080" channelmode="2" paletteEnabled="1" color="4278190080" interpolated="0">
+									<Params name="Channels">
+										<ParamRange name="Red" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Saturation" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+										<ParamRange name="Brightness" T="DOUBLE" default="1" value="0">
+											<PhaseSourceStatic name="PhaseSourceStatic"/>
+										</ParamRange>
+									</Params>
+								</ParamColor>
+							</Params>
+						</RenderPass>
+					</VideoSource>
+				</PrimarySource>
+				<ChoosableMixer name="Blend">
+					<VideoMixerStateID uniqueId="1765111245096"/>
+				</ChoosableMixer>
+			</VideoTrack>
+		</Clip>
 		<Clip name="Clip" uniqueId="1765027237397" layerIndex="3" columnIndex="11"/>
 		<Clip name="Clip" uniqueId="1765027237512" layerIndex="0" columnIndex="12"/>
 		<Clip name="Clip" uniqueId="1765027237481" layerIndex="1" columnIndex="12"/>
