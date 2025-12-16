@@ -125,7 +125,7 @@ export function versionUpdate (service) {
         }
       })
       // eslint-disable-next-line
-      case version < 2.0202 :
+    case version < 2.0202:
       service.presentations.forEach(presentation => {
         if (!presentation.settings.osc) presentation.settings.osc = {}
         if (!presentation.settings.osc.clip) presentation.settings.osc.clip = null
