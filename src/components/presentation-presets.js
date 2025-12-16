@@ -20,6 +20,9 @@ export default [
       livestream: {
         fileId: '/images/collectelivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   },
@@ -35,6 +38,9 @@ export default [
       livestream: {
         fileId: '/images/ministrylivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   },
@@ -50,6 +56,9 @@ export default [
       livestream: {
         fileId: '/images/endlivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   }

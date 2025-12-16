@@ -108,8 +108,24 @@ export function versionUpdate (service) {
           default:
         }
       })
+      // case version < 2.0103 : moved to 2.0202
       // eslint-disable-next-line
-      case version < 2.0103 :
+    case version <= 2.0105:
+      service.presentations.forEach(presentation => {
+        switch (presentation.type) {
+          case 'caption': {
+            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
+            break
+          }
+          case 'scripture': {
+            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
+            break
+          }
+          default:
+        }
+      })
+      // eslint-disable-next-line
+    case version < 2.0202:
       service.presentations.forEach(presentation => {
         if (!presentation.settings.osc) presentation.settings.osc = {}
         if (!presentation.settings.osc.clip) presentation.settings.osc.clip = null
@@ -127,24 +143,10 @@ export function versionUpdate (service) {
             if (!presentation.settings.osc.text) presentation.settings.osc.text = null
             break
           case 'image':
+            break
           case 'video':
             if (!presentation.settings.osc.resolumePlayPauzeSync) presentation.settings.osc.resolumePlayPauzeSync = '0'
             break
-          default:
-        }
-      })
-        // eslint-disable-next-line
-      case version <= 2.0105:
-      service.presentations.forEach(presentation => {
-        switch (presentation.type) {
-          case 'caption': {
-            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
-            break
-          }
-          case 'scripture': {
-            presentation.settings.maxBeamerLine = 20 // high so you don't break formatting
-            break
-          }
           default:
         }
       })
