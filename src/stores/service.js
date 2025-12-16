@@ -160,7 +160,7 @@ export const useServiceStore = defineStore('service', {
 
     addPresentation (presentation) {
       presentation.id = presentation.id || nanoid()
-      this.service.presentations.push(presentation)
+      this.service.presentations.push(this.addOscSettings(presentation))
     },
     updatePresentation (presentation, settings) {
       Object.assign(presentation.settings, settings)
@@ -183,6 +183,31 @@ export const useServiceStore = defineStore('service', {
     },
     removePresentation (presentation) {
       this.service.presentations = this.service.presentations.filter(s => s.id !== presentation.id)
+    },
+    addOscSettings (presentation) {
+      if (!presentation.settings.osc) presentation.settings.osc = {}
+      if (!presentation.settings.osc.clip) presentation.settings.osc.clip = null
+      switch (presentation.type) {
+        case 'song':
+          if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+            if (!presentation.settings.osc.translation) presentation.settings.osc.translation = null
+          break
+        case 'caption':
+        case 'scripture':
+          if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+            if (!presentation.settings.osc.title) presentation.settings.osc.title = null
+          break
+        case 'countdown':
+          if (!presentation.settings.osc.text) presentation.settings.osc.text = null
+          break
+        case 'image':
+          break
+        case 'video':
+          if (!presentation.settings.osc.resolumePlayPauzeSync) presentation.settings.osc.resolumePlayPauzeSync = '0'
+          break
+        default:
+      }
+      return presentation
     },
 
     preview (presentation) {
