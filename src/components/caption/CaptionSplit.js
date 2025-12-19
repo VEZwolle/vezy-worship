@@ -200,17 +200,21 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
         htmlText += '</div><div>'
         currentLine = formatText.line
       }
-      let htmlformat = ''
+      let htmlformatS = ''
+      let htmlformatE = ''
       const formats = formatText.class?.split(' ') || []
       if (formats.length) {
         formats.forEach(format => {
           const html = classHTML.find(t => t.format === format)?.html
-          if (html) htmlformat += `<${html}>`
+          if (html) {
+            htmlformatS += `<${html}>`
+            htmlformatE = `</${html}>${htmlformatE}`
+          }
         })
       }
       
       htmlText +=
-        htmlformat
+        htmlformatS
         + formatText.text
           .replace(/&/g, '&amp;') // first & // html-entities
           .replace(/</g, '&lt;')
@@ -218,7 +222,7 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
           .replace(/ {2}/g, '&nbsp;&nbsp;')
           .replace(/^ /g, '&nbsp;')
           .replace(/ $/g, '&nbsp;')
-        + htmlformat.replace('<','</')
+        + htmlformatE
     })
     htmlText += '</div>'
     slides.push(htmlText)
