@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.post('/api/scripture', async (req, res) => {
   const { bible, book, chapter, verseFrom, verseTo } = req.body
 
-  let query 
+  let query
   if (verseFrom) {
     query = db.collection(bible)
       .where('book', '==', book)
@@ -70,7 +70,11 @@ app.post('/api/language', async (req, res) => {
       data.append('text', textLines[i])
     }
     try {
-      const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+      const result = await axios.post('https://api-free.deepl.com/v2/translate', data, {
+        headers: {
+          'Authorization': `DeepL-Auth-Key ${process.env.DEEPL_API_KEY}`
+        }
+      })
       const translations = result.data.translations
       for (const translation of translations) {
         resultLanguage.push(translation.detected_source_language)
@@ -95,7 +99,11 @@ app.post('/api/translate', async (req, res) => {
   })
 
   try {
-    const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+    const result = await axios.post('https://api-free.deepl.com/v2/translate', data, {
+      headers: {
+        'Authorization': `DeepL-Auth-Key ${process.env.DEEPL_API_KEY}`
+      }
+    })
     const translation = result.data.translations[0].text
     res.json({ translation })
   } catch {
@@ -118,7 +126,11 @@ app.post('/api/translatearray', async (req, res) => {
       data.append('text', textArray[i])
     }
     try {
-      const result = await axios.post(`https://api-free.deepl.com/v2/translate?auth_key=${process.env.DEEPL_API_KEY}`, data)
+      const result = await axios.post('https://api-free.deepl.com/v2/translate', data, {
+        headers: {
+          'Authorization': `DeepL-Auth-Key ${process.env.DEEPL_API_KEY}`
+        }
+      })
       const translations = result.data.translations
       for (const translation of translations) {
         resultTranslations.push(translation.text)
