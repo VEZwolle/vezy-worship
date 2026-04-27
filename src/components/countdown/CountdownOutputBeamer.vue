@@ -1,0 +1,25 @@
+<template>
+  <div class="bg-output" :style="styleBgBeamer">
+    <Transition name="q-transition--fade">
+      <div v-show="!clear" class="full" :style="styleOpacityBeamer" />
+    </Transition>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from 'vue'
+import BaseOutput from '../output/BaseOutput.vue'
+
+export default defineComponent({
+  name: 'CountdownOutputBeamer',
+  extends: BaseOutput
+})
+</script>
+
+<style scoped>
+.full {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+</style>

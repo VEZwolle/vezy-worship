@@ -1,5 +1,8 @@
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'BaseSettings',
   props: {
     presentation: Object
   },
@@ -8,5 +11,5 @@ export default {
       return this.presentation.settings
     }
   }
-}
+})
 </script>

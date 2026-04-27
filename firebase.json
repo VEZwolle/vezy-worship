@@ -9,7 +9,10 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "function": "api"
+        "function": {
+          "functionId": "api",
+          "region": "europe-west1"
+        }
       },
       {
         "source": "**",
@@ -29,6 +32,9 @@
     },
     "firestore": {
       "port": 5002
+    },
+    "pubsub": {
+      "port": 5003
     },
     "ui": {
       "enabled": true

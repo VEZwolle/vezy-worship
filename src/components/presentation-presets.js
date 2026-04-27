@@ -20,6 +20,9 @@ export default [
       livestream: {
         fileId: '/images/collectelivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   },
@@ -27,14 +30,17 @@ export default [
     id: 'ministry',
     type: 'image',
     settings: {
-      title: 'Nazorg',
+      title: 'Gesprek en gebed',
       beamer: {
-        fileId: '/images/nazorgbeamer.png',
+        fileId: '/images/ministrybeamer.png',
         ...imageDefaults
       },
       livestream: {
-        fileId: '/images/nazorglivestream.png',
+        fileId: '/images/ministrylivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   },
@@ -50,6 +56,9 @@ export default [
       livestream: {
         fileId: '/images/endlivestream.png',
         ...imageDefaults
+      },
+      osc: {
+          clip: null
       }
     }
   }

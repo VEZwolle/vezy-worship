@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       (Aftel)klok toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
@@ -16,7 +16,19 @@
       Vul de tijd in tot wanneer de klok moet aftellen (HH:mm) uitgaande van 24uurs klok.<br>
       Selecteer of de klok moet aftellen tot 0:00 of dat er een tijd in beeld moet staan.<br>
       De (aftel)klok wordt alleen op de livestream getoond, en loopt tot de ingestelde tijd.<br>
+      Er kan ingesteld worden in welke hoek van het scherm hij weergegeven wordt.<br>
+      Op het stage scherm wordt wanneer de countdown live is geen preview van het volgende item weergegeven. Dit omdat het scherm ook in de zaal zichtbaar is bij binnenkomst.<br>
       opm.: de tijd wordt alleen getoond wanneer hij in de toekomst van dezelfde dag ligt.
+    </p>
+    <div class="text-h6 q-mb-md">
+      Afwijkende achtergrond
+    </div>
+    <p>
+      Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
+      Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
@@ -35,7 +47,15 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'HelpCountdown',
+})
+</script>

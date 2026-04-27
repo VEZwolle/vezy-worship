@@ -1,6 +1,7 @@
 {
   "name": "vezy-worship-api",
   "description": "Cloud Functions for Firebase",
+  "type": "module",
   "scripts": {
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
@@ -9,16 +10,17 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "16"
+    "node": "22"
   },
   "main": "index.js",
   "dependencies": {
-    "axios": "^0.27.2",
-    "firebase-admin": "^10.0.2",
-    "firebase-functions": "^3.21.2"
+    "algoliasearch": "^5.40.0",
+    "axios": "^1.12.2",
+    "firebase-admin": "^13.5.0",
+    "firebase-functions": "^6.5.0"
   },
   "devDependencies": {
-    "firebase-functions-test": "^0.2.0"
+    "firebase-functions-test": "^3.4.1"
   },
   "private": true
 }

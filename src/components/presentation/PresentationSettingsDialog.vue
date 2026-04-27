@@ -7,7 +7,7 @@
           <span v-if="presentation.id">{{ presentationType.name }} aanpassen</span>
           <span v-else>{{ presentationType.name }} toevoegen</span>
         </q-toolbar-title>
-        <q-btn v-close-popup flat round dense icon="close" />
+        <q-btn flat round dense icon="close" @click="close"/>
       </q-toolbar>
 
       <component :is="settingsComponent" v-if="settingsComponent" :presentation="presentation" />
@@ -15,23 +15,31 @@
       <q-separator />
 
       <q-card-actions align="right">
-        <q-btn color="secondary" :label="btnLabel" :icon="btnIcon" @click="save" />
+        <q-btn v-if="editEmit" color="secondary" label="Opslaan" icon="save" @click="saveEmit" />
+        <q-btn v-else color="secondary" :label="btnLabel" :icon="btnIcon" @click="save" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
+import { defineComponent } from 'vue'
+import presentationTypes from '../presentation-types.js'
 import cloneDeep from 'lodash/cloneDeep'
+import { sanitizerHtmlPresentation } from '../common/CleanText.js'
 
-export default {
+export default defineComponent({
+  name: 'PresentationSettingsDialog',
+  emits: ['save'],
   data () {
     return {
       presentation: null
     }
   },
   computed: {
+    editEmit () {
+      return this.presentation?.from === 'database'
+    },
     presentationType () {
       return presentationTypes.find(t => t.id === this.presentation?.type)
     },
@@ -73,20 +81,30 @@ export default {
       this.show()
     },
     save () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
       if (!this.presentation.id) {
         this.$store.addPresentation(this.presentation)
       }
 
       this.$store.preview(this.presentation)
       this.hide()
+    },
+    saveEmit () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
+      this.$emit('save')
+      this.hide()
+    },
+    close () {
+      this.presentation = sanitizerHtmlPresentation(this.presentation)
+      this.hide()
     }
   }
-}
+})
 </script>
 
 <style scoped>
 .q-card {
-  min-width: 60vw;
+  min-width: max(60vw, min(1152px, 95vw));
   min-height: 80vh;
 }
 </style>

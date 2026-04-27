@@ -1,10 +1,17 @@
 <script>
+import { defineComponent } from 'vue'
 import ImageOutput from './ImageOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageOutputLivestream',
   extends: ImageOutput,
+  data () {
+    return {
+      beamer: false
+    }
+  },
   computed: {
-    settings () {
+    settingsimage () {
       if (!this.presentation.settings.livestream.fileId) {
         return this.presentation.settings.beamer
       }
@@ -12,5 +19,5 @@ export default {
       return this.presentation.settings.livestream
     }
   }
-}
+})
 </script>

@@ -1,25 +1,36 @@
 <template>
-  <div v-if="!clear" class="image-output">
-    <div :style="containerStyle">
-      <img :src="fileUrl" :style="imageStyle">
-    </div>
+  <div class="bg-output" :style="beamer ? styleBgBeamer : ''">
+    <Transition name="q-transition--fade">
+      <div v-show="!clear && imgLoaded" class="image-output" :style="beamer ? styleOpacityBeamer : ''">
+        <div :style="containerStyle">
+          <img :src="fileUrl" loading="eager" :style="imageStyle" @load="imgLoad">
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseOutput from '../output/BaseOutput.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageOutput',
   extends: BaseOutput,
+  data () {
+    return {
+      imgLoaded: false
+    }
+  },
   computed: {
     fileUrl () {
-      return this.$store.getMediaUrl(this.settings.fileId)
+      return this.$store.getMediaUrl(this.settingsimage.fileId)
     },
     factor () {
-      return this.$store.outputRatio / this.settings.ratio
+      return this.$store.outputRatio / this.settingsimage.ratio
     },
     containerStyle () {
-      const { zoom, x, y } = this.settings
+      const { zoom, x, y } = this.settingsimage
 
       return {
         position: 'absolute',
@@ -30,7 +41,7 @@ export default {
       }
     },
     imageStyle () {
-      const { rotate } = this.settings
+      const { rotate } = this.settingsimage
 
       const style = {
         width: '100%',
@@ -43,8 +54,13 @@ export default {
 
       return style
     }
+  },
+  methods: {
+    imgLoad () {
+      this.imgLoaded = true
+    }
   }
-}
+})
 </script>
 
 <style>

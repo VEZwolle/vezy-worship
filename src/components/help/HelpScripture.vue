@@ -1,20 +1,22 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../../public/icons/favicon-32x32.png">
+      <img src="../../assets/help/logo.png">
       Bijbelteksten toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
-      Nieuwe bijbeltekst toevoegen aan setlist:
+      Nieuwe Bijbeltekst toevoegen aan setlist:
     </div>
     <p>
       Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddscripture.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
-      Vul hier de <i>bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
-      Klik hiernaa op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database.<br>
+      Op de eerste regel kan je de titel (Bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een Bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
+      Vul op de 2e regel de <i>Bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
+      Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database, via het dropdown menu kan je de tekst ook toevoegen.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
+      Opm.: wanneer er geen verse vanaf wordt gekozen wordt het hele hoofdstuk ingeladen.<br>
       <img src="../../assets/help/addscripturedialog.png">
     </p>
     <p>
@@ -33,27 +35,48 @@
       VezyWorship zorgt voor verdeling van de beamer tekst op de livestream aan de hand van regels & een maximale lengte aan tekens.
     </p>
     <p>
-      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden.<br>
+      Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden, of alle opmaak van de tekst verwijderd worden.<br>
+      Met de knop "nummers" kan je alle getallen in 1 keer verkleinen en aan de bovenzijde plaatsen.<br>
+      <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je de o.a. nummers tool, 1x ongedaan maken.<br>
+      <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i><br>
       <img src="../../assets/help/scripturefontsetting.png">
     </p>
     <p>
       <i><u>aandachtspunten / opmerkingen:</u></i>
-      <ul>
-        <li>
-          Er is een internet verbinding nodig om de tekst vanuit de database te kunnen inladen.
-        </li>
-        <li>
-          Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst.
-        </li>
-        <li>
-          Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
-        </li>
-        <li>
-          Er zitten nog een aantal <a href="https://github.com/VEZwolle/vezy-worship/issues?q=is%3Aissue+is%3Aopen+label%3Ascripture" target="_blank">fouten</a> in deze module wanneer je zelf tekst invult;<br>
-          controleer jezelf met het voorbeeld in de bedienging of het juiste wordt weergegeven.<br>
-        </li>
-      </ul>
     </p>
+    <ul>
+      <li>
+        Er is een internet verbinding nodig om de tekst vanuit de database te kunnen inladen.
+      </li>
+      <li>
+        Het gebruik van de knop "tekst inladen" vervangt de bestaande tekst en titel.
+      </li>
+      <li>
+        Het gekozen boek & vertaling, hoofdstuk e.d. wordt als titel op de beamer en livestream weergegeven.
+      </li>
+      <li>
+        <b>Max regels</b><br>
+        Hier kan je invoeren regels de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de invoer.<br>
+        Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+        <sup>
+          Zoek eerst of minder dan 'Max regels' regels<br>
+          Dan naar een regeleinde of [.?!'"’]<br>
+          Dan naar [,:; spatie]<br>
+          Dan naar iets binnen 'Max regels'.
+        </sup>
+      </li>
+      <li>
+        <b>Max tekens</b><br>
+        Hier kan je invoeren hoeveel tekens de tekst maximaal mag hebben voor hij in meerdere delen gesplitst wordt tov de tekst op de beamer.<br>
+        Splitsen van regels gebeurt met de volgende voorwaarden:<br>
+        <sup>
+          Zoek eerst of minder dan 'Max tekens' tekens<br>
+          Dan naar een regeleinde of [.?!'"’]<br>
+          Dan naar [,:; spatie]<br>
+          Dan naar iets binnen 'Max tekens'.
+        </sup>
+      </li>
+    </ul>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
     </div>
@@ -69,9 +92,11 @@
       Afwijkende achtergrond
     </div>
     <p>
-      <i>Dit onderdeel werkt nog niet in de output naar de beamer.</i><br>
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png">
+      Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
+      Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
+      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
+      <img src="../../assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken
@@ -83,15 +108,17 @@
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>
-      <i>Let op dat alle wijzigingen die je aanbrengd direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
+      <i>Let op dat alle wijzigingen die je aanbrengt direct worden toegepast in de setlist.</i> (excl. het onderdeel in live).<br>
     </p>
   </div>
 </template>
 
 <script>
-import bibles from '../scripture/bibles'
+import { defineComponent } from 'vue'
+import bibles from '../scripture/bibles.js'
 
-export default {
+export default defineComponent({
+  name: 'HelpScripture',
   computed: {
     bibleOptions () {
       return bibles.map(b => ({
@@ -100,5 +127,5 @@ export default {
       }))
     }
   }
-}
+})
 </script>

@@ -1,13 +1,15 @@
 <template>
   <div>
-    <video-output-beamer v-bind="$attrs" muted />
+    <video-output v-bind="$attrs" outputlivestream muted />
   </div>
 </template>
 
 <script>
-import VideoOutputBeamer from './VideoOutputBeamer.vue'
+import { defineComponent } from 'vue'
+import VideoOutput from './VideoOutput.vue'
 
-export default {
-  components: { VideoOutputBeamer }
-}
+export default defineComponent({
+  name: 'VideoOutputLivestream',
+  components: { VideoOutput }
+})
 </script>

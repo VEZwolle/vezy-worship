@@ -1,19 +1,22 @@
 <template>
   <Transition :duration="{ enter: 5500, leave: 5500 }" name="message">
     <div v-if="message.length > 1" class="message-box">
-      <div class="message-text" v-html="message" />
+      <div class="message-text" v-text="message" />
     </div>
   </Transition>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'MessageOutput',
   computed: {
     message () {
       return this.$store.message
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
@@ -33,7 +36,7 @@ export default {
   margin: auto;
   padding: 1.5vw;
   text-align: center;
-  font-size: 3vw;
+  font-size: 3.4vw;
   letter-spacing: 0.01vw;
   color: #fff;
   width: 100%;
@@ -56,6 +59,7 @@ export default {
 /* transition message-box */
 .message-enter-active, .message-leave-active {
   transition: all 1.5s ease-in-out;
+  transform: translateY(0%);
 }
 /* delay leave of parent element */
 .message-leave-active {
@@ -64,8 +68,7 @@ export default {
 
 .message-enter-from,
 .message-leave-to {
-  transform: translateY(0%);
-  opacity: 0;
+  transform: translateY(-100%);
 }
 
 /* transition message-text */
@@ -80,10 +83,8 @@ export default {
 
 .message-enter-from .message-text {
   transform: translateX(200%);
-  /* opacity: 0.001; */
 }
 .message-leave-to .message-text {
   transform: translateX(-100%);
-  /* opacity: 0.001; */
 }
 </style>

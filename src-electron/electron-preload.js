@@ -14,6 +14,18 @@
  *   contextBridge.exposeInMainWorld('myAPI', {
  *     doAThing: () => {}
  *   })
+ *
+ * WARNING!
+ * If accessing Node functionality (like importing @electron/remote) then in your
+ * electron-main.js you will need to set the following when you instantiate BrowserWindow:
+ *
+ * mainWindow = new BrowserWindow({
+ *   // ...
+ *   webPreferences: {
+ *     // ...
+ *     sandbox: false // <-- to be able to import @electron/remote in preload script
+ *   }
+ * }
  */
 
 import { contextBridge, ipcRenderer } from 'electron'
@@ -22,5 +34,11 @@ import { contextBridge, ipcRenderer } from 'electron'
 contextBridge.exposeInMainWorld('electron', {
   getConfig: (key) => ipcRenderer.invoke('getConfig', key),
   setConfig: (key, val) => ipcRenderer.invoke('setConfig', key, val),
-  getAllDisplays: () => ipcRenderer.invoke('getAllDisplays')
+  getAllDisplays: () => ipcRenderer.invoke('getAllDisplays'),
+  udp: () => ipcRenderer.invoke('udp'),
+  oscSend: (outAddress, outPort, buffer) => ipcRenderer.invoke('oscSend', outAddress, outPort, buffer),
+  showDisplaysNr: (show) => ipcRenderer.invoke('showDisplaysNr', show),
+  onAutoUpdate: (status, percent, message) => ipcRenderer.on('autoUpdate', status, percent, message),
+  onAppClose: (key) => ipcRenderer.on('appClose', key),
+  closeApp: () => ipcRenderer.send('closeApp')
 })

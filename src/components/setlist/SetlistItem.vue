@@ -1,11 +1,13 @@
 <template>
-  <q-item clickable :active="active" active-class="bg-purple-1">
+  <q-item clickable :active="active" active-class="bg-active">
     <q-item-section avatar>
       <q-avatar :color="presentationType.color" text-color="white" :icon="presentationType.icon" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="title" v-html="title" />
+      <q-item-label class="title">
+        <div ref="setlistItem" v-html="title" />
+      </q-item-label>
       <q-item-label v-if="description" caption :lines="1">
         {{ $strip(description) }}
       </q-item-label>
@@ -54,9 +56,11 @@
 </template>
 
 <script>
-import presentationTypes from '../presentation-types'
+import { defineComponent } from 'vue'
+import presentationTypes from '../presentation-types.js'
 
-export default {
+export default defineComponent({
+  name: 'SetlistItem',
   props: {
     presentation: Object,
     active: Boolean
@@ -67,6 +71,10 @@ export default {
       return presentationTypes.find(t => t.id === this.presentation.type)
     },
     title () {
+      if (this.presentation.type === 'song') {
+        return this.presentationType.title(this.presentation.settings)
+      }
+
       if (this.presentation.settings.title) {
         return this.presentation.settings.title
       }
@@ -84,8 +92,15 @@ export default {
 
       return this.presentationType.description(this.presentation.settings)
     }
+  },
+  methods: {
+    scrollToCenter () {
+      const el = this.$refs.setlistItem
+      if ('scrollIntoViewIfNeeded' in el) return el.scrollIntoViewIfNeeded() // non default specs
+      el.scrollIntoView({ behavior: 'smooth', block: 'center', scrollMode: 'if-needed' }) // if-needed scrollmode in futher specs probably
+    }
   }
-}
+})
 </script>
 
 <style scoped>

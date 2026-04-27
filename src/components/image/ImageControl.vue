@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <q-tabs v-model="tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
+  <div
+    v-shortkey="shortkeysNextBack"
+    @shortkey="baseHandleArrow"
+    @click="setHandleArrowLocation"
+  >
+    <q-tabs v-model="presentation.control.tab" class="text-grey" active-color="primary" indicator-color="primary" align="left" narrow-indicator :breakpoint="0">
       <q-tab name="both" label="Beamer & Livestream" />
       <q-tab name="beamer" label="Beamer" />
       <q-tab name="livestream" label="Livestream" />
@@ -8,7 +12,7 @@
 
     <q-separator />
 
-    <q-tab-panels v-model="tab">
+    <q-tab-panels v-model="presentation.control.tab">
       <q-tab-panel name="both">
         <div class="row q-gutter-md">
           <div class="col">
@@ -34,21 +38,21 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import BaseControl from '../presentation/BaseControl.vue'
 import OutputPreview from '../output/OutputPreview.vue'
 import ImageOutputBeamer from './ImageOutputBeamer.vue'
 import ImageOutputLivestream from './ImageOutputLivestream.vue'
 
-export default {
+export default defineComponent({
+  name: 'ImageControl',
   components: { OutputPreview },
   extends: BaseControl,
   setup () {
     return { ImageOutputBeamer, ImageOutputLivestream }
   },
-  data () {
-    return {
-      tab: 'both'
-    }
+  created () {
+    // create .control via store: preview/golive
   }
-}
+})
 </script>

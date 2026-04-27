@@ -1,5 +1,7 @@
+import { defineBoot } from '#q-app/wrappers'
 import * as zip from '@zip.js/zip.js'
-import useServiceStore from 'stores/service'
+import { useServiceStore } from 'stores/service.js'
+import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
 import { Notify } from 'quasar'
 
 const filePickerOptions = {
@@ -9,54 +11,117 @@ const filePickerOptions = {
       'application/vez': '.vez'
     }
   }],
-  excludeAcceptAllOption: true
+  suggestedName:'setlist.vez',
+  excludeAcceptAllOption: true,
+  startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
+}
+const filePickerOptionsOsc = {
+  types: [{
+    description: 'VezyWorship OSC instellingen bestand',
+    accept: {
+      'application/vezosc': '.vezosc'
+    }
+  }],
+  excludeAcceptAllOption: true,
+  startIn: 'documents' // must be a known default directory or filehandle or directoryhandle; must not be empty, null etc.
 }
 
 const fs = {
   fileHandle: null,
 
-  async open () {
-    const [fileHandle] = await window.showOpenFilePicker(filePickerOptions)
-    fs.fileHandle = fileHandle
-
-    const file = await fileHandle.getFile()
-
-    // Read file list from zip
-    const zipReader = new zip.ZipReader(new zip.BlobReader(file))
-    const entries = await zipReader.getEntries()
-
-    // Load service data from `service.json`
-    let service = entries.find(e => e.filename === 'service.json')
-    if (!service) {
-      Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand' })
-      await zipReader.close()
-      return
+  async getLastLocation () {
+    filePickerOptions.startIn = 'documents' // when something is not right, reset to 'documents' folder
+    try {
+      const fileHandleLastUsed = await get('VezyLastUsedLocation') // get from IndexedDB
+      if (fileHandleLastUsed && fileHandleLastUsed.name ) {
+        filePickerOptions.startIn = fileHandleLastUsed // when folder does not exist it defaults to the 'documents' folder
+        return true
+      }
+      return false
+    } catch (error) {
+      console.log(error)
+      return false
     }
-
-    service = await service.getData(new zip.TextWriter())
-    service = JSON.parse(service)
-
-    const store = useServiceStore()
-
-    // Load media into store
-    const mediaEntries = entries.filter(e => e.filename !== 'service.json')
-
-    for (const file of mediaEntries) {
-      const blob = await file.getData(new zip.BlobWriter())
-
-      store.media[file.filename] = URL.createObjectURL(blob)
-    }
-
-    // Add loaded service to store
-    store.loadService(service)
-
-    await zipReader.close()
   },
 
-  async save (showPicker = false) {
+  async open (add = false, openHandle = null) {
+    if (!('showOpenFilePicker' in window) && !openHandle) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+    try {
+      await this.getLastLocation()
+      const [fileHandle] = openHandle ? [openHandle] : await window.showOpenFilePicker(filePickerOptions)
+      if (!add) {
+        fs.fileHandle = fileHandle
+        await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
+      }
+
+      const file = await fileHandle.getFile()
+
+      // Read file list from zip
+      const zipReader = new zip.ZipReader(new zip.BlobReader(file))
+      const entries = await zipReader.getEntries()
+
+      // Load service data from `service.json`
+      let service = entries.find(e => e.filename === 'service.json')
+      if (!service) {
+        Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship bestand' })
+        await zipReader.close()
+        return
+      }
+
+      service = await service.getData(new zip.TextWriter())
+      service = JSON.parse(service)
+
+      const store = useServiceStore()
+
+      // Load media into store
+      const mediaEntries = entries.filter(e => e.filename !== 'service.json')
+
+      if (!add) store.cleanMedia(null, false) // clear media list by open new setlist
+
+      for (const file of mediaEntries) {
+        const blob = await file.getData(new zip.BlobWriter())
+
+        store.media[file.filename] = URL.createObjectURL(blob)
+      }
+
+      if (add) {
+        // add service to existing service store
+        store.addService(service)
+      } else {
+        // Add loaded service to store
+        store.loadService(service)
+      }
+
+      await zipReader.close()
+    } catch (error) {
+      if (error.name === 'AbortError') return // user abort or files too sensitive or dangerous
+      console.error(error)
+      Notify.create({ type: 'negative', message: 'Fout bij openen VezyWorship bestand' })
+    }
+  },
+
+  async save (showPicker = false, suggestedName = '') {
+    if (!showPicker && fs.fileHandle) {
+      // verifyPermission: 'granted', 'denied' or 'prompt'
+      const options = {}
+      options.mode = 'readwrite' // 'read'
+      if (await fs.fileHandle.queryPermission(options) === 'prompt') await fs.fileHandle.requestPermission(options)
+      if (await fs.fileHandle.queryPermission(options) !== 'granted') fs.fileHandle = null
+    }
+
     // Show SaveFilePicker on first save
     if (showPicker || !fs.fileHandle) {
-      fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
+      if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
+        try {
+          await this.getLastLocation()
+          filePickerOptions.suggestedName = suggestedName ? suggestedName : 'setlist.vez'
+          fs.fileHandle = await window.showSaveFilePicker(filePickerOptions)
+          await set('VezyLastUsedLocation', fs.fileHandle) // save to IndexedDB
+        } catch (error) {
+          if (error.name === 'AbortError') return Notify.create({ type: 'negative', message: 'Opslaan is geannuleerd' }) // user abort or files too sensitive or dangerous
+          console.error(error) // unknown error --> download file via catch by emty filehandle
+        }
+      }
     }
 
     const blobWriter = new zip.BlobWriter('application/zip')
@@ -71,21 +136,46 @@ const fs = {
     // Add media files to zip
     for (const [fileId, fileUrl] of Object.entries(store.media)) {
       if (!service.includes(fileId)) {
+        store.removeMedia(fileId) // File isn't used anymore, remove from list
         continue // File isn't used anymore, so don't save it
       }
-
       // Read the file from its url
-      const reader = new zip.HttpReader(fileUrl, {
-        preventHeadRequest: true
-      })
+      try {
+        const reader = new zip.HttpReader(fileUrl, {
+          preventHeadRequest: true
+        })
 
-      // Add file to zip (by its id, which includes the file extension)
-      await zipWriter.add(fileId, reader)
+        // Add file to zip (by its id, which includes the file extension)
+        await zipWriter.add(fileId, reader)
+      } catch {
+        // zoek item in setlist waar gebruikt
+        let notify = false
+        Object.values(store.service.presentations).forEach(presentation => {
+          const presentationJSON = JSON.stringify(presentation)
+          if (presentationJSON.includes(fileId)) {
+            Notify.create({
+              type: 'negative',
+              message: `Media bestand niet gevonden in setlist item met titel: "${presentation.settings?.title}", deze wordt niet opgeslagen.`,
+              timeout: 0,
+              actions: [{ icon: 'close', color: 'white' }],
+              position: 'top'
+            })
+            notify = true
+          }
+        })
+        if (!notify) {
+          Notify.create({
+            type: 'negative',
+            message: `Media bestand niet gevonden: "${fileId}", deze wordt niet opgeslagen.`,
+            timeout: 0,
+            actions: [{ icon: 'close', color: 'white' }],
+            position: 'top'
+          })
+        }
+      }
     }
 
-    await zipWriter.close()
-
-    const blob = blobWriter.getData()
+    const blob = await zipWriter.close()
 
     // Write zip file to disk
     try {
@@ -93,16 +183,189 @@ const fs = {
       await writable.write(blob)
       await writable.close()
 
-      Notify.create({ type: 'positive', message: `Dienst succesvol opgeslagen als ${fs.fileHandle.name}` })
+      Notify.create({ type: 'positive', message: `Dienst opgeslagen als ${fs.fileHandle.name}`, position: 'top' })
+      store.setServiceSaved()
+      return true
     } catch {
-      Notify.create({ type: 'negative', message: 'De dienst kon niet worden opgeslagen. Is het bestand geopend in een ander programma?' })
+      Notify.create({
+        type: 'negative',
+        message: 'De dienst kon niet worden opgeslagen. --> Downloaden... gelukt?',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'setlist.vez'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
+    }
+  },
+
+  async download (addMedia = false) {
+    const blobWriter = new zip.BlobWriter('application/zip')
+    const zipWriter = new zip.ZipWriter(blobWriter)
+
+    const store = useServiceStore()
+
+    // Add service data to zip
+    const service = JSON.stringify(store.service)
+    await zipWriter.add('service.json', new zip.TextReader(service))
+
+    // Add media files to zip
+    if (addMedia) {
+      for (const [fileId, fileUrl] of Object.entries(store.media)) {
+        if (!service.includes(fileId)) {
+          continue // File isn't used anymore, so don't save it
+        }
+        // Read the file from its url
+        try {
+          const reader = new zip.HttpReader(fileUrl, {
+            preventHeadRequest: true
+          })
+
+          // Add file to zip (by its id, which includes the file extension)
+          await zipWriter.add(fileId, reader)
+        } catch {
+          // zoek item in setlist waar gebruikt
+          let notify = false
+          Object.values(store.service.presentations).forEach(presentation => {
+            const presentationJSON = JSON.stringify(presentation)
+            if (presentationJSON.includes(fileId)) {
+              Notify.create({
+                type: 'negative',
+                message: `Media bestand niet gevonden in setlist item met titel: "${presentation.settings?.title}", deze wordt niet opgeslagen.`,
+                timeout: 0,
+                actions: [{ icon: 'close', color: 'white' }],
+                position: 'top'
+              })
+              notify = true
+            }
+          })
+          if (!notify) {
+            Notify.create({
+              type: 'negative',
+              message: `Media bestand niet gevonden: "${fileId}", deze wordt niet opgeslagen.`,
+              timeout: 0,
+              actions: [{ icon: 'close', color: 'white' }],
+              position: 'top'
+            })
+          }
+        }
+      }
+    }
+
+    const blob = await zipWriter.close()
+
+    // Download zip file to disk
+    try {
+      Notify.create({ type: 'info', message: 'Downloaden wordt gestart...' })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'setlist.vez'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
+    } catch {
+      Notify.create({
+        type: 'negative',
+        message: 'De dienst kon niet worden opgeslagen... Error 1',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
+    }
+  },
+
+  async importOscConfig () {
+    if (!('showOpenFilePicker' in window)) return Notify.create({ type: 'info', message: 'Browser ondersteund openen dialoog niet, gebruik bijv. Chome of Edge' })
+    let oscFileHandle
+    try {
+      await this.getLastLocation()
+      const [fileHandle] = await window.showOpenFilePicker(filePickerOptionsOsc)
+      oscFileHandle = fileHandle
+      await set('VezyLastUsedLocation', oscFileHandle) // save to IndexedDB
+
+      const file = await fileHandle.getFile()
+
+      // Read file list from zip
+      const zipReader = new zip.ZipReader(new zip.BlobReader(file))
+      const entries = await zipReader.getEntries()
+
+      // Load osc output instellingen
+      let oscOutput = entries.find(e => e.filename === 'oscoutput.json')
+      if (!oscOutput) {
+        Notify.create({ type: 'negative', message: 'Ongeldig VezyWorship OSC instellingen bestand' })
+        await zipReader.close()
+        return false
+      }
+
+      oscOutput = await oscOutput.getData(new zip.TextWriter())
+      oscOutput = JSON.parse(oscOutput)
+
+      await zipReader.close()
+
+      return oscOutput
+
+    } catch (error) {
+      if (error.name === 'AbortError') return // user abort or files too sensitive or dangerous
+      console.error(error)
+      Notify.create({ type: 'negative', message: 'Fout bij openen VezyWorship OSC instellingen bestand' })
+      return false
+    }
+  },
+
+  async exportOscConfig (oscOutput) {
+    let oscFileHandle
+    // Show SaveFilePicker on first save
+    if ('showOpenFilePicker' in window) { // if not exist/support --> download file via catch by emty filehandle
+      try {
+        await this.getLastLocation()
+        oscFileHandle = await window.showSaveFilePicker(filePickerOptionsOsc)
+        await set('VezyLastUsedLocation', oscFileHandle) // save to IndexedDB
+      } catch (error) {
+        if (error.name === 'AbortError') return Notify.create({ type: 'negative', message: 'Exporteren is geannuleerd' }) // user abort or files too sensitive or dangerous
+        console.error(error) // unknown error --> download file via catch by emty filehandle
+      }
+    }
+  
+    const blobWriter = new zip.BlobWriter('application/zip')
+    const zipWriter = new zip.ZipWriter(blobWriter)
+
+    // Add oscOutput data to zip
+    const jsonfile = JSON.stringify(oscOutput)
+    await zipWriter.add('oscoutput.json', new zip.TextReader(jsonfile))
+
+    const blob = await zipWriter.close()
+
+    // Write zip file to disk
+    try {
+      const writable = await oscFileHandle.createWritable()
+      await writable.write(blob)
+      await writable.close()
+
+      Notify.create({ type: 'positive', message: `OSC output instellingen opgeslagen als ${oscFileHandle.name}`, position: 'top' })
+      return true
+    } catch {
+      Notify.create({
+        type: 'negative',
+        message: 'OSC output instellingen kon niet worden opgeslagen. --> Downloaden... gelukt?',
+        timeout: 0,
+        actions: [{ icon: 'close', color: 'white' }]
+      })
+      // try download
+      const link = document.createElement('a')
+      link.download = 'oscoutput.vezosc'
+      link.href = URL.createObjectURL(blob)
+      link.click()
+      URL.revokeObjectURL(link.href)
     }
   }
+
 }
 
-export default ({ app }) => {
+export default defineBoot(({ app }) => {
   // Allows to use this.$fs inside Vue components.
   app.config.globalProperties.$fs = fs
-}
+})
 
 export { fs }

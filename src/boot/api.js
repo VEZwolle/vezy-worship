@@ -1,19 +1,69 @@
+import { defineBoot } from '#q-app/wrappers'
 import axios from 'axios'
-import http from 'axios/lib/adapters/http'
+import { Notify, Dialog } from 'quasar'
+
+// Be careful when using SSR for cross-request state pollution
+// due to creating a Singleton instance here;
+// If any client changes this (global) instance, it might be a
+// good idea to move this instance creation inside of the
+// "export default () => {}" function below (which runs individually
+// for each client)
 
 const api = axios.create({
-  baseURL: process.env.API_URL,
-  adapter: http
+  baseURL: process.env.API_URL
 })
+
+api.interceptors.request.use((request) =>
+  new Promise((resolve, reject) => {
+    let token = localStorage.getItem('VezyWorshipApiToken')
+    if (token) {
+      request.headers.Authorization = token
+      resolve(request)
+    } else {
+      Notify.create({ type: 'info', message: 'Cloud functies: gebruikers sleutel niet ingesteld!', position: 'top' })
+      Dialog.create({
+        title: 'Vezy worship - Cloud functies',
+        message: 'Wat is uw gebruikers sleutel?',
+        prompt: {
+          model: '',
+          isValid: val => val.length > 5,
+          type: 'text'
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        token = data
+        localStorage.setItem('VezyWorshipApiToken', token)
+        if (token) {
+          request.headers.Authorization = token
+          resolve(request)
+        } else {
+          reject()
+        }
+      }).onCancel(() => {
+        reject()
+      })
+    }
+  },
+  (error) => Promise.reject(error)
+  )
+)
 
 api.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(error)
+  (error) => {
+    if (error.response.status === 401 && error.response.data?.api === 'VezyWorshipApi') {
+      localStorage.removeItem('VezyWorshipApiToken')
+      Notify.create({ type: 'negative', message: 'Cloud functies: Gebruikers sleutel niet geldig!' })
+    }
+    Promise.reject(error)
+  }
 )
 
-export default ({ app }) => {
-  // Allows to use this.$api inside Vue components.
+export default defineBoot(({ app }) => {
   app.config.globalProperties.$api = api
-}
+  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
+  //       so you can easily perform requests against your app's API
+})
 
 export { api }
