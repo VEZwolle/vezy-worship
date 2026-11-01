@@ -1,14 +1,15 @@
-import functions from 'firebase-functions/v1'
-import admin from 'firebase-admin'
+import * as functions from 'firebase-functions/v1'
+import { initializeApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
 import express from 'express'
 import axios from 'axios'
 import cors from 'cors'
 import { algoliasearch } from 'algoliasearch'
 
 // Initialization
-admin.initializeApp()
+initializeApp()
 
-const db = admin.firestore()
+const db = getFirestore()
 
 const app = express()
 app.use(cors())

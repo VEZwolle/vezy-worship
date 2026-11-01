@@ -155,7 +155,7 @@
           <div class="row q-pt-sm">
             <div class="col-auto q-pt-xs" v-text="'Cloud'" />
             <div class="col-auto q-pt-sm q-px-xs">
-              <img src="../../assets/algolia-logo.svg" height="16">
+              <img src="~@/assets/algolia-logo.svg" height="16">
             </div>
             <q-toggle v-model="searchBaseIsLocal" checked-icon="lyrics" unchecked-icon="cloud" color="primary" dense>
               <q-tooltip>cloud of locale database</q-tooltip>
@@ -188,7 +188,7 @@
               <div class="row">
                 <div class="col-auto q-pt-xs text-h6" v-text="'Cloud '" />
                 <div class="col-auto q-pt-sm q-px-xs">
-                  <img src="../../assets/algolia-logo.svg" height="24">
+                  <img src="~@/assets/algolia-logo.svg" height="24">
                 </div>
                 <div class="col-auto q-pt-xs text-h6" v-text="' : '" />
               </div>
@@ -299,9 +299,9 @@
 <script>
 import { defineComponent } from 'vue'
 import cloneDeep from 'lodash/cloneDeep'
-import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '../song/database/algolia.js'
-import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsSettings, setPresentationPresetsSettings } from '../presets-settings.js'
-import oscOutput from '../osc-output-settings.js'
+import { GetAlgoliaDatabase, getAlgoliaCollections, algoliaIndexNames } from '@/components/song/database/algolia.js'
+import { imageFiles, openPresentationPresetsSettings, removePresentationPresetsSettings, setPresentationPresetsSettings } from '@/components/presets-settings.js'
+import oscOutput from '@/components/osc-output-settings.js'
 
 export default defineComponent({
   name: 'AppSettingsDialog',

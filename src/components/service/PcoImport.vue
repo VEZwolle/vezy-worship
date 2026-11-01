@@ -700,7 +700,7 @@ export default defineComponent({
     },
     pcoInlogEvent (event) {
       // Verify App - api Domain
-      if (event.origin !== process.env.API_HOST_URL) return
+      if (event.origin !== import.meta.env.API_HOST_URL) return
       if (event.data.token) localStorage.setItem('pcoToken', event.data.token)
       if (event.data.tokenExpiry) localStorage.setItem('pcoTokenExpiry', event.data.tokenExpiry)
       if (event.data.refreshToken) localStorage.setItem('pcoRefreshToken', event.data.refreshToken)
