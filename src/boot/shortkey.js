@@ -1,4 +1,4 @@
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import ShortKey from 'vue-three-shortkey'
 
 export default defineBoot(({ app }) => {

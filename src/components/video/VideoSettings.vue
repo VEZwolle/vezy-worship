@@ -12,7 +12,7 @@
       <q-tab-panel name="video">
         <q-card-section>
           <div v-if="fileUrl" class="row">
-            <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="col" />
+            <q-input v-model="settings.title" outlined label="Naam" :rules="[isRequired]" class="col" />
             <q-toggle v-model="settings.noLivestream" label="Niet op de livestream tonen" class="col2" />
           </div>
           <q-file v-model="file" accept="video/*" label="Selecteer video" outlined @update:model-value="update">

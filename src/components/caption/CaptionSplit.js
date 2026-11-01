@@ -156,7 +156,7 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
       tempFormatBeamerLines = []
       n++
       if (n >= plainTextSlides.length) {
-        lengthCount = 0
+        // lengthCount = 0
         break
       }
       lengthCount = plainTextSlides[n].replaceAll('\n', '').length

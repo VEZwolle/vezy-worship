@@ -13,7 +13,7 @@
       <q-tab-panel name="text">
         <div class="row q-gutter-md">
           <div class="col">
-            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+            <q-input v-model="settings.title" outlined label="Titel" :rules="[isRequired]" />
           </div>
           <div class="col">
             <div class="row q-gutter-md">

@@ -1,4 +1,4 @@
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 import axios from 'axios'
 import { Notify, Dialog } from 'quasar'
 
@@ -10,7 +10,7 @@ import { Notify, Dialog } from 'quasar'
 // for each client)
 
 const api = axios.create({
-  baseURL: process.env.API_URL
+  baseURL: import.meta.env.API_URL
 })
 
 api.interceptors.request.use((request) =>

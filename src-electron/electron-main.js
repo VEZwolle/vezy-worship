@@ -4,12 +4,13 @@ import ElectronUpdater from 'electron-updater'
 const { autoUpdater } = ElectronUpdater // ivm CommonJS module
 import path from 'node:path'
 import os from 'node:os'
-import { fileURLToPath } from 'node:url'
+import {
+  registerQuasarRuntime,
+  resolveElectronAssetsPath
+} from '#q-app/electron/main'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
-
-const currentDir = fileURLToPath(new URL('.', import.meta.url))
 
 let autoUpdaterDownloaded = false
 
@@ -76,11 +77,12 @@ ipcMain.handle('oscSend', (e, outAddress, outPort, buffer) => {
 app.commandLine.appendSwitch('enable-experimental-web-platform-features')
 
 app.whenReady().then(() => {
+  registerQuasarRuntime()
   const primaryDisplay = screen.getPrimaryDisplay()
 
   mainWindow = createWindow('/', primaryDisplay)
 
-  if (process.env.DEBUGGING) {
+  if (import.meta.env.QUASAR_DEBUG) {
     // if on DEV or Production with debug enabled
     mainWindow.webContents.openDevTools()
   } else {
@@ -135,7 +137,7 @@ app.whenReady().then(() => {
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
-            icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
+            icon: resolveElectronAssetsPath('icons/icon.png'), // Windows and Linux
             title: 'VezyWorship | Planning Center Online',
             autoHideMenuBar: true,
             width: 750,
@@ -149,7 +151,7 @@ app.whenReady().then(() => {
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {
-            icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
+            icon: resolveElectronAssetsPath('icons/icon.png'), // Windows and Linux
             autoHideMenuBar: true
           }
         }
@@ -202,7 +204,7 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
   const { x, y } = display.bounds
 
   const window = new BrowserWindow({
-    icon: path.resolve(currentDir, 'icons/icon.png'), // tray icon
+    icon: resolveElectronAssetsPath('icons/icon.png'), // Windows and Linux
     width,
     height,
     frame,
@@ -211,11 +213,8 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     useContentSize: true,
     webPreferences: {
       contextIsolation: true,
-      // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
-      preload: path.resolve(
-        currentDir,
-        path.join(process.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
-      )
+      // https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
+      preload: path.join(import.meta.dirname, 'electron-preload.cjs')
     }
   })
 
@@ -228,8 +227,8 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
   }
 
   if (url !== 'about:blank') {
-    if (process.env.DEV) {
-      window.loadURL(process.env.APP_URL + '#' + url)
+    if (import.meta.env.QUASAR_DEV) {
+      window.loadURL(import.meta.env.QUASAR_APP_URL + '#' + url)
     } else {
       window.loadFile('index.html', { hash: url })
     }
@@ -237,7 +236,7 @@ function createWindow (url, display, fullscreen = false, width = 1344, height = 
     window.loadURL(url)
   }
 
-  if (process.env.DEBUGGING) {
+  if (import.meta.env.QUASAR_DEBUG) {
     // if on DEV or Production with debug enabled
     window.webContents.openDevTools()
   }

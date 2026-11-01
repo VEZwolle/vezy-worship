@@ -45,7 +45,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import BgPng from '../../assets/bg.png'
+import BgPng from '@/assets/bg.png'
 
 export default defineComponent({
   name: 'BackgroundSetting',

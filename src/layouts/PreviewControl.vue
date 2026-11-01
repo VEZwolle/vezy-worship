@@ -42,9 +42,9 @@
 
 <script>
 import { defineComponent } from 'vue'
-import presentationTypes from '../presentation-types.js'
-import presentationPresets from '../presentation-presets.js'
-import OutputBoxes from '../output/OutputBoxes.vue'
+import presentationTypes from '@/components/presentation-types.js'
+import presentationPresets from '@/components/presentation-presets.js'
+import OutputBoxes from '@/components/output/OutputBoxes.vue'
 
 export default defineComponent({
   name: 'PreviewControl',

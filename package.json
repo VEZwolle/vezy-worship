@@ -1,6 +1,6 @@
 {
   "name": "vezy-worship",
-  "version": "2.2.9",
+  "version": "3.0.0",
   "description": "Presentatiesoftware voor beamer én livestream",
   "productName": "VezyWorship",
   "author": "Jan-Paul Kleemans jpkleemans@gmail.com & Jeroen Faber",
@@ -12,7 +12,7 @@
     "test": "echo \"No test specified\" && exit 0",
     "serve": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare",
+    "postinstall": "quasar prepare --silent",
     "electron:serve": "quasar dev -m electron",
     "electron:build": "quasar build -m electron -P never",
     "electron:build-debug": "quasar build -m electron -d -P never",
@@ -23,46 +23,45 @@
     "api:update-data": "powershell ./dev/emulator-update-data.ps1"
   },
   "dependencies": {
-    "@quasar/extras": "^1.17.0",
-    "@zip.js/zip.js": "^2.8.7",
-    "axios": "^1.12.2",
-    "core-js": "^3.46.0",
-    "dayjs": "^1.11.18",
-    "electron-store": "11.0.2",
-    "electron-updater": "^6.7.0",
-    "idb-keyval": "^6.2.2",
-    "lodash": "^4.17.21",
-    "nanoid": "^5.1.6",
+    "@quasar/extras": "^2.1.0",
+    "quasar": "^2.35.2",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0",
+    "@zip.js/zip.js": "^2.24.0",
+    "axios": "^1.21.0",
+    "core-js": "^3.51.0",
+    "dayjs": "^1.11.23",
+    "idb-keyval": "^6.3.0",
+    "lodash": "^4.18.1",
+    "nanoid": "^6.0.2",
     "osc-min": "^2.1.2",
-    "pinia": "^3.0.3",
-    "pinia-shared-state": "1.0.1",
-    "quasar": "^2.18.5",
-    "vue": "^3.5.20",
-    "vue-router": "^4.5.1",
+    "pinia": "^4.1.0",
+    "pinia-shared-state": "2.1.0",
     "vue-three-shortkey": "^4.0.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
-    "@quasar/app-vite": "^2.4.0",
-    "autoprefixer": "^10.4.21",
-    "electron": "^38.2.2",
-    "electron-builder": "^26.1.0",
-    "eslint": "^9.37.0",
-    "eslint-plugin-vue": "^9.33.0",
-    "globals": "^16.4.0",
-    "postcss": "^8.5.6",
-    "vite-plugin-checker": "^0.11.0"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-vue": "^10.12.0",
+    "globals": "^17.14.0",
+    "vite-plugin-checker": "^0.14.5",
+    "vue-eslint-parser": "^10.4.1",
+    "@quasar/app-vite": "^3.10.3",
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32"
   },
-  "overrides": {
-    "broadcast-channel": {
-      "@babel/runtime": "^7.26.10"
-    },
-    "glob": "^9.0.0",
-    "rimraf": "^4.0.0"
-  },
+  "keywords": [
+    "quasar",
+    "quasar-app",
+    "quasar-cli",
+    "quasar-app-vite",
+    "vite",
+    "vue",
+    "vuejs"
+  ],
   "engines": {
-    "node": "^28 || ^26 || ^24 || ^22",
+    "node": ">= 26 || ^24 || ^22.12",
     "npm": ">= 11.2.0",
     "yarn": ">= 1.21.1"
   }
