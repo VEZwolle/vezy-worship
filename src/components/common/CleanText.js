@@ -77,8 +77,7 @@ export function sanitizerHtmlService (service) {
   if (!service) return service
   // clean for xxs attack in v-html
   service.presentations.forEach(presentation => {
-    // eslint-disable-next-line no-unused-vars
-    presentation = sanitizerHtmlPresentation(presentation)
+    sanitizerHtmlPresentation(presentation) // wordt direct in arrays settings aangepast hoeft niet toe te kennen
   })
 
   return service

@@ -469,7 +469,7 @@ export default defineComponent({
 
       const getLanguage = []
       const lines = []
-      let language = []
+      let language // = []
       for (let i = 0; i < this.lyricsLines.length; i++) {
         if (this.lyricsLines[i].output === 1) {
           getLanguage.push(this.lyricsLines[i].text)

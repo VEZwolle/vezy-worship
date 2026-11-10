@@ -1,25 +1,25 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       Film toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
       Nieuw film toevoegen aan setlist:
     </div>
     <p>
-      Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddvideo.png">
+      Via de <img src="~@/assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="~@/assets/help/setlistaddvideo.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
-      <img src="../../assets/help/addvideodialog.png"><br>
+      <img src="~@/assets/help/addvideodialog.png"><br>
       Kies hier een videobestand door in het vak "selecteer video" te klikken<br>
       Onder zie je nu een voorbeeld van het bestand verschijnen.<br>
       Hierna kan je eventueel de <i>naam</i> nog invullen.<br>
       In video wordt op de beamer en op de livestream getoond.<br>
       Tevens kan je bij te lange films opgeven op welk punt hij moet starten met afspelen en op welk punt hij moet stoppen.<br>
       Zie onder wat aandachtspunten<br>
-      <img src="../../assets/help/videodialog.png">
+      <img src="~@/assets/help/videodialog.png">
     </p>
     <p>
       <b><u>Naam</u></b><br>
@@ -53,7 +53,7 @@
       Wanneer de clear knop aan staat wordt de video niet gestart en kun je in het control scherm van live de startpositie schuiven/afspelen. Wanneer je clear uit zet start de film met afspelen op dat punt. Clear weer aan zetten stop de video weer en laat hem op de huidige positie staan.<br>
       Aan de rechter zijde zie je de tijd dat het nog duurt tot stopplek van de film.<br>
       <i>Opm.: De film moet op een aantal plekken tegelijk starten, dit is het meest gelijk wanneer je de film eerst naar live te zet en daarna pas de clear knop uit zet om hem te starten/tonen. Wanneer je hem gelijk laat afspelen kan het zijn dat er een kleine verschil zit in de timing tussen beamer en livestream.</i>
-      <img src="../../assets/help/videocontrol.png">
+      <img src="~@/assets/help/videocontrol.png">
     </p>
     <div class="text-h6 q-mb-md">
       Afwijkende achtergrond
@@ -62,8 +62,8 @@
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
       Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
       Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
-      <img src="../../assets/help/achtergronddonkerder.png">
+      <img src="~@/assets/help/scriptureachtergronddialog.png"><br>
+      <img src="~@/assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken
@@ -71,7 +71,7 @@
     <p>
       Optie 1: Selecteer het onderdeel en kies aan het einde van de regel het potloodje.<br>
       Optie 2: Klik met de rechtermuisknop op het onderdeel; er verschijnt een menu en kies dan bewerken.<br>
-      <img src="../../assets/help/setlistedit.png">
+      <img src="~@/assets/help/setlistedit.png">
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>

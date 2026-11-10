@@ -1,9 +1,9 @@
-import { defineBoot } from '#q-app/wrappers'
-import PresentationSettingsDialog from '../components/presentation/PresentationSettingsDialog.vue'
-import SearchDatabaseDialog from '../components/song/database/SearchDatabaseDialog.vue'
-import SongLyricsViews from '../components/song/database/SongLyricsViews.vue'
-import SongItemDatabase from '../components/song/database/SongItemDatabase.vue'
-import SongItem from '../components/song/database/SongItem.vue'
+import { defineBoot } from '#q-app'
+import PresentationSettingsDialog from '@/components/presentation/PresentationSettingsDialog.vue'
+import SearchDatabaseDialog from '@/components/song/database/SearchDatabaseDialog.vue'
+import SongLyricsViews from '@/components/song/database/SongLyricsViews.vue'
+import SongItemDatabase from '@/components/song/database/SongItemDatabase.vue'
+import SongItem from '@/components/song/database/SongItem.vue'
 
 export default defineBoot(({ app }) => {
   app.component('PresentationSettingsDialog', PresentationSettingsDialog)

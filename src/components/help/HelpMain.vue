@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       VezyWorship
     </div>
     <p>
@@ -70,7 +70,7 @@
     Basis instellingen:
   </div>
   <p>
-    Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm kan je diverse instellingen doen.<br>
+    Via de knop <img src="~@/assets/help/buttonsettings.png"> rechts boven in het scherm kan je diverse instellingen doen.<br>
     Na wijzigen moet de desktop app opnieuw opgestart worden. (de instellingen worden per pc opgeslagen.)<br>
   </p>
   <ul>
@@ -80,13 +80,13 @@
       Daarnaast kan je ook instellen of de OSC output aan moet staan.
     </li>
     <li>
-      Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="../../assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
+      Bij de web-app is de monitor keuze niet aanwezig; hier zijn 3 knoppen aanwezig <img src="~@/assets/help/buttonoutput.png"> om het uitvoerscherm van de beamer, de livestream & de stageweergave te tonen in een nieuw browser venster.
     </li>
     <li>
       In de desktop app kan je een eigen standaard achtergrond & standaard collecte/gesprek en gebed en einde dienst afbeeldingen instellen.
     </li>
     <li>
-      De PCO live weergave kan je starten met de knop <img src="../../assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
+      De PCO live weergave kan je starten met de knop <img src="~@/assets/help/pcolive.png"> , met de rechter muisknop op deze knop kan je dit scherm ook leeg maken of een andere live dienst uit PCO kiezen via de id.
     </li>
     <li>
       Een achtergrond kleur instellen voor de livestream en beamer bijv. voor gebruik van de chroma en/of alpha key (of weer leeg gehaald worden voor standaard waarden).
@@ -122,7 +122,7 @@
         <q-item-section>{{ apiFunction.name }}</q-item-section>
       </q-item>
     </q-list>
-    Via de knop <img src="../../assets/help/buttonsettings.png"> rechts boven in het scherm kan je de api-key instellen.<br>
+    Via de knop <img src="~@/assets/help/buttonsettings.png"> rechts boven in het scherm kan je de api-key instellen.<br>
     Na wijzigen moet de desktop app opnieuw opgestart worden. (de instellingen worden per pc/browser opgeslagen.)<br>
   </p>
 </template>

@@ -25,11 +25,11 @@
 </template>
 
 <script>
-import ToolbarTop from './layout/ToolbarTop.vue'
+import ToolbarTop from '@/layouts/ToolbarTop.vue'
 import SetlistControl from './setlist/SetlistControl.vue'
-import PreviewControl from './layout/PreviewControl.vue'
-import LiveControl from './layout/LiveControl.vue'
-import OpenDragDrop from './layout/OpenDragDrop.vue'
+import PreviewControl from '@/layouts/PreviewControl.vue'
+import LiveControl from '@/layouts/LiveControl.vue'
+import OpenDragDrop from '@/layouts/OpenDragDrop.vue'
 
 export default {
   components: { ToolbarTop, SetlistControl, PreviewControl, LiveControl, OpenDragDrop },

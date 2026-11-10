@@ -1,17 +1,31 @@
-import functions from 'firebase-functions/v1'
-import admin from 'firebase-admin'
+import * as functions from 'firebase-functions/v1'
+import { initializeApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
 import express from 'express'
 import axios from 'axios'
 import cors from 'cors'
 import { algoliasearch } from 'algoliasearch'
 
 // Initialization
-admin.initializeApp()
+initializeApp()
 
-const db = admin.firestore()
+const db = getFirestore()
 
 const app = express()
-app.use(cors())
+var allowedOrigins = ['http://localhost:8080',
+                      'https://vezy-worship.web.app'];
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not allow access from the specified Origin.'
+      return callback(new Error(msg), false)
+    }
+    return callback(null, true)
+  }
+}))
 
 /**
  * Check authorization

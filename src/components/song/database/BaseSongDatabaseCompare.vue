@@ -129,7 +129,7 @@ export default defineComponent({
       this.songsTodoIndex = []
       // search database
       for (let k = 0; k < this.songs.length; k++) {
-        let databaseSongFilter = []
+        let databaseSongFilter // = []
         if (this.$store.searchBaseIsLocal) {
           databaseSongFilter = this.filterSearchSongInLocalDatabase(this.songs[k].settings).slice(0, 99) || [] // max 99 results pro song
         } else {
@@ -302,8 +302,7 @@ export default defineComponent({
     },
     async addToDatabase () {
       this.songs.forEach(song => {
-        // eslint-disable-next-line no-unused-vars
-        song = sanitizerHtmlPresentation(song)
+        sanitizerHtmlPresentation(song) // onder de originele settings was alles al aangepast via function.
       })
       if (this.$store.searchBaseIsLocal) return this.addToLocalDatabase()
       return await this.addToAlgoliaDatabase()
@@ -328,7 +327,7 @@ export default defineComponent({
     },
     async addToAlgoliaDatabase () {
       let result = true
-      let record = null
+      let record // = null
       const addRecords = []
       const editRecords = []
       for (let i = 0; i < this.songs.length; i++) {
@@ -350,15 +349,13 @@ export default defineComponent({
       if (addRecords.length) {
         const apiResult = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, addRecords, false)
         if (!apiResult) {
-          result = false
-          return
+          return false // result = false
         }
       }
       if (editRecords.length) {
         const apiResult = await AddToAlgoliaDatabase(this.$store.algoliaIndexId, editRecords, true)
         if (!apiResult) {
-          result = false
-          return
+          return false // result = false
         }
       }
       return result

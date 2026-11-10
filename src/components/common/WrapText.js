@@ -119,7 +119,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
     let lineRFS = [] // line pieces Result Format Segments
     // get format change
     linePieces.forEach(linePiece => {
-      let linePieceText = ''
+      let linePieceText // =''
       switch (true) {
         case linePiece.startsWith('b>'):
           bold = true
@@ -312,7 +312,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
             remainingWidth = maxWidth
             firstlinePiece = true
             const lineRFStemp = []
-            let endSpace = false
+            let endSpace // = false
             if (allLines[0].line !== i) { // niet afgebroken in laatste line.
               // <--> kan dit wel voorkomen? nieuwe line i gebeurt alleen bij regeleinde <br> en dat kan nooit meer dan 1 i verder zijn en die blijft dan geheel voor volgende sheet of een deel.
               i = allLines[0].line // 'start opnieuw na i, resterend van i nog laten lopen

@@ -7,6 +7,7 @@
           :options="listFormatBeamer"
           fill-input
           class="col q-pb-none"
+          hide-bottom-space
           outlined
           label="Opmaak type"
           @update:model-value="$emit('update:formatBeamer', settingsFormatBeamer)"
@@ -17,6 +18,7 @@
           outlined
           stack-label
           class="col2 q-pl-md q-pb-none"
+          hide-bottom-space
           min="1"
           step="1"
           label="max regels"
@@ -36,6 +38,7 @@
           :options="listFormatLivestream"
           fill-input
           class="col q-pb-none"
+          hide-bottom-space
           outlined
           label="Opmaak type"
           @update:model-value="$emit('update:formatLivestream', settingsFormatLivestream)"
@@ -46,6 +49,7 @@
           outlined
           stack-label
           class="col2 q-pl-md q-pb-none"
+          hide-bottom-space
           min="50"
           step="50"
           label="max tekens"

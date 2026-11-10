@@ -13,7 +13,7 @@
       <q-tab-panel name="text">
         <div class="row q-gutter-md">
           <div class="col">
-            <q-input v-model="settings.title" outlined label="Titel" :rules="['required']" />
+            <q-input v-model="settings.title" outlined label="Titel" :rules="[isRequired]" />
           </div>
           <div class="col">
             <div class="row q-gutter-md">
@@ -22,7 +22,6 @@
                   <template #append>
                     <q-select
                       v-model="settings.collection"
-                      borderless
                       hide-selected
                       menu-anchor="bottom right"
                       menu-self="top right"
@@ -477,6 +476,7 @@ export default defineComponent({
 .q-input {
   :deep(.q-select) {
     margin-right: -12px;
+    max-width: none;
 
     .q-field__control,
     .q-field__control::before {

@@ -2,11 +2,11 @@ import { defineStore, acceptHMRUpdate } from 'pinia'
 import cloneDeep from 'lodash/cloneDeep'
 import { nanoid } from 'nanoid'
 import PACKAGE from '../../package.json'
-import presentationPresets from '../components/presentation-presets.js'
+import presentationPresets from '@/components/presentation-presets.js'
 import { versionUpdate } from './versionUpdate.js'
-import { sanitizerHtmlService } from '../components/common/CleanText.js'
-import { addControlCloneDeep } from '../components/presentation-control-create.js'
-import oscOutput from '../components/osc-output-settings.js'
+import { sanitizerHtmlService } from '@/components/common/CleanText.js'
+import { addControlCloneDeep } from '@/components/presentation-control-create.js'
+import oscOutput from '@/components/osc-output-settings.js'
 
 let clearLastShortKey
 
