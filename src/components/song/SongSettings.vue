@@ -22,7 +22,6 @@
                   <template #append>
                     <q-select
                       v-model="settings.collection"
-                      borderless
                       hide-selected
                       menu-anchor="bottom right"
                       menu-self="top right"
@@ -477,6 +476,7 @@ export default defineComponent({
 .q-input {
   :deep(.q-select) {
     margin-right: -12px;
+    max-width: none;
 
     .q-field__control,
     .q-field__control::before {
