@@ -28,7 +28,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { CleanText } from './CleanText.js'
+import { CleanText, fromHtmlEntity } from './CleanText.js'
 import { debounce, scroll } from 'quasar'
 import { splitSong } from '../song/SongSplit.js'
 import { getCaretLine, setCaretLine } from './Caret.js'
@@ -144,13 +144,14 @@ export default defineComponent({
     },
     htmlToText (htmlText) {
       // first run cleantext in editor
-      return htmlText
+      return fromHtmlEntity(htmlText
         .replace(/(<\/?b>)|(<\/?i>)|(<\/?u>)|(<\/?sup>)|(<\/?small>)*?/g, '') // verwijder alle opmaak elementen
         .replace(/^(<div><br><\/div>|<div>)/g, '') // verwijder 1e nieuwe regel of 1e regelstart
         .replace(/<div><br><\/div>/g, '\n') // vervang lege regel door newline
         .replace(/<div>/g, '\n') // vervang regelstart door newline
         .replace(/<\/div>/g, '') // verwijder overige </div>
         .replace(/&nbsp;/g, ' ') // html spatie --> spatie
+      )
     },
     textToHtml (text) {
       const sections = splitSong(text, 100, 0, false) // no auto split due to extra empty lines to be added

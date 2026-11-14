@@ -31,7 +31,6 @@ export default defineComponent({
     },
     containerStyle () {
       const { zoom, x, y } = this.settingsimage
-
       return {
         position: 'absolute',
         width: `${zoom}vw`,

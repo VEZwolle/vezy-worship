@@ -25,16 +25,19 @@ export function CleanText (content) {
   return text
 }
 
-export function sanitizerHtml (content) {
+export function sanitizerHtml (content, entities = true) {
   if (!content) return content
   // validHtml = 'div|br|p|b|i|u|sub|sup|small|ins|del|mark'
   let text = content
     .replace(/<\/?script(.*?)>/gi, '') //  verwijder alle <script ...> & </script> elementen
     .replace(/<\/?span(.*?)>/gi, '') //    verwijder alle <span ...> & </span> elementen
     .replace(/( style="(.*?);*"| class="(.*?)")>/gi, '>') // verwijder alle extra "style" & class elementen
-    .replace(/<(?!\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)>)/gi, '&#60;') // vervang alle "<"...> welke niet validHtml hebben
-    .replace(/(?<!(<\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)))>/gi, '&#62;') // vervang alle <...">" welke niet validHtml hebben
-  return text
+    if (entities) {
+      text = text
+        .replace(/<(?!\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)>)/gi, '&lt;') // vervang alle "<"...> welke niet validHtml hebben | Named: '&lt;' of Numeric '&#60;'
+        .replace(/(?<!(<\/?(div|br|p|b|i|u|sub|sup|small|ins|del|mark)))>/gi, '&gt;') // vervang alle <...">" welke niet validHtml hebben | Named: '&gt;' of Numeric: '&#62;'
+    }
+    return text
 }
 
 export function sanitizerHtmlPresentation (presentation) {
@@ -42,18 +45,18 @@ export function sanitizerHtmlPresentation (presentation) {
   // clean for xxs attack in v-html
   switch (presentation.type) {
     case 'song':
-      presentation.settings.title = sanitizerHtml(presentation.settings.title)
-      presentation.settings.collection = sanitizerHtml(presentation.settings.collection)
-      presentation.settings.number = sanitizerHtml(presentation.settings.number)
-      presentation.settings.text = sanitizerHtml(presentation.settings.text).replace(/&nbsp;/g, ' ')
-      presentation.settings.translation = sanitizerHtml(presentation.settings.translation).replace(/&nbsp;/g, ' ')
+      presentation.settings.title = sanitizerHtml(presentation.settings.title, false)
+      presentation.settings.collection = sanitizerHtml(presentation.settings.collection, false)
+      presentation.settings.number = sanitizerHtml(presentation.settings.number, false)
+      presentation.settings.text = sanitizerHtml(presentation.settings.text, false).replace(/&nbsp;/g, ' ')
+      presentation.settings.translation = sanitizerHtml(presentation.settings.translation, false).replace(/&nbsp;/g, ' ')
       break
     case 'caption':
-      presentation.settings.title = sanitizerHtml(presentation.settings.title)
+      presentation.settings.title = sanitizerHtml(presentation.settings.title, false)
       presentation.settings.text = sanitizerHtml(presentation.settings.text)
       break
     case 'scripture':
-      presentation.settings.title = sanitizerHtml(presentation.settings.title)
+      presentation.settings.title = sanitizerHtml(presentation.settings.title, false)
       presentation.settings.text = sanitizerHtml(presentation.settings.text)
       presentation.settings.bible = sanitizerHtml(presentation.settings.bible)
       presentation.settings.chapter = presentation.settings.chapter ? parseInt(presentation.settings.chapter) : presentation.settings.chapter
@@ -62,7 +65,7 @@ export function sanitizerHtmlPresentation (presentation) {
       break
     case 'image':
     case 'video':
-        presentation.settings.title = sanitizerHtml(presentation.settings.title)
+        presentation.settings.title = sanitizerHtml(presentation.settings.title, false)
         break
     case 'countdown':
       break
@@ -81,4 +84,24 @@ export function sanitizerHtmlService (service) {
   })
 
   return service
+}
+
+export function toHtmlEntity (text) {
+  if (!text) return text
+  return text
+          .replace(/&/g, '&amp;') // first & // html-entities
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/ {2}/g, '&nbsp;&nbsp;')
+          .replace(/^ /g, '&nbsp;')
+          .replace(/ $/g, '&nbsp;')
+}
+
+export function fromHtmlEntity (text) {
+  if (!text) return text
+  return text
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&') // html-entities
 }
