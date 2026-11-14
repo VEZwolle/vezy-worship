@@ -1,5 +1,72 @@
 // app global css in SCSS form
+// https://fontsource.org/fonts/alan-sans/
+// font-family: 'Alan Sans', sans-serif;
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: local("Alan Sans Light"), url(../assets/fonts/alan-sans/AlanSans-Light.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: local("Alan Sans"), url(../assets/fonts/alan-sans/AlanSans-Regular.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: local("Alan Sans Medium"), url(../assets/fonts/alan-sans/AlanSans-Medium.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: local("Alan Sans SemiBold"), url(../assets/fonts/alan-sans/AlanSans-SemiBold.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: local("Alan Sans Bold"), url(../assets/fonts/alan-sans/AlanSans-Bold.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 800;
+  src: local("Alan Sans ExtraBold"), url(../assets/fonts/alan-sans/AlanSans-ExtraBold.woff2) format(woff2);
+}
+
+@font-face {
+  font-family: 'Alan Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 900;
+  src: local("Alan Sans Black"), url(../assets/fonts/alan-sans/AlanSans-Black.woff2) format(woff2);
+}
+// font-family: 'Alan Sans Variable', sans-serif;
+@font-face {
+  font-family: 'Alan Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(../assets/fonts/alan-sans/AlanSans-wght.woff2) format('woff2-variations');
+  }
+
 // https://fonts.google.com/specimen/Ubuntu
+// font-family: 'Ubuntu', sans-serif;
 @font-face {
   font-family: "Ubuntu";
   font-style: normal;
@@ -65,6 +132,7 @@
 }
 
 // CMG Sans
+// font-family: 'CMG Sans', sans-serif;
 @font-face {
   font-family: "CMG Sans";
   font-style: normal;
