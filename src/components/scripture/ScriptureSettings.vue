@@ -12,10 +12,10 @@
       <q-tab-panel name="text">
         <div class="row">
           <div class="col">
-            <q-input v-model="titleBook" outlined label="Titel (boek, vers)" :rules="['required']" @change="titleUpdate" />
+            <q-input v-model="titleBook" outlined label="Titel (boek, vers)" :rules="[isRequired]" @change="titleUpdate" />
           </div>
           <div class="col q-pl-sm">
-            <q-input v-model="titleBible" outlined label="Titel (vertaling)" :rules="['required']" @change="titleUpdate" />
+            <q-input v-model="titleBible" outlined label="Titel (vertaling)" :rules="[isRequired]" @change="titleUpdate" />
           </div>
         </div>
 
@@ -52,7 +52,7 @@
               stack-label
               min="1"
               label="Hoofdstuk"
-              :rules="[required, min1]"
+              :rules="[isRequired, min1]"
             />
           </div>
 
@@ -222,9 +222,6 @@ export default defineComponent({
         this.titleUpdate()
       }
       this.settings.text = CleanText(this.settings.text)
-    },
-    required (val) {
-      return !!val || 'Verplicht'
     },
     min1 (val) {
       if (typeof val !== 'number') {

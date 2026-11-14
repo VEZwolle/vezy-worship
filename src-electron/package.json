@@ -1,0 +1,15 @@
+{
+  "name": "vezy-worship-electron-app",
+  "version": "3.0.0",
+  "description": "VezyWorship Electron Folder",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "electron-store": "12.0.0",
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0"
+  }
+}

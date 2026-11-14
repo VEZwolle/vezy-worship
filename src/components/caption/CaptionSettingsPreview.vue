@@ -7,6 +7,7 @@
           :options="listFormatBeamer"
           fill-input
           class="col q-pb-none"
+          hide-bottom-space
           outlined
           label="Opmaak type"
           @update:model-value="$emit('update:formatBeamer', settingsFormatBeamer)"
@@ -17,6 +18,7 @@
           outlined
           stack-label
           class="col2 q-pl-md q-pb-none"
+          hide-bottom-space
           min="1"
           step="1"
           label="max regels"
@@ -36,6 +38,7 @@
           :options="listFormatLivestream"
           fill-input
           class="col q-pb-none"
+          hide-bottom-space
           outlined
           label="Opmaak type"
           @update:model-value="$emit('update:formatLivestream', settingsFormatLivestream)"
@@ -46,6 +49,7 @@
           outlined
           stack-label
           class="col2 q-pl-md q-pb-none"
+          hide-bottom-space
           min="50"
           step="50"
           label="max tekens"
@@ -67,6 +71,7 @@ import OutputPreview from '../output/OutputPreview.vue'
 import CaptionOutputLivestream from './CaptionOutputLivestream.vue'
 import CaptionOutputBeamer from './CaptionOutputBeamer.vue'
 import { splitTextCaption, titleLines } from '../caption/CaptionSplit.js'
+import { fromHtmlEntity } from '../common/CleanText.js'
 import { debounce } from 'quasar'
 
 export default defineComponent({
@@ -185,11 +190,7 @@ export default defineComponent({
       for (let i = 0; i < this.control.sections.length; i++) {
         for (let j = 0; j < this.control.sections[i].slides.length; j++) {
           if (this.control.sections[i].slides[j][0]) {
-            const charLength = this.control.sections[i].slides[j][0]
-              .replace(/<.+?>/g, '')
-              .replace(/&nbsp;/g, ' ')
-              .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') // html-entities
-              .length
+            const charLength = fromHtmlEntity(this.control.sections[i].slides[j][0].replace(/<.+?>/g, '')).length
             sumLength += charLength
           }
           sumCharLength.push({ count: sumLength, section: i, slide: j })

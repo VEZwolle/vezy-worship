@@ -1,4 +1,4 @@
-import { CleanText } from '../components/common/CleanText.js'
+import { CleanText } from '@/components/common/CleanText.js'
 
 export function versionUpdate (service) {
   let version = 0

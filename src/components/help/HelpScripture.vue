@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       Bijbelteksten toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
       Nieuwe Bijbeltekst toevoegen aan setlist:
     </div>
     <p>
-      Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddscripture.png">
+      Via de <img src="~@/assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="~@/assets/help/setlistaddscripture.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
       Op de eerste regel kan je de titel (Bijbelboek + vers) & eventueel de vertaling invullen of aanpassen. Dit gebeurt ook na inladen van een Bijbeltekst via de 2e regel aan invoervelden. Wanneer er niets is ingevoerd wordt de titel automatisch gegenereerd.<br>
       Vul op de 2e regel de <i>Bijbel</i>vertaling, het <i>boek</i>, het <i>hoofdstuk</i> en het <i>vers vanaf</i> & <i>t/m</i> in de betreffende vakken in.<br>
-      Klik hierna op de knop <img src="../../assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database, via het dropdown menu kan je de tekst ook toevoegen.<br>
+      Klik hierna op de knop <img src="~@/assets/help/scripturetekstinladen.png"> om de tekst in het tekstveld te zetten vanuit de database, via het dropdown menu kan je de tekst ook toevoegen.<br>
       De opmaak van de teksten wordt grotendeels door het programma geregeld. Zie onder wat aandachtspunten.<br>
       Opm.: wanneer er geen verse vanaf wordt gekozen wordt het hele hoofdstuk ingeladen.<br>
-      <img src="../../assets/help/addscripturedialog.png">
+      <img src="~@/assets/help/addscripturedialog.png">
     </p>
     <p>
       <b><u>Bijbelvertaling</u></b><br>
@@ -37,9 +37,9 @@
     <p>
       Eventueel kunnen delen van de tekst vet, cursief, onderstreept worden en daarnaast kan de tekst verkleind aan de bovenzijde geplaatst worden, of alle opmaak van de tekst verwijderd worden.<br>
       Met de knop "nummers" kan je alle getallen in 1 keer verkleinen en aan de bovenzijde plaatsen.<br>
-      <img src="../../assets/help/addsongdialogundu.png"> Met deze knop kan je de o.a. nummers tool, 1x ongedaan maken.<br>
+      <img src="~@/assets/help/addsongdialogundu.png"> Met deze knop kan je de o.a. nummers tool, 1x ongedaan maken.<br>
       <i>opm.: Bewerkingen in het tekstvak zelf kunnen meestal met "ctrl + z" hersteld worden.</i><br>
-      <img src="../../assets/help/scripturefontsetting.png">
+      <img src="~@/assets/help/scripturefontsetting.png">
     </p>
     <p>
       <i><u>aandachtspunten / opmerkingen:</u></i>
@@ -86,7 +86,7 @@
       De pagina van de beamer wordt naar maximaal x tekens gesplitst op basis van zinnen voor de livestream.<br>
       Je moet per (livestream) pagina doorklikken/doorlopen in de lijst.<br>
       Onder in het scherm zie je een voorbeeld.<br>
-      <img src="../../assets/help/scripturecontrol.png">
+      <img src="~@/assets/help/scripturecontrol.png">
     </p>
     <div class="text-h6 q-mb-md">
       Afwijkende achtergrond
@@ -95,8 +95,8 @@
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
       Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
       Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
-      <img src="../../assets/help/achtergronddonkerder.png">
+      <img src="~@/assets/help/scriptureachtergronddialog.png"><br>
+      <img src="~@/assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken
@@ -104,7 +104,7 @@
     <p>
       Optie 1: Selecteer het onderdeel en kies aan het einde van de regel het potloodje.<br>
       Optie 2: Klik met de rechtermuisknop op het onderdeel; er verschijnt een menu en kies dan bewerken.<br>
-      <img src="../../assets/help/setlistedit.png">
+      <img src="~@/assets/help/setlistedit.png">
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>

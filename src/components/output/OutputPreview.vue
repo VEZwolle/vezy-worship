@@ -9,9 +9,9 @@
 import { defineComponent } from 'vue'
 import { createApp } from 'vue'
 import { debounce } from 'quasar'
-import BgPng from '../../assets/bg.png'
-import ViewbeamerPng from '../../assets/viewbeamer.png'
-import ViewlivestreamPng from '../../assets/viewlivestream.png'
+import BgPng from '@/assets/bg.png'
+import ViewbeamerPng from '@/assets/viewbeamer.png'
+import ViewlivestreamPng from '@/assets/viewlivestream.png'
 
 export default defineComponent({
   name: 'OutputPreview',

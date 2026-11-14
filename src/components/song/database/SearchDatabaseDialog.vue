@@ -26,7 +26,6 @@
             v-model="searchInput"
             outlined
             label="Lied zoeken in database"
-            :rules="['required']"
             debounce="500"
             @update:model-value="searchResults"
           >

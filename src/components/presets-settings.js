@@ -1,7 +1,7 @@
 import { Notify } from 'quasar'
 import { get, set } from 'idb-keyval' // use IndexedDB database name: 'keyval-store', and store: 'keyval'
 import presentationPresets from './presentation-presets.js'
-import BgPng from '../assets/bg.png'
+import BgPng from '@/assets/bg.png'
 
 const fileDefaults = {
   baseFileId: null,

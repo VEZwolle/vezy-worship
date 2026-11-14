@@ -13,7 +13,7 @@
         <q-card-section>
           <div class="row q-gutter-md">
             <div class="col">
-              <q-input v-model="settings.title" outlined label="Naam" :rules="['required']" class="q-mt-sm" />
+              <q-input v-model="settings.title" outlined label="Naam" :rules="[isRequired]" class="q-mt-sm" />
             </div>
             <div v-if="!defaultPresetId" class="col2">
               <q-btn-dropdown color="primary" label="standaard" class="q-mt-sm">

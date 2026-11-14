@@ -31,11 +31,11 @@ export default defineComponent({
     },
     containerStyle () {
       const { zoom, x, y } = this.settingsimage
-
       return {
         position: 'absolute',
         width: `${zoom}vw`,
         left: `${x}vw`,
+        height: `${zoom * this.factor}vh`,
         top: `${y * ((this.factor + 1) / 2)}vh`,
         transform: 'translate(calc(50vw - 50%), calc(50vh - 50%))' // Base position calculations from the center
       }

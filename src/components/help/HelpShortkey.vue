@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       Sneltoetsen
     </div>
     <div class="q-pa-md">
@@ -21,7 +21,7 @@
     </div>
     <p>
       Door met de rechtermuisknop op de knop "GO LIVE" te klikken verschijnt een menu met een aantal standaard onderdelen die je direct live kan zetten. <i>(opmerking: dit zijn de standaard versies uit VezyWorship.)</i><br>
-      <img src="../../assets/help/quickliverightkey.png">
+      <img src="~@/assets/help/quickliverightkey.png">
     </p>
   </div>
 </template>

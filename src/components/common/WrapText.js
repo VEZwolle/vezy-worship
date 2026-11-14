@@ -1,3 +1,5 @@
+import { fromHtmlEntity } from './CleanText.js'
+
 export function getTextWidth (text, font, letterSpacing) {
   const context = document.createElement('canvas').getContext('2d')
   context.font = font
@@ -119,7 +121,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
     let lineRFS = [] // line pieces Result Format Segments
     // get format change
     linePieces.forEach(linePiece => {
-      let linePieceText = ''
+      let linePieceText // =''
       switch (true) {
         case linePiece.startsWith('b>'):
           bold = true
@@ -166,9 +168,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
       }
       // check if text or loop bij second format change
       if (linePieceText.length > 0) {
-        linePieceText = linePieceText
-          .replace(/&nbsp;/g, ' ')
-          .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&') // html-entities
+        linePieceText = fromHtmlEntity(linePieceText) // html-entities
         // tspan class
         let resultClass = bold ? ' bold' : ''
         resultClass += italic ? ' italic' : ''
@@ -312,7 +312,7 @@ export function wrapTextLinesFormat (lines, maxWidth, fonttype, fontSize, fontSi
             remainingWidth = maxWidth
             firstlinePiece = true
             const lineRFStemp = []
-            let endSpace = false
+            let endSpace // = false
             if (allLines[0].line !== i) { // niet afgebroken in laatste line.
               // <--> kan dit wel voorkomen? nieuwe line i gebeurt alleen bij regeleinde <br> en dat kan nooit meer dan 1 i verder zijn en die blijft dan geheel voor volgende sheet of een deel.
               i = allLines[0].line // 'start opnieuw na i, resterend van i nog laten lopen

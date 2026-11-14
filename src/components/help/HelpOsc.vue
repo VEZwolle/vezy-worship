@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       OSC (Open Sound Control)
     </div>
     <div class="text-h6 q-mb-md">
@@ -83,7 +83,7 @@
       Algemene instellingen:
     </p>
     <p>
-      <img src="../../assets/help/oscsettingsdialogmain.png">
+      <img src="~@/assets/help/oscsettingsdialogmain.png">
     </p>
     <ul>
       <li>
@@ -116,14 +116,14 @@
       clip: te activeren item<br>
       text, title, translation: bestemming waar de tekst heen gestuurd word.<br>
       resolumePlayPauzeSync: [0=uit of 1=aan] Video: Play/Pauze + Positie + 'Play Once en Hold' + 'Relative'<br>
-      <img src="../../assets/help/oscsetttingsitem.png">
+      <img src="~@/assets/help/oscsetttingsitem.png">
     </p>
     <p class="text-h6 q-mb-md">
       Output OSC aan
     </p>
     <p>
       In de uitvoer weergave onderin wordt aangegeven of de osc commando's worden verstuurd.<br>
-      <img src="../../assets/help/oscaanmelding.png">
+      <img src="~@/assets/help/oscaanmelding.png">
     </p>
     <div class="text-h6 q-mb-md">
       Lijst instelbare waarden per item (algemeen)

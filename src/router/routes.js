@@ -1,15 +1,15 @@
-import App from 'components/App.vue'
-import OutputView from 'components/output/OutputView.vue'
-import OutputStage from 'components/output/OutputStage.vue'
-import ShowText from 'components/output/ShowText.vue'
-import HelpDocu from 'components/help/HelpDocu.vue'
+import App from '@/components/App.vue'
+import OutputView from '@/components/output/OutputView.vue'
+import OutputStage from '@/components/output/OutputStage.vue'
+import ShowText from '@/components/output/ShowText.vue'
+import HelpDocu from '@/components/help/HelpDocu.vue'
 
-export default [
+const routes = [
   {
     path: '/',
     component: App
     // loaded on demand only, using dynamic imports:
-    // component: () => import('components/App.vue')
+    // component: () => import('@/components/App.vue')
     // no import at start required
   },
   {
@@ -43,5 +43,11 @@ export default [
   {
     path: '/showtext/:nr',
     component: ShowText
-  }
+  },
+  {
+    path: '/:catchAll(.*)*',
+    component: () => import('@/pages/ErrorNotFound.vue'),
+  },
 ]
+
+export default routes

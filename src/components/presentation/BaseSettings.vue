@@ -10,6 +10,11 @@ export default defineComponent({
     settings () {
       return this.presentation.settings
     }
+  },
+  methods: {
+    isRequired (val) {
+      return !!val || 'Verplicht'
+    }
   }
 })
 </script>

@@ -1,4 +1,4 @@
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 export function strip (html) {
   const tmp = document.createElement('div')
   tmp.innerHTML = html

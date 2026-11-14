@@ -78,7 +78,6 @@
             dense
             hide-bottom-space
             :label="`Lied zoeken in ${$store.searchBaseIsLocal ? 'lokale' : 'cloud'} database`"
-            :rules="['required']"
             debounce="500"
             @update:model-value="searchResults"
           >
@@ -191,6 +190,7 @@ export default defineComponent({
     if (this.$fsdb.localSongDatabase || (this.$q.platform.is.electron && localSongDatabaseName)) this.openLocalDatabase() // open only when already loaded
   },
   methods: {
+
     rowClickSelect (e, row) {
       this.selected = [row]
       if (this.selectedFalse) return

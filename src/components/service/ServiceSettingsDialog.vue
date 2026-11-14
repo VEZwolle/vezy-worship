@@ -35,10 +35,10 @@
                 </q-input>
               </div>
             </div>
-            <q-input v-model="service.theme" label="Thema" :rules="['required']" />
-            <q-input v-model="service.host" label="Host" :rules="['required']" />
-            <q-input v-model="service.preacher" label="Spreker" :rules="['required']" />
-            <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="['required']" />
+            <q-input v-model="service.theme" label="Thema" :rules="[isRequired]" />
+            <q-input v-model="service.host" label="Host" :rules="[isRequired]" />
+            <q-input v-model="service.preacher" label="Spreker" :rules="[isRequired]" />
+            <q-input v-model="service.worshiplead" label="Aanbiddingsleider" :rules="[isRequired]" />
 
             <div class="row">
               <q-file v-model="backgroundImageFile" accept="image/*" label="Achtergrondafbeelding" class="col" @update:model-value="updateBackgroundImage">
@@ -118,6 +118,9 @@ export default defineComponent({
     }
   },
   methods: {
+    isRequired (val) {
+      return !!val || 'Verplicht'
+    },
     show (service = null) {
       // reset dialog by open
       this.backgroundImageFile = null

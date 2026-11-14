@@ -16,7 +16,7 @@
 import { defineComponent } from 'vue'
 import presentationTypes from '../presentation-types.js'
 import MessageOutput from '../message/MessageOutput.vue'
-import BgPng from '../../assets/bg.png'
+import BgPng from '@/assets/bg.png'
 
 export default defineComponent({
   name: 'OutputView',

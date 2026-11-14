@@ -7,7 +7,7 @@ export default [
   {
     /**
      * Ignore the following files.
-     * Please note that pluginQuasar.configs.recommended already ignores
+     * Please note that pluginQuasar.configs.recommended() already ignores
      * the "node_modules" folder for you (and all other Quasar project
      * relevant folders and files).
      *
@@ -31,7 +31,7 @@ export default [
    * pluginVue.configs["flat/recommended"]
    *   -> Above, plus rules to enforce subjective community defaults to ensure consistency.
    */
-  ...pluginVue.configs[ 'flat/essential' ],
+  ...pluginVue.configs['flat/essential'],
 
   {
     languageOptions: {
@@ -46,25 +46,27 @@ export default [
         cordova: 'readonly',
         Capacitor: 'readonly',
         chrome: 'readonly', // BEX related
-        browser: 'readonly' // BEX related
-      }
+        browser: 'readonly', // BEX related
+      },
     },
 
     // add your custom rules here
     rules: {
       'prefer-promise-reject-errors': 'off',
+      // slots use the "#" shorthand everywhere, as in the Quasar docs
+      // 'vue/v-slot-style': ['warn', 'shorthand'],
 
       // allow debugger during development only
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    },
   },
 
   {
-    files: [ 'src-pwa/custom-service-worker.js' ],
+    files: ['src-pwa/sw/**/*.js'],
     languageOptions: {
       globals: {
-        ...globals.serviceworker
-      }
-    }
-  }
+        ...globals.serviceworker,
+      },
+    },
+  },
 ]

@@ -1,26 +1,26 @@
 <template>
   <div>
     <div class="text-h4 q-mb-md">
-      <img src="../../assets/help/logo.png">
+      <img src="~@/assets/help/logo.png">
       Afbeeldingen toevoegen / wijzigen
     </div>
     <div class="text-h6 q-mb-md">
       Nieuw afbeelding toevoegen aan setlist:
     </div>
     <p>
-      Via de <img src="../../assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="../../assets/help/setlistaddimage.png">
+      Via de <img src="~@/assets/help/setlistadd.png">in het linker vak, onderin; kies je <img src="~@/assets/help/setlistaddimage.png">
     </p>
     <p>
       Je zie nu onderstaand scherm verschijnen.<br>
-      <img src="../../assets/help/addimagedialog.png"><br>
-      Kies hier een afbeeldingbestand door in het vak <img src="../../assets/help/imageselecteerafbeeldingen.png"> te klikken<br>
+      <img src="~@/assets/help/addimagedialog.png"><br>
+      Kies hier een afbeeldingbestand door in het vak <img src="~@/assets/help/imageselecteerafbeeldingen.png"> te klikken<br>
       Onder zie je nu een voorbeeld van het bestand verschijnen.<br>
       Hierna kan je eventueel de <i>naam</i> nog invullen.<br>
       In basis wordt de afbeelding op de beamer en op de livestream getoond.<br>
-      Dit kan je veranderen door op de knop <img src="../../assets/help/imagezelfde.png"> te klikken en dan via <img src="../../assets/help/imageselecteerlivestream.png"> een ander bestand te kiezen.<br>
+      Dit kan je veranderen door op de knop <img src="~@/assets/help/imagezelfde.png"> te klikken en dan via <img src="~@/assets/help/imageselecteerlivestream.png"> een ander bestand te kiezen.<br>
       Via de knop "Standaard" zijn de standaard sheets uit VezyWorship (extra) toe te voegen.<br>
       Zie onder wat aandachtspunten & andere opties.<br>
-      <img src="../../assets/help/imagedialog.png">
+      <img src="~@/assets/help/imagedialog.png">
     </p>
     <p>
       <b><u>Naam</u></b><br>
@@ -69,9 +69,9 @@
       Geavanceerde instellingen
     </div>
     <p>
-      Onder de voorbeeld afbeelding staat de knop <img src="../../assets/help/imagegeavenceerd.png">.<br>
+      Onder de voorbeeld afbeelding staat de knop <img src="~@/assets/help/imagegeavenceerd.png">.<br>
       Wanneer je deze aan zet (naar rechts) verschijnen een aantal extra schuifbalken.<br>
-      <img src="../../assets/help/imagegeavenceerd2.png"><br>
+      <img src="~@/assets/help/imagegeavenceerd2.png"><br>
       <q-list bordered separator>
         <q-item borderd dense>
           <q-item-section top side>
@@ -117,8 +117,8 @@
       Onder het tabblad "achtergrond" kan je eventueel een afwijkende achtergrond kiezen voor dit onderdeel.<br>
       Tevens kan je hier de achtergrond donkerder maken voor bijv. leesbaarheid teksten. (nvt tijdens clear)<br>
       Nadat er reeds afbeeldingen zijn gebruikt, kan je deze ook hergebruiken door deze via het uitklapvenster te selecteren.<br>
-      <img src="../../assets/help/scriptureachtergronddialog.png"><br>
-      <img src="../../assets/help/achtergronddonkerder.png">
+      <img src="~@/assets/help/scriptureachtergronddialog.png"><br>
+      <img src="~@/assets/help/achtergronddonkerder.png">
     </p>
     <div class="text-h6 q-mb-md">
       Controle Voorbeeld / Live bediening
@@ -128,7 +128,7 @@
       Een afbeelding bestaat uit 1 pagina.<br>
       Bovenin kan je wel kiezen via 3 tabbladen welke uitvoer (beamer / livestream) je wilt zien in de control. Beide blijven echter wel uitgezonden worden.<br>
       Onder in het scherm zie je een voorbeeld.<br>
-      <img src="../../assets/help/imagecontrol.png">
+      <img src="~@/assets/help/imagecontrol.png">
     </p>
     <div class="text-h6 q-mb-md">
       Onderdeel uit setlist bewerken
@@ -136,7 +136,7 @@
     <p>
       Optie 1: Selecteer het onderdeel en kies aan het einde van de regel het potloodje.<br>
       Optie 2: Klik met de rechtermuisknop op het onderdeel; er verschijnt een menu en kies dan bewerken.<br>
-      <img src="../../assets/help/setlistedit.png">
+      <img src="~@/assets/help/setlistedit.png">
     </p>
     <p>
       Je komt nu weer terug in het zelfde scherm als je hebt gebruikt bij toevoegen van het onderdeel.<br>

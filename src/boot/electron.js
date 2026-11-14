@@ -1,4 +1,4 @@
-import { defineBoot } from '#q-app/wrappers'
+import { defineBoot } from '#q-app'
 /**
  * Communicate with electron main thread (electron-main.js).
  */
