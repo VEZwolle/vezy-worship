@@ -1,4 +1,5 @@
 import { wrapTextLinesFormat } from '../common/WrapText.js'
+import { toHtmlEntity } from '../common/CleanText.js'
 
 const beamerFont = 'Ubuntu, "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif'
 
@@ -215,13 +216,7 @@ function splitSectionToSlides (section, livestreamMaxCharCount = 500) {
       
       htmlText +=
         htmlformatS
-        + formatText.text
-          .replace(/&/g, '&amp;') // first & // html-entities
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/ {2}/g, '&nbsp;&nbsp;')
-          .replace(/^ /g, '&nbsp;')
-          .replace(/ $/g, '&nbsp;')
+        + toHtmlEntity(formatText.text)
         + htmlformatE
     })
     htmlText += '</div>'
