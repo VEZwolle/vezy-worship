@@ -1,5 +1,4 @@
 import { isLabel } from './labels.js'
-import { toHtmlEntity } from '../common/CleanText.js'
 import chunk from 'lodash/chunk'
 
 export function splitSong (text, linesPerSlideLivestream, linesPerSlideBeamer = 0, minOneSlide = true) {
@@ -32,7 +31,7 @@ function splitSongMaxLines (text, maxlines = 0) {
   const result = []
   const sections = text.split('<br><br>')
   for (let i = 0; i < sections.length; i++) {
-    const lines = sections[i].split('<br>').map(line => toHtmlEntity(line))
+    const lines = sections[i].split('<br>')
     const addLabelLine = isLabel(lines[0] || '') ? 1 : 0
     if (lines.length <= maxlines + addLabelLine) {
       result.push(sections[i])

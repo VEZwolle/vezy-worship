@@ -126,7 +126,6 @@ export default defineComponent({
     cleanText () {
       const cursorPosition = getCaretLine(this.$refs.editor.getContentEl())
       this.lastEmitText = this.htmlToText(CleanText(this.content))
-      console.log(this.lastEmitText)
       this.$emit('update:modelValue', this.lastEmitText)
       this.content = this.textToHtml(this.lastEmitText)
       if (cursorPosition) {
