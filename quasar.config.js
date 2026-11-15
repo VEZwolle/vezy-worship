@@ -279,8 +279,8 @@ export default defineConfig((ctx) => {
       builder: {
         // https://www.electron.build/configuration
 
-        appId: 'vezy-worship',
-        artifactName: 'VezyWorship-Setup-${version}.${ext}',
+        appId: 'vezy-worshipTEST',
+        artifactName: 'VezyWorshipTEST-Setup-${version}.${ext}',
         win: {
           target: [
             {
