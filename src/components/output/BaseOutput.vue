@@ -25,6 +25,10 @@ export default defineComponent({
     styleBgBeamer () {
       const style = {}
 
+      if (this.control.background) {
+        style.backgroundColor = this.control.background
+        return style
+      }
       if (this.backgroundImageUrl) {
         style.backgroundImage = `url(${this.backgroundImageUrl})`
         if (this.alpha) {

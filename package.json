@@ -1,8 +1,8 @@
 {
-  "name": "vezy-worship",
+  "name": "vezy-worship-test",
   "version": "3.0.0",
   "description": "Presentatiesoftware voor beamer én livestream",
-  "productName": "VezyWorship",
+  "productName": "VezyWorshipTEST",
   "author": "Jan-Paul Kleemans jpkleemans@gmail.com & Jeroen Faber",
   "type": "module",
   "private": true,

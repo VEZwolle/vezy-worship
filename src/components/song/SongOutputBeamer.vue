@@ -4,9 +4,9 @@
       <div v-show="!clear" v-if="control" :style="offsetServiceType">
         <svg :style="styleOpacityBeamer" :class="{ alpha }">
           <text y="6.6vw">
-            <tspan v-for="(line, i) in lines" :key="i" x="50%" dy="4.4vw" :style="styleServiceType">{{ line }}</tspan>
-            <tspan x="50%" dy="3vw">&nbsp;</tspan>
-            <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" dy="4.4vw" class="translation" :style="styleServiceType">{{ line }}</tspan>
+            <tspan v-for="(line, i) in lines" :key="i" x="50%" :dy="dyLine" :style="styleTspan">{{ line }}</tspan>
+            <tspan x="50%" dy="3vw" :style="styleTspan">&nbsp;</tspan>
+            <tspan v-for="(line, i) in translatedLines" :key="i" x="50%" :dy="dyLineTranslation" class="translation" :style="styleTspanTranslation">{{ line }}</tspan>
           </text>
         </svg>
       </div>
@@ -57,6 +57,60 @@ export default defineComponent({
         default:
       }
       return style
+    },
+    dyLine () {
+      return `${ this.control.lineHeigth || 4.4}vw`
+    },
+    dyLineTranslation () {
+      return `${this.control.translationLineHeigth || 4.4}vw`
+    },
+    styleTspan () {
+      const style = {}
+        style.fontFamily = this.control.fontFamily || '\'Alan Sans\', sans-serif'
+        style.fontSize = `${this.control.fontSize || 3.8}vw`
+        style.letterSpacing =  `${this.control.letterSpacing || 0.01}vw`
+        style.fontStyle = this.control.fontStyle || 'normal'
+        style.fontWeight = this.control.fontWeight  || 400
+
+        style.fill = this.control.fill || '#fff'
+        if (this.control.strokeWidth) {
+          style.stroke = this.control.stroke || '#000'
+          style.strokeWidth = `${this.control.strokeWidth || 0.5}vw`
+          style.strokeLinejoin = this.control.strokeLinejoin || 'round'
+        }
+        style.paintOrder = this.control.paintOrder || 'stroke'
+        
+        style.textAnchor = this.control.textAnchor || 'middle'
+        style.dominantBaseline = this.control.dominantBaseline || 'middle'
+        
+        if (this.control.filterlength && this.control.filter) {
+          style.filter = `drop-shadow(${this.control.filterlength || 0.3}vw ${this.control.filterlength || 0.3}vw ${this.control.filterlength || 0.3}vw rgba(0, 0, 0, ${this.control.filter || 0.8}))` // 'shadow(#000, 0.8)'
+        }
+      return style
+    },
+    styleTspanTranslation () {
+      const style = {}
+        style.fontFamily = this.control.fontFamily || '\'Alan Sans\', sans-serif'
+        style.fontSize = `${this.control.translationFontSize || 3.4}vw`
+        style.letterSpacing =  `${this.control.letterSpacing || 0.01}vw`
+        style.fontStyle = this.control.translationFontStyle || 'italic'
+        style.fontWeight = this.control.translationFontWeight || 400
+
+        style.fill = this.control.translationFill || '#bbb'
+        if (this.control.translationStrokeWidth) {
+          style.stroke = this.control.stroke || '#000'
+          style.strokeWidth = `${this.control.translationStrokeWidth || 0.4}vw`
+          style.strokeLinejoin = 'round'
+        }
+        style.paintOrder = 'stroke'
+        
+        style.textAnchor = 'middle'
+        style.dominantBaseline = 'middle'
+        
+        if (this.control.translationFilterlength && this.control.translationFilter) {
+          style.filter = `drop-shadow(${this.control.translationFilterlength || 0.3}vw ${this.control.translationFilterlength || 0.3}vw ${this.control.translationFilterlength || 0.3}vw rgba(0, 0, 0, ${this.control.translationFilter || 0.6}))` // 'shadow(#000, 0.6)'
+        }
+      return style
     }
   }
 })
@@ -73,30 +127,6 @@ export default defineComponent({
     position: fixed;
     width: 100%;
     height: 120%;
-
-    tspan {
-      font-size: 3.8vw;
-      letter-spacing: 0.01vw;
-
-      fill: #fff;
-      stroke: #000;
-      stroke-width: 0.5vw;
-      stroke-linejoin: round;
-      paint-order: stroke;
-
-      text-anchor: middle;
-      dominant-baseline: middle;
-
-      filter: shadow(#000, 0.8);
-    }
-
-    tspan.translation {
-      fill: #bbb;
-      font-style: italic;
-      stroke-width: 0.4vw;
-      font-size: 3.4vw;
-      filter: shadow(#000, 0.6);
-    }
 
     &.alpha {
       tspan {
